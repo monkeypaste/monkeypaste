@@ -25,17 +25,22 @@ namespace MonkeyPaste.Avalonia {
                 if (!valStr.IsStringHexColor()) {
                     return fallback;
                 }
-                var b = valStr.ToAvBrush();
+                Brush b = valStr.ToAvBrush();
                 if (parameter is string paramStr && !paramStr.IsStringHexColor()) {
-                    double opacity = 1.0;
-                    try {
-                        opacity = System.Convert.ToDouble(opacity);
+                    if(paramStr.StartsWith("muted")) {
+                        b = MpAvBrushToMutedBrushConverter.Instance.Convert(
+                            b, targetType, paramStr.Replace("muted", string.Empty), culture) as Brush;
+                    } else {
+                        double opacity = 1.0;
+                        try {
+                            opacity = System.Convert.ToDouble(opacity);
+                        }
+                        catch (Exception ex) {
+                            MpConsole.WriteTraceLine($"Couldn't convert param '{paramStr}' to a double for opacity", ex);
+                            opacity = 1.0;
+                        }
+                        b.Opacity = opacity;
                     }
-                    catch (Exception ex) {
-                        MpConsole.WriteTraceLine($"Couldn't convert param '{paramStr}' to a double for opacity", ex);
-                        opacity = 1.0;
-                    }
-                    b.Opacity = opacity;
                 }
 
                 return b;

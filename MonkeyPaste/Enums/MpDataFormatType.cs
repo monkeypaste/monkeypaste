@@ -6,6 +6,7 @@
         HtmlFragment,
         DeltaJson,
         Rtf2Html,
+        VsRtf2Html,
         Rtf,
         Rtfd,
         Csv,

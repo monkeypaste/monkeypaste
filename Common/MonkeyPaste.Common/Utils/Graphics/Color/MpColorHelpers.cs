@@ -20,6 +20,15 @@ namespace MonkeyPaste.Common {
             return "#" + BitConverter.ToString(argb).Replace("-", "");
         }
 
+        public static string HexToWebHex(string hex) {
+            if(hex.Length <= 7) {
+                return hex;
+            }
+            string alpha = hex.Substring(2, 2);
+            hex = $"#{hex.Substring(3)}{alpha}";
+            return hex;
+        }
+
         public static string ParseHexFromString(string hexChannelsOrNamedColorStr, string fallBack = "#00000000", bool includeAlpha = true) {
             if (string.IsNullOrWhiteSpace(hexChannelsOrNamedColorStr)) {
                 return fallBack.IncludeOrRemoveHexAlpha(!includeAlpha);

@@ -34,6 +34,7 @@ var UiStrings = {
 	EditorNextTemplateLabel: `తదుపరి టెంప్లేట్`,
 	EditorPasteButtonAppendBeginLabel: `అనుబంధం ...`,
 	EditorPasteButtonLabel: `అతికించండి`,
+	EditorPasteButtonLabelMobile: `కాపీ`,
 	EditorPasteTemplateWatermark: `పేస్ట్ వచనాన్ని నమోదు చేయండి ...`,
 	EditorPrevTemplateLabel: `మునుపటి టెంప్లేట్`,
 	EditorRegExLabel: ` సాధారణ వ్యక్తీకరణ`,

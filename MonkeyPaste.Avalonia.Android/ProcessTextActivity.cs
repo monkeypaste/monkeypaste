@@ -1,4 +1,5 @@
 ﻿using Android.App;
+using Android.Content;
 using Android.Content.PM;
 using Android.OS;
 using Android.Widget;
@@ -29,13 +30,22 @@ namespace MonkeyPaste.Avalonia.Android {
             if (string.IsNullOrEmpty(selectedText)) {
                 return;
             }
+            await Clipboard.SetTextAsync(selectedText);
+            MpAvDeviceWrapper.Instance.PlatformToastNotification
+                .ShowToast(string.Empty, UiStrings.MobileCopiedNtfText, null, null);
+
+            CreateTextClip(selectedText);
+
+
+            Finish();
+        }
+
+        private void CreateTextClip(string selectedText) {
             string package_name = Referrer.Host;
             string app_path = Path.Combine(Path.GetDirectoryName(DataDir.AbsolutePath), package_name);
 
             string app_name = GetAppName(package_name);
             string app_icon_base64 = Mp.Services.IconBuilder.GetPathIconBase64(app_path);
-
-            // TODO Add Skia Icon builder here
 
             var app_pi = new MpPortableProcessInfo() {
                 ProcessPath = app_path,
@@ -44,22 +54,18 @@ namespace MonkeyPaste.Avalonia.Android {
             };
             var avdo = new MpAvDataObject(MpPortableDataFormats.Text, selectedText);
             avdo.SetData(MpPortableDataFormats.INTERNAL_PROCESS_INFO_FORMAT, app_pi);
-            var avdo_ci = await Mp.Services.ContentBuilder.BuildFromDataObjectAsync(avdo, false);
+            avdo.SetData(MpPortableDataFormats.INTERNAL_CONTENT_TYPE_FORMAT, MpCopyItemType.Text.ToString());
 
-            await Clipboard.SetTextAsync(selectedText);
-            Toast.MakeText(this, "Copied to clipboard", ToastLength.Short).Show();
-
-
+            Mp.Services.ContentBuilder.BuildFromDataObjectAsync(avdo, false, MpDataObjectSourceType.ClipboardWatcher).FireAndForgetSafeAsync();
             //var source = await MpSource.CreateAsync(app, null);
             //StartActivity(new Intent(this, typeof(MainActivity)));
-
-            Finish();
         }
+
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Interoperability", "CA1416:Validate platform compatibility", Justification = "<Pending>")]
         private string GetAppName(string packageName) {
             try {
                 var pm = this.ApplicationContext.PackageManager;
-                if (pm.GetApplicationInfo(packageName, ApplicationInfoFlags.Of(0)) is { } appInfo) {
+                if (pm.GetApplicationInfo(packageName,0) is { } appInfo) {
                     return pm.GetApplicationLabel(appInfo);
                 }
             }
@@ -67,7 +73,7 @@ namespace MonkeyPaste.Avalonia.Android {
                 MpConsole.WriteTraceLine(@"Android.ProcessTextActivity error finding app name for referrer: " + this.Referrer.Host);
                 MpConsole.WriteTraceLine(@"With Exception: " + ex);
             }
-            return "(unknown)";
+            return packageName;
         }
 
     }

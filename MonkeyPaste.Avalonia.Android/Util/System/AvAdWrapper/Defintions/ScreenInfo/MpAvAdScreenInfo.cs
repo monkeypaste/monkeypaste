@@ -1,10 +1,12 @@
 ﻿using Android.App;
 using Avalonia;
 using Avalonia.Controls.ApplicationLifetimes;
+using Avalonia.Platform;
 using Avalonia.Rendering;
 using Avalonia.VisualTree;
 using MonkeyPaste.Common;
 using MonkeyPaste.Common.Avalonia;
+using System.Collections.Generic;
 using Xamarin.Essentials;
 using AvApplication = Avalonia.Application;
 
@@ -17,7 +19,7 @@ namespace MonkeyPaste.Avalonia.Android {
         private double _statusHeight;
         private double _sw;
         private double _sh;
-        
+
         #endregion
 
         #region Constants
@@ -43,7 +45,7 @@ namespace MonkeyPaste.Avalonia.Android {
                 mobile.MainView.GetVisualRoot() is IRenderRoot rr) {
                 Scaling = 1;
                 Bounds = new MpRect(MpPoint.Zero, rr.ClientSize.ToPortableSize());
-                WorkArea = Bounds;
+                WorkingArea = Bounds;
                 IsPrimary = true;
             }
         }
@@ -59,7 +61,7 @@ namespace MonkeyPaste.Avalonia.Android {
                 mobile.MainView.GetVisualRoot() is IRenderRoot rr) {
                 Scaling = 1;
                 Bounds = new MpRect(MpPoint.Zero, rr.ClientSize.ToPortableSize());
-                WorkArea = Bounds;
+                WorkingArea = Bounds;
                 IsPrimary = true;
             } else {
                 // s9 info:
@@ -93,22 +95,22 @@ namespace MonkeyPaste.Avalonia.Android {
                 _sw = IsVertical ? di.Width : di.Height;
                 _sh = IsVertical ? di.Height : di.Width;
                 Bounds = GetBounds(IsVertical);
-                WorkArea = GetWorkArea(IsVertical);
+                WorkingArea = GetWorkArea(IsVertical);
             }
         }
-
         public override void Rotate(double angle) {
             bool is_portrait = angle != 270 && angle != 90;
             Bounds = GetBounds(is_portrait);
-            WorkArea = GetWorkArea(is_portrait);
+            WorkingArea = GetWorkArea(is_portrait);
         }
+
         #endregion
 
         #region Protected Methods
         #endregion
 
         #region Private Methods
-        
+
         private MpRect GetBounds(bool is_vert) {
             var ps = is_vert ? new PixelSize((int)_sw, (int)_sh) : new PixelSize((int)_sh, (int)_sw);
             return new PixelRect(ps).ToPortableRect(Scaling);
@@ -116,12 +118,13 @@ namespace MonkeyPaste.Avalonia.Android {
         
         private MpRect GetWorkArea(bool is_vert) {
             var pix_bounds = GetBounds(is_vert).ToAvPixelRect(Scaling);
-            int nav_height = (int)(is_vert ? _navHeightPortrait : _navHeightLandscape);
             int wa_x = pix_bounds.X;
             int wa_y = pix_bounds.Y + (int)_statusHeight;
             int wa_w = pix_bounds.Width;
-            int dumb_pad = 144;
-            int wa_h = pix_bounds.Height - (int)_statusHeight - nav_height - dumb_pad;
+
+            int nav_height = (int)(is_vert ? _navHeightPortrait : _navHeightLandscape);
+            int bound_diff = (int)(_statusHeight + nav_height) * 1;
+            int wa_h = pix_bounds.Height - bound_diff;
             return new PixelRect(wa_x, wa_y, wa_w, wa_h).ToPortableRect(Scaling);
         }
         #endregion

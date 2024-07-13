@@ -222,4 +222,10 @@
   <data name="ToFileExtHint" xml:space="preserve">
     <value>סיומת הקובץ המשמשת כאשר '{0}' משמשת ליצירת קובץ לפי דרישה.</value>
   </data>
+  <data name="RtfParaTagNameHint" xml:space="preserve">
+    <value>להדגשת קוד השתמש בתג 'לפני' אחרת ה- RTF יתייחס כאל טקסט עשיר רגיל.</value>
+  </data>
+  <data name="RtfParaTagNameLabel" xml:space="preserve">
+    <value>תג פסקאות HTML</value>
+  </data>
 </root>

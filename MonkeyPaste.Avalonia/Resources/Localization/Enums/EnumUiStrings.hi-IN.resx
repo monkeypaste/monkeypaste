@@ -1186,4 +1186,16 @@
   <data name="MpShortcutType_ToggleGlobalHooks" xml:space="preserve">
     <value>वैश्विक हुक को टॉगल करें</value>
   </data>
+  <data name="MpNotificationType_ModalSettingsFrameMenu" xml:space="preserve">
+    <value>मोडल सेटिंग्स फ्रेम मेनू</value>
+  </data>
+  <data name="MpShortcutType_EnterKeyAction" xml:space="preserve">
+    <value>कुंजी कार्रवाई दर्ज करें</value>
+  </data>
+  <data name="MpShortcutType_ToggleXamlHotReload" xml:space="preserve">
+    <value>टॉगल Xaml हॉट रीलोड</value>
+  </data>
+  <data name="MpShortcutType_ToggleContentWrap" xml:space="preserve">
+    <value>टॉगल कंटेंट रैप</value>
+  </data>
 </root>

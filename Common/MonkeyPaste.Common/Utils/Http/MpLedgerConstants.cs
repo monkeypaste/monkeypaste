@@ -1,4 +1,5 @@
 ﻿using MonkeyPaste.Common;
+using System.IO;
 
 namespace MonkeyPaste.Avalonia {
     public static class MpLedgerConstants {
@@ -22,12 +23,28 @@ namespace MonkeyPaste.Avalonia {
 
         public static string REMOTE_CORE_PLUGIN_BASE_URI => $"{MpServerConstants.REMOTE_SERVER_URL}/dat";
 
-        public static string LEDGER_PROJ_DIR = $"{MpPlatformHelpers.GetSolutionDir()}/Build/Ledger";
+        public static string LEDGER_PROJ_DIR =>
+            Path.Combine(
+                MpPlatformHelpers.GetSolutionDir(),
+                "Build",
+                "Ledger");
         public static string DEBUG_PACKAGES_DIR =>
-            $"{LEDGER_PROJ_DIR}/plugin_packages_debug/";
+            Path.Combine(
+                LEDGER_PROJ_DIR, 
+                "plugin_packages_debug");
         public static string RELEASE_PACKAGES_DIR =>
-            $"{LEDGER_PROJ_DIR}/plugin_packages_release/";
+            Path.Combine(
+                LEDGER_PROJ_DIR,
+                "plugin_packages_release");
 
+        public static string LOCAL_INV_LEDGER_PATH =>
+            Path.Combine(
+                LEDGER_PROJ_DIR, 
+                LOCAL_LEDGER_NAME);
+        public static string REMOTE_INV_LEDGER_PATH =>
+            Path.Combine(
+                LEDGER_PROJ_DIR,
+                REMOTE_LEDGER_NAME);
         public static string LOCAL_CULTURES_DIR_URI =>
             $"{LEDGER_PROJ_DIR.ToFileSystemUriFromPath()}/{CULTURE_DIR_NAME}";
         public static string REMOTE_CULTURES_DIR_URI =>
@@ -38,10 +55,6 @@ namespace MonkeyPaste.Avalonia {
         public static string REMOTE_LEDGER_INDEX_URI =>
             $"https://raw.githubusercontent.com/monkeypaste/ledger/master/{REMOTE_LEDGER_INDEX_NAME}";
 
-        public static string LOCAL_INV_LEDGER_PATH =>
-            $"{LEDGER_PROJ_DIR}/{LOCAL_LEDGER_NAME}";
-        public static string REMOTE_INV_LEDGER_PATH =>
-            $"{LEDGER_PROJ_DIR}/{REMOTE_LEDGER_NAME}";
 
         public static string LOCAL_INV_LEDGER_URI =>
             $"{LEDGER_PROJ_DIR.ToFileSystemUriFromPath()}/{LOCAL_LEDGER_NAME}";

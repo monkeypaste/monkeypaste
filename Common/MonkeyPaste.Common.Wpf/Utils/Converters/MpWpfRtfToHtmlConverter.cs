@@ -12,38 +12,34 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 
 namespace MonkeyPaste.Common.Wpf {
+    public class MpWpfRtfToHtmlConverterProps {
+        public string ParagraphTagName { get; set; } = "p";
+    }
     public static class MpWpfRtfToHtmlConverter {
         #region Private Variables
         private static double _indentCharCount { get; set; } = 5;
-
-        private static string[] _inlineTags { get; set; } = new string[] { "span", "a", "em", "strong", "u", "s", "sub", "sup", "img" };
-        private static string[] _blockTags { get; set; } = new string[] { "p", "ol", "ul", "li", "div", "table", "colgroup", "col", "tbody", "tr", "td", "iframe" };
-
         private static HtmlDocument _htmlDoc;
+        private static MpWpfRtfToHtmlConverterProps _curProps;
         #endregion
 
         #region Constants
-
-        public const string HTML_SPECIAL_ENTITY_CLASS = "rtf-html-entity";
-
         #endregion
 
         #region Public Methods
 
-        public static string ConvertFormatToHtml(
-            string formatData,
-            Dictionary<string, string> globalBlockAttributes = null, Dictionary<string, string> globalInlineAttributes = null) {
+        public static string ConvertFormatToHtml(string formatData, MpWpfRtfToHtmlConverterProps props = null) {
             // allow empty document creation
+            _curProps = props == null ? new MpWpfRtfToHtmlConverterProps() : props;
             formatData = formatData == null ? string.Empty : formatData;
             var fd = formatData.ToFlowDocument();
-            return ConvertFlowDocumentToHtml(fd, globalBlockAttributes, globalInlineAttributes);
+            return ConvertFlowDocumentToHtml(fd);
         }
 
         #endregion
 
         #region Private Methods
 
-        private static string ConvertFlowDocumentToHtml(FlowDocument fd, Dictionary<string, string> globalBlockAttributes = null, Dictionary<string, string> globalInlineAttributes = null) {
+        private static string ConvertFlowDocumentToHtml(FlowDocument fd) {
             _htmlDoc = new HtmlDocument();
             foreach (Block b in fd.Blocks) {
                 if (b is Table t) {
@@ -63,7 +59,6 @@ namespace MonkeyPaste.Common.Wpf {
             }
 
             try {
-                SetGlobalAttributes(_htmlDoc, globalBlockAttributes, globalInlineAttributes);
                 string encoded_html = _htmlDoc.DocumentNode.InnerHtml;
                 var errors = _htmlDoc.ParseErrors;
                 foreach (var error in errors) {
@@ -77,33 +72,7 @@ namespace MonkeyPaste.Common.Wpf {
             return fd.ContentRange().Text;
         }
 
-        #region Global Attributes
-
-        private static void SetGlobalAttributes(HtmlDocument htmlDoc, Dictionary<string, string> blockAttributes, Dictionary<string, string> inlineAttributes) {
-            if (blockAttributes == null) {
-                return;
-            }
-
-            foreach (var n in htmlDoc.DocumentNode.Descendants()) {
-                if (n.NodeType == HtmlNodeType.Text) {
-                    continue;
-                }
-                if (_blockTags.Contains(n.Name.ToLowerInvariant())) {
-                    foreach (var bkvp in blockAttributes) {
-                        n.SetAttributeValue(bkvp.Key, bkvp.Value);
-                    }
-                } else if (_inlineTags.Contains(n.Name.ToLowerInvariant())) {
-                    foreach (var ikvp in inlineAttributes) {
-                        n.SetAttributeValue(ikvp.Key, ikvp.Value);
-                    }
-                }
-            }
-        }
-
-        #endregion
-
         private static HtmlNode ConvertTextElementToHtml(TextElement te) {
-            //string html = string.Empty;
             List<HtmlNode> children = new List<HtmlNode>();
             var cl = GetChildren(te);
             foreach (var cte in cl) {
@@ -143,7 +112,6 @@ namespace MonkeyPaste.Common.Wpf {
 
         private static string GetRunText(string text) {
             return text.EncodeSpecialHtmlEntities();
-            //return text;
         }
 
         private static HtmlNode ProcessRun(Run r, List<HtmlNode> children) {
@@ -208,8 +176,6 @@ namespace MonkeyPaste.Common.Wpf {
 
         private static HtmlNode WrapWithTable(Table t, List<HtmlNode> children) {
             double tableWidth = 0;
-            //string colGroupInnerHtml = string.Empty;
-
             HtmlNode colGroupNode = _htmlDoc.CreateElement("colgroup");
             foreach (var tc in t.Columns) {
                 double colWidth = 100;
@@ -219,18 +185,11 @@ namespace MonkeyPaste.Common.Wpf {
                     MpDebug.Break();
 
                 }
-                //colGroupInnerHtml += string.Format(@"<col width='{0}px'>", colWidth);
                 HtmlNode colNode = _htmlDoc.CreateElement("col");
                 colNode.SetAttributeValue("width", $"{colWidth}px");
                 colGroupNode.AppendChild(colNode);
                 tableWidth += colWidth;
             }
-            //string colGroupHtml = string.Format(@"<colgroup>{0}</colgroup>", colGroupInnerHtml);
-            //return string.Format(
-            //    @"<div class='quill-better-table-wrapper'><table class='quill-better-table' style='width: {0}px'>{1}{2}</table></div>",
-            //    tableWidth,
-            //    colGroupHtml,
-            //    children);
 
             HtmlNode tableNode = _htmlDoc.CreateElement("table");
             tableNode.AddClass("quill-better-table");
@@ -286,7 +245,7 @@ namespace MonkeyPaste.Common.Wpf {
             li_node.SetAttributeValue("data-list", listType);
             li_node.AppendChild(bullet_span);
             foreach (var child in children) {
-                if (child.Name.ToLowerInvariant() == "p") {
+                if (child.Name.ToLowerInvariant() == _curProps.ParagraphTagName) {
                     //rtf list items are parents of paragraphs but quills are the direct content
                     child.GetClasses().ForEach(x => li_node.AddClass(x));
                     child.GetAttributes().ForEach(x => li_node.SetAttributeValue(x.Name, x.Value));
@@ -300,12 +259,8 @@ namespace MonkeyPaste.Common.Wpf {
         }
 
         private static HtmlNode WrapWithParagraph(Paragraph p, List<HtmlNode> children) {
-            //if (p.Parent is ListItem) {
-            //    //rtf list items are parents of paragraphs but quills are the direct content
-            //    return content;
-            //}
-            var p_node = _htmlDoc.CreateElement("p");
-            //var sb = new StringBuilder(@"<p ");
+            string paragraph_tag_name = _curProps.ParagraphTagName.ToLowerInvariant();
+            var p_node = _htmlDoc.CreateElement(paragraph_tag_name);
             string align_class = "ql-align-left";
             switch (p.TextAlignment) {
                 case TextAlignment.Left:
@@ -332,18 +287,6 @@ namespace MonkeyPaste.Common.Wpf {
         }
 
         private static HtmlNode WrapWithSpan(Span span, List<HtmlNode> children) {
-            //if (content == "<br>") {
-            //    //when adding linebreak inside a span quill internally converts
-            //    //the one linebreak into two empty paragraphs
-            //    //so do not wrap linebreak with a span
-            //    return string.Empty;
-            //}
-            //if (string.IsNullOrWhiteSpace(content)) {
-            //    //wrapping unformatted spaces with a span makes quill ignore the space
-            //    //so just return the space
-            //    return content;
-            //}
-            //children = children == null ? string.Empty : children;
             HtmlNode span_node = null;
             if (span is Hyperlink hl) {
                 span_node = WrapWithHyperlink(hl, children, span_node);
@@ -358,14 +301,6 @@ namespace MonkeyPaste.Common.Wpf {
             if (span.FontWeight.Equals(FontWeights.Bold) || span is Bold) {
                 span_node = WrapWithTag("strong", children, span_node);
             }
-            //var sb = new StringBuilder(@"<span");
-            //if (span.Parent is Paragraph) {
-            //    sb.AppendFormat(@" {0}>", GetSpanAttributes(span as Span));
-            //} else {
-            //    sb.Append(@">");
-            //}
-            //sb.AppendFormat(@"{0}</span>", children);
-            //return sb.ToString();
             span_node = SetSpanAttributes(span, children, span_node);
             return span_node;
         }
@@ -382,24 +317,15 @@ namespace MonkeyPaste.Common.Wpf {
         }
 
         private static HtmlNode WrapWithHyperlink(Hyperlink hl, List<HtmlNode> children, HtmlNode cur_node = null) {
-            //return string.Format(@"<a href='{0}'>{1}</a>", hl.NavigateUri.AbsoluteUri, content);
             var a_node = WrapWithTag("a", children, cur_node);
             a_node.SetAttributeValue("href", hl.NavigateUri.AbsoluteUri);
             return a_node;
         }
 
         private static HtmlNode WrapWithImage(Image img, List<HtmlNode> children) {
-            //if (!string.IsNullOrEmpty(content)) {
-            //    // pretty sure images can't have child content but investigate here
-            //    MpDebug.Break();
-            //}
             var bmpSrc = img.Source as BitmapSource;
 
             string srcAttrbValue = string.Format(@"data:image/png;base64,{0}", bmpSrc.ToBase64String());
-
-            //return string.Format(
-            //    @"<img src='{0}'>",
-            //    srcAttrbValue);
             var img_node = WrapWithTag("img", children);
             img_node.SetAttributeValue("src", srcAttrbValue);
             return img_node;
@@ -416,14 +342,12 @@ namespace MonkeyPaste.Common.Wpf {
         private static HtmlNode SetParagraphIndent(Paragraph p, HtmlNode p_node) {
             if (p.TextIndent > 0) {
                 int indentLevel = (int)(p.TextIndent / _indentCharCount);
-                //return @" ql-indent-" + indentLevel; ;
                 p_node.AddClass($"ql-indent-{indentLevel}");
             }
             return p_node;
         }
 
         private static HtmlNode SetTableCellAttributes(TableCell tc, HtmlNode tr_node) {
-            //return string.Format(@"rowspan='{0}' colspan='{1}' data-row='{2}'", tc.RowSpan, tc.ColumnSpan, (tc.Parent as TableRow).Tag as string);
             tr_node.SetAttributeValue("rowspan", tc.RowSpan.ToString());
             tr_node.SetAttributeValue("colspan", tc.ColumnSpan.ToString());
             tr_node.SetAttributeValue("data-row", (tc.Parent as TableRow).Tag.ToString());
@@ -447,19 +371,6 @@ namespace MonkeyPaste.Common.Wpf {
         }
 
         private static HtmlNode SetSpanAttributes(Span s, List<HtmlNode> children, HtmlNode span_node) {
-            //var sb = new StringBuilder();
-            //sb.AppendFormat(@"class='ql-font-{0}'", GetHtmlFont(s));
-            //sb.AppendFormat(GetFontSize(s));
-            //if (s.Foreground != null) {
-            //    sb.AppendFormat(@" color: {0};", GetHtmlColor((s.Foreground as SolidColorBrush).Color));
-            //}
-            //if (s.Background != null) {
-            //    sb.AppendFormat(@" background-color: {0};'", GetHtmlColor((s.Background as SolidColorBrush).Color));
-            //} else {
-            //    sb.Append(@"'");
-            //}
-
-            //return sb.ToString();
             if (span_node == null) {
                 span_node = WrapWithTag("span", children);
             }
@@ -472,30 +383,25 @@ namespace MonkeyPaste.Common.Wpf {
             }
             if (s.Foreground is SolidColorBrush fg_scb) {
                 style_parts.Add($"color: {GetHtmlColor(fg_scb.Color)};");
-                //span_node.AddClass("font-color-override-on");
             }
             if (s.Background is SolidColorBrush bg_scb) {
                 style_parts.Add($"background-color: {GetHtmlColor(bg_scb.Color)};");
-                //span_node.AddClass("font-bg-color-override-on");
             }
             span_node.SetAttributeValue("style", string.Join(" ", style_parts));
             return span_node;
         }
 
         private static string GetFontSize(Span s) {
-            double fs = (double)((int)s.FontSize);//new FontSizeConverter().ConvertFrom(s.FontSize+"pt");
-            //MpWpfRtfDefaultProperties.Instance.AddFontSize(fs);
+            double fs = (double)((int)s.FontSize);
             return $"{fs}px";
         }
 
         private static string GetHtmlColor(Color c) {
-            //MpWpfRtfDefaultProperties.Instance.AddFontColor(c);
             return string.Format(@"rgb({0},{1},{2})", c.R, c.G, c.B);
         }
 
         private static string GetHtmlFont(Span s) {
             string ff = s.FontFamily.ToString().ToLowerInvariant().Trim();
-            //MpWpfRtfDefaultProperties.Instance.AddFont(ff);
             return ff.Replace(" ", "-");
         }
 
@@ -541,17 +447,6 @@ namespace MonkeyPaste.Common.Wpf {
 
 
         public static string Test() {
-            //MpHtmlToRtfConverter.Test();
-
-            //var assembly = IntrospectionExtensions.GetTypeInfo(typeof(MpRtfToHtmlConverter)).Assembly;
-            //var stream = assembly.GetManifestResourceStream("MpWpfApp.Resources.TestData.quillFormattedTextSample1.html");
-            //using (var reader = new System.IO.StreamReader(stream)) {
-            //    string rtf = MpHtmlToRtfConverter.ConvertHtmlToRtf(reader.ReadToEnd());
-            //    string html = MpRtfToHtmlConverter.ConvertRtfToHtml(rtf);
-            //    MpHelpers.WriteTextToFile(@"C:\Users\tkefauver\Desktop\rtf2html.html", html, false);
-            //}
-
-            //string itemGuid = System.Guid.NewGuid().ToString();
             string rtf = ReadTextFromFile(@"C:\Users\tkefauver\Desktop\rtf_sample_short.rtf");
             string plain_html = ConvertFormatToHtml(rtf);
 

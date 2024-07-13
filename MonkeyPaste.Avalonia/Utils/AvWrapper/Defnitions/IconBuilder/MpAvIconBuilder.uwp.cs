@@ -7,10 +7,10 @@ using System;
 namespace MonkeyPaste.Avalonia {
     public partial class MpAvIconBuilder {
 
-        public string GetPathIconBase64(string path, MpIconSize iconSize = MpIconSize.MediumIcon32) =>
+        public string GetPathIconBase64(string path, MpIconSize iconSize) =>
             GetPathIconBase64(path, IntPtr.Zero, iconSize);
 
-        public string GetPathIconBase64(string path, nint handle, MpIconSize iconSize = MpIconSize.MediumIcon32) {
+        public string GetPathIconBase64(string path, nint handle, MpIconSize iconSize) {
             if (string.IsNullOrEmpty(path)) {
                 return null;
             }

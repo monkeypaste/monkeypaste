@@ -1186,4 +1186,16 @@
   <data name="MpShortcutType_ToggleGlobalHooks" xml:space="preserve">
     <value>გლობალური კაკვები</value>
   </data>
+  <data name="MpNotificationType_ModalSettingsFrameMenu" xml:space="preserve">
+    <value>მოდალური პარამეტრების ჩარჩო მენიუ</value>
+  </data>
+  <data name="MpShortcutType_EnterKeyAction" xml:space="preserve">
+    <value>შეიყვანეთ ძირითადი მოქმედება</value>
+  </data>
+  <data name="MpShortcutType_ToggleXamlHotReload" xml:space="preserve">
+    <value>შეცვალეთ xaml ცხელი გადატვირთვა</value>
+  </data>
+  <data name="MpShortcutType_ToggleContentWrap" xml:space="preserve">
+    <value>გადაიტანეთ შინაარსის შეფუთვა</value>
+  </data>
 </root>

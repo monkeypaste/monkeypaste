@@ -1186,4 +1186,16 @@
   <data name="MpShortcutType_ToggleGlobalHooks" xml:space="preserve">
     <value>ቶግለ ግሎባል መንጠልጠሊታት</value>
   </data>
+  <data name="MpNotificationType_ModalSettingsFrameMenu" xml:space="preserve">
+    <value>ሞዳል ቅጥዕታት ፍሬም ዝርዝር</value>
+  </data>
+  <data name="MpShortcutType_EnterKeyAction" xml:space="preserve">
+    <value>ቁልፊ ስጉምቲ ምእታው</value>
+  </data>
+  <data name="MpShortcutType_ToggleXamlHotReload" xml:space="preserve">
+    <value>Toggle XAML ውዑይ ሪሎድ</value>
+  </data>
+  <data name="MpShortcutType_ToggleContentWrap" xml:space="preserve">
+    <value>ትሕዝቶ ምልባስ መጠቕለሊ</value>
+  </data>
 </root>

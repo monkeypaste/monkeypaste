@@ -28,9 +28,9 @@ using AvToolTip = Avalonia.Controls.ToolTip;
 #if WINDOWS
 using static System.Net.Mime.MediaTypeNames;
 using System.Windows.Media.Media3D;
+using System.Collections.ObjectModel;
+
 #endif
-
-
 
 #if CEFNET_WV
 using CefNet.Avalonia;
@@ -49,7 +49,6 @@ using TheArtOfDev.HtmlRenderer.Avalonia;
 #if MAC
 using MonoMac.Foundation;
 #endif
-
 #endif
 
 namespace MonkeyPaste.Avalonia {
@@ -68,7 +67,6 @@ namespace MonkeyPaste.Avalonia {
         private MpQuillEditorContentChangedMessage _lastReadOnlyEnabledFromHostResp = null;
         private MpQuillEditorSelectionStateMessage _lastEditorSelectionStateMessage = null;
         private DateTime? _lastAppendStateChangeCompleteDt = null;
-
         #endregion
 
         #region Constants
@@ -471,6 +469,13 @@ namespace MonkeyPaste.Avalonia {
 
                 #region LAYOUT
 
+                case MpEditorBindingFunctionType.notifyWrapEnabledChanged:
+                    ntf = MpJsonExtensions.DeserializeBase64Object<MpQuillWrapChangedEventMessage>(msgJsonBase64Str);
+                    if (ntf is MpQuillWrapChangedEventMessage wrapChangedMsg) {
+                        BindingContext.IsWrappingEnabled = wrapChangedMsg.isWrappingEnabled;
+                    }
+                    break;
+                
                 case MpEditorBindingFunctionType.notifyScrollBarVisibilityChanged:
                     ntf = MpJsonExtensions.DeserializeBase64Object<MpQuillOverrideScrollNotification>(msgJsonBase64Str);
                     if (ntf is MpQuillOverrideScrollNotification scrollbarVisibleMsg) {
@@ -598,7 +603,7 @@ namespace MonkeyPaste.Avalonia {
                 case MpEditorBindingFunctionType.notifySetClipboardRequested:
                     ntf = MpJsonExtensions.DeserializeBase64Object<MpQuillEditorSetClipboardRequestNotification>(msgJsonBase64Str);
                     if (ntf is MpQuillEditorSetClipboardRequestNotification setClipboardReq) {
-                        ctvm.CopyToClipboardCommand.Execute(null);
+                        ctvm.CopyToClipboardCommand.Execute("editor");
                     }
                     break;
                 case MpEditorBindingFunctionType.notifyPasteRequest:
@@ -790,7 +795,8 @@ namespace MonkeyPaste.Avalonia {
                                 interactive: this,
                                 mp: new MpPoint(pointerMsg.clientX, pointerMsg.clientY),
                                 KeyModifiers.None,
-                                isLocalMp: true);
+                                isLocalMp: true,
+                                isLeftButton: pointerMsg.isLeft);
                             this.RaiseEvent(pe);
                             return;
                         }
@@ -1040,6 +1046,7 @@ namespace MonkeyPaste.Avalonia {
 #endif
         }
 
+
 #if CEFNET_WV
 
         //protected override void Dispose(bool disposing) {
@@ -1210,19 +1217,27 @@ namespace MonkeyPaste.Avalonia {
                 return;
             }
         }
+
         #endregion
 
         #region Private Methods
+
         private void InitDnd() {
 
         }
         private MpQuillDefaultsRequestMessage GetDefaultsMessage() {
             return new MpQuillDefaultsRequestMessage() {
+                // TODO when using dynamic plugins wwwroot should be relative dir from local storage
+                // NOTE! wwwroot needs to include trailing slash
+                wwwroot = string.Empty,
+                selectedSyntaxTheme = MpAvPrefViewModel.Instance.SelectedSyntaxTheme,
+                isMobile = MpAvThemeViewModel.Instance.IsMobileOrWindowed,
                 internalSourceBaseUri = Mp.Services.SourceRefTools.InternalSourceBaseUri,
                 minLogLevel = (int)MpConsole.MinLogLevel,
                 isDebug = MpDebug.IsDebug,
                 cultureCode = MpAvCurrentCultureViewModel.Instance.CurrentCulture.Name,
                 isRightToLeft = MpAvPrefViewModel.Instance.IsTextRightToLeft,
+                syntaxFontFamily = MpAvPrefViewModel.Instance.DefaultCodeFontFamily,
                 defaultFontFamily = MpAvPrefViewModel.Instance.DefaultEditableFontFamily,
                 defaultFontSize = MpAvPrefViewModel.Instance.DefaultFontSize.ToString() + "px",
                 isSpellCheckEnabled = MpAvPrefViewModel.Instance.IsSpellCheckEnabled,
@@ -1249,6 +1264,7 @@ namespace MonkeyPaste.Avalonia {
             }
 
             var loadContentMsg = new MpQuillLoadContentRequestMessage() {
+                isWrappingEnabled = BindingContext.IsWrappingEnabled,
                 isPopOut = BindingContext.IsWindowOpen,
                 editorScale = ContentScale,
                 contentId = BindingContext.CopyItemId,
@@ -1397,7 +1413,7 @@ namespace MonkeyPaste.Avalonia {
                 nameof(ContentScale),
                 x => x.ContentScale,
                 (x, o) => x.ContentScale = o,
-                MpCopyItem.DEFAULT_ZOOM_FACTOR);
+                MpCopyItem.ZOOM_FACTOR_DEFAULT);
 
         private void OnContentScaleChanged() {
             if (!IsEditorLoaded) {
@@ -1589,10 +1605,15 @@ namespace MonkeyPaste.Avalonia {
                 return;
             }
 
+           
             BindingContext.IgnoreHasModelChanged = true;
 
-            BindingContext.SearchableText = contentChanged_ntf.itemPlainText;
+            string pt = contentChanged_ntf.itemPlainText.ToStringOrEmpty().Replace("\n", Environment.NewLine);
+            bool did_content_change = BindingContext.SearchableText != pt;
+            if(did_content_change) {
 
+            }
+            BindingContext.SearchableText = pt;
             if (contentChanged_ntf.itemData != null) {
                 bool is_empty = contentChanged_ntf.itemData.IsNullOrWhitespaceHtmlString();
                 if (is_empty &&
@@ -1608,6 +1629,9 @@ namespace MonkeyPaste.Avalonia {
                 MpJsonExtensions.DeserializeBase64Object<MpQuillDataTransferCompletedNotification>(contentChanged_ntf.dataTransferCompletedRespFragment) is
                 MpQuillDataTransferCompletedNotification dtcn) {
                 ProcessDataTransferCompleteResponse(dtcn);
+            }
+            if(did_content_change) {
+                MpAvAnalyticItemCollectionViewModel.Instance.ApplyCoreAnnotatorCommand.Execute(BindingContext);
             }
 
 
@@ -1701,6 +1725,7 @@ namespace MonkeyPaste.Avalonia {
         }
         #endregion
 
+
         #region IsContentReadOnly 
 
         private bool _isContentReadOnly = true;
@@ -1721,6 +1746,7 @@ namespace MonkeyPaste.Avalonia {
             if (BindingContext == null || !IsEditorLoaded) {
                 return;
             }
+            
             Dispatcher.UIThread.Post(async () => {
                 if (IsContentReadOnly) {
                     if (!BindingContext.IsWindowOpen) {
@@ -1972,6 +1998,9 @@ namespace MonkeyPaste.Avalonia {
             Resize(nw, nh);
         }
         private void Resize(double nw, double nh) {
+            if (MpAvThemeViewModel.Instance.IsMobileOrWindowed) {
+                return;
+            }
             // NOTE trying to isolate this cause persistent size gets lost
             // keeping animation smooth so waiting till end to make sure its set
 

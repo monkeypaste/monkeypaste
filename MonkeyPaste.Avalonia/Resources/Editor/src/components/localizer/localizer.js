@@ -1,7 +1,7 @@
 
 // #region Life Cycle
-function initLocalizer(cc) {    
-    let src_str = `src/components/localizer/UiStrings.${cc}.js`;
+function initLocalizer(cc) {
+    let src_str = `${globals.wwwroot}src/components/localizer/UiStrings.${cc}.js`;
     let culture_script_elm = document.createElement('script');
     culture_script_elm.classList.add('culture-script');
     culture_script_elm.setAttribute('defer', null);
@@ -16,7 +16,6 @@ function initLocalizer(cc) {
             cur_culture_elms[i].remove();
         }
         toggleRightToLeft(globals.IsRtl);
-        localizeCss();
         localizeGlobals();
         initLocalizerDomWatcher();
         getLocalizableElements().forEach(x => localizeElement(x));
@@ -71,9 +70,7 @@ function getLocalizableElements() {
 // #endregion State
 
 // #region Actions
-function localizeCss() {
-    setElementComputedStyleProp(document.body, '--linkLabel', 'POOP');
-}
+
 function localizeElement(elm, args) {
     if (elm.hasAttribute(globals.LOCALIZER_UI_STRING_CONTENT_ATTR_NAME)) {
         // has content key

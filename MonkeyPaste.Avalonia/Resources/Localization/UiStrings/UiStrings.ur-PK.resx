@@ -2996,4 +2996,49 @@
   <data name="DonateLabel" xml:space="preserve">
     <value>عطیہ کریں</value>
   </data>
+  <data name="MobileCopiedNtfText" xml:space="preserve">
+    <value>کلپ بورڈ میں کاپی کیا</value>
+  </data>
+  <data name="PinTraySidebarLabel" xml:space="preserve">
+    <value>پن</value>
+  </data>
+  <data name="QueryTraySidebarLabel" xml:space="preserve">
+    <value>استفسار</value>
+  </data>
+  <data name="PluginBrowserFormattedWindowTitle" xml:space="preserve">
+    <value>پلگ ان براؤزر - {0}</value>
+  </data>
+  <data name="AddNewActionLabel" xml:space="preserve">
+    <value>نیا شامل کریں</value>
+  </data>
+  <data name="PluginBrowserWindowTitle" xml:space="preserve">
+    <value>پلگ ان براؤزر</value>
+  </data>
+  <data name="ClipboardSetMessage" xml:space="preserve">
+    <value>کلپ بورڈ سیٹ</value>
+  </data>
+  <data name="EditorPasteButtonLabelMobile" xml:space="preserve">
+    <value>کاپی</value>
+  </data>
+  <data name="PrefSyntaxThemeHint" xml:space="preserve">
+    <value>ٹیکسٹ کلپس میں پائے جانے والے کوڈ کے بلاکس کے لئے استعمال ہونے والا تھیم۔</value>
+  </data>
+  <data name="PrefSyntaxThemeLabel" xml:space="preserve">
+    <value>نحو تھیم</value>
+  </data>
+  <data name="PrefCodeFontLabel" xml:space="preserve">
+    <value>نحو</value>
+  </data>
+  <data name="CommonViewLabel" xml:space="preserve">
+    <value>دیکھیں</value>
+  </data>
+  <data name="WrapTextMenuLabel" xml:space="preserve">
+    <value>اختتامی کلمات</value>
+  </data>
+  <data name="ClipAssignShortcutLabel" xml:space="preserve">
+    <value>شارٹ کٹ تفویض کریں ...</value>
+  </data>
+  <data name="ClipUpdateShortcutLabel" xml:space="preserve">
+    <value>شارٹ کٹ کو اپ ڈیٹ کریں ...</value>
+  </data>
 </root>

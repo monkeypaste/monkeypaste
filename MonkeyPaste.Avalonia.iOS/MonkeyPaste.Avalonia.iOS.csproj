@@ -1,22 +1,61 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
     <OutputType>Exe</OutputType>
-    <TargetFramework>$(MainTargetFramework)</TargetFramework>
-    <SupportedOSPlatformVersion>10.0</SupportedOSPlatformVersion>
+    <TargetFramework>net8.0-ios</TargetFramework>
+    <SupportedOSPlatformVersion>13.0</SupportedOSPlatformVersion>
+    <Nullable>disable</Nullable>
     <ProvisioningType>manual</ProvisioningType>
-    <Nullable>enable</Nullable>
-    <RuntimeIdentifier>iossimulator-x64</RuntimeIdentifier>
-    
-    <!-- These properties need to be set in order to run on a real iDevice -->
-    <!--<RuntimeIdentifier>ios-arm64</RuntimeIdentifier>-->
-    <!--<CodesignKey></CodesignKey>-->
+    <CodesignKey>Apple Development: Created via API (79M7T3S5XK)</CodesignKey>
+    <UseMauiEssentials>true</UseMauiEssentials>
+  </PropertyGroup>
+  
+  <!--<PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
+    <MtouchLink>SdkOnly</MtouchLink>
+    <OptimizePNGs>True</OptimizePNGs>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
+    <MtouchLink>SdkOnly</MtouchLink>
+    <OptimizePNGs>True</OptimizePNGs>
+  </PropertyGroup>-->
+  
+  <PropertyGroup Condition="'$(TargetFramework)'=='net8.0-ios'">
+    <CodesignKey>Apple Development: Created via API (79M7T3S5XK)</CodesignKey>
+    <CodesignProvision>VS: WildCard Development</CodesignProvision>
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="Avalonia.iOS" Version="11.0.0-preview7" />
+    <PackageReference Include="Avalonia.iOS" Version="$(AvaloniaVersion)" />
+    <PackageReference Include="WebView.Avalonia.iOS" Version="11.0.0.1" />
+    <PackageReference Include="Microsoft.Maui.Essentials" Version="8.0.21" />
   </ItemGroup>
-
+  
+  <ItemGroup>
+    <AvaloniaResource Include="Assets\dat\**">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </AvaloniaResource>
+  </ItemGroup>
+  
+  <ItemGroup>
+    <None Remove="Assets\dat\cf2ec03f-9edd-45e9-a605-2a2df71e03bd.zip" />
+    <None Remove="Assets\dat\ecde8e7c-30cf-47ef-a6a9-8f7f439b0a31.zip" />
+  </ItemGroup>
+  
   <ItemGroup>
     <ProjectReference Include="..\MonkeyPaste.Avalonia\MonkeyPaste.Avalonia.csproj" />
-  </ItemGroup>
+  </ItemGroup>    
+  
+  
+<PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
+    <!--<Debugger>Xamarin</Debugger>
+    <DebugSymbols>True</DebugSymbols>-->
+    <MtouchDebug>True</MtouchDebug>
+    <MtouchProfiling>True</MtouchProfiling>
+  </PropertyGroup>
+  
+  <!-- Workaround for https://github.com/dotnet/maui/issues/7272 -->
+  <Target Name="_SetPublishFolderTypeNoneOnDocFileItems" BeforeTargets="_ComputePublishLocation">
+    <ItemGroup>
+      <ResolvedFileToPublish Update="@(ResolvedFileToPublish)" Condition="'%(ResolvedFileToPublish.Extension)' == '.resx' And '%(ResolvedFileToPublish.PublishFolderType)' == ''" PublishFolderType="None" />
+    </ItemGroup>
+  </Target>
 </Project>

@@ -14,7 +14,8 @@ function loadContentAsync(
 	paste_button_info,
 	break_before_load,
 	editor_scale,
-	is_pop_out) {
+	is_pop_out,
+	is_wrap_enabled) {
 	if (break_before_load) {
 		log('breaking before load called...');
 		debugger;
@@ -22,7 +23,7 @@ function loadContentAsync(
 	// NOTE only called fromHost (or tester which calls _ext)
 
 	let sup_guid = suppressTextChanged();
-	globals.IsLoadingContent = true;
+	setIsContentLoaded(false);
 
 	let is_reload = contentHandle == globals.ContentHandle;
 	let was_sub_sel_enabled = null;
@@ -72,7 +73,7 @@ function loadContentAsync(
 
 		deactivateFindReplace(false);
 
-		loadContentDataAsync(contentData);
+		loadContentDataAsync(contentData, is_reload);
 
 		updateQuill();
 		if (!is_reload) {
@@ -107,6 +108,8 @@ function loadContentAsync(
 		//} else {
 			loadAnnotations(annotationsJsonStr);
 		//}
+		is_wrap_enabled = isRunningOnHost() || is_reload || globals.ContentItemType != 'Image' ? is_wrap_enabled : true;
+		setWrap(is_wrap_enabled);
 
 		updateAllElements();
 		updateQuill();
@@ -143,12 +146,12 @@ function loadContentAsync(
 		disableReadOnly();
 	}	
 
-	globals.IsLoadingContent = false;
-	setEditorPlaceholderText('');
+	setIsContentLoaded(true);
 	// signal content loaded (atm used by scrollToAppendIdx)
 	getEditorContainerElement().dispatchEvent(globals.ContentLoadedEvent);
-
+	
 	unsupressTextChanged(sup_guid);
+
 
 	if (is_reload) {
 		log('Editor re-loaded');
@@ -337,7 +340,10 @@ function getContentHeightByType() {
 // #endregion Getters
 
 // #region Setters
-
+function setIsContentLoaded(isContentLoaded) {
+	globals.IsContentLoaded = isContentLoaded;
+	updateEditorPlaceholderText();
+}
 // #endregion Setters
 
 // #region State
@@ -413,7 +419,7 @@ function appendContentData(data) {
 }
 
 function loadContentDataAsync(contentData) {
-	// enusre globals.IsLoaded is false so msg'ing doesn't get clogged up
+	// enusre globals.IsEditorLoaded is false so msg'ing doesn't get clogged up
 	setEditorIsLoaded(false);
 
 	if (globals.ContentItemType == 'Image') {

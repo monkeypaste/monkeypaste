@@ -61,7 +61,7 @@ namespace MonkeyPaste.Avalonia {
             get {
                 if (ProgressLoader == null) {
                     return MpNotificationType.None;
-                }
+                } 
                 return ProgressLoader.DialogType;
             }
         }

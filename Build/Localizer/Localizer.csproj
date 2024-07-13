@@ -5,7 +5,7 @@
     <TargetFramework>$(DefaultTargetFramework)</TargetFramework>
     <ImplicitUsings>enable</ImplicitUsings>
     <Nullable>disable</Nullable>
-    <Platforms>$(DefaultPlatforms)</Platforms>
+    <!--<Platforms>$(DefaultPlatforms)</Platforms>-->
   </PropertyGroup>
 
   <ItemGroup>

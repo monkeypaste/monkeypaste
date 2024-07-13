@@ -22,12 +22,10 @@ namespace MonkeyPaste.Avalonia {
                     string.Join(" ", pi.ArgumentList) :
                     null;
 
-#if !ANDROID 
             if (!processPath.IsFileOrDirectory()) {
                 MpDebug.Break($"Invalid process path detected '{processPath}'", silent: false);
                 return null;
             }
-#endif
 
             var dupApp = await MpDataModelProvider.GetAppByMembersAsync(processPath, args, MpDefaultDataModelTools.ThisUserDeviceId);
             if(dupApp == null && !Mp.Services.SingleInstanceTools.IsFirstInstance) {
@@ -54,7 +52,7 @@ namespace MonkeyPaste.Avalonia {
 
             // GET APP ICON
             if (string.IsNullOrEmpty(iconBase64)) {
-                iconBase64 = Mp.Services.IconBuilder.GetPathIconBase64(processPath, pi.Handle);
+                iconBase64 = Mp.Services.IconBuilder.GetPathIconBase64(processPath, pi.Handle, MpIconSize.ExtraLargeIcon128);
             }
 
             if (string.IsNullOrEmpty(iconBase64)) {

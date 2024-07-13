@@ -1,6 +1,8 @@
+using Avalonia.Input;
 using Avalonia.Interactivity;
 using Avalonia.Threading;
 using PropertyChanged;
+using WebViewCore.Extensions;
 
 namespace MonkeyPaste.Avalonia {
 

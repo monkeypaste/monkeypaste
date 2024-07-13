@@ -15,6 +15,7 @@
         // APPLICATION
         DecreaseFocus,
         IncreaseFocus,
+        EnterKeyAction,
         ExitApplication,
         PasteToExternal,
         PasteSelection,
@@ -58,6 +59,8 @@
         ResetSelectionZoom,
         ClearPinTray,
         ToggleGlobalHooks,
+        ToggleXamlHotReload,
+        ToggleContentWrap,
 
         // CUT-OFF 
         MAX_APP_SHORTCUT,

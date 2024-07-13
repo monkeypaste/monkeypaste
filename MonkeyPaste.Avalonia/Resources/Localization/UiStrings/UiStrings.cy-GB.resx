@@ -2996,4 +2996,49 @@ Bellach gellir galluogi Llwybrau Byr Byd-eang yn y Ddewislen Hambwrdd System</va
   <data name="DonateLabel" xml:space="preserve">
     <value>Rhoddwch</value>
   </data>
+  <data name="MobileCopiedNtfText" xml:space="preserve">
+    <value>Wedi'i gopïo i'r clipfwrdd</value>
+  </data>
+  <data name="PinTraySidebarLabel" xml:space="preserve">
+    <value>Wedi'i binio</value>
+  </data>
+  <data name="QueryTraySidebarLabel" xml:space="preserve">
+    <value>Ymholiad</value>
+  </data>
+  <data name="PluginBrowserFormattedWindowTitle" xml:space="preserve">
+    <value>Porwr Ategion - {0}</value>
+  </data>
+  <data name="PluginBrowserWindowTitle" xml:space="preserve">
+    <value>Porwr Ategyn</value>
+  </data>
+  <data name="ClipboardSetMessage" xml:space="preserve">
+    <value>Set Clipfwrdd</value>
+  </data>
+  <data name="AddNewActionLabel" xml:space="preserve">
+    <value>Ychwanegu Newydd</value>
+  </data>
+  <data name="EditorPasteButtonLabelMobile" xml:space="preserve">
+    <value>Copïan</value>
+  </data>
+  <data name="PrefSyntaxThemeHint" xml:space="preserve">
+    <value>Y thema a ddefnyddir ar gyfer blociau o god a ganfyddir mewn clipiau testun.</value>
+  </data>
+  <data name="PrefSyntaxThemeLabel" xml:space="preserve">
+    <value>Thema Cystrawen</value>
+  </data>
+  <data name="PrefCodeFontLabel" xml:space="preserve">
+    <value>Cystrawen</value>
+  </data>
+  <data name="CommonViewLabel" xml:space="preserve">
+    <value>Golygfa</value>
+  </data>
+  <data name="WrapTextMenuLabel" xml:space="preserve">
+    <value>Lapiwch Testun</value>
+  </data>
+  <data name="ClipAssignShortcutLabel" xml:space="preserve">
+    <value>Neilltuo llwybr byr...</value>
+  </data>
+  <data name="ClipUpdateShortcutLabel" xml:space="preserve">
+    <value>Diweddaru llwybr byr...</value>
+  </data>
 </root>

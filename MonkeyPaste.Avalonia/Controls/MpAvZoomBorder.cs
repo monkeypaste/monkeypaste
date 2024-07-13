@@ -2,6 +2,7 @@
 using Avalonia.Controls;
 using Avalonia.Controls.Shapes;
 using Avalonia.Input;
+using Avalonia.Interactivity;
 using Avalonia.Media;
 using Avalonia.Threading;
 using MonkeyPaste.Common;
@@ -51,20 +52,15 @@ namespace MonkeyPaste.Avalonia {
         public Control Child =>
             Content as Control;
 
-        #region DesignerItem AvaloniaProperty
-        public MpIDesignerSettingsViewModel DesignerItem => DataContext as MpIDesignerSettingsViewModel;
-
-        #endregion
-
         #region ShowGrid AvaloniaProperty
         public bool ShowGrid {
             get { return (bool)GetValue(ShowGridProperty); }
             set { SetValue(ShowGridProperty, value); }
         }
 
-        public static readonly AttachedProperty<bool> ShowGridProperty =
-            AvaloniaProperty.RegisterAttached<object, Control, bool>(
-                "ShowGrid",
+        public static readonly StyledProperty<bool> ShowGridProperty =
+            AvaloniaProperty.Register<MpAvZoomBorder, bool>(
+                nameof(ShowGrid),
                 true,
                 false);
 
@@ -76,9 +72,9 @@ namespace MonkeyPaste.Avalonia {
             set { SetValue(MinScaleProperty, value); }
         }
 
-        public static readonly AttachedProperty<double> MinScaleProperty =
-            AvaloniaProperty.RegisterAttached<object, Control, double>(
-                "MinScale",
+        public static readonly StyledProperty<double> MinScaleProperty =
+            AvaloniaProperty.Register<MpAvZoomBorder, double>(
+                nameof(MinScale),
                 0.1,
                 false);
 
@@ -90,22 +86,85 @@ namespace MonkeyPaste.Avalonia {
             set { SetValue(MaxScaleProperty, value); }
         }
 
-        public static readonly AttachedProperty<double> MaxScaleProperty =
-            AvaloniaProperty.RegisterAttached<object, Control, double>(
-                "MaxScale",
+        public static readonly StyledProperty<double> MaxScaleProperty =
+            AvaloniaProperty.Register<MpAvZoomBorder, double>(
+                nameof(MaxScale),
                 3.0d,
+                false);
+
+        #endregion
+        
+        #region Scale AvaloniaProperty
+        public double Scale {
+            get { return (double)GetValue(ScaleProperty); }
+            set { SetValue(ScaleProperty, value); }
+        }
+
+        public static readonly StyledProperty<double> ScaleProperty =
+            AvaloniaProperty.Register<MpAvZoomBorder, double>(
+                nameof(Scale),
+                1.0d,
+                false);
+
+        #endregion
+        
+        #region TranslateOffsetX AvaloniaProperty
+        public double TranslateOffsetX {
+            get { return (double)GetValue(TranslateOffsetXProperty); }
+            set { SetValue(TranslateOffsetXProperty, value); }
+        }
+
+        public static readonly StyledProperty<double> TranslateOffsetXProperty =
+            AvaloniaProperty.Register<MpAvZoomBorder, double>(
+                nameof(TranslateOffsetX),
+                0.0d,
+                false);
+
+        #endregion
+        
+        #region TranslateOffsetY AvaloniaProperty
+        public double TranslateOffsetY {
+            get { return (double)GetValue(TranslateOffsetYProperty); }
+            set { SetValue(TranslateOffsetYProperty, value); }
+        }
+
+        public static readonly StyledProperty<double> TranslateOffsetYProperty =
+            AvaloniaProperty.Register<MpAvZoomBorder, double>(
+                nameof(TranslateOffsetY),
+                0.0d,
                 false);
 
         #endregion
 
         #region Bg Grid Properties
 
-        public IBrush GridLineBrush { get; set; } = Brushes.LightBlue;
+        #region GridLineBrush
+        public IBrush GridLineBrush {
+            get { return (IBrush)GetValue(GridLineBrushProperty); }
+            set { SetValue(GridLineBrushProperty, value); }
+        }
+
+        public static readonly StyledProperty<IBrush> GridLineBrushProperty =
+            AvaloniaProperty.Register<MpAvZoomBorder, IBrush>(
+                nameof(GridLineBrush),
+                Brushes.LightBlue,
+                false);
+        #endregion
+
+        #region OriginBrush
+        public IBrush OriginBrush {
+            get { return (IBrush)GetValue(OriginBrushProperty); }
+            set { SetValue(OriginBrushProperty, value); }
+        }
+
+        public static readonly StyledProperty<IBrush> OriginBrushProperty =
+            AvaloniaProperty.Register<MpAvZoomBorder, IBrush>(
+                nameof(OriginBrush),
+                Brushes.LightBlue,
+                false);
+        #endregion
         public double GridLineThickness { get; set; } = 1;
-
-        public IBrush OriginBrush { get; set; } = Brushes.Cyan;
         public double OriginThickness { get; set; } = 3;
-
         public int GridLineSpacing { get; set; } = 35;
 
         #endregion
@@ -120,9 +179,9 @@ namespace MonkeyPaste.Avalonia {
             set { SetValue(WarningBrush1Property, value); }
         }
 
-        public static readonly AttachedProperty<IBrush> WarningBrush1Property =
-            AvaloniaProperty.RegisterAttached<object, Control, IBrush>(
-                "WarningBrush1",
+        public static readonly StyledProperty<IBrush> WarningBrush1Property =
+            AvaloniaProperty.Register<MpAvZoomBorder, IBrush>(
+                nameof(WarningBrush1),
                 Brushes.Yellow,
                 false);
         #endregion
@@ -133,9 +192,9 @@ namespace MonkeyPaste.Avalonia {
             set { SetValue(WarningBrush2Property, value); }
         }
 
-        public static readonly AttachedProperty<IBrush> WarningBrush2Property =
-            AvaloniaProperty.RegisterAttached<object, Control, IBrush>(
-                "WarningBrush2",
+        public static readonly StyledProperty<IBrush> WarningBrush2Property =
+            AvaloniaProperty.Register<MpAvZoomBorder, IBrush>(
+                nameof(WarningBrush2),
                 Brushes.Black,
                 false);
         #endregion
@@ -146,9 +205,9 @@ namespace MonkeyPaste.Avalonia {
             set { SetValue(TransitionLineDefaultBorderBrushProperty, value); }
         }
 
-        public static readonly AttachedProperty<IBrush> TransitionLineDefaultBorderBrushProperty =
-            AvaloniaProperty.RegisterAttached<object, Control, IBrush>(
-                "TransitionLineDefaultBorderBrush",
+        public static readonly StyledProperty<IBrush> TransitionLineDefaultBorderBrushProperty =
+            AvaloniaProperty.Register<MpAvZoomBorder, IBrush>(
+                nameof(TransitionLineDefaultBorderBrush),
                 Brushes.White,
                 false);
         #endregion
@@ -159,9 +218,9 @@ namespace MonkeyPaste.Avalonia {
             set { SetValue(TransitionLineHoverBorderBrushProperty, value); }
         }
 
-        public static readonly AttachedProperty<IBrush> TransitionLineHoverBorderBrushProperty =
-            AvaloniaProperty.RegisterAttached<object, Control, IBrush>(
-                "TransitionLineHoverBorderBrush",
+        public static readonly StyledProperty<IBrush> TransitionLineHoverBorderBrushProperty =
+            AvaloniaProperty.Register<MpAvZoomBorder, IBrush>(
+                nameof(TransitionLineHoverBorderBrush),
                 Brushes.Yellow,
                 false);
         #endregion
@@ -172,9 +231,9 @@ namespace MonkeyPaste.Avalonia {
             set { SetValue(TransitionLineDisabledFillBrushProperty, value); }
         }
 
-        public static readonly AttachedProperty<IBrush> TransitionLineDisabledFillBrushProperty =
-            AvaloniaProperty.RegisterAttached<object, Control, IBrush>(
-                "TransitionLineDisabledFillBrush",
+        public static readonly StyledProperty<IBrush> TransitionLineDisabledFillBrushProperty =
+            AvaloniaProperty.Register<MpAvZoomBorder, IBrush>(
+                nameof(TransitionLineDisabledFillBrush),
                 Brushes.Red,
                 false);
         #endregion
@@ -185,9 +244,9 @@ namespace MonkeyPaste.Avalonia {
             set { SetValue(TransitionLineEnabledFillBrushProperty, value); }
         }
 
-        public static readonly AttachedProperty<IBrush> TransitionLineEnabledFillBrushProperty =
-            AvaloniaProperty.RegisterAttached<object, Control, IBrush>(
-                "TransitionLineEnabledFillBrush",
+        public static readonly StyledProperty<IBrush> TransitionLineEnabledFillBrushProperty =
+            AvaloniaProperty.Register<MpAvZoomBorder, IBrush>(
+                nameof(TransitionLineEnabledFillBrush),
                 Brushes.Green,
                 false);
         #endregion
@@ -209,7 +268,16 @@ namespace MonkeyPaste.Avalonia {
         public MpAvZoomBorder() : base() {
             this.GestureRecognizers.Add(new PinchGestureRecognizer());
             this.AddHandler(Gestures.PinchEvent, MpAvZoomBorder_Pinch);
+
+            this.AddHandler(PointerPressedEvent, MpAvZoomBorder_PointerPressed, RoutingStrategies.Tunnel);
+            this.AddHandler(PointerMovedEvent, MpAvZoomBorder_PointerMoved, RoutingStrategies.Tunnel);
+            this.AddHandler(PointerReleasedEvent, MpAvZoomBorder_PointerReleased, RoutingStrategies.Tunnel);
+
+            this.GetObservable(ScaleProperty).Subscribe(value => OnScaleChanged());
+
         }
+
+
 
         #endregion
 
@@ -224,79 +292,51 @@ namespace MonkeyPaste.Avalonia {
             if (ShowGrid) {
                 DrawGrid(ctx);
             }
-            if (DesignerItem == null) {
-                return;
-            }
-
             DrawItemEffects(ctx);
         }
 
         public void Reset() {
-            if (DesignerItem == null) {
-                return;
-            }
-
-            DesignerItem.ZoomFactor = 1.0d;
-            DesignerItem.TranslateOffsetX = 0;
-            DesignerItem.TranslateOffsetY = 0;
+            Scale = 1.0d;
+            TranslateOffsetX = 0;
+            TranslateOffsetY = 0;
         }
 
         public void Zoom(double scaleDelta, Point relative_anchor) {
-            if (DesignerItem == null) {
-                return;
-            }
-            double scale = DesignerItem.ZoomFactor;
+            double scale = Scale;
 
             if (scale < MinScale) {
                 return;
             }
-            scale += scaleDelta;
-            double zoomCorrected = scaleDelta * scale;
-            scale += zoomCorrected;
+            //scale += scaleDelta;
+            //double zoomCorrected = scaleDelta * scale;
+            //scale += zoomCorrected;
 
-            scale = Math.Min(MaxScale, Math.Max(MinScale, scale));
-            DesignerItem.ZoomFactor = scale;
+            scale = Math.Clamp(scale + scaleDelta, MinScale, MaxScale);
+            Scale = scale;
 
-            var t = new MpPoint(DesignerItem.TranslateOffsetX, DesignerItem.TranslateOffsetY) * scale;
+            var t = new MpPoint(TranslateOffsetX, TranslateOffsetY) * scale;
             //relative_anchor += MpAvTriggerCollectionViewModel.Instance.DesignerCenterLocation;
             //relative_anchor *= scale;
             //MpPoint abs = (relative_anchor) + t;
             //t = abs - relative_anchor;// * scale;
-            DesignerItem.TranslateOffsetX = t.X;
-            DesignerItem.TranslateOffsetY = t.Y;
+
+            //TranslateOffsetX = t.X;
+            //TranslateOffsetY = t.Y;
 
             if (DataContext is MpAvTriggerCollectionViewModel acvm) {
                 acvm.HasModelChanged = true;
             }
         }
         public void TranslateOrigin(double deltaX, double deltaY) {
-            if (DesignerItem == null) {
-                return;
-            }
             // NOTE to be used by DesignerItem Drop Behavior
-            DesignerItem.TranslateOffsetX -= deltaX;
-            DesignerItem.TranslateOffsetY -= deltaY;
+            TranslateOffsetX -= deltaX;
+            TranslateOffsetY -= deltaY;
+            MpConsole.WriteLine($"{TranslateOffsetX} {TranslateOffsetY}");
         }
 
         #endregion
 
         #region Protected Methods
-        protected override void OnPointerPressed(PointerPressedEventArgs e) {
-            base.OnPointerPressed(e);
-            e.Handled = true;
-            child_PreviewMouseLeftButtonDown(Child, e);
-        }
-        protected override void OnPointerReleased(PointerReleasedEventArgs e) {
-            base.OnPointerReleased(e);
-            e.Handled = true;
-            child_MouseLeftButtonUp(Child, e);
-        }
-
-        protected override void OnPointerMoved(PointerEventArgs e) {
-            base.OnPointerMoved(e);
-            e.Handled = true;
-            child_MouseMove(Child, e);
-        }
 
         protected override void OnAttachedToVisualTree(VisualTreeAttachmentEventArgs e) {
             base.OnAttachedToVisualTree(e);
@@ -321,16 +361,73 @@ namespace MonkeyPaste.Avalonia {
 
         protected override void OnPointerWheelChanged(PointerWheelEventArgs e) {
             base.OnPointerWheelChanged(e);
-
-            child_MouseWheel(Child, e);
+            if (Child == null) {
+                return;
+            }
+            double zoom = e.Delta.Y > 0 ? WHEEL_ZOOM_DELTA : -WHEEL_ZOOM_DELTA;
+            Zoom(zoom, e.GetPosition(Child));
         }
+
 
         #endregion
 
         #region Private Methods
 
+        private void OnScaleChanged() {
+            //_lastScale = _lastScale ?? Scale;
+            //if(Math.Abs(Scale-_lastScale.Value) < 0.001) {
+            //    return;
+            //}
+            //Zoom(Scale - _lastScale.Value, this.Bounds.Center);
+            //_lastScale = Scale;
+        }
+
         #region Gesture Handlers
 
+
+        private void MpAvZoomBorder_PointerPressed(object sender, PointerPressedEventArgs e) {
+            if (Child == null ||
+                MpAvMoveExtension.IsAnyMoving ||
+                e.Source is not Control sc ||
+                sc.GetVisualAncestor<MpAvActionDesignerItemView>() is { } press_iv) {
+                return;
+            }
+            _last_mp = e.GetPosition(this).ToPortablePoint();
+            IsTranslating = true;
+            e.Pointer.Capture(this);
+            e.Handled = true;
+        }
+
+
+        private void MpAvZoomBorder_PointerMoved(object sender, PointerEventArgs e) {
+            if (Child == null || !IsTranslating) {
+                return;
+            }
+            e.Handled = true;
+            var mp = e.GetPosition(this).ToPortablePoint();
+            if(_last_mp == null) {
+                _last_mp = mp;
+            }
+            var v = _last_mp - mp;
+            if(v.Length > 1) {
+                TranslateOrigin(v.X, v.Y);
+                this.Redraw();
+                _last_mp = mp;
+            }
+        }
+
+        private void MpAvZoomBorder_PointerReleased(object sender, PointerReleasedEventArgs e) {
+
+            e.Pointer.Capture(null);
+            if (Child == null || !IsTranslating) {
+                return;
+            }
+            IsTranslating = false;
+            e.Handled = true;
+            if (DataContext is MpAvTriggerCollectionViewModel acvm) {
+                acvm.HasModelChanged = true;
+            }
+        }
         private void MpAvZoomBorder_Pinch(object sender, PinchEventArgs e) {
             MpConsole.WriteLine($"Pinch Scale: {e.Scale} Scale Origin: {e.ScaleOrigin}");
             if (_lastScale == null && _lastScaleOrigin == null) {
@@ -348,73 +445,26 @@ namespace MonkeyPaste.Avalonia {
 
         #region Child Events
 
-        private void child_MouseWheel(object sender, PointerWheelEventArgs e) {
-            if (Child == null || DesignerItem == null) {
-                return;
-            }
-            double zoom = e.Delta.Y > 0 ? WHEEL_ZOOM_DELTA : -WHEEL_ZOOM_DELTA;
-            Zoom(zoom, e.GetPosition(Child));
-        }
 
-        private void child_PreviewMouseLeftButtonDown(object sender, PointerPressedEventArgs e) {
-            if (Child != null && !MpAvMoveExtension.IsAnyMoving) {
-                _last_mp = e.GetPosition(this).ToPortablePoint();
-                e.Pointer.Capture(this);
-                if (e.Pointer.Captured != this) {
-                    var capturer = e.Pointer.Captured;
-                    MpDebug.Break();
-                } else {
-                    IsTranslating = true;
-                    e.Handled = true;
-                }
-            }
-        }
-
-        private void child_MouseLeftButtonUp(object sender, PointerReleasedEventArgs e) {
-            if (Child != null) {
-                IsTranslating = false;
-                e.Pointer.Capture(null);
-                if (DataContext is MpAvTriggerCollectionViewModel acvm) {
-                    acvm.HasModelChanged = true;
-                }
-            }
-        }
 
         void child_PreviewMouseRightButtonDown(object sender, PointerPressedEventArgs e) {
             this.Reset();
         }
 
-        private void child_MouseMove(object sender, PointerEventArgs e) {
-            if (Child != null) {
-                if (IsTranslating) {
-                    var mp = e.GetPosition(this).ToPortablePoint();
-                    var v = _last_mp - mp;
-                    TranslateOrigin(v.X, v.Y);
-                    this.Redraw();
-                    _last_mp = mp;
-                }
-            }
-        }
 
         #endregion
 
         #region Grid Rendering
         private void DrawGrid(DrawingContext dc) {
-            if (DesignerItem == null) {
-                return;
-            }
-
-            var di = DesignerItem;
-
             double w = Bounds.Width;
             double h = Bounds.Height;
 
-            double offset_x = di.TranslateOffsetX;
-            double offset_y = di.TranslateOffsetY;
+            double offset_x = TranslateOffsetX;
+            double offset_y = TranslateOffsetY;
 
             //var st = GetScaleTransform(Child);
-            int HorizontalGridLineCount = (int)((w / GridLineSpacing) * (1 / di.ZoomFactor));
-            int VerticalGridLineCount = (int)((h / GridLineSpacing) * (1 / di.ZoomFactor));
+            int HorizontalGridLineCount = (int)((w / GridLineSpacing) * (1 / Scale));
+            int VerticalGridLineCount = (int)((h / GridLineSpacing) * (1 / Scale));
 
             int major_count = 5;
             double major_thickness = 2;
@@ -575,15 +625,16 @@ namespace MonkeyPaste.Avalonia {
             return null;
         }
         private MpRect GetTranslatedActionShapeRect(MpAvActionViewModelBase avm) {
-            if (this.GetVisualDescendant<ListBox>() is ListBox lb &&
-                GetActionShape(avm) is Shape s) {
-                var s_rect = s.Bounds.ToPortableRect();
-                var s_center = s.TranslatePoint(new Point(/*s.Bounds.Width / 2, s.Bounds.Height / 2*/), lb).Value.ToPortablePoint();
-                s_center /= DesignerItem.ZoomFactor;
-                s_rect.Move(s_center);
-                return s_rect;
+            if (this.GetVisualDescendant<ListBox>() is not ListBox lb ||
+                GetActionShape(avm) is not Shape s) {
+                return MpRect.Empty;
             }
-            return MpRect.Empty;
+
+            var s_rect = s.Bounds.ToPortableRect();
+            var s_center = s.TranslatePoint(new Point(/*s.Bounds.Width / 2, s.Bounds.Height / 2*/), this).Value.ToPortablePoint();
+            s_center /= Scale;
+            s_rect.Move(s_center);
+            return s_rect;
         }
         private void DrawActionShadow(DrawingContext ctx, MpAvActionViewModelBase avm) {
             double scale = avm.Parent.ZoomFactor;
@@ -608,22 +659,14 @@ namespace MonkeyPaste.Avalonia {
                 }
             } else if (s is Polygon pg) {
                 using (ctx.PushTransform(
-                    Matrix.CreateScale(scale, scale) //*
-                                                     //Matrix.CreateTranslation(origin.X, origin.Y)
-                    )) {
+                    Matrix.CreateScale(scale, scale))) {
 
                     var pg_trans = (pg.Bounds.ToPortableRect().Location + shape_rect.TopLeft + shadow_offset).ToAvPoint();
                     ctx.DrawGeometry(shadow_brush, new Pen(Brushes.Transparent), GetPointGeometry(pg.Points, pg_trans));
                 }
             } else if (s is Rectangle r) {
                 using (ctx.PushTransform(
-                    Matrix.CreateScale(scale, scale) //*
-                                                     //Matrix.CreateTranslation(origin.X, origin.Y)
-                    )) {
-                    //var rect = r.Bounds.ToPortableRect();
-                    //rect.Move(origin);
-                    //rect.Size.Width *= scale;
-                    //rect.Size.Height *= scale;
+                    Matrix.CreateScale(scale, scale))) {
                     var tl = shape_rect.TopLeft + shadow_offset;
                     ctx.DrawRectangle(shadow_brush, new Pen(Brushes.Transparent), new Rect(tl.ToAvPoint(), r.Bounds.Size));
                 }
@@ -647,10 +690,6 @@ namespace MonkeyPaste.Avalonia {
                 GradientStops = new GradientStops(),
                 StartPoint = new RelativePoint(pp.ToAvPoint(), RelativeUnit.Absolute),
                 EndPoint = new RelativePoint(p.ToAvPoint(), RelativeUnit.Absolute)
-                //StartPoint = new RelativePoint(new Point(), RelativeUnit.Relative),
-                //EndPoint = new RelativePoint((p - pp).Normalized.ToAvPoint(), RelativeUnit.Relative)
-                //StartPoint = new RelativePoint(0, 0, RelativeUnit.Relative),
-                //EndPoint = new RelativePoint(1, 0, RelativeUnit.Relative)
             };
 
             int strip_count = (int)((double)(pp - p).Length / 15d);
@@ -800,7 +839,7 @@ namespace MonkeyPaste.Avalonia {
                 geometryContext.EndFigure(true);
             }
 
-            double scale = DesignerItem.ZoomFactor;
+            double scale = Scale;
             using (ctx.PushTransform(
                     Matrix.CreateScale(scale, scale))) {
                 ctx.DrawGeometry(

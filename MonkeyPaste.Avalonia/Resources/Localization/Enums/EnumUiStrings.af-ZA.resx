@@ -1200,4 +1200,16 @@
   <data name="MpShortcutType_ToggleGlobalHooks" xml:space="preserve">
     <value>Wissel Global Hooks</value>
   </data>
+  <data name="MpNotificationType_ModalSettingsFrameMenu" xml:space="preserve">
+    <value>Modale instellings raamkieslys</value>
+  </data>
+  <data name="MpShortcutType_EnterKeyAction" xml:space="preserve">
+    <value>Voer sleutelaksie in</value>
+  </data>
+  <data name="MpShortcutType_ToggleXamlHotReload" xml:space="preserve">
+    <value>Wissel Xaml Hot Reload</value>
+  </data>
+  <data name="MpShortcutType_ToggleContentWrap" xml:space="preserve">
+    <value>Wissel inhoudsomloop</value>
+  </data>
 </root>

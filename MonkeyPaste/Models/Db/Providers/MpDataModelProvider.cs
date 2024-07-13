@@ -5,6 +5,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
+using static SQLite.SQLite3;
 //using Xamarin.Forms;
 
 namespace MonkeyPaste {
@@ -124,6 +125,20 @@ namespace MonkeyPaste {
             string query = $"select {columnName} from MpContentQueryView where RootId=? and {columnName} is not NULL limit 1";
             var result = await MpDb.QueryScalarAsync<T>(query, ciid);
             return result;
+        }
+
+        #endregion
+        
+        #region GetTriggerDesignerSettingsByLabel
+
+        public static async Task<MpTriggerDesignerSettings> GetTriggerDesignerSettingsByActionId(int actionId) {
+            // NOTE select columns CANNOT be parameterized
+            string query = $"select * from MpTriggerDesignerSettings where fk_MpActionId=?";
+            var result = await MpDb.QueryAsync<MpTriggerDesignerSettings>(query, actionId);
+            if (result == null || result.Count == 0) {
+                return null;
+            }
+            return result[0];
         }
 
         #endregion
@@ -718,6 +733,12 @@ namespace MonkeyPaste {
 
         #region MpShortcut
 
+        public static async Task<List<MpShortcut>> GetShortcutsByKeyStringAsync(string keystring) {
+            string query = string.Format(@"select * from MpShortcut where KeyString=?");
+            var result = await MpDb.QueryAsync<MpShortcut>(query, keystring);
+            return result;
+        }
+        
         public static async Task<MpShortcut> GetShortcutAsync(string shortcutTypeName, string commandParameter = null) {
             List<MpShortcut> result;
 

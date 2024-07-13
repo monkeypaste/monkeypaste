@@ -8,6 +8,12 @@ using System;
 
 namespace MonkeyPaste.Avalonia {
     public partial class MpAvZoomFactorView : MpAvUserControl<MpIZoomFactorViewModel> {
+        bool IsSliderHorizontal =>
+#if MULTI_WINDOW
+            MpAvMainWindowViewModel.Instance.IsHorizontalOrientation;
+#else   
+                true;
+#endif
         public MpAvZoomFactorView() {
             InitializeComponent();
 
@@ -83,18 +89,20 @@ namespace MonkeyPaste.Avalonia {
         }
 
         private void SetMarkerPosition(Control container, Control marker, double percent) {
-            if (marker.RenderTransform is not TranslateTransform tt) {
+            if (container == null ||
+                marker == null ||
+                marker.RenderTransform is not TranslateTransform tt) {
                 return;
             }
             double hw = marker.Bounds.Width * 0.5;
             double hh = marker.Bounds.Height * 0.5;
 
-            double x = MpAvMainWindowViewModel.Instance.IsHorizontalOrientation ?
+            double x = IsSliderHorizontal ?
                 (container.Bounds.Width * percent) :
                 (container.Bounds.Width / 2);
             //x += offsetX;
 
-            double y = MpAvMainWindowViewModel.Instance.IsHorizontalOrientation ?
+            double y = IsSliderHorizontal ?
                 (container.Bounds.Height / 2) :
                 (container.Bounds.Height * percent);
             //y += offsetY;
@@ -108,7 +116,7 @@ namespace MonkeyPaste.Avalonia {
             var cg_mp = e.GetClientMousePoint(ZoomSliderContainerGrid);
 
             double percent =
-                MpAvMainWindowViewModel.Instance.IsHorizontalOrientation ?
+                IsSliderHorizontal ?
                     cg_mp.X / ZoomSliderContainerGrid.Bounds.Width :
                     cg_mp.Y / ZoomSliderContainerGrid.Bounds.Height;
             return percent;
@@ -121,7 +129,7 @@ namespace MonkeyPaste.Avalonia {
             return ((zfvm.MaxZoomFactor - zfvm.MinZoomFactor) * percent) + zfvm.MinZoomFactor;
         }
         private double GetSliderPercent() {
-            return MpAvMainWindowViewModel.Instance.IsHorizontalOrientation ?
+            return IsSliderHorizontal ?
                     CurValLine.Bounds.Center.X / ZoomSliderContainerGrid.Bounds.Width :
                     CurValLine.Bounds.Center.Y / ZoomSliderContainerGrid.Bounds.Height;
         }

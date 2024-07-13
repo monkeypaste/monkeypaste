@@ -21,6 +21,7 @@
     </local:MpAvUserControl.Resources>
 
     <local:MpAvUserControl.Styles>
+
         <!--  CONTAINER BG  -->
 
 
@@ -31,6 +32,15 @@
         <Style Selector="DockPanel#OuterContainer.dark">
             <Setter Property="Background"
                     Value="{DynamicResource ThemeCompliment3DarkColor}" />
+        </Style>
+
+        <Style Selector="DockPanel#OuterContainer Border#FilterBorder">
+            <Setter Property="Background"
+                    Value="{DynamicResource ThemeCompliment3DarkColor}" />
+        </Style>
+        <Style Selector="DockPanel#OuterContainer.dark Border#FilterBorder">
+            <Setter Property="Background"
+                    Value="{DynamicResource ThemeCompliment3Color}" />
         </Style>
 
         <!--  FOOTER  -->
@@ -55,9 +65,13 @@
 
         <!--  FRAMES  -->
         <Style Selector="local|MpAvSettingsFrameView">
+            <Setter Property="CornerRadius"
+                    Value="10" />
+            <Setter Property="Padding"
+                    Value="10,5" />
             <Setter Property="Margin"
                     Value="10" />
-            <Setter Property="MinWidth"
+            <Setter Property="MaxWidth"
                     Value="300" />
             <Setter Property="MinHeight"
                     Value="50" />
@@ -65,6 +79,30 @@
                     Value="1" />
             <Setter Property="BorderBrush"
                     Value="{DynamicResource ThemeWhiteBrush}" />
+        </Style>
+        <Style Selector="DockPanel#OuterContainer.mobile local|MpAvSettingsFrameView">
+            <Setter Property="Margin"
+                    Value="10,0,10,0" />
+            <Setter Property="MinHeight"
+                    Value="0" />
+        </Style>
+
+        <Style Selector="DockPanel#OuterContainer.mobile local|MpAvSettingsFrameView">
+            <Setter Property="Width"
+                    Value="{StaticResource NaN}" />
+            <Setter Property="MinWidth"
+                    Value="300" />
+            <Setter Property="BorderThickness"
+                    Value="0" />
+        </Style>
+
+        <Style Selector="DockPanel#OuterContainer TransitioningContentControl#SettingsTransitioningContentControl">
+            <Setter Property="Margin"
+                    Value="10,5,20,5" />
+        </Style>
+        <Style Selector="DockPanel#OuterContainer.mobile TransitioningContentControl#SettingsTransitioningContentControl">
+            <Setter Property="Margin"
+                    Value="0" />
         </Style>
 
         <!--  EXPANDERS  -->
@@ -344,12 +382,6 @@
         </Style>
 
         <!--  PREF FRAME BG  -->
-        <Style Selector="local|MpAvSettingsFrameView">
-            <Setter Property="CornerRadius"
-                    Value="10" />
-            <Setter Property="Padding"
-                    Value="10,5" />
-        </Style>
         <Style Selector="local|MpAvSettingsFrameView:pointerover,local|MpAvSettingsFrameView:focus-within">
             <Setter Property="Background">
                 <Setter.Value>
@@ -376,8 +408,10 @@
             <Setter Property="MaxWidth"
                     Value="120" />
         </Style>-->
+
     </local:MpAvUserControl.Styles>
     <DockPanel x:Name="OuterContainer"
+               Classes.mobile="{Binding IsMobileOrWindowed, Source={x:Static local:MpAvThemeViewModel.Instance}}"
                Classes.dark="{Binding IsThemeDark, Source={x:Static local:MpAvThemeViewModel.Instance}}"
                LastChildFill="True">
         <StackPanel x:Name="TabAndFilterPanel"
@@ -387,12 +421,15 @@
 
             <!--  TABS PANEL  -->
             <local:MpAvSettingsMenuView x:Name="TabMenu"
+                                        IsVisible="{Binding !IsMobileOrWindowed, Source={x:Static local:MpAvThemeViewModel.Instance}}"
                                         MaxHeight="200"
                                         BorderThickness="0,0,0,1.5"
                                         BorderBrush="Silver" />
 
-            <!--  FILTER TEXTBOX  -->
-            <Border Height="50"
+            <!--  FILTER ROW  -->
+            <Border x:Name="FilterBorder"
+                    Classes="expand-height"
+                    Height="{Binding IsFilterExpanded, ConverterParameter=50|0, Converter={x:Static local:MpAvBoolToDoubleConverter.Instance}}"
                     HorizontalAlignment="Stretch"
                     BorderThickness="0,0,0,1.5"
                     BorderBrush="Silver">
@@ -409,9 +446,7 @@
                                       VerticalContentAlignment="Center">
                     <Grid>
 
-                        <!--
-                            FILTER TEXTBOX
-                        -->
+                        <!--  FILTER TEXTBOX  -->
 
                         <AutoCompleteBox x:Name="FilterBox"
                                          MinWidth="150"
@@ -460,16 +495,22 @@
 
         <!--  Footer  -->
         <Border x:Name="FooterContainer"
-                IsVisible="{Binding !IsLoginOnly}"
                 DockPanel.Dock="Bottom"
                 HorizontalAlignment="Stretch"
                 BorderThickness="0,1.5,0,0"
                 BorderBrush="Silver"
                 MinHeight="48">
+            <Border.IsVisible>
+                <MultiBinding Converter="{x:Static BoolConverters.And}">
+                    <Binding Path="!IsLoginOnly" />
+                    <Binding Path="IsMultiWindow"
+                             Source="{x:Static local:MpAvThemeViewModel.Instance}" />
+                </MultiBinding>
+            </Border.IsVisible>
             <DockPanel>
                 <Button x:Name="ResetButton"
                         IsVisible="{Binding IsPrefTabSelected}"
-                        Classes="defaultButton textOnlyButton footer"
+                        Classes="default-button textOnlyButton footer"
                         Margin="10"
                         DockPanel.Dock="Left"
                         Content="{Binding Source={x:Static local:R.U}, Path=CurrentUiStrings.PrefRestoreDefaultsLabel}"
@@ -478,7 +519,7 @@
         </Border>
         <!--  Content  -->
         <ScrollViewer x:Name="BodyScrollViewer"
-                      IsScrollInertiaEnabled="False"
+                      IsScrollInertiaEnabled="True"
                       BringIntoViewOnFocusChange="False">
             <ScrollViewer.Transitions>
                 <Transitions>
@@ -488,7 +529,6 @@
 
             </ScrollViewer.Transitions>
             <TransitioningContentControl x:Name="SettingsTransitioningContentControl"
-                                         Margin="10,5,20,5"
                                          Content="{Binding SelectedTabIdx}">
                 <TransitioningContentControl.PageTransition>
                     <CrossFade Duration="0:00:00.500" />
@@ -500,9 +540,8 @@
                             <!--<local:MpAvAccountView />-->
                             <local:MpAvSyncView />
                         </DataTemplate>
-                        <DataTemplate x:Key="PreferencesTemplate"
-                                      x:DataType="local:MpAvSettingsViewModel">
-                            <local:MpAvSettingsFrameCollectionView DataContext="{Binding FilteredPreferenceFrames, Source={x:Static local:MpAvSettingsViewModel.Instance}}" />
+                        <DataTemplate x:Key="PreferencesTemplate">
+                            <local:MpAvSettingsFrameCollectionView DataContext="{x:Static local:MpAvSettingsViewModel.Instance}" />
                         </DataTemplate>
                         <DataTemplate x:Key="InteropTemplate">
                             <local:MpAvInteropView />

@@ -2996,4 +2996,49 @@
   <data name="DonateLabel" xml:space="preserve">
     <value>Донирати</value>
   </data>
+  <data name="MobileCopiedNtfText" xml:space="preserve">
+    <value>Копирано у међуспремник</value>
+  </data>
+  <data name="PinTraySidebarLabel" xml:space="preserve">
+    <value>Прикован</value>
+  </data>
+  <data name="QueryTraySidebarLabel" xml:space="preserve">
+    <value>Упит</value>
+  </data>
+  <data name="AddNewActionLabel" xml:space="preserve">
+    <value>Додај нови</value>
+  </data>
+  <data name="PluginBrowserFormattedWindowTitle" xml:space="preserve">
+    <value>Прегледач додатака – {0}</value>
+  </data>
+  <data name="PluginBrowserWindowTitle" xml:space="preserve">
+    <value>Плугин Бровсер</value>
+  </data>
+  <data name="ClipboardSetMessage" xml:space="preserve">
+    <value>Цлипбоард Сет</value>
+  </data>
+  <data name="EditorPasteButtonLabelMobile" xml:space="preserve">
+    <value>Копија</value>
+  </data>
+  <data name="PrefSyntaxThemeHint" xml:space="preserve">
+    <value>Тема која се користи за блокове кода откривених у снимцима за текст.</value>
+  </data>
+  <data name="PrefSyntaxThemeLabel" xml:space="preserve">
+    <value>Тема синтаксе</value>
+  </data>
+  <data name="PrefCodeFontLabel" xml:space="preserve">
+    <value>Синтакса</value>
+  </data>
+  <data name="CommonViewLabel" xml:space="preserve">
+    <value>Поглед</value>
+  </data>
+  <data name="WrapTextMenuLabel" xml:space="preserve">
+    <value>Преломити текст</value>
+  </data>
+  <data name="ClipAssignShortcutLabel" xml:space="preserve">
+    <value>Доделите пречицу ...</value>
+  </data>
+  <data name="ClipUpdateShortcutLabel" xml:space="preserve">
+    <value>Ажурирајте пречицу ...</value>
+  </data>
 </root>

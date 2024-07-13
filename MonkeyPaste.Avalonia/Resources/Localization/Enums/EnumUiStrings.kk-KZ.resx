@@ -1186,4 +1186,16 @@
   <data name="MpShortcutType_ToggleGlobalHooks" xml:space="preserve">
     <value>Ғаламдық ілмектерді ауыстырыңыз</value>
   </data>
+  <data name="MpNotificationType_ModalSettingsFrameMenu" xml:space="preserve">
+    <value>Modal Settings Frame мәзірі</value>
+  </data>
+  <data name="MpShortcutType_EnterKeyAction" xml:space="preserve">
+    <value>Негізгі әрекетті енгізіңіз</value>
+  </data>
+  <data name="MpShortcutType_ToggleXamlHotReload" xml:space="preserve">
+    <value>Xaml ыстық қайта жүктеуді ауыстырыңыз</value>
+  </data>
+  <data name="MpShortcutType_ToggleContentWrap" xml:space="preserve">
+    <value>Мазмұнды оралу</value>
+  </data>
 </root>

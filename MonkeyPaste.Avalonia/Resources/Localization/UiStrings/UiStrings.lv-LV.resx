@@ -2996,4 +2996,49 @@ Globālās saīsnes tagad var iespējot Sistēmas paplātes izvēlnē</value>
   <data name="DonateLabel" xml:space="preserve">
     <value>Ziedot</value>
   </data>
+  <data name="MobileCopiedNtfText" xml:space="preserve">
+    <value>Kopē pie starpliktuves</value>
+  </data>
+  <data name="PinTraySidebarLabel" xml:space="preserve">
+    <value>Saspiests</value>
+  </data>
+  <data name="QueryTraySidebarLabel" xml:space="preserve">
+    <value>Vaicājums</value>
+  </data>
+  <data name="PluginBrowserFormattedWindowTitle" xml:space="preserve">
+    <value>Spraudņu pārlūks - {0}</value>
+  </data>
+  <data name="PluginBrowserWindowTitle" xml:space="preserve">
+    <value>Spraudņa pārlūks</value>
+  </data>
+  <data name="AddNewActionLabel" xml:space="preserve">
+    <value>Pievieno jaunu</value>
+  </data>
+  <data name="ClipboardSetMessage" xml:space="preserve">
+    <value>Starpliktuves komplekts</value>
+  </data>
+  <data name="EditorPasteButtonLabelMobile" xml:space="preserve">
+    <value>Kopija</value>
+  </data>
+  <data name="PrefSyntaxThemeHint" xml:space="preserve">
+    <value>Tēma, kas izmantota koda blokiem, kas atklāts teksta klipos.</value>
+  </data>
+  <data name="PrefSyntaxThemeLabel" xml:space="preserve">
+    <value>Sintakses tēma</value>
+  </data>
+  <data name="PrefCodeFontLabel" xml:space="preserve">
+    <value>Sintakse</value>
+  </data>
+  <data name="CommonViewLabel" xml:space="preserve">
+    <value>Skats</value>
+  </data>
+  <data name="WrapTextMenuLabel" xml:space="preserve">
+    <value>Aptināt tekstu</value>
+  </data>
+  <data name="ClipAssignShortcutLabel" xml:space="preserve">
+    <value>Piešķiriet saīsni ...</value>
+  </data>
+  <data name="ClipUpdateShortcutLabel" xml:space="preserve">
+    <value>Atjaunināt saīsni ...</value>
+  </data>
 </root>

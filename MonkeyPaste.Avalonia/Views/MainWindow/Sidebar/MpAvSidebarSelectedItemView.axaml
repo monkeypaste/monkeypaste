@@ -1,0 +1,144 @@
+<local:MpAvUserControl xmlns="https://github.com/avaloniaui"
+                       xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                       xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+                       xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+                       xmlns:local="using:MonkeyPaste.Avalonia"
+                       xmlns:pcl="using:MonkeyPaste"
+                       x:DataType="local:MpAvSidebarItemCollectionViewModel"
+                       x:TypeArguments="local:MpAvSidebarItemCollectionViewModel"
+                       x:CompileBindings="True"
+                       DataContext="{x:Static local:MpAvSidebarItemCollectionViewModel.Instance}"
+                       mc:Ignorable="d"
+                       d:DesignWidth="800"
+                       d:DesignHeight="450"
+                       x:Class="MonkeyPaste.Avalonia.MpAvSidebarSelectedItemView">
+    <local:MpAvUserControl.Styles>
+        <!--  MOBILE COLLAPSE  -->
+        <Style Selector="Button#CollapseSidebarButton">
+            <Setter Property="HorizontalAlignment"
+                    Value="Center" />
+            <Setter Property="VerticalAlignment"
+                    Value="Top" />
+            <Setter Property="Margin"
+                    Value="0,15,0,0" />
+        </Style>
+        <Style Selector="Button#CollapseSidebarButton local|MpAvTintedImage">
+            <Setter Property="Source"
+                    Value="{Binding Source={StaticResource EdgeArrowDownImage}, ConverterParameter=test, Converter={x:Static local:MpAvIconSourceObjToBitmapConverter.Instance}}" />
+        </Style>
+
+        <Style Selector="Button#CollapseSidebarButton.horiz">
+            <Setter Property="HorizontalAlignment"
+                    Value="Right" />
+            <Setter Property="VerticalAlignment"
+                    Value="Center" />
+            <Setter Property="Margin"
+                    Value="0,0,15,0" />
+        </Style>
+        <Style Selector="Button#CollapseSidebarButton.horiz local|MpAvTintedImage">
+            <Setter Property="Source"
+                    Value="{Binding Source={StaticResource EdgeArrowLeftImage}, ConverterParameter=test, Converter={x:Static local:MpAvIconSourceObjToBitmapConverter.Instance}}" />
+        </Style>
+        <!--  MOBILE CONTENT CONTROL EDGE EFFECTS  -->
+        <Style Selector="ContentControl#SelectedSidebarContentControl">
+            <Setter Property="Background"
+                    Value="{DynamicResource MainWindowBgBrush}" />
+            <Setter Property="Transitions">
+                <Setter.Value>
+                    <Transitions>
+                        <DoubleTransition Property="Height"
+                                          Duration="0:0:2" />
+                    </Transitions>
+                </Setter.Value>
+            </Setter>
+        </Style>
+        <Style Selector="ContentControl#SelectedSidebarContentControl.mobile"
+               x:DataType="local:MpISidebarItemViewModel">
+            <Setter Property="Effect"
+                    Value="drop-shadow(0 0 15 Black)" />
+            <Setter Property="Margin"
+                    Value="5,10,5,0" />
+            <Setter Property="CornerRadius"
+                    Value="10,10,0,0" />
+            <Setter Property="BorderThickness"
+                    Value="2,2,2,0" />
+            <Setter Property="Background"
+                    Value="{DynamicResource ThemeInteractiveBgBrush}" />
+            <Setter Property="BorderBrush"
+                    Value="{Binding SidebarBgHexColor, Converter={x:Static local:MpAvStringHexToBrushConverter.Instance}}" />
+        </Style>
+        <Style Selector="ContentControl#SelectedSidebarContentControl.mobile.horiz">
+            <Setter Property="Effect"
+                    Value="drop-shadow(0 0 15 Black)" />
+            <Setter Property="Margin"
+                    Value="0,5,10,5" />
+            <Setter Property="CornerRadius"
+                    Value="0,10,10,0" />
+            <Setter Property="BorderThickness"
+                    Value="0,2,2,2" />
+        </Style>
+        <Style Selector="ContentControl#SelectedSidebarContentControl.mobile /template/ ScrollViewer">
+            <Setter Property="IsScrollChainingEnabled"
+                    Value="False" />
+        </Style>
+    </local:MpAvUserControl.Styles>
+    <Grid x:Name="OuterContainer"
+          Classes="oriented">
+        <!--  SIDEBAR CONTENT CONTROL  -->
+
+        <ContentControl x:Name="SelectedSidebarContentControl"
+                        x:DataType="local:MpISidebarItemViewModel"
+                        DataContext="{Binding BoundItem}"
+                        ScrollViewer.BringIntoViewOnFocusChange="False"
+                        Classes.horiz="{Binding IsHorizontalOrientation, Source={x:Static local:MpAvMainWindowViewModel.Instance}}"
+                        Classes.mobile="{Binding IsMobileOrWindowed, Source={x:Static local:MpAvThemeViewModel.Instance}}"
+                        HorizontalAlignment="Stretch"
+                        VerticalAlignment="Stretch"
+                        HorizontalContentAlignment="Stretch"
+                        VerticalContentAlignment="Stretch"
+                        local:MpAvSizeObserverExtension.IsEnabled="True"
+                        local:MpAvSizeObserverExtension.ObservedWidth="{Binding SidebarWidth, Mode=OneWayToSource}"
+                        local:MpAvSizeObserverExtension.ObservedHeight="{Binding SidebarHeight, Mode=OneWayToSource}"
+                        Content="{Binding}">
+            <ContentControl.DataTemplates>
+                <local:MpAvSidebarItemTemplateSelector>
+                    <!--  TAG TREE  -->
+                    <DataTemplate x:Key="TagTreeViewTemplate"
+                                  x:DataType="local:MpAvTagTrayViewModel">
+                        <local:MpAvTagTreeView />
+
+                    </DataTemplate>
+
+                    <!--  CLIPBOARD HANDLER  -->
+                    <DataTemplate x:Key="ClipboardHandlerSelectorViewTemplate"
+                                  x:DataType="local:MpAvClipboardHandlerCollectionViewModel">
+                        <local:MpAvClipboardHandlerSelectorView />
+
+
+                    </DataTemplate>
+                    <!--  ANALYZERS  -->
+                    <DataTemplate x:Key="AnalyticItemSelectorViewTemplate"
+                                  x:DataType="local:MpAvAnalyticItemCollectionViewModel">
+                        <local:MpAvAnalyticItemSelectorView />
+
+                    </DataTemplate>
+                    <!--  ACTIONS  -->
+                    <DataTemplate x:Key="TriggerActionChooserViewTemplate"
+                                  x:DataType="local:MpAvTriggerCollectionViewModel">
+
+                        <local:MpAvTriggerActionChooserView IsVisible="{Binding !IsWindowOpen}" />
+                    </DataTemplate>
+                </local:MpAvSidebarItemTemplateSelector>
+            </ContentControl.DataTemplates>
+        </ContentControl>
+
+        <!--  COLLAPSE BUTTON  -->
+        <Button x:Name="CollapseSidebarButton"
+                Classes="default-button no-bg no-hover-bg no-border"
+                Classes.horiz="{Binding IsHorizontalOrientation, Source={x:Static local:MpAvMainWindowViewModel.Instance}}"
+                IsVisible="{Binding IsMobileOrWindowed, Source={x:Static local:MpAvThemeViewModel.Instance}}"
+                Command="{Binding ToggleIsSidebarItemSelectedCommand}">
+            <local:MpAvTintedImage Tint="{DynamicResource ThemeInteractiveBrush}" />
+        </Button>
+    </Grid>
+</local:MpAvUserControl>

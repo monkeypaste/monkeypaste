@@ -2996,4 +2996,49 @@ Globální zkratky lze nyní povolit v nabídce hlavního panelu</value>
   <data name="DonateLabel" xml:space="preserve">
     <value>Darovat</value>
   </data>
+  <data name="MobileCopiedNtfText" xml:space="preserve">
+    <value>Zkopírováno do schránky</value>
+  </data>
+  <data name="PinTraySidebarLabel" xml:space="preserve">
+    <value>Připnuto</value>
+  </data>
+  <data name="QueryTraySidebarLabel" xml:space="preserve">
+    <value>Dotaz</value>
+  </data>
+  <data name="PluginBrowserFormattedWindowTitle" xml:space="preserve">
+    <value>Prohlížeč pluginu – {0}</value>
+  </data>
+  <data name="PluginBrowserWindowTitle" xml:space="preserve">
+    <value>Prohlížeč pluginů</value>
+  </data>
+  <data name="ClipboardSetMessage" xml:space="preserve">
+    <value>Sada schránky</value>
+  </data>
+  <data name="AddNewActionLabel" xml:space="preserve">
+    <value>Přidat nový</value>
+  </data>
+  <data name="EditorPasteButtonLabelMobile" xml:space="preserve">
+    <value>kopírovat</value>
+  </data>
+  <data name="PrefSyntaxThemeHint" xml:space="preserve">
+    <value>Motiv používaný pro bloky kódu detekované v textových klipech.</value>
+  </data>
+  <data name="PrefSyntaxThemeLabel" xml:space="preserve">
+    <value>Téma syntaxe</value>
+  </data>
+  <data name="PrefCodeFontLabel" xml:space="preserve">
+    <value>Syntax</value>
+  </data>
+  <data name="CommonViewLabel" xml:space="preserve">
+    <value>Pohled</value>
+  </data>
+  <data name="WrapTextMenuLabel" xml:space="preserve">
+    <value>Obtékání textu</value>
+  </data>
+  <data name="ClipAssignShortcutLabel" xml:space="preserve">
+    <value>Přiřadit zástupce...</value>
+  </data>
+  <data name="ClipUpdateShortcutLabel" xml:space="preserve">
+    <value>Aktualizovat zástupce...</value>
+  </data>
 </root>

@@ -34,6 +34,7 @@ var UiStrings = {
 	EditorNextTemplateLabel: `अर्को टेम्पलेट`,
 	EditorPasteButtonAppendBeginLabel: `जोडिएको ...`,
 	EditorPasteButtonLabel: `टाँसिनु`,
+	EditorPasteButtonLabelMobile: `कापी`,
 	EditorPasteTemplateWatermark: `टाँस्नुहोस् पाठ प्रविष्ट गर्नुहोस् ...`,
 	EditorPrevTemplateLabel: `अघिल्लो टेम्पलेट`,
 	EditorRegExLabel: ` नियमित अभिव्यक्ति`,

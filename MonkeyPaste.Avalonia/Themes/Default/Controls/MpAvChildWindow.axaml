@@ -1,0 +1,53 @@
+<Styles xmlns="https://github.com/avaloniaui"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:sys="clr-namespace:System;assembly=mscorlib"
+        xmlns:local="using:MonkeyPaste.Avalonia">
+    <Design.PreviewWith>
+        <local:MpAvChildWindow Title="Sup"
+                               Width="360"
+                               Height="740" />
+    </Design.PreviewWith>
+
+
+    <Style Selector=":is(local|MpAvChildWindow)">
+        <Setter Property="HorizontalAlignment"
+                Value="Left" />
+        <Setter Property="VerticalAlignment"
+                Value="Top" />
+        <Setter Property="RenderTransformOrigin"
+                Value="0,0" />
+        <Setter Property="RenderTransform">
+            <Setter.Value>
+                <TranslateTransform />
+            </Setter.Value>
+        </Setter>
+        <Setter Property="Template">
+            <ControlTemplate>
+                <Grid x:Name="ContainerGrid"
+                      x:DataType="local:MpAvChildWindow"
+                      RowDefinitions="Auto,*">
+                    <!--  HEADER  -->
+                    <Border IsVisible="{TemplateBinding HeaderViewModel, Converter={x:Static local:MpAvHeaderMenuViewModelToIsVisibleConverter.Instance}}">
+
+                        <TransitioningContentControl x:DataType="local:MpAvIHeaderMenuViewModel"
+                                                     Classes="header"
+                                                     DataContext="{TemplateBinding HeaderViewModel}"
+                                                     Content="{Binding .}">
+                            <TransitioningContentControl.ContentTemplate>
+                                <DataTemplate DataType="local:MpAvIHeaderMenuViewModel">
+                                    <local:MpAvHeaderMenuView x:Name="HeaderPanel"
+                                                              Height="{Binding DefaultTitleMenuFixedLength, Source={x:Static local:MpAvMainWindowTitleMenuViewModel.Instance}}" />
+                                </DataTemplate>
+                            </TransitioningContentControl.ContentTemplate>
+                        </TransitioningContentControl>
+                    </Border>
+
+                    <!--  CONTENT  -->
+                    <ContentPresenter Grid.Row="1"
+                                      Background="{TemplateBinding Background}"
+                                      Content="{TemplateBinding Content}" />
+                </Grid>
+            </ControlTemplate>
+        </Setter>
+    </Style>
+</Styles>

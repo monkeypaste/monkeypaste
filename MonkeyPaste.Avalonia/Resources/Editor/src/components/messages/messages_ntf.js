@@ -24,11 +24,20 @@ function onAnnotationSelected_ntf(ann_guid, dblClick) {
 	sendMessage('notifyAnnotationSelected', msgStr);
 }
 
+function onWrapEnabledChanged_ntf(is_wrap_enabled) {
+	// output 'MpQuillWrapChangedEventMessage'
+	let msg = {
+		isWrappingEnabled: is_wrap_enabled
+	};
+	let msgStr = toBase64FromJsonObj(msg);
+	sendMessage('notifyWrapEnabledChanged',msgStr)
+}
+
 function onReadOnlyChanged_ntf(isReadOnly) {
 	// output (true) MpQuillEditorContentChangedMessage
 	// output (false) MpQuillDisableReadOnlyResponseMessage
 
-	if (!globals.IsLoaded) {
+	if (!globals.IsEditorLoaded) {
 		return;
 	}
 	if (isReadOnly) {

@@ -6,6 +6,9 @@
         GlobalBgOpacity_browser,
         GlobalBgOpacity_mobile,
         GlobalBgOpacity,
+        GlobalInteractiveBgOpacity,
+        GlobalDisabledOverlayOpacity,
+        GlobalInteractiveOpacity,
 
         #endregion
 
@@ -15,6 +18,22 @@
         ThemeColor,
         ThemeLightColor,
         ThemeDarkColor,
+
+        ThemeLightBgColor,
+        ThemeDarkBgColor,
+
+        ThemeHiColor,
+        ThemeLoColor,
+        ThemeHi1Color,
+        ThemeLo1Color,
+        ThemeHi2Color,
+        ThemeLo2Color,
+        ThemeHi3Color,
+        ThemeLo3Color,
+        ThemeHi4Color,
+        ThemeLo4Color,
+        ThemeHi5Color,
+        ThemeLo5Color,
 
         ThemeBlackColor,
         ThemeWhiteColor,
@@ -67,7 +86,9 @@
         #region FONTS
 
         DefaultEditableFontFamily,
+        DefaultEditableFontFamilyFont,
         DefaultReadOnlyFontFamily,
+        DefaultReadOnlyFontFamilyFont,
         ContentControlThemeFontFamily,
         IsRtl,
 
@@ -81,6 +102,12 @@
         DefaultGridSplitterFixedDimensionLength,
         DefaultNotificationWidth,
         DefaultNotificationHeight,
+        #endregion
+
+        #region Effects
+
+        ThemeBlackDropShadow,
+        ThemeWhiteDropShadow
         #endregion
     }
 }

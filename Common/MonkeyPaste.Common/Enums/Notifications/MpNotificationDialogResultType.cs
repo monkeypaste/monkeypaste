@@ -18,5 +18,7 @@
         ResetShared,
         ResetUnshared,
         ResetAll,
+        Back,
+        Done
     }
 }

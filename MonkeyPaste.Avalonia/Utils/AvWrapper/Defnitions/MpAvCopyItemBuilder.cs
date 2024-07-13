@@ -258,7 +258,7 @@ namespace MonkeyPaste.Avalonia {
                         MpConsole.WriteLine($"Ci builder error cannot find ci w/ guid '{ci_guid}'. Timed out, shouldn't happen...");
                         return;
                     }
-                    MpConsole.WriteLine($"Ci builder error cannot find ci w/ guid '{ci_guid}'. Will retry...");
+                    //MpConsole.WriteLine($"Ci builder error cannot find ci w/ guid '{ci_guid}'. Will retry...");
                     await Task.Delay(100);
                     ciid = await MpDataModelProvider.GetItemIdByGuidAsync<MpCopyItem>(ci_guid);
                 }
@@ -426,6 +426,15 @@ namespace MonkeyPaste.Avalonia {
                 case var _ when max_format == MpPortableDataFormats.Files:
                     inputFormatType = MpDataFormatType.FileList;
                     break;
+            }
+
+            if (inputFormatType == MpDataFormatType.Rtf2Html &&
+                avdo.TryGetData<MpPortableProcessInfo>(MpPortableDataFormats.INTERNAL_PROCESS_INFO_FORMAT, out var pi) &&
+                (pi.ProcessPath.ToStringOrEmpty().EndsWith("dev.exe") || 
+                 pi.ProcessPath.ToStringOrEmpty().EndsWith("devenv.exe"))) {
+                // handle special case of vs rtf so converter treats it as a code block
+                inputFormatType = MpDataFormatType.VsRtf2Html;
+                MpConsole.WriteLine($"CopyItem marked as VsRtf2Html");
             }
             return itemData;
         }

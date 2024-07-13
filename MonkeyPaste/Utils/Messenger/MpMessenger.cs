@@ -71,6 +71,8 @@ namespace MonkeyPaste {
 
         TraySelectionChanged,
 
+        FocusItemChanged,
+
         PreTrayLayoutChange,
         PostTrayLayoutChange,
 
@@ -124,6 +126,7 @@ namespace MonkeyPaste {
         AdvancedSearchExpandedChanged,
 
         FilterItemSizeChanged,
+        FilterExpandedChanged,
 
         DropWidgetOpened,
 

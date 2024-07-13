@@ -2996,4 +2996,49 @@ feedback@monkeypaste.com</value>
   <data name="DonateLabel" xml:space="preserve">
     <value>దానం</value>
   </data>
+  <data name="MobileCopiedNtfText" xml:space="preserve">
+    <value>క్లిప్‌బోర్డ్‌కు కాపీ చేయబడింది</value>
+  </data>
+  <data name="PinTraySidebarLabel" xml:space="preserve">
+    <value>పిన్</value>
+  </data>
+  <data name="QueryTraySidebarLabel" xml:space="preserve">
+    <value>ప్రశ్న</value>
+  </data>
+  <data name="PluginBrowserFormattedWindowTitle" xml:space="preserve">
+    <value>ప్లగిన్ బ్రౌజర్ - {0}</value>
+  </data>
+  <data name="ClipboardSetMessage" xml:space="preserve">
+    <value>క్లిప్‌బోర్డ్ సెట్</value>
+  </data>
+  <data name="PluginBrowserWindowTitle" xml:space="preserve">
+    <value>ప్లగిన్ బ్రౌజర్</value>
+  </data>
+  <data name="AddNewActionLabel" xml:space="preserve">
+    <value>కొత్తది జత పరచండి</value>
+  </data>
+  <data name="EditorPasteButtonLabelMobile" xml:space="preserve">
+    <value>కాపీ</value>
+  </data>
+  <data name="PrefSyntaxThemeHint" xml:space="preserve">
+    <value>టెక్స్ట్ క్లిప్‌లలో కనుగొనబడిన కోడ్ బ్లాక్‌ల కోసం ఉపయోగించే థీమ్.</value>
+  </data>
+  <data name="PrefSyntaxThemeLabel" xml:space="preserve">
+    <value>సింటాక్స్ థీమ్</value>
+  </data>
+  <data name="PrefCodeFontLabel" xml:space="preserve">
+    <value>సింటాక్స్</value>
+  </data>
+  <data name="CommonViewLabel" xml:space="preserve">
+    <value>చూడండి</value>
+  </data>
+  <data name="WrapTextMenuLabel" xml:space="preserve">
+    <value>టెక్స్ట్ వ్రాప్</value>
+  </data>
+  <data name="ClipAssignShortcutLabel" xml:space="preserve">
+    <value>సత్వరమార్గాన్ని కేటాయించండి ...</value>
+  </data>
+  <data name="ClipUpdateShortcutLabel" xml:space="preserve">
+    <value>సత్వరమార్గాన్ని నవీకరించండి ...</value>
+  </data>
 </root>

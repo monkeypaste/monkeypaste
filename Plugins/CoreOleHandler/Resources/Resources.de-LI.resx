@@ -222,4 +222,10 @@
   <data name="ToFileExtHint" xml:space="preserve">
     <value>Die Dateierweiterung, die bei „{0}“ verwendet wird, wird zum Erstellen einer Datei bei Bedarf verwendet.</value>
   </data>
+  <data name="RtfParaTagNameHint" xml:space="preserve">
+    <value>Verwenden Sie zum Hervorheben des Codes das Tag „PRE“, andernfalls wird das RTF als normaler Rich Text behandelt.</value>
+  </data>
+  <data name="RtfParaTagNameLabel" xml:space="preserve">
+    <value>HTML-Absatz-Tag</value>
+  </data>
 </root>

@@ -1,0 +1,51 @@
+pre code.hljs {
+  display: block;
+  overflow-x: auto;
+  padding: 1em
+}
+code.hljs {
+  padding: 3px 5px
+}
+.hljs {
+  background: #272822;
+  color: #ddd
+}
+.hljs-tag{ color: #fcff5d }
+.hljs-keyword{ color: #7dfc00 }
+.hljs-selector-tag{ color: #0ec434 }
+.hljs-literal{ color: #228c68 }
+.hljs-strong{ color: #8ad8e8 }
+.hljs-name { color: #f92672 }
+.hljs-code { color: #66d9ef }
+.hljs-attribute{ color: #235b54 }
+.hljs-symbol{ color: #29bdab }
+.hljs-regexp{ color: #3998f5 }
+.hljs-link { color: #bf79db }
+.hljs-string{ color: #37294f }
+.hljs-bullet{ color: #277da7 }
+.hljs-subst{ color: #3750db }
+.hljs-title{ color: #f22020 }
+.hljs-section{ color: #991919 }
+.hljs-emphasis{ color: #ffcba5 }
+.hljs-type{ color: #e68f66 }
+.hljs-built_in{ color: #c56133 }
+.hljs-selector-attr{ color: #96341c }
+.hljs-selector-pseudo{ color: #632819 }
+.hljs-addition{ color: #ffc413 }
+.hljs-variable{ color: #f47a22 }
+.hljs-template-tag{ color: #2f2aa0 }
+.hljs-template-variable { color: #a6e22e }
+.hljs-title.class_{ color: #b732cc }
+.hljs-class .hljs-title { color: white }
+.hljs-comment{ color: #772b9d }
+.hljs-quote{ color: #f07cab }
+.hljs-deletion{ color: #d30b94 }
+.hljs-meta { color: #75715e }
+.hljs-keyword{ color: #edeff3 }
+.hljs-selector-tag{ color: #c3a5b4 }
+.hljs-literal{ color: #946aa2 }
+.hljs-doctag{ color: #5d4c86 }
+.hljs-title{ color: #835432}
+.hljs-section{ color: #f9801d }
+.hljs-type{ color: #5e7c16 }
+.hljs-selector-id { font-weight: bold }

@@ -222,4 +222,10 @@
   <data name="ToFileExtHint" xml:space="preserve">
     <value>'{0}' এটা ফাইল অন-ডিমাণ্ড সৃষ্টি কৰিবলে ব্যৱহাৰ কৰাৰ সময়ত ব্যৱহৃত ফাইল সম্প্ৰসাৰণ।</value>
   </data>
+  <data name="RtfParaTagNameHint" xml:space="preserve">
+    <value>ক'ড হাইলাইটিঙৰ বাবে 'PRE' টেগ ব্যৱহাৰ কৰক অন্যথা RTF ক সাধাৰণ সমৃদ্ধ লিখনী হিচাপে গণ্য কৰা হ'ব।</value>
+  </data>
+  <data name="RtfParaTagNameLabel" xml:space="preserve">
+    <value>HTML অনুচ্ছেদ টেগ</value>
+  </data>
 </root>

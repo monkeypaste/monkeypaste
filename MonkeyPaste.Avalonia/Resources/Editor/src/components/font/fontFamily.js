@@ -76,7 +76,7 @@ function initFontFamilyStyles() {
 // #region Getters
 
 function getFontFamilyToolbarSelector() {
-    let elm_idx = globals.IsLoaded ? 1 : 0;
+    let elm_idx = globals.IsEditorLoaded ? 1 : 0;
     return document.getElementsByClassName('ql-font')[elm_idx];
 }
 
@@ -214,6 +214,9 @@ function updateFontFamilyPickerToSelection(force_ff_dv = null, sel = null) {
     }
 
     let picker_label_elm = getFontFamilyToolbarPickerLabel();
+    if (isNullOrUndefined(picker_label_elm)) {
+        return;
+    }
     picker_label_elm.setAttribute('data-label', getFontFamilyDataValueFontFamily(cur_ff_dv));
 
     

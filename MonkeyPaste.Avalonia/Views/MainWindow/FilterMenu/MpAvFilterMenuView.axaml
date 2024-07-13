@@ -12,18 +12,53 @@
                        d:DesignWidth="800"
                        d:DesignHeight="450"
                        x:Class="MonkeyPaste.Avalonia.MpAvFilterMenuView">
-    <ScrollViewer VerticalScrollBarVisibility="Hidden"
-                  HorizontalScrollBarVisibility="Auto">
+    <local:MpAvUserControl.Styles>
+        <!--  MOBILE VERT SUB-FILTER VISIBILITY  -->
+        <Style Selector="Grid#FilterDockPanel.mobile local|MpAvTagTrayView, Grid#FilterDockPanel.vert local|MpAvTagTrayView">
+            <Setter Property="IsVisible"
+                    Value="False" />
+        </Style>
+        <Style Selector="Grid#FilterDockPanel.vert.sort-expanded local|MpAvSearchBoxView, Grid#FilterDockPanel.mobile.sort-expanded local|MpAvSearchBoxView">
+            <Setter Property="IsVisible"
+                    Value="False" />
+        </Style>
+        <Style Selector="Grid#FilterDockPanel.vert.search-expanded local|MpAvClipTileSortView, Grid#FilterDockPanel.mobile.search-expanded local|MpAvClipTileSortView">
+            <Setter Property="IsVisible"
+                    Value="False" />
+        </Style>
+
+        <!--<Style Selector="Grid#FilterDockPanel:not(.mobile) local|MpAvClipTileSortView">
+            <Setter Property="IsHitTestVisible"
+                    Value="{Binding IsAnyTagActive, Source={x:Static local:MpAvTagTrayViewModel.Instance}}" />
+            <Setter Property="Opacity"
+                    Value="{Binding $self.IsHitTestVisible, ConverterParameter=1|0, Converter={x:Static local:MpAvBoolToDoubleConverter.Instance}}" />
+        </Style>
+        <Style Selector="Grid#FilterDockPanel:not(.mobile) local|MpAvSearchBoxView">
+            <Setter Property="IsHitTestVisible"
+                    Value="{Binding IsAnyTagActive, Source={x:Static local:MpAvTagTrayViewModel.Instance}}" />
+            <Setter Property="Opacity"
+                    Value="{Binding $self.IsHitTestVisible, ConverterParameter=1|0, Converter={x:Static local:MpAvBoolToDoubleConverter.Instance}}" />
+        </Style>-->
+
+        <Style Selector="Grid#FilterDockPanel.mobile.pin local|MpAvClipTileSortView">
+            <Setter Property="IsVisible"
+                    Value="False" />
+        </Style>
+    </local:MpAvUserControl.Styles>
+    <Border Background="{DynamicResource FilterMenuBgBrush}"
+            Classes="dark-bevel-3">
         <Grid x:Name="FilterDockPanel"
+              Classes.pin="{Binding IsPinTrayVisible, Source={x:Static local:MpAvClipTrayViewModel.Instance}}"
+              Classes.mobile="{Binding IsMobileOrWindowed, Source={x:Static local:MpAvThemeViewModel.Instance}}"
+              Classes.vert="{Binding IsVerticalOrientation, Source={x:Static local:MpAvMainWindowViewModel.Instance}}"
+              Classes.sort-expanded="{Binding IsExpanded, Source={x:Static local:MpAvClipTileSortDirectionViewModel.Instance}}"
+              Classes.search-expanded="{Binding IsExpanded, Source={x:Static local:MpAvSearchBoxViewModel.Instance}}"
               HorizontalAlignment="Stretch"
-              VerticalAlignment="Stretch"
-              Background="{StaticResource MainWindowBgBrush}">
+              VerticalAlignment="Stretch">
 
             <!--  Content Sort View  -->
 
             <local:MpAvClipTileSortView x:Name="SortView"
-                                        IsHitTestVisible="{Binding IsAnyTagActive, Source={x:Static local:MpAvTagTrayViewModel.Instance}}"
-                                        Opacity="{Binding $self.IsHitTestVisible, ConverterParameter=1|0, Converter={x:Static local:MpAvBoolToDoubleConverter.Instance}}"
                                         DockPanel.Dock="Left"
                                         HorizontalAlignment="Left"
                                         VerticalAlignment="Center"
@@ -42,8 +77,6 @@
             <!--  SearchBox View  -->
 
             <local:MpAvSearchBoxView x:Name="SearchBoxView"
-                                     IsHitTestVisible="{Binding IsAnyTagActive, Source={x:Static local:MpAvTagTrayViewModel.Instance}}"
-                                     Opacity="{Binding $self.IsHitTestVisible, ConverterParameter=1|0, Converter={x:Static local:MpAvBoolToDoubleConverter.Instance}}"
                                      DockPanel.Dock="Right"
                                      VerticalAlignment="Stretch"
                                      HorizontalAlignment="Right"
@@ -51,5 +84,5 @@
                                      local:MpAvSizeObserverExtension.ObservedWidth="{Binding ObservedSearchBoxWidth, Source={x:Static local:MpAvFilterMenuViewModel.Instance}, Mode=TwoWay}"
                                      Tag="Search" />
         </Grid>
-    </ScrollViewer>
+    </Border>
 </local:MpAvUserControl>

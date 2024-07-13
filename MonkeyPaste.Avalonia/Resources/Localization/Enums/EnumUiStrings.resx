@@ -309,6 +309,9 @@
   <data name="MpNotificationType_ModalShutdownLater" xml:space="preserve">
     <value>Modal Shutdown Later</value>
   </data>
+  <data name="MpNotificationType_ModalSettingsFrameMenu" xml:space="preserve">
+    <value>Modal Settings Frame Menu</value>
+  </data>
   <data name="MpNotificationType_ConfirmEndAppend" xml:space="preserve">
     <value>Confirm End Append</value>
   </data>
@@ -359,6 +362,9 @@
   </data>
   <data name="MpShortcutType_IncreaseFocus" xml:space="preserve">
     <value>Increase Focus</value>
+  </data>
+  <data name="MpShortcutType_EnterKeyAction" xml:space="preserve">
+    <value>Enter Key Action</value>
   </data>
   <data name="MpShortcutType_ExitApplication" xml:space="preserve">
     <value>Exit Application</value>
@@ -488,6 +494,12 @@
   </data>
   <data name="MpShortcutType_ToggleGlobalHooks" xml:space="preserve">
     <value>Toggle Global Hooks</value>
+  </data>
+  <data name="MpShortcutType_ToggleXamlHotReload" xml:space="preserve">
+    <value>Toggle Xaml Hot Reload</value>
+  </data>
+  <data name="MpShortcutType_ToggleContentWrap" xml:space="preserve">
+    <value>Toggle Content Wrap</value>
   </data>
   <data name="MpShortcutType_MAX_APP_SHORTCUT" xml:space="preserve">
     <value>M A X_A P P_S H O R T C U T</value>

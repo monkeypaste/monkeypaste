@@ -13,7 +13,7 @@
         <Style Selector="local|MpAvSettingsFrameView">
             <Setter Property="Width"
                     Value="450" />
-          <Setter Property="BorderBrush"
+            <Setter Property="BorderBrush"
                     Value="Transparent" />
         </Style>
         <Style Selector="ListBox#PluginParameterListBox > ListBoxItem">
@@ -21,7 +21,7 @@
                     Value="{StaticResource PosInf}" />
         </Style>
     </UserControl.Styles>
-    <ScrollViewer>
+    <ScrollViewer x:DataType="local:MpAvSettingsViewModel">
         <local:MpAvSettingsFrameCollectionView HorizontalAlignment="Stretch"
                                                DataContext="{Binding FilteredAccountFrames, Source={x:Static local:MpAvSettingsViewModel.Instance}}" />
     </ScrollViewer>

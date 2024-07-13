@@ -14,8 +14,6 @@
                        d:DesignHeight="450"
                        x:Class="MonkeyPaste.Avalonia.MpAvParameterCollectionView">
     <local:MpAvUserControl.Resources>
-
-
         <sys:TimeSpan x:Key="FadeTimeSpan">
             0:0:0.2
         </sys:TimeSpan>
@@ -87,6 +85,12 @@
             <Setter Property="TextAlignment"
                     Value="Center" />
         </Style>
+
+        <!--  LISTBOX AUTOSCROLL  -->
+        <Style Selector="ListBox#PluginParameterListBox, ListBox.paramValueListBox">
+            <Setter Property="AutoScrollToSelectedItem"
+                    Value="False" />
+        </Style>
     </local:MpAvUserControl.Styles>
     <Grid x:Name="ParameterContainerGrid"
           HorizontalAlignment="Stretch"
@@ -106,7 +110,7 @@
                 Command="{Binding CancelCommand}"
                 HorizontalAlignment="Left"
                 VerticalAlignment="Top"
-                Classes="defaultButton saveOrCancelButton squareByHeight">
+                Classes="default-button saveOrCancelButton squareByHeight">
             <Grid RowDefinitions="25,15"
                   HorizontalAlignment="Stretch">
                 <Image Grid.Row="0"
@@ -127,7 +131,7 @@
                 HorizontalAlignment="Right"
                 VerticalAlignment="Top"
                 Command="{Binding SaveCommand}"
-                Classes="defaultButton saveOrCancelButton squareByHeight">
+                Classes="default-button saveOrCancelButton squareByHeight">
             <Grid RowDefinitions="25,15"
                   HorizontalAlignment="Stretch">
                 <Image Grid.Row="0"
@@ -166,7 +170,9 @@
             </ListBox.ItemsPanel>
             <ListBox.ItemTemplate>
                 <DataTemplate>
-                    <local:MpAvPluginParameterItemView HorizontalAlignment="Stretch"
+                    <local:MpAvPluginParameterItemView Loaded="ParameterItemView_Loaded"
+                                                       Unloaded="ParameterItemView_Unloaded"
+                                                       HorizontalAlignment="Stretch"
                                                        Classes.invalid="{Binding !IsValid}" />
                 </DataTemplate>
             </ListBox.ItemTemplate>
@@ -202,7 +208,7 @@
                                 <sys:String>'</sys:String>
                             </Binding.Source>
                         </Binding>
-                        <Binding Path="LabelText"/>
+                        <Binding Path="LabelText" />
                         <Binding>
                             <Binding.Source>
                                 <sys:String>'</sys:String>

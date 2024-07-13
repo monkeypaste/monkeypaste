@@ -44,7 +44,7 @@
     </local:MpAvUserControl.Styles>
     <Button HorizontalAlignment="Stretch"
             VerticalAlignment="Stretch"
-            Classes="optionsButton noBg noBgOver noBorder"
+            Classes="optionsButton no-bg noBgOver no-border"
             Padding="2"
             Command="{Binding Command, ElementName=OptionsButton}"
             CommandParameter="{Binding CommandParameter, ElementName=OptionsButton}">

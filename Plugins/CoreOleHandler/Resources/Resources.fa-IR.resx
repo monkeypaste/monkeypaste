@@ -222,4 +222,10 @@
   <data name="ToFileExtHint" xml:space="preserve">
     <value>پسوند فایل مورد استفاده در هنگام استفاده از "{0}" برای ایجاد پرونده در صورت تقاضا استفاده می شود.</value>
   </data>
+  <data name="RtfParaTagNameHint" xml:space="preserve">
+    <value>برای برجسته کردن کد از برچسب "pre" استفاده کنید در غیر این صورت RTF به عنوان متن غنی معمولی درمان می شود.</value>
+  </data>
+  <data name="RtfParaTagNameLabel" xml:space="preserve">
+    <value>برچسب پاراگراف HTML</value>
+  </data>
 </root>

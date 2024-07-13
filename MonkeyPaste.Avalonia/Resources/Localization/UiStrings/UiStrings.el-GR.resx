@@ -2996,4 +2996,49 @@ feedble@monkeypaste.com</value>
   <data name="DonateLabel" xml:space="preserve">
     <value>Προσφέρω</value>
   </data>
+  <data name="MobileCopiedNtfText" xml:space="preserve">
+    <value>Αντιγράφηκε στο πρόχειρο</value>
+  </data>
+  <data name="PinTraySidebarLabel" xml:space="preserve">
+    <value>Καρφιτσωμένο</value>
+  </data>
+  <data name="QueryTraySidebarLabel" xml:space="preserve">
+    <value>Ερώτηση</value>
+  </data>
+  <data name="PluginBrowserFormattedWindowTitle" xml:space="preserve">
+    <value>Πρόγραμμα περιήγησης προσθηκών - {0}</value>
+  </data>
+  <data name="PluginBrowserWindowTitle" xml:space="preserve">
+    <value>Plugin Browser</value>
+  </data>
+  <data name="ClipboardSetMessage" xml:space="preserve">
+    <value>Σύνολο προχείρου</value>
+  </data>
+  <data name="AddNewActionLabel" xml:space="preserve">
+    <value>Προσθεσε νεο</value>
+  </data>
+  <data name="EditorPasteButtonLabelMobile" xml:space="preserve">
+    <value>αντίγραφο</value>
+  </data>
+  <data name="PrefSyntaxThemeHint" xml:space="preserve">
+    <value>Το θέμα που χρησιμοποιείται για μπλοκ κώδικα που εντοπίζονται σε κλιπ κειμένου.</value>
+  </data>
+  <data name="PrefSyntaxThemeLabel" xml:space="preserve">
+    <value>Θέμα Σύνταξης</value>
+  </data>
+  <data name="PrefCodeFontLabel" xml:space="preserve">
+    <value>Σύνταξη</value>
+  </data>
+  <data name="CommonViewLabel" xml:space="preserve">
+    <value>Θέα</value>
+  </data>
+  <data name="WrapTextMenuLabel" xml:space="preserve">
+    <value>Αναδίπλωση του κειμένου</value>
+  </data>
+  <data name="ClipAssignShortcutLabel" xml:space="preserve">
+    <value>Εκχώρηση συντόμευσης...</value>
+  </data>
+  <data name="ClipUpdateShortcutLabel" xml:space="preserve">
+    <value>Ενημέρωση συντόμευσης...</value>
+  </data>
 </root>

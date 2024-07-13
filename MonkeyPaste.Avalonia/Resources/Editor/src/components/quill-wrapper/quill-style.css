@@ -1,41 +1,7 @@
-.ql-stroke {
-    stroke: var(--editortoolbarbuttoncolor) !important;
-    stroke-width: 1px !important;
-}
-
-.ql-fill, .ql-path {
-    fill: var(--editortoolbarbuttoncolor) !important;
-}
-
-button.locked .ql-stroke {
-    stroke: var(--insertselectcolor) !important;
-}
-
-button.locked .ql-fill, button.locked .ql-path {
-    fill: var(--insertselectcolor) !important;
-}
-button.toggled:not(.locked) .ql-stroke {
-    stroke: var(--optselectcolor) !important;
-}
-
-button.toggled:not(.locked) .ql-fill, button.toggled:not(.locked).ql-path {
-    fill: var(--optselectcolor) !important;
-}
-
 .ql-picker-label {
     color: var(--editortoolbarbuttoncolor) !important;
 }
 
-
-
-.no-fill {
-    fill: transparent !important;
-}
-
-.disabled .ql-stroke, .disabled .ql-path {
-    stroke: white !important;
-    fill: white !important;
-}
 
 .ql-editor.ql-blank::before {
     /* empty placeholder*/
@@ -43,31 +9,12 @@ button.toggled:not(.locked) .ql-fill, button.toggled:not(.locked).ql-path {
 }
 
 
-.template-type-icon .ql-fill, .paste-toolbar-icon .ql-fill {
-    fill: white !important;
-}
-.template-type-icon .ql-stroke, .paste-toolbar-icon .ql-stroke {
-    stroke: white;
-}
-
 .ql-editor {
     height: auto;
     padding: 2px 10px;
     caret-color: var(--caretcolor) !important;
 }
 
-#editor.light .ql-editor code:not(.font-color-override-on) {
-    color: dimgray !important;
-}
-#editor.light .ql-editor code:not(.font-bg-color-override-on) {
-    background-color: silver !important;
-}
-#editor.dark .ql-editor code:not(.font-color-override-on) {
-    color: silver !important;
-}
-#editor.dark .ql-editor code:not(.font-bg-color-override-on) {
-    background-color: dimgray !important;
-}
 
 .ql-editor::selection {    
   color: var(--selfgcolor);
@@ -170,22 +117,75 @@ button.toggled:not(.locked) .ql-fill, button.toggled:not(.locked).ql-path {
         padding: 2px 4px;
     }
 
-.ql-code-block-container {
-    background-color: unset !important;
-    color: unset !important;
-    font-family: unset !important;
-    margin: 0 !important;
-    padding: 0 !important;
+/*.ql-editor h1 {*/
+    /*line-height: 84px !important;*/
+    /*font-size: 42px !important;
+}
+.ql-editor h2 {*/
+    /*line-height: 64px !important;*/
+    /*font-size: 32px !important;
+}
+.ql-editor h3  {*/
+    /*line-height: 64px !important;*/
+    /*font-size: 32px !important;
+}
+.ql-editor h4 {*/
+    /*line-height: 48px !important;*/
+    /*font-size: 24px !important;
+}
+.ql-editor h5 {
+    line-height: 48px !important;
+    font-size: 24px !important;
+}
+.ql-editor h6 {
+    line-height: 40px !important;
+    font-size: 20px !important;
+}*/
+
+.ql-snow .ql-tooltip[data-mode=link]::before {
+    content: attr(data-before);
+}
+.ql-snow .ql-tooltip.ql-editing a.ql-action::after {
+    border-right: 0px;
+    /*content: 'Save';*/
+    content: attr(data-after);
+    padding-right: 0px;
+}
+/* NOTE not sure where this one is but it should be localized */
+.ql-snow .ql-tooltip a.ql-action::after {
+    border-right: 1px solid #ccc;
+    content: 'Edit';
+    /*content: attr(data-after);*/
+    margin-left: 16px;
+    padding-right: 8px;
 }
 
-#editor a {
-    color: var(--linkcolor) !important;
-}
-#editor a:hover {
-    color: var(--linkhovercolor) !important;
+
+.ql-editor > * {
+   /*cursor: unset;*/ 
 }
 
-#editor.dark:not(.no-select) tr:hover a,
-#editor.dark:not(.no-select) tr.selected a {
-    color: blue !important;
+
+.ql-editor p {
+    line-height: 1.2em;
+    margin-top: 0.6em;
+    margin-bottom: 0.6em;
+}
+.ql-editor h6 {
+    line-height: 2em;
+}
+.ql-editor h5 {
+    line-height: 2.2em;
+}
+.ql-editor h4 {
+    line-height: 2.4em;
+}
+.ql-editor h3 {
+    line-height: 2.6em;
+}
+.ql-editor h2 {
+    line-height: 2.8em;
+}
+.ql-editor h1 {
+    line-height: 3em;
 }

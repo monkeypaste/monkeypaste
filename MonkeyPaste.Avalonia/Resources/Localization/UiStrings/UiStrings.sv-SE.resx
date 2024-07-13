@@ -2996,4 +2996,49 @@ Globala genvägar kan nu vara aktiverade i systemfack -menyn</value>
   <data name="DonateLabel" xml:space="preserve">
     <value>Donera</value>
   </data>
+  <data name="MobileCopiedNtfText" xml:space="preserve">
+    <value>Kopierad till urklipp</value>
+  </data>
+  <data name="PinTraySidebarLabel" xml:space="preserve">
+    <value>Fästad</value>
+  </data>
+  <data name="QueryTraySidebarLabel" xml:space="preserve">
+    <value>Fråga</value>
+  </data>
+  <data name="PluginBrowserFormattedWindowTitle" xml:space="preserve">
+    <value>Plugin webbläsare - {0}</value>
+  </data>
+  <data name="PluginBrowserWindowTitle" xml:space="preserve">
+    <value>Plugin webbläsare</value>
+  </data>
+  <data name="ClipboardSetMessage" xml:space="preserve">
+    <value>Urklipp</value>
+  </data>
+  <data name="AddNewActionLabel" xml:space="preserve">
+    <value>Lägg till ny</value>
+  </data>
+  <data name="EditorPasteButtonLabelMobile" xml:space="preserve">
+    <value>Kopiera</value>
+  </data>
+  <data name="PrefSyntaxThemeHint" xml:space="preserve">
+    <value>Temat som används för kodblock som upptäcks i textklipp.</value>
+  </data>
+  <data name="PrefSyntaxThemeLabel" xml:space="preserve">
+    <value>Syntaxtema</value>
+  </data>
+  <data name="PrefCodeFontLabel" xml:space="preserve">
+    <value>Syntax</value>
+  </data>
+  <data name="CommonViewLabel" xml:space="preserve">
+    <value>Se</value>
+  </data>
+  <data name="WrapTextMenuLabel" xml:space="preserve">
+    <value>Lindningstext</value>
+  </data>
+  <data name="ClipAssignShortcutLabel" xml:space="preserve">
+    <value>Tilldela genväg ...</value>
+  </data>
+  <data name="ClipUpdateShortcutLabel" xml:space="preserve">
+    <value>Uppdatera genväg ...</value>
+  </data>
 </root>

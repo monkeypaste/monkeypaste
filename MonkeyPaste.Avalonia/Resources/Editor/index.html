@@ -36,14 +36,15 @@
 
     <!-- EXTERNAL STYLES BEGIN -->
     <!--<link href="https://cdn.quilljs.com/1.0.0/quill.snow.css" rel="stylesheet">-->
-
-    <link href="lib/Quill/quill.snow.css" rel="stylesheet" />
+    <link href="lib/Quill/2.0.0-dev.3/quill.snow.css" rel="stylesheet" />
+    <!--<link href="https://cdn.jsdelivr.net/npm/quill@2.0.2/dist/quill.snow.css" rel="stylesheet" />-->
     <!--<link href="https://cdn.jsdelivr.net/npm/quill@2.0.0-beta.0/dist/quill.snow.css" rel="stylesheet" />-->
 
     <link href="lib/jquery-context-menus/src/context-menu.css" rel="stylesheet" />
     <link href="lib/Quill-Better-Table/quill-better-table.css" rel="stylesheet" type="text/css" />
     <!--<link href="lib/HighlightJs/github.min.css" rel="stylesheet" />-->
-    <link href="lib/HighlightJs/monokai-sublime.min.css" rel="stylesheet" />
+    <!--<link class="hljs" href="lib/HighlightJs/monokai-sublime.min.css" rel="stylesheet" />-->
+    <!--<link href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/atom-one-dark.min.css" rel="stylesheet">-->
     <!--<link href="lib/katex/katex.min.css" rel="stylesheet" />-->
     <!-- EXTERNAL STYLES END -->
     <!-- INTERNAL STYLES BEGIN -->
@@ -74,23 +75,14 @@
     <link href="src/components/table/table-style.css" rel="stylesheet" />
     <link href="src/components/table/toolbar/create-table-style.css" rel="stylesheet" />
     <link href="src/components/common/toolbar/common-toolbar-style.css" rel="stylesheet" />
-
+    <link href="src/components/syntax/syntax-style.css" rel="stylesheet" />
+    <link href="src/components/wrap/wrap-style.css" rel="stylesheet" />
     <!-- INTERNAL STYLES END -->
     <!-- EXTERNAL APIS BEGIN -->
     <script defer src="lib/HighlightJs/highlight.min.js"></script>
-    <!--<script defer src="lib/HighlightJs/xml.min.js"></script>-->
-    <!--<script defer src="lib/quill-delta-to-html/dist/browser/QuillDeltaToHtmlConverter.bundle.js"></script>-->
-    <!--<script defer src="lib/font-awesome/fontawesome-free-6.1.1-web/all.min.js"></script>-->
-    <!--<script defer src="lib/DynamicQuillTools/DynamicQuillTools.js"></script>-->
-    <!--<script defer src="node_modules/quilldev2/dist/quill.js"></script>-->
-    <!--<script defer src="https://cdn.quilljs.com/2.0.0-dev.4/quill.js"></script>-->
-    <!--<script defer src="node_modules/quill-better-table/dist/quill-better-table.js"></script>-->
-    <!--<script defer src="node_modules/quill-delta-to-html/dist/browser/QuillDeltaToHtmlConverter.bundle.js"></script>-->
+    <!--<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js"></script>-->
 
     <script defer src="lib/Quill/2.0.0-dev.3/quill.min.js"></script>
-    <!--<script defer src="lib/Quill/2.0.1/quill.core.js"></script>-->
-    <!--<script defer src="lib/Quill/2.0.1/quill.js"></script>-->
-    <!--<script defer src="lib/Quill-Better-Table/quill-better-table.min.js"></script>-->
     <script defer src="lib/Quill-Better-Table/quill-better-table/dist/quill-better-table.js"></script>
     <script defer src="lib/Quill-Delta-to-Html/QuillDeltaToHtmlConverter.bundle.js"></script>
     <script defer src="lib/jquery/jquery.min.js"></script>
@@ -184,6 +176,7 @@
     <script defer src="src/components/font/fontFamily.js"></script>
     <script defer src="src/components/font/fontSize.js"></script>
     <script defer src="src/components/font/fontcolor.js"></script>
+    <script defer src="src/components/syntax/syntax.js"></script>
     <script defer src="src/components/clipboard/clipboard.js"></script>
     <script defer src="src/components/shortcuts/shortcuts.js"></script>
     <script defer src="src/components/dragdrop/drag.js"></script>
@@ -217,6 +210,7 @@
     <script defer src="src/components/findreplace/findreplace.js"></script>
     <script defer src="src/components/tooltip/tooltip.js"></script>
     <script defer src="src/components/history/history.js"></script>
+    <script defer src="src/components/wrap/wrap.js"></script>
     <script defer src="src/components/editor/editor.js"></script>
     <script defer src="src/components/main/main.js"></script>
     <!-- INTERNAL API END -->
@@ -310,7 +304,10 @@
                 value="+1"></button>
         <div class="toolbar-separator"></div>
         <!-- ALIGN -->
-        <button id="alignEditorToolbarButton"></button>
+        <button id="alignEditorToolbarButton" 
+                class="svg-key-align-left"></button>
+        <button id="wrapToolbarButton"
+                class="svg-key-wrap svg-no-defaults"></button>
         <div class="toolbar-separator"></div>
         <!-- CREATE TABLE -->
         <span id="createTableToolbarButton" class="ql-Table-Input ql-picker hidden">
@@ -335,9 +332,10 @@
         <div class="toolbar-separator hidden"></div>
         <!-- FLOW DIRECTION -->
         <button class="ql-direction hidden" value="rtl"></button>
-        <div class="toolbar-separator"></div>
+        <div class="toolbar-separator hidden"></div>
         <!-- LINK -->
         <button id="linkEditorToolbarButton"
+                class="hidden"
                 ui-tooltip-key="EditorInsertLinkLabel"
                 hover-tooltip></button>
         <button class="ql-image hidden"
@@ -347,10 +345,10 @@
                 ui-tooltip-key="EditorInsertVideoLabel"
                 hover-tooltip></button>
         <!--<button class="ql-formula"></button>-->
-        <div class="toolbar-separator"></div>
+        <div class="toolbar-separator hidden"></div>
         <!-- FIND/REPLACE -->
         <button id="findReplaceToolbarButton" 
-                class="right-align svg-key-findreplace svg-no-defaults" 
+                class="svg-key-findreplace svg-no-defaults" 
                 svg-classes="svg-icon ql-fill"></button>
     </div>
     <!-- EDITOR CONTAINER -->
@@ -375,7 +373,7 @@
                       class="template-data-element"
                       spellcheck="false"></textarea>
         </div>
-        <button id="editTemplateDeleteButton" class="right-align" type="button" tabindex="2">
+        <button id="editTemplateDeleteButton" type="button" tabindex="2">
             <i class="svg-key-delete"></i>
             <span ui-content-key="EditorDeleteAllButtonText"></span>
         </button>
@@ -460,7 +458,7 @@
         </button>
         <!-- PASTE BUTTON/MODE CONTAINER -->
         <div id="pasteButtonAndModeContainer"
-             class="right-align pasteButtonSpit">
+             class="pasteButtonSpit">
             <!-- APPEND STATE CONTAINER -->
             <div id="pasteAppendToolbarContainer" 
                  class="hover-border append-toolbar-container">
@@ -489,7 +487,7 @@
                     class="hover-border"
                     tabindex="6"
                     hover-tooltip="Paste">
-                <i></i><span ui-content-key="EditorPasteButtonLabel"></span>
+                <i></i><span id="pasteButtonText" ui-content-key="EditorPasteButtonLabel"></span>
             </button>
             <!-- PASTE BUTTON POPUP -->
             <button id="pasteButtonPopupExpander"

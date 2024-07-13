@@ -222,4 +222,10 @@
   <data name="ToFileExtHint" xml:space="preserve">
     <value>ଅନ୍-ଡିମାଣ୍ଡ ସୃଷ୍ଟି କରିବା ପାଇଁ ବ୍ୟବହୃତ ହେବା ଫାଇଲ ଏକ୍ସଟେନ୍ସନ୍ ଯେତେବେଳେ '{0}' ବ୍ୟବହୃତ ହୁଏ |</value>
   </data>
+  <data name="RtfParaTagNameHint" xml:space="preserve">
+    <value>ପାଇଁ ହାଇଲାଇଟ୍ କରିବା ପାଇଁ 'ପ୍ରି' ଟ୍ୟାଗ୍ କୁ ସାଧାରଣ ଧନୀ ପାଠ ଭାବରେ ବ୍ୟବହାର କରାଯିବ |</value>
+  </data>
+  <data name="RtfParaTagNameLabel" xml:space="preserve">
+    <value>HTML ଅନୁଚ୍ଛେଦ ଟ୍ୟାଗ୍ |</value>
+  </data>
 </root>

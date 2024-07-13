@@ -3,10 +3,12 @@ using Avalonia.Controls;
 using Avalonia.Controls.Primitives;
 using Avalonia.Data;
 using Avalonia.Input;
+using Avalonia.Input.GestureRecognizers;
 using Avalonia.Interactivity;
 using Avalonia.Layout;
 using Avalonia.Media;
 using Avalonia.Threading;
+using Avalonia.VisualTree;
 using MonkeyPaste.Common;
 using MonkeyPaste.Common.Avalonia;
 using MonkeyPaste.Common.Plugin;
@@ -34,7 +36,7 @@ namespace MonkeyPaste.Avalonia {
 
         #region Constants
 
-        public const int SCROLL_TICK_INTERVAL_MS = 20;
+        public const int SCROLL_FPS = 50;
         public const double MIN_SCROLL_VELOCITY_MAGNITUDE = 0.1d;
 
         #endregion
@@ -155,6 +157,20 @@ namespace MonkeyPaste.Avalonia {
 
         #endregion
 
+        #region IsScrollingIntoView 
+        public static bool GetIsScrollingIntoView(AvaloniaObject obj) {
+            return obj.GetValue(IsScrollingIntoViewProperty);
+        }
+        public static void SetIsScrollingIntoView(AvaloniaObject obj, bool value) {
+            obj.SetValue(IsScrollingIntoViewProperty, value);
+        }
+        public static readonly AttachedProperty<bool> IsScrollingIntoViewProperty =
+            AvaloniaProperty.RegisterAttached<object, ListBox, bool>(
+                "IsScrollingIntoView",
+                false,
+                false);
+
+        #endregion
         #endregion
 
         #region Scrollbar Properties
@@ -545,27 +561,30 @@ namespace MonkeyPaste.Avalonia {
             if (s is ListBox lb) {
                 lb.DetachedFromVisualTree += DetachedFromVisualHandler;
 
-                lb.AddHandler(
+                if(MpAvThemeViewModel.Instance.IsMultiWindow) {
+                    lb.AddHandler(
                     InputElement.PointerWheelChangedEvent,
                     PointerMouseWheelHandler,
                     RoutingStrategies.Tunnel);
 
-                lb.AddHandler(
-                       InputElement.PointerPressedEvent,
-                       PreviewControlPointerPressedHandler,
-                       RoutingStrategies.Tunnel);
-
-                if (GetCanTouchScroll(lb)) {
                     lb.AddHandler(
-                        InputElement.PointerMovedEvent,
-                        PreviewControlPointerMovedHandler,
-                        RoutingStrategies.Tunnel);
-
-                    lb.AddHandler(
-                        InputElement.PointerReleasedEvent,
-                        PreviewControlPointerReleasedHandler,
-                        RoutingStrategies.Tunnel);
+                           InputElement.PointerPressedEvent,
+                           PreviewControlPointerPressedHandler,
+                           RoutingStrategies.Tunnel);
                 }
+
+                //if (GetCanTouchScroll(lb)) {
+
+                //    lb.AddHandler(
+                //        InputElement.PointerMovedEvent,
+                //        PreviewControlPointerMovedHandler,
+                //        RoutingStrategies.Tunnel);
+
+                //    lb.AddHandler(
+                //        InputElement.PointerReleasedEvent,
+                //        PreviewControlPointerReleasedHandler,
+                //        RoutingStrategies.Tunnel);
+                //}
 
 
                 if (e == null) {
@@ -574,7 +593,7 @@ namespace MonkeyPaste.Avalonia {
 
                 var timer = new DispatcherTimer(DispatcherPriority.Normal);
                 timer.Tag = lb;
-                timer.Interval = new TimeSpan(0, 0, 0, 0, SCROLL_TICK_INTERVAL_MS);
+                timer.Interval = ((double)SCROLL_FPS).FpsToDelayTime();// new TimeSpan(0, 0, 0, 0, SCROLL_FPS.);
                 timer.Tick += HandleWorldTimerTick;
 
                 timer.Start();
@@ -598,38 +617,52 @@ namespace MonkeyPaste.Avalonia {
                     //    while (!BindScrollViewerAndTracks(lb)) {
                     //        await Task.Delay(1000);
                     //    }
-                    //};
+                    //}; 
+                    //if (GetCanTouchScroll(lb)) {
+                    //    sv.IsScrollInertiaEnabled = MpAvThemeViewModel.Instance.IsMobileOrWindowed;
+                    //    if(sv.IsScrollInertiaEnabled && 
+                    //    sv is MpAvPagingScrollViewer psv &&
+                    //    psv.InnerGrid is { } ig) {
+                    //        ig.AddHandler(Gestures.ScrollGestureEvent, (s, e) => {
+                    //            SetIsTouchScrolling(lb, true);
+                    //        }, RoutingStrategies.Tunnel);
+                    //        ig.AddHandler(Gestures.ScrollGestureEndedEvent, (s, e) => {
+                    //            SetIsTouchScrolling(lb, false);
+                    //        }, RoutingStrategies.Tunnel);
+                    //    }
+                    //}
                 });
             }
         }
 
         private static void DetachedFromVisualHandler(object s, VisualTreeAttachmentEventArgs? e) {
-            if (s is ListBox lb) {
-                if (GetScrollViewer(lb) is ScrollViewer sv) {
-                    sv.RemoveHandler(
-                                ScrollViewer.PointerPressedEvent,
-                                ScrollViewerPointerPressedHandler);
-
-                    sv.RemoveHandler(
-                        ScrollViewer.PointerMovedEvent,
-                        ScrollViewerPointerMovedHandler);
-                    sv.RemoveHandler(
-                        ScrollViewer.PointerReleasedEvent,
-                        ScrollViewerPointerReleasedHandler);
-                }
-                lb.AttachedToVisualTree -= AttachedToVisualHandler;
-                lb.DetachedFromVisualTree -= DetachedFromVisualHandler;
-
-                lb.RemoveHandler(
-                    ListBox.PointerWheelChangedEvent,
-                    PointerMouseWheelHandler);
-
-                lb.RemoveHandler(
-                    ListBox.PointerPressedEvent,
-                    PreviewControlPointerPressedHandler);
+            if (s is not ListBox lb) {
+                return;
             }
-        }
 
+            if (GetScrollViewer(lb) is ScrollViewer sv) {
+                sv.RemoveHandler(
+                            ScrollViewer.PointerPressedEvent,
+                            ScrollViewerPointerPressedHandler);
+
+                sv.RemoveHandler(
+                    ScrollViewer.PointerMovedEvent,
+                    ScrollViewerPointerMovedHandler);
+                sv.RemoveHandler(
+                    ScrollViewer.PointerReleasedEvent,
+                    ScrollViewerPointerReleasedHandler);
+            }
+            lb.AttachedToVisualTree -= AttachedToVisualHandler;
+            lb.DetachedFromVisualTree -= DetachedFromVisualHandler;
+
+            lb.RemoveHandler(
+                ListBox.PointerWheelChangedEvent,
+                PointerMouseWheelHandler);
+
+            lb.RemoveHandler(
+                ListBox.PointerPressedEvent,
+                PreviewControlPointerPressedHandler);
+        }
 
         private static void PreviewControlPointerPressedHandler(object s, PointerPressedEventArgs e) {
             // when user clicks always halt any animated scrolling
@@ -640,14 +673,16 @@ namespace MonkeyPaste.Avalonia {
 
             SetVelocityX(lb, 0);
             SetVelocityY(lb, 0);
-            if (GetCanTouchScroll(lb)) {
-                //e.Pointer.Capture(lb);
-                _down_touch_loc = e.GetPosition(lb).ToPortablePoint();
-                MpConsole.WriteLine($"Touch down loc: {_down_touch_loc}", true);
-                _downOffset = new MpPoint(GetScrollOffsetX(lb), GetScrollOffsetY(lb));
-                _last_scroll_offset = _downOffset;
-            }
             e.Handled = false;
+            if (!GetCanTouchScroll(lb)) {
+                return;
+            }
+            e.PreventGestureRecognition();
+            //e.Pointer.Capture(lb);
+            _down_touch_loc = e.GetPosition(lb).ToPortablePoint();
+            //MpConsole.WriteLine($"Touch down loc: {_down_touch_loc}", true);
+            _downOffset = new MpPoint(GetScrollOffsetX(lb), GetScrollOffsetY(lb));
+            _last_scroll_offset = _downOffset;
         }
 
         private static void PreviewControlPointerMovedHandler(object s, PointerEventArgs e) {
@@ -662,10 +697,15 @@ namespace MonkeyPaste.Avalonia {
                 SetIsTouchScrolling(lb, false);
                 return;
             }
+            e.PreventGestureRecognition();
+            SetIsTouchScrolling(lb, true);
 
             var cur_touch_loc = e.GetPosition(lb).ToPortablePoint();
             if (_down_touch_loc == null) {
                 _down_touch_loc = cur_touch_loc;
+            }
+            if (_last_touch_loc == null) {
+                _last_touch_loc = cur_touch_loc;
             }
 
             var cur_touch_dt = DateTime.Now;
@@ -675,14 +715,16 @@ namespace MonkeyPaste.Avalonia {
             var cur_offset = new MpPoint(GetScrollOffsetX(lb), GetScrollOffsetY(lb));
             var new_offset = cur_offset - (cur_touch_loc - _down_touch_loc);
 
-            MpConsole.WriteLine($"Cur Offset: {cur_offset} New Offset: {new_offset}", true);
-            MpConsole.WriteLine($"Cur Loc: {cur_touch_loc} Down Loc: {_down_touch_loc}", false, true);
+            //MpConsole.WriteLine($"Cur Offset: {cur_offset} New Offset: {new_offset}", true);
+            //MpConsole.WriteLine($"Cur Loc: {cur_touch_loc} Down Loc: {_down_touch_loc}", false, true);
 
             ApplyScrollOffset(lb, new_offset.X, new_offset.Y);
             if (_last_v == null) {
                 _last_v = MpPoint.Zero;
             } else {
-                _last_v = (cur_touch_loc - _last_v) / (cur_touch_dt - _last_touch_dt.Value).TotalMilliseconds;
+                //_last_v = (cur_touch_loc - _last_v) / (cur_touch_dt - _last_touch_dt.Value).TotalMilliseconds;
+                
+                _last_v = (cur_touch_loc - _last_touch_loc) / (cur_touch_dt - _last_touch_dt.Value).TotalMilliseconds;
             }
 
             _last_touch_loc = cur_touch_loc;
@@ -699,6 +741,7 @@ namespace MonkeyPaste.Avalonia {
                 _last_v == null) {
                 return;
             }
+            e.PreventGestureRecognition();
 
             var cur_touch_loc = e.GetPosition(lb).ToPortablePoint();
             var cur_touch_dt = DateTime.Now;
@@ -838,12 +881,23 @@ namespace MonkeyPaste.Avalonia {
             if (sender is DispatcherTimer timer &&
                timer.Tag is ListBox lb &&
                GetScrollViewer(lb) is ScrollViewer sv) {
-                if (sv.DataContext is MpAvViewModelBase vm &&
-                    vm.IsBusy) {
+
+                if (MpAvThemeViewModel.Instance.IsMobileOrWindowed) {
+                    // force single axis scrolling (really hard to understand where/what causes)
+                    if (!GetCanScrollX(lb)) {
+                        SetAllOffsets(lb, x: 0);
+                    }
+                    if (!GetCanScrollY(lb)) {
+                        SetAllOffsets(lb, y: 0);
+                    }
+                    // ntf ctrvm of scroll for query,etc.
+                    SetScrollOffsetX(lb, sv.Offset.X);
+                    SetScrollOffsetY(lb, sv.Offset.Y);
                     return;
                 }
-                if (GetIsTouchScrolling(lb)) {
-                    // touch in progress
+
+                if (sv.DataContext is MpAvViewModelBase vm &&
+                    vm.IsBusy) {
                     return;
                 }
                 bool isThumbDragging = GetIsThumbDragging(lb);
@@ -882,21 +936,12 @@ namespace MonkeyPaste.Avalonia {
                 scrollOffsetX += vx;
                 scrollOffsetY += vy;
 
-                //if (_touch_accel == null) {
-                vx *= GetFrictionX(lb);
-                vy *= GetFrictionY(lb);
-                //} else {
-                //    _touch_accel *= new MpPoint(GetFrictionX(lb), GetFrictionY(lb));
-                //    //vx *= GetFrictionX(lb);
-                //    //vy *= GetFrictionY(lb);
-                //    var new_v = new MpPoint(vx, vy) + (_touch_accel * (0.5d * (double)(SCROLL_TICK_INTERVAL_MS ^ 2)));
-                //    vx = new_v.X;
-                //    vy = new_v.Y;
-                //    if (_touch_accel.Length.IsFuzzyZero()) {
-                //        _touch_accel = null;
-                //    }
-                //}
-
+                if (GetIsScrollingIntoView(lb)) {
+                    // no friction
+                } else { 
+                    vx *= GetFrictionX(lb);
+                    vy *= GetFrictionY(lb);
+                }
 
                 ApplyScrollOffset(lb, scrollOffsetX, scrollOffsetY);
 
@@ -929,6 +974,27 @@ namespace MonkeyPaste.Avalonia {
 
             }
             if (GetCanScrollY(lb)) {
+                SetScrollOffsetY(lb, y);
+                lb_sv.ScrollToVerticalOffset(y);
+                sv.ScrollToVerticalOffset(y);
+            }
+        }
+        
+        private static void SetAllOffsets(ListBox lb, double x = -1, double y = -1) {
+            if(GetScrollViewer(lb) is not { } sv ||
+                lb.GetVisualDescendant<ScrollViewer>() is not { } lb_sv) {
+                return;
+            }
+            if(x >= 0) {
+                SetScrollOffsetX(lb, x);
+                // manually set actual listbox scroll
+                // so thumb drag smoothly scrolls (updates visual container sv)
+                // and load more check doesn't occur to mouse up
+                lb_sv.ScrollToHorizontalOffset(x);
+                sv.ScrollToHorizontalOffset(x);
+            }
+
+            if(y >= 0) {
                 SetScrollOffsetY(lb, y);
                 lb_sv.ScrollToVerticalOffset(y);
                 sv.ScrollToVerticalOffset(y);
@@ -1091,7 +1157,7 @@ namespace MonkeyPaste.Avalonia {
                 MpDebug.Break();
             }
         }
-
+       
         #endregion
 
         #region Public Methods
@@ -1156,7 +1222,7 @@ namespace MonkeyPaste.Avalonia {
 
         public static void ForceScrollOffset(MpPoint offset) {
             if (MpAvMainView.Instance.GetVisualDescendant<MpAvQueryTrayView>() is not MpAvQueryTrayView qtv ||
-                qtv.FindControl<ListBox>("ClipTrayListBox") is not ListBox qt_lb) {
+                qtv.FindControl<ListBox>("QueryTrayListBox") is not ListBox qt_lb) {
                 return;
             }
             ApplyScrollOffset(qt_lb, offset.X, offset.Y);

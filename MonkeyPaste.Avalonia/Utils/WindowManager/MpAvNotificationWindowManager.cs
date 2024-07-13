@@ -2,11 +2,14 @@
 using Avalonia.Controls;
 using Avalonia.Layout;
 using Avalonia.Threading;
+using Microsoft.Maui.Graphics;
 using MonkeyPaste.Common;
 using MonkeyPaste.Common.Avalonia;
 using MonkeyPaste.Common.Plugin;
 using PropertyChanged;
 using System;
+using System.Threading.Tasks;
+using static Avalonia.Animation.PageSlide;
 
 namespace MonkeyPaste.Avalonia {
     [DoNotNotify]
@@ -31,10 +34,10 @@ namespace MonkeyPaste.Avalonia {
                 MpDebug.Break();
             }
 
-            if (Mp.Services.PlatformInfo.IsDesktop) {
+            if (MpAvThemeViewModel.Instance.IsDesktop) {
                 ShowDesktopNotification(nvmb);
             } else {
-                ShowWindowedNotification(nvmb);
+                ShowMobileNotification(nvmb);
             }
         }
         public void HideNotification(object dc) {
@@ -62,34 +65,31 @@ namespace MonkeyPaste.Avalonia {
         #endregion
 
         #region Private Methods
-        private void ShowWindowedNotification(MpAvNotificationViewModelBase nvmb) {
+        private void ShowMobileNotification(MpAvNotificationViewModelBase nvmb) {
             Control nw = null;
             var layoutType = MpAvNotificationViewModelBase.GetLayoutTypeFromNotificationType(nvmb.NotificationType);
             switch (layoutType) {
                 case MpNotificationLayoutType.Welcome:
-                    //nw = new MpAvWelcomeWindow() {
-                    //    DataContext = nvmb
-                    //};
+                    // ignored
                     break;
                 case MpNotificationLayoutType.Loader:
                     var mlv = new MpAvMobileLoaderView() {
-                        DataContext = nvmb,
-                        //Width = Mp.Services.ScreenInfoCollection.Screens.FirstOrDefault(x=>x.IsPrimary).WorkArea.Width,
-                        //Height = Mp.Services.ScreenInfoCollection.Screens.FirstOrDefault(x=>x.IsPrimary).WorkArea.Height
+                        DataContext = nvmb
                     };
                     App.SetPrimaryView(mlv);
                     break;
-                case MpNotificationLayoutType.ErrorWithOption:
-                case MpNotificationLayoutType.UserAction:
-                case MpNotificationLayoutType.ErrorAndShutdown:
-                    //nw = new MpAvUserActionNotificationWindow() {
-                    //    DataContext = nvmb
-                    //};
-                    break;
                 default:
-                    //nw = new MpAvMessageNotificationWindow() {
-                    //    DataContext = nvmb,
-                    //};
+                    MpDebug.Assert(nvmb.Body is string, $"Unhandled mobile ntf '{nvmb.NotificationType}'");
+
+                    if(MpAvDeviceWrapper.Instance == null ||
+                        nvmb.Body is not string text) {
+                        break;
+                    }
+                    MpAvDeviceWrapper.Instance.PlatformToastNotification.ShowToast(
+                        title: nvmb.Title,
+                        text: text,
+                        icon: nvmb.IconSourceObj,
+                        accentHexColor: nvmb.BorderHexColor);
                     break;
             }
             if (nw == null) {
@@ -101,26 +101,48 @@ namespace MonkeyPaste.Avalonia {
                 Dispatcher.UIThread.Post(() => ShowDesktopNotification(nvmb));
                 return;
             }
-            // BUG setting owner seems locks everything up, don't know
-            // if its or avalonia but just ignoring it for now
             MpAvWindow nw = null;
             switch (nvmb) {
                 case MpAvWelcomeNotificationViewModel:
+                    if(MpAvThemeViewModel.Instance.IsMobileOrWindowed) {
+                        return;
+                    }
                     nw = new MpAvWelcomeWindow() {
                         DataContext = nvmb
                     };
                     break;
                 case MpAvLoaderNotificationViewModel:
-                    nvmb.IsVisible = true;
+#if WINDOWED
+                    var mwo = MpAvPrefViewModel.Instance.MainWindowOrientationStr.ToEnum<MpMainWindowOrientationType>();
+                    bool is_vert = mwo == MpMainWindowOrientationType.Left || mwo == MpMainWindowOrientationType.Right;
+                    var w = new Window() {
+                        Width = is_vert ? 360:740,
+                        Height = is_vert ? 740:360,
+                        DataContext = nvmb,
+                        WindowStartupLocation = WindowStartupLocation.CenterScreen
+                    };
+                    w.Classes.Add("windowed-mode");
+                    if (Mp.Services != null && Mp.Services.ScreenInfoCollection == null) {
+                        Mp.Services.ScreenInfoCollection = new MpAvDesktopScreenInfoCollection(w);
+                    }
+
+                    nw = new MpAvWindow() {
+                        DataContext = nvmb,
+                        Content = new MpAvMobileLoaderView() {
+                            DataContext = nvmb
+                        }
+                    };
+                    w.Content = nw;
+                    App.Current.SetMainWindow(w);
+#else
                     nw = new MpAvLoaderNotificationWindow() {
                         DataContext = nvmb,
                         Topmost = true,
                         ShowActivated = true
                     };
-
-#if WINDOWED
-                    App.Current.SetMainWindow(MpAvRootWindow.Instance);
-#else
+                    if (Mp.Services != null && Mp.Services.ScreenInfoCollection == null) {
+                        Mp.Services.ScreenInfoCollection = new MpAvDesktopScreenInfoCollection(nw);
+                    }
                     App.Current.SetMainWindow(nw); 
 #endif
                     break;
@@ -130,21 +152,26 @@ namespace MonkeyPaste.Avalonia {
                     };
                     break;
             }
-            if (nw == null) {
-                // somethings wrong
-                return;
-            }
-
+            if (MpAvThemeViewModel.Instance.IsMultiWindow &&
+                nvmb is not MpAvWelcomeNotificationViewModel &&
+                nw != null &&
+                nw.TryGetPlatformHandle() is { } ph) {
 #if WINDOWS
-
-            if (nvmb is not MpAvWelcomeNotificationViewModel) {
-
-                MpAvToolWindow_Win32.SetAsToolWindow(nw.TryGetPlatformHandle().Handle);
-            }
+                MpAvToolWindow_Win32.SetAsToolWindow(ph.Handle);
 #endif
+                // BUG ntf styles don't seem to be registering, manually setting system decoration
+                nw.SystemDecorations = SystemDecorations.None;
+
+            }
+
+
+
             BeginOpen(nw);
         }
         private void BeginOpen(MpAvWindow nw) {
+            if(nw == null) {
+                return;
+            }
             var nvmb = nw.DataContext as MpAvNotificationViewModelBase;
 
             if(nvmb.Title.IsNullOrEmpty()) {
@@ -167,6 +194,11 @@ namespace MonkeyPaste.Avalonia {
                 } else {
                     nw.WindowStartupLocation = WindowStartupLocation.CenterOwner;
                 }
+                if(MpAvThemeViewModel.Instance.IsMobileOrWindowed) {
+                    nw.WindowStartupLocation = WindowStartupLocation.Manual;
+                    nvmb.AnchorTarget = MpAvMainView.Instance;
+                    nw.Position = MpAvWindowPositioner.GetWindowPositionByAnchorVisual(nw, nvmb.AnchorTarget);
+                }
             } else {
                 nvmb.Owner = null;
                 nvmb.AnchorTarget = null;
@@ -182,7 +214,7 @@ namespace MonkeyPaste.Avalonia {
 
             var disp = nw.GetObservable(Control.BoundsProperty).Subscribe(value => PositionAllNtfs());
 
-            void Nw_EffectiveViewportChanged(object sender, EffectiveViewportChangedEventArgs e) {
+            void Nw_EffectiveViewportChanged(object sender, EventArgs e) {
                 PositionAllNtfs();
             }
 
@@ -194,6 +226,23 @@ namespace MonkeyPaste.Avalonia {
             }
             nw.Closed += OnWindowClosed;
             nw.EffectiveViewportChanged += Nw_EffectiveViewportChanged;
+            nw.Opened += Nw_EffectiveViewportChanged;
+
+#if MOBILE_OR_WINDOWED
+            if (nvmb is MpAvUserActionNotificationViewModel uavm) {
+                    if (nvmb.IsModal) {
+                        nw.OpenTransition = MpChildWindowTransition.FadeIn;
+                        nw.CloseTransition = MpChildWindowTransition.FadeOut;
+                    } else {
+                        nw.OpenTransition = MpChildWindowTransition.SlideInFromTop;
+                        nw.CloseTransition = MpChildWindowTransition.SlideOutToTop;
+                    }
+                    nw.HeightRatio = -1; // use default height
+                } else if (nvmb is MpAvLoaderNotificationViewModel) {
+                    nw.OpenTransition = MpChildWindowTransition.FadeIn;
+                    nw.CloseTransition = MpChildWindowTransition.FadeOut | MpChildWindowTransition.SlideOutToTop;
+                }
+#endif
             try {
                 if (nvmb.Owner != null) {
                     nw.Show(nvmb.Owner);

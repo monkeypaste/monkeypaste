@@ -222,4 +222,10 @@
   <data name="ToFileExtHint" xml:space="preserve">
     <value>Phần mở rộng tệp được sử dụng khi '{0}' được sử dụng để tạo một tệp theo yêu cầu.</value>
   </data>
+  <data name="RtfParaTagNameHint" xml:space="preserve">
+    <value>Để làm nổi bật mã, sử dụng thẻ 'pre' nếu không RTF sẽ được coi là văn bản phong phú bình thường.</value>
+  </data>
+  <data name="RtfParaTagNameLabel" xml:space="preserve">
+    <value>Thẻ đoạn HTML</value>
+  </data>
 </root>

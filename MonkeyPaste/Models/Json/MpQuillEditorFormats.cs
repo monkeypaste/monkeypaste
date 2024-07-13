@@ -22,14 +22,18 @@ namespace MonkeyPaste {
         public bool isConverter { get; set; }
     }
     public class MpQuillDefaultsRequestMessage {
+        public string wwwroot { get; set; }
+        public string selectedSyntaxTheme { get; set; }
         public string internalSourceBaseUri { get; set; }
         public int minLogLevel { get; set; }
         public bool isDebug { get; set; }
         public string defaultFontFamily { get; set; }
+        public string syntaxFontFamily { get; set; }
         public string defaultFontSize { get; set; }
         public bool isSpellCheckEnabled { get; set; }
         public string currentTheme { get; set; }
         public double bgOpacity { get; set; }
+        public bool isMobile { get; set; }
 
         public string cultureCode { get; set; }
         public bool isRightToLeft { get; set; }
@@ -43,13 +47,14 @@ namespace MonkeyPaste {
 
     public class MpQuillLoadContentRequestMessage {
         public bool isPopOut { get; set; }
-        public double editorScale { get; set; } = MpCopyItem.DEFAULT_ZOOM_FACTOR;
+        public double editorScale { get; set; } = MpCopyItem.ZOOM_FACTOR_DEFAULT;
         public bool breakBeforeLoad { get; set; }
         public int contentId { get; set; }
         public bool isSubSelectionEnabled { get; set; }
         // fragment 'MpQuillPasteButtonInfoMessage'
         public string pasteButtonInfoFragment { get; set; }
         public bool isReadOnly { get; set; }
+        public bool isWrappingEnabled { get; set; }
         public string contentHandle { get; set; }
         public string contentType { get; set; }
 
@@ -409,5 +414,8 @@ namespace MonkeyPaste {
         public double clientY { get; set; }
         public string eventType { get; set; }
         public bool isLeft { get; set; }
+    }
+    public class MpQuillWrapChangedEventMessage {
+        public bool isWrappingEnabled { get; set; }
     }
 }

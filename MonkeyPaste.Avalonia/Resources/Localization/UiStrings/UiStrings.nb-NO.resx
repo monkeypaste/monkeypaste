@@ -2996,4 +2996,49 @@ Globale snarveier kan nå aktiveres i systemskuffenyen</value>
   <data name="DonateLabel" xml:space="preserve">
     <value>Donere</value>
   </data>
+  <data name="MobileCopiedNtfText" xml:space="preserve">
+    <value>Kopiert til utklippstavle</value>
+  </data>
+  <data name="PinTraySidebarLabel" xml:space="preserve">
+    <value>Festet</value>
+  </data>
+  <data name="QueryTraySidebarLabel" xml:space="preserve">
+    <value>Spørsmål</value>
+  </data>
+  <data name="PluginBrowserWindowTitle" xml:space="preserve">
+    <value>Plugin Browser</value>
+  </data>
+  <data name="PluginBrowserFormattedWindowTitle" xml:space="preserve">
+    <value>Plugin-nettleser – {0}</value>
+  </data>
+  <data name="ClipboardSetMessage" xml:space="preserve">
+    <value>Utklippstavlesett</value>
+  </data>
+  <data name="AddNewActionLabel" xml:space="preserve">
+    <value>Legg til ny</value>
+  </data>
+  <data name="EditorPasteButtonLabelMobile" xml:space="preserve">
+    <value>Kopiere</value>
+  </data>
+  <data name="PrefSyntaxThemeHint" xml:space="preserve">
+    <value>Temaet som ble brukt for blokker med kode oppdaget i tekstklipp.</value>
+  </data>
+  <data name="PrefSyntaxThemeLabel" xml:space="preserve">
+    <value>Syntaks -tema</value>
+  </data>
+  <data name="PrefCodeFontLabel" xml:space="preserve">
+    <value>Syntaks</value>
+  </data>
+  <data name="CommonViewLabel" xml:space="preserve">
+    <value>Utsikt</value>
+  </data>
+  <data name="WrapTextMenuLabel" xml:space="preserve">
+    <value>Bryte tekst</value>
+  </data>
+  <data name="ClipAssignShortcutLabel" xml:space="preserve">
+    <value>Tilordne snarvei ...</value>
+  </data>
+  <data name="ClipUpdateShortcutLabel" xml:space="preserve">
+    <value>Oppdater snarvei ...</value>
+  </data>
 </root>

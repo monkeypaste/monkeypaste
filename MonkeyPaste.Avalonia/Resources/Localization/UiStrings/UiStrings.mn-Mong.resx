@@ -2996,4 +2996,49 @@ FEEDBOWY@monkeypue.com</value>
   <data name="DonateLabel" xml:space="preserve">
     <value>Бэлэглэх</value>
   </data>
+  <data name="MobileCopiedNtfText" xml:space="preserve">
+    <value>Санах самбар руу хуулсан</value>
+  </data>
+  <data name="PinTraySidebarLabel" xml:space="preserve">
+    <value>Ан хатуу</value>
+  </data>
+  <data name="QueryTraySidebarLabel" xml:space="preserve">
+    <value>Асуух</value>
+  </data>
+  <data name="PluginBrowserWindowTitle" xml:space="preserve">
+    <value>Plugin хөтөч</value>
+  </data>
+  <data name="AddNewActionLabel" xml:space="preserve">
+    <value>Шинээр нэмэх</value>
+  </data>
+  <data name="PluginBrowserFormattedWindowTitle" xml:space="preserve">
+    <value>Plugin Browser - {0}</value>
+  </data>
+  <data name="ClipboardSetMessage" xml:space="preserve">
+    <value>Түр санах ойн багц</value>
+  </data>
+  <data name="EditorPasteButtonLabelMobile" xml:space="preserve">
+    <value>Хуулах</value>
+  </data>
+  <data name="PrefSyntaxThemeHint" xml:space="preserve">
+    <value>Текст клипэнд илрүүлсэн блокуудад ашигладаг сэдэв.</value>
+  </data>
+  <data name="PrefSyntaxThemeLabel" xml:space="preserve">
+    <value>Синтакс сэдэв</value>
+  </data>
+  <data name="PrefCodeFontLabel" xml:space="preserve">
+    <value>Синтакс</value>
+  </data>
+  <data name="CommonViewLabel" xml:space="preserve">
+    <value>Харагдац</value>
+  </data>
+  <data name="WrapTextMenuLabel" xml:space="preserve">
+    <value>Текст</value>
+  </data>
+  <data name="ClipAssignShortcutLabel" xml:space="preserve">
+    <value>Богино товчлолыг хуваарилах ...</value>
+  </data>
+  <data name="ClipUpdateShortcutLabel" xml:space="preserve">
+    <value>Богино шинэчлэх ...</value>
+  </data>
 </root>

@@ -2996,4 +2996,49 @@ A globális parancsikonok már engedélyezhetők a rendszer tálca menüben</val
   <data name="DonateLabel" xml:space="preserve">
     <value>Adományoz</value>
   </data>
+  <data name="MobileCopiedNtfText" xml:space="preserve">
+    <value>A vágólapra másolt</value>
+  </data>
+  <data name="PinTraySidebarLabel" xml:space="preserve">
+    <value>Rögzített</value>
+  </data>
+  <data name="QueryTraySidebarLabel" xml:space="preserve">
+    <value>Lekérdezés</value>
+  </data>
+  <data name="PluginBrowserFormattedWindowTitle" xml:space="preserve">
+    <value>Plugin böngésző - {0}</value>
+  </data>
+  <data name="PluginBrowserWindowTitle" xml:space="preserve">
+    <value>Plugin böngésző</value>
+  </data>
+  <data name="ClipboardSetMessage" xml:space="preserve">
+    <value>Vágólapkészlet</value>
+  </data>
+  <data name="AddNewActionLabel" xml:space="preserve">
+    <value>Új hozzáadása</value>
+  </data>
+  <data name="EditorPasteButtonLabelMobile" xml:space="preserve">
+    <value>Másolat</value>
+  </data>
+  <data name="PrefSyntaxThemeHint" xml:space="preserve">
+    <value>A szöveges klipekben észlelt kódblokkokhoz használt téma.</value>
+  </data>
+  <data name="PrefSyntaxThemeLabel" xml:space="preserve">
+    <value>Szintaxis téma</value>
+  </data>
+  <data name="PrefCodeFontLabel" xml:space="preserve">
+    <value>Szintaxis</value>
+  </data>
+  <data name="CommonViewLabel" xml:space="preserve">
+    <value>Kilátás</value>
+  </data>
+  <data name="WrapTextMenuLabel" xml:space="preserve">
+    <value>Csomagolási szöveg</value>
+  </data>
+  <data name="ClipAssignShortcutLabel" xml:space="preserve">
+    <value>Rendeljen parancsikont ...</value>
+  </data>
+  <data name="ClipUpdateShortcutLabel" xml:space="preserve">
+    <value>Frissítse a parancsikont ...</value>
+  </data>
 </root>

@@ -222,4 +222,10 @@
   <data name="ToFileExtHint" xml:space="preserve">
     <value>'{0}' ዝጥቀመሉ ናይ ፋይል መቐጸልታ ንፋይል ብድሌት ንምፍጣር ክጥቀመሉ ከሎ ይጥቀመሉ።</value>
   </data>
+  <data name="RtfParaTagNameHint" xml:space="preserve">
+    <value>ንኮድ ድምቀት ተጠቐም እቲ 'PRE' ዝብል መለለዪ ተጠቐም እንተዘይኮይኑ RTF ከም ንቡር ሃብታም ጽሑፍ ክሕሰብ እዩ።</value>
+  </data>
+  <data name="RtfParaTagNameLabel" xml:space="preserve">
+    <value>HTML ሕጡበ ጽሑፍ መለለዪ</value>
+  </data>
 </root>

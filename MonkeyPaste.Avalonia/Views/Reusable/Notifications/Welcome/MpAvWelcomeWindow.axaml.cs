@@ -8,8 +8,7 @@ using System.Linq;
 namespace MonkeyPaste.Avalonia {
     [DoNotNotify]
     public partial class MpAvWelcomeWindow : MpAvNotificationWindow {
-        public MpAvWelcomeWindow() : this(null) { }
-        public MpAvWelcomeWindow(MpAvWindow owner = default) : base(owner) {
+        public MpAvWelcomeWindow() { 
             InitializeComponent();
             //this.GetObservable(Window.WidthProperty).Subscribe(paramValue => OnWindowSizeChanged());
             //this.GetObservable(Window.HeightProperty).Subscribe(paramValue => OnWindowSizeChanged());

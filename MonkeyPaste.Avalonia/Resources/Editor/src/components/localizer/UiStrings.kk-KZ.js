@@ -34,6 +34,7 @@ var UiStrings = {
 	EditorNextTemplateLabel: `Келесі шаблон`,
 	EditorPasteButtonAppendBeginLabel: `Қосу ...`,
 	EditorPasteButtonLabel: `Ұту`,
+	EditorPasteButtonLabelMobile: `Еліктеу`,
 	EditorPasteTemplateWatermark: `Қою мәтінді енгізіңіз ...`,
 	EditorPrevTemplateLabel: `Алдыңғы шаблон`,
 	EditorRegExLabel: ` Тұрақты өрнек`,

@@ -2,9 +2,10 @@
 using Avalonia.Controls;
 using Avalonia.Controls.Primitives;
 using Avalonia.Data;
+using Avalonia.Media;
 using MonkeyPaste.Common;
+using MonkeyPaste.Common.Avalonia;
 using MonkeyPaste.Common.Plugin;
-
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -21,7 +22,8 @@ namespace MonkeyPaste.Avalonia {
     public class MpAvPluginBrowserViewModel :
         MpAvViewModelBase,
         MpICloseWindowViewModel,
-        MpIWantsTopmostWindowViewModel {
+        MpIWantsTopmostWindowViewModel,
+        MpAvIHeaderMenuViewModel {
         #region Private Variables
         #endregion
 
@@ -38,6 +40,25 @@ namespace MonkeyPaste.Avalonia {
         #endregion
 
         #region Interfaces
+
+        #region MpAvIHeaderMenuViewModel Implementation
+
+        MpAvHeaderBackButtonType MpAvIHeaderMenuViewModel.BackButtonType =>
+            MpAvHeaderBackButtonType.Arrow;
+        IBrush MpAvIHeaderMenuViewModel.HeaderBackground => 
+            MpAvThemeViewModel.Instance.IsThemeDark ?
+                    Mp.Services.PlatformResource.GetResource<IBrush>(MpThemeResourceKey.ThemeLightColor) :
+                    Mp.Services.PlatformResource.GetResource<IBrush>(MpThemeResourceKey.ThemeDarkColor);
+        string MpAvIHeaderMenuViewModel.HeaderTitle =>
+            UiStrings.PluginBrowserWindowTitle;
+        IEnumerable<MpAvIMenuItemViewModel> MpAvIHeaderMenuViewModel.HeaderMenuItems =>
+            null;
+        ICommand MpAvIHeaderMenuViewModel.BackCommand =>
+            BackCommand;
+        object MpAvIHeaderMenuViewModel.BackCommandParameter =>
+            null;
+
+        #endregion
 
         #region MpIWantsTopmostWindowViewModel Implementation
         bool MpIWantsTopmostWindowViewModel.WantsTopmost =>
@@ -82,11 +103,10 @@ namespace MonkeyPaste.Avalonia {
 
         public string WindowTitle {
             get {
-                string sufffix = string.Empty;
-                if (SelectedItem != null) {
-                    sufffix = $": {SelectedItem.PluginTitle}";
+                if(SelectedItem == null) {
+                    return UiStrings.PluginBrowserWindowTitle;
                 }
-                return $"Plugin Browser{sufffix}";
+                return UiStrings.PluginBrowserFormattedWindowTitle.Format(SelectedItem.PluginTitle);
             }
         }
 
@@ -132,7 +152,17 @@ namespace MonkeyPaste.Avalonia {
             Items.ForEach(x => x.RefreshState());
             OnPropertyChanged(nameof(CanUpdateCount));
             OnPropertyChanged(nameof(FilteredItems));
-            SelectedItem = FilteredItems.FirstOrDefault();
+
+            bool is_mobile =
+                MpAvThemeViewModel.Instance.IsMobile
+                || true; // only for testing
+
+            if(is_mobile) {
+                SelectedItem = null;
+            } else {
+                SelectedItem = FilteredItems.FirstOrDefault();
+            }
+            
         }
         #endregion
 
@@ -153,6 +183,10 @@ namespace MonkeyPaste.Avalonia {
                 case nameof(SelectedItem):
                     Items.ForEach(x => x.OnPropertyChanged(nameof(x.IsSelected)));
                     OnPropertyChanged(nameof(IsSelectedBusy));
+                    OnPropertyChanged(nameof(WindowTitle));
+                    if(this is MpAvIHeaderMenuViewModel hmivm) {
+                        hmivm.OnPropertyChanged(nameof(hmivm.HeaderTitle));
+                    }
                     break;
                 case nameof(IsAnyBusy):
                     OnPropertyChanged(nameof(IsSelectedBusy));
@@ -234,14 +268,19 @@ namespace MonkeyPaste.Avalonia {
         }
         private MpAvWindow CreatePluginBrowserWindow(string selectedGuid) {
             MpAvWindow pbw = new MpAvWindow() {
-                Width = 800,
-                Height = 500,
+                Width = MpAvThemeViewModel.Instance.IsMobileOrWindowed ? double.NaN : 800,
+                Height = MpAvThemeViewModel.Instance.IsMobileOrWindowed ? double.NaN : 500,
                 DataContext = this,
                 ShowInTaskbar = true,
                 Icon = MpAvIconSourceObjToBitmapConverter.Instance.Convert("JigsawImage", typeof(MpAvWindowIcon), null, null) as MpAvWindowIcon,
                 WindowStartupLocation = WindowStartupLocation.CenterScreen,
-                Content = new MpAvPluginBrowserView(),
+                Content = new MpAvPluginBrowserView()
             };
+            pbw.Background =
+                MpAvThemeViewModel.Instance.IsThemeDark ?
+                    Mp.Services.PlatformResource.GetResource<IBrush>(MpThemeResourceKey.ThemeDarkColor) :
+                    Mp.Services.PlatformResource.GetResource<IBrush>(MpThemeResourceKey.ThemeLightColor);
+
             if (pbw.Content is MpAvPluginBrowserView pbv &&
                 pbv.FindControl<TabStrip>("PluginTabStrip") is TabStrip ts) {
                 ts.SelectedItem = Tabs[(int)MpPluginBrowserTabType.Installed];
@@ -339,6 +378,24 @@ namespace MonkeyPaste.Avalonia {
                 }
                 OpenPluginBrowserWindow(null);
             });
+
+        public ICommand ClearPluginSelectionCommand => new MpCommand(
+            () => {
+                SelectedItem = null;
+            },
+            () => {
+                return SelectedItem != null;
+            });
+        
+        public ICommand BackCommand => new MpCommand<object>(
+            (args) => {
+                if(SelectedItem == null) {
+                    IsWindowOpen = false;
+                } else {
+                    ClearPluginSelectionCommand.Execute(null);
+                }
+            });
+
         #endregion
     }
 }

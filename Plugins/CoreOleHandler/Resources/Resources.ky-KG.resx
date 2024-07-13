@@ -222,4 +222,10 @@
   <data name="ToFileExtHint" xml:space="preserve">
     <value>"{0}" колдонулган файл кеңейтүүсү, суроо-талап боюнча файл түзүү үчүн колдонулат.</value>
   </data>
+  <data name="RtfParaTagNameHint" xml:space="preserve">
+    <value>Белгилей кетүүчү код үчүн 'Pre' тегин колдонбосо, антпесе RTF кадимки бай текст катары каралат.</value>
+  </data>
+  <data name="RtfParaTagNameLabel" xml:space="preserve">
+    <value>HTML ПАРТАМА ТАГЫ</value>
+  </data>
 </root>

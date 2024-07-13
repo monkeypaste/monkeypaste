@@ -222,4 +222,10 @@
   <data name="ToFileExtHint" xml:space="preserve">
     <value>L'estensione del file utilizzata quando '{0}' viene utilizzata per creare un file su richiesta.</value>
   </data>
+  <data name="RtfParaTagNameHint" xml:space="preserve">
+    <value>Per l'evidenziazione del codice utilizzare il tag "pre" altrimenti l'RTF verrà trattato come un normale testo ricco.</value>
+  </data>
+  <data name="RtfParaTagNameLabel" xml:space="preserve">
+    <value>Tag paragrafo HTML</value>
+  </data>
 </root>

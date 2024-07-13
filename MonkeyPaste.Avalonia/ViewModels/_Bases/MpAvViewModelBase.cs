@@ -14,6 +14,7 @@ namespace MonkeyPaste.Avalonia {
         MpIHierarchialViewModel,
         INotifyPropertyChanged,
         MpIErrorHandler,
+        MpILoadableViewModel,
         MpIAsyncObject {
 
         #region Private Variables
@@ -44,6 +45,8 @@ namespace MonkeyPaste.Avalonia {
         public bool IsBusy { get; set; }
         [JsonIgnore]
         public virtual bool IsLoaded { get; set; }
+
+        public virtual bool IsLoadable { get; }
 
 
         [JsonIgnore]

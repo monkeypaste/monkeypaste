@@ -1,4 +1,5 @@
-﻿using MonkeyPaste.Common;
+﻿using Avalonia.Controls;
+using MonkeyPaste.Common;
 
 namespace MonkeyPaste.Avalonia {
     public class MpAvMainWindowTitleMenuViewModel : MpAvViewModelBase {
@@ -10,6 +11,33 @@ namespace MonkeyPaste.Avalonia {
         #endregion
 
         #region Properties
+
+        #region View Models
+
+        private MpAvIFocusHeaderMenuViewModel _focusHeaderMenuViewModel;
+        public MpAvIFocusHeaderMenuViewModel FocusHeaderViewModel {
+            get {
+                //if(IsFocusHeaderFrozen) {
+                //    return _focusHeaderMenuViewModel;
+                //}
+                //var fc = MpAvFocusManager.Instance.FocusElement as Control;
+                //if (fc != null && 
+                //    fc is not MpAvMainView &&
+                //    fc.TryGetSelfOrAncestorDataContext<MpAvIFocusHeaderMenuViewModel>(out var hmvm)) {
+                //    _focusHeaderMenuViewModel = hmvm;
+                //} else {
+                //    _focusHeaderMenuViewModel = null;
+                //}
+                return _focusHeaderMenuViewModel;
+            }
+            set {
+                if(_focusHeaderMenuViewModel != value) {
+                    _focusHeaderMenuViewModel = value;
+                    OnPropertyChanged(nameof(FocusHeaderViewModel));
+                }
+            }
+        }
+        #endregion
 
         #region Appearance
 
@@ -28,12 +56,17 @@ namespace MonkeyPaste.Avalonia {
         #region Layout
         public double ZoomSliderLength => 125;
         public double ZoomSliderLineWidth => 1;
-        public double ZoomSliderValueLength => 3;
+
+        public double ZoomSliderLineLengthRatio =>
+            MpAvThemeViewModel.Instance.IsMultiWindow ? 0.5 : 0.25;
+        public double ZoomSliderValueLength =>
+            MpAvThemeViewModel.Instance.IsMultiWindow ? 3 : 5;
         public double ZoomSliderShortMargin => 3;
         public double ZoomSliderLongMargin => 10;
 
         public double TitleDragHandleLongLength => 50;
-        public double DefaultTitleMenuFixedLength => 20;
+        public double DefaultTitleMenuFixedLength =>
+            MpAvThemeViewModel.Instance.IsMultiWindow ? 20 : 50;
         public double TitleMenuWidth { get; set; }
         public double TitleMenuHeight { get; set; }
 
@@ -46,6 +79,7 @@ namespace MonkeyPaste.Avalonia {
         #endregion
 
         #region State
+        public bool IsFocusHeaderFrozen { get; set; }
         public bool IsZoomSliderHovering { get; set; }
         #endregion
 
@@ -70,6 +104,9 @@ namespace MonkeyPaste.Avalonia {
 
         private void ReceivedGlobalMessage(MpMessageType msg) {
             switch (msg) {
+                case MpMessageType.FocusItemChanged:
+                    OnPropertyChanged(nameof(FocusHeaderViewModel));
+                    break;
                 case MpMessageType.MainWindowActivated:
                 case MpMessageType.MainWindowDeactivated:
                 case MpMessageType.MainWindowOpened:

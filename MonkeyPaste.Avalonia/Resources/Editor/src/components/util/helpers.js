@@ -200,6 +200,32 @@ function utf8_to_b64(str) {
 function b64_to_utf8(str) {
     return decodeURIComponent(escape(window.atob(str)));
 }
+function utf8ArrayToString(aBytes) {
+    // from https://stackoverflow.com/a/59186929/105028
+    var sView = "";
+
+    for (var nPart, nLen = aBytes.length, nIdx = 0; nIdx < nLen; nIdx++) {
+        nPart = aBytes[nIdx];
+
+        sView += String.fromCharCode(
+            nPart > 251 && nPart < 254 && nIdx + 5 < nLen ? /* six bytes */
+                /* (nPart - 252 << 30) may be not so safe in ECMAScript! So...: */
+                (nPart - 252) * 1073741824 + (aBytes[++nIdx] - 128 << 24) + (aBytes[++nIdx] - 128 << 18) + (aBytes[++nIdx] - 128 << 12) + (aBytes[++nIdx] - 128 << 6) + aBytes[++nIdx] - 128
+                : nPart > 247 && nPart < 252 && nIdx + 4 < nLen ? /* five bytes */
+                    (nPart - 248 << 24) + (aBytes[++nIdx] - 128 << 18) + (aBytes[++nIdx] - 128 << 12) + (aBytes[++nIdx] - 128 << 6) + aBytes[++nIdx] - 128
+                    : nPart > 239 && nPart < 248 && nIdx + 3 < nLen ? /* four bytes */
+                        (nPart - 240 << 18) + (aBytes[++nIdx] - 128 << 12) + (aBytes[++nIdx] - 128 << 6) + aBytes[++nIdx] - 128
+                        : nPart > 223 && nPart < 240 && nIdx + 2 < nLen ? /* three bytes */
+                            (nPart - 224 << 12) + (aBytes[++nIdx] - 128 << 6) + aBytes[++nIdx] - 128
+                            : nPart > 191 && nPart < 224 && nIdx + 1 < nLen ? /* two bytes */
+                                (nPart - 192 << 6) + aBytes[++nIdx] - 128
+                                : /* nPart < 127 ? */ /* one byte */
+                                nPart
+        );
+    }
+
+    return sView;
+}
 function toBase64FromJsonObj(obj) {
     let objStr = null
     if (typeof obj === 'string' || obj instanceof String) {
@@ -284,7 +310,7 @@ function substringByLength(str, sIdx, length) {
     // js subsring is by sidx,eidx
     // cs substring is by sidx,length
     // this mimics cs for ported code, etc.
-    if (length == 0) {
+    if (length <= 0) {
         return '';
     }
     if (!length) {
@@ -610,9 +636,9 @@ function isStringContainSpecialHtmlEntities(str) {
     return globals.HtmlEntitiesLookup.find(x => str.includes(x[0])) != null;
 }
 
-function encodeHtmlSpecialEntitiesFromHtmlDoc(htmlStr) {
+function encodeHtmlSpecialEntitiesFromHtmlDoc(htmlStr,htmlDoc = null) {
     // create temp dom of htmlStr and escape special chars in text nodes	
-    let html_doc = globals.DomParser.parseFromString(htmlStr, 'text/html');
+    let html_doc = htmlDoc || globals.DomParser.parseFromString(htmlStr, 'text/html');
     let text_elms = getAllTextElementsInElement(html_doc.body);
     for (var i = 0; i < text_elms.length; i++) {
         let text_elm = text_elms[i];
@@ -637,7 +663,7 @@ function encodeHtmlSpecialEntitiesFromPlainText(str) {
     return str;
 }
 
-function decodeHtmlSpecialEntities(str) {
+function decodeHtmlSpecialEntities(str, excluded = []) {
     if (!isString(str)) {
         // NOTE important return input if not strig for clipboard matcher
         return str;
@@ -646,6 +672,9 @@ function decodeHtmlSpecialEntities(str) {
         return '';
     }
     for (var i = 0; i < globals.HtmlEntitiesLookup.length; i++) {
+        if (excluded.includes(globals.HtmlEntitiesLookup[i][1])) {
+            continue;
+        }
         str = str.replaceAll(globals.HtmlEntitiesLookup[i][1], globals.HtmlEntitiesLookup[i][0]);
     }
     return str;
@@ -934,3 +963,22 @@ function strFormat(b) {
 }
 
 
+function computedStyleToInlineStyle(element, recursive = false, properties = null) {
+    if (!element) {
+        throw new Error('No element specified.');
+    }
+
+    if (recursive) {
+        Array.prototype.forEach.call(element.children, (child) => {
+            computedStyleToInlineStyle(child, recursive, properties);
+        });
+    }
+
+    const computedStyle = getComputedStyle(element);
+    Array.prototype.forEach.call(
+        properties || computedStyle,
+        (property) => {
+            element.style[property] = computedStyle.getPropertyValue(property);
+        }
+    );
+}

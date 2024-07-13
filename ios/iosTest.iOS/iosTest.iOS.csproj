@@ -1,0 +1,81 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <OutputType>Exe</OutputType>
+    <TargetFramework>net8.0-ios</TargetFramework>
+    <SupportedOSPlatformVersion>$(MinIosVersion)</SupportedOSPlatformVersion>
+    <Nullable>disable</Nullable>
+    <ProvisioningType>manual</ProvisioningType>
+    <CodesignKey>Apple Development: Created via API (79M7T3S5XK)</CodesignKey>
+    <CodesignProvision>VS: WildCard Development</CodesignProvision>
+    <CodesignEntitlements>Entitlements.plist</CodesignEntitlements>
+    <MtouchLink>None</MtouchLink>
+    <UseMauiEssentials>true</UseMauiEssentials>
+    <PackageIcon>monkey.png</PackageIcon>
+    <ApplicationIcon>monkey.ico</ApplicationIcon>
+    <!--<UseMaui>true</UseMaui>-->
+  </PropertyGroup>
+
+  <PropertyGroup>
+    <EnableCodeSigning>true</EnableCodeSigning>
+    <CodesignRequireProvisioningProfile>true</CodesignRequireProvisioningProfile>
+    <DisableCodesignVerification>true</DisableCodesignVerification>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Avalonia.Fonts.Inter" Version="11.0.10" />
+    <PackageReference Include="Avalonia.iOS" Version="$(AvaloniaVersion)" />
+    <PackageReference Include="Avalonia.ReactiveUI" Version="$(AvaloniaVersion)" />
+    <PackageReference Include="Microsoft.Maui.Extensions" Version="6.0.553" />
+    <PackageReference Include="WebView.Avalonia.iOS" Version="11.0.0.1" />
+    <PackageReference Include="Microsoft.Maui.Essentials" Version="8.0.21" />
+    <PackageReference Include="Microsoft.Maui.Controls" Version="8.0.21" />
+    
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\..\MonkeyPaste.Avalonia\MonkeyPaste.Avalonia.csproj" />
+    <!--<ProjectReference Include="..\iosTest.iOS.KeyboardExtension\iosTest.iOS.KeyboardExtension.csproj" />-->
+    <!--<ProjectReference Include="..\iosTest.iOS.ShareExtension\iosTest.iOS.ShareExtension.csproj" />-->
+    <!--<ProjectReference Include="..\iosTest.iOS.KeyboardExtension\iosTest.iOS.KeyboardExtension.csproj">
+      <IsAppExtension>true</IsAppExtension>
+      <Project>{D9031235-0C00-4C34-BD1C-1DB57E1B4B56}</Project>
+      <Name>MonkeyKeyboardServiceExtension</Name>
+      <IsWatchApp>false</IsWatchApp>
+    </ProjectReference>-->
+    <ProjectReference Include="..\iosTest.iOS.ShareExtension\iosTest.iOS.ShareExtension.csproj">
+	    <IsAppExtension>true</IsAppExtension>
+      <Project>{375D4054-044A-4906-AAF2-F8D5F8AA4FAB}</Project>
+      <Name>MonkeyShareServiceExtension</Name>
+	    <IsWatchApp>false</IsWatchApp>
+    </ProjectReference>
+  </ItemGroup>
+  <!--<Import Project="$(MSBuildExtensionsPath)\Xamarin\iOS\Xamarin.iOS.CSharp.targets" />-->
+  
+  <ItemGroup>
+    <Content Include="monkey.ico" />
+  </ItemGroup>
+  
+  <ItemGroup>
+    <None Include="..\..\..\MonkeyPaste.Avalonia\Assets\Images\monkey.png">
+      <Pack>True</Pack>
+      <PackagePath>\</PackagePath>
+    </None>
+  </ItemGroup>
+
+  
+  
+<PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
+    <!--<Debugger>Xamarin</Debugger>
+    <DebugSymbols>True</DebugSymbols>-->
+    <!--<MtouchProfiling>True</MtouchProfiling>-->
+    <MtouchDebug>True</MtouchDebug>
+  </PropertyGroup>
+  
+  <Target Name="_SetPublishFolderTypeNoneOnDocFileItems" BeforeTargets="_ComputePublishLocation">
+    <!-- Workaround for https://github.com/dotnet/maui/issues/7272 -->
+    <ItemGroup>
+      <!--<ResolvedFileToPublish Update="@(ResolvedFileToPublish)" Condition="'%(ResolvedFileToPublish.Extension)' == '.resx' And '%(ResolvedFileToPublish.PublishFolderType)' == ''" PublishFolderType="None" />-->
+      <ResolvedFileToPublish Update="@(ResolvedFileToPublish)" Condition="'%(ResolvedFileToPublish.Extension)' == '.resx'" PublishFolderType="None" />
+    </ItemGroup>
+  </Target>
+</Project>

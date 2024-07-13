@@ -1,0 +1,16 @@
+<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <TargetFramework>net8.0-ios</TargetFramework>
+    <OutputType>Library</OutputType>
+    <ApplicationId>com.Monkey.iosTest-CustomKeyboardExtension</ApplicationId>
+    <ApplicationDisplayVersion>1.0</ApplicationDisplayVersion>
+    <ApplicationVersion>1</ApplicationVersion>
+    <SupportedOSPlatformVersion>$(MinIosVersion)</SupportedOSPlatformVersion>
+  </PropertyGroup>
+
+  <PropertyGroup>
+    <IsAppExtension>True</IsAppExtension>
+    <IsWatchExtension>False</IsWatchExtension>
+  </PropertyGroup>
+  
+  </Project>

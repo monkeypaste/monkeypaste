@@ -3,6 +3,7 @@ using MonkeyPaste.Common.Plugin;
 using SQLite;
 
 using System;
+using System.Linq;
 using System.Threading.Tasks;
 
 namespace MonkeyPaste {
@@ -99,25 +100,38 @@ namespace MonkeyPaste {
             string commandParameter = null,
             string guid = "",
             bool isReadOnly = false,
-            bool isInternalOnly = false) {
+            bool isInternalOnly = false,
+            bool resetIfDupKeyStringFound = false) {
             if (shortcutType == MpShortcutType.None) {
                 throw new Exception("Needs type");
             }
 
             guid = string.IsNullOrEmpty(guid) ? System.Guid.NewGuid().ToString() : guid;
 
-            var dupShortcut = await MpDataModelProvider.GetShortcutAsync(shortcutType.ToString(), commandParameter);
-            if (dupShortcut != null) {
-                MpConsole.WriteLine($"Updating keyString from '{dupShortcut.KeyString}' to '{keyString}'");
-                MpConsole.WriteLine($"Updating routing type from '{dupShortcut.RoutingType}' to '{routeType}'");
+            var dup_by_type = await MpDataModelProvider.GetShortcutAsync(shortcutType.ToString(), commandParameter);
+            if (dup_by_type != null) {
+                MpConsole.WriteLine($"Updating keyString from '{dup_by_type.KeyString}' to '{keyString}'");
+                MpConsole.WriteLine($"Updating routing type from '{dup_by_type.RoutingType}' to '{routeType}'");
 
-                dupShortcut = await MpDataModelProvider.GetItemAsync<MpShortcut>(dupShortcut.Id);
-                dupShortcut.KeyString = keyString;
-                dupShortcut.RoutingType = routeType;
+                dup_by_type = await MpDataModelProvider.GetItemAsync<MpShortcut>(dup_by_type.Id);
+                dup_by_type.KeyString = keyString;
+                dup_by_type.RoutingType = routeType;
 
-                await dupShortcut.WriteToDatabaseAsync();
-                return dupShortcut;
+                await dup_by_type.WriteToDatabaseAsync();
+                return dup_by_type;
             }
+            if(resetIfDupKeyStringFound) {
+                // auto created after during update
+                var dups_by_key_string = await MpDataModelProvider.GetShortcutsByKeyStringAsync(keyString);
+                if (dups_by_key_string != null && 
+                    dups_by_key_string.Any() &&
+                    dups_by_key_string.All(x=>x.ShortcutType != shortcutType)) {
+                    // when a new shortcut's default keystring matches some user shortcut, clear the new one to avoid conflict
+                    MpConsole.WriteLine($"New Shortcut '{shortcutType}' keystr '{keyString}' already exisits. Storing w/o keystr.");
+                    keyString = string.Empty;
+                }
+            }
+            
             var newShortcut = new MpShortcut() {
                 ShortcutGuid = System.Guid.Parse(guid),
                 KeyString = keyString,

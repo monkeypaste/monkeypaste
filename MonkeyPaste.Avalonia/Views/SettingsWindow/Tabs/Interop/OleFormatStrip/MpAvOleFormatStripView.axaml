@@ -8,6 +8,7 @@
                        xmlns:sys="clr-namespace:System;assembly=mscorlib"
                        xmlns:local="using:MonkeyPaste.Avalonia"
                        xmlns:pcl="using:MonkeyPaste"
+                       x:CompileBindings="False"
                        x:Class="MonkeyPaste.Avalonia.MpAvOleFormatStripView">
     <ItemsControl ItemsSource="{Binding}"
                   MaxWidth="250"
@@ -21,7 +22,7 @@
         <ItemsControl.ItemTemplate>
             <DataTemplate x:DataType="local:MpAvAppOlePresetViewModel">
                 <!--  NOTE cmd param set in interop style  -->
-                <Button Classes="noBg noHoverBg noBorder noHoverBorder"
+                <Button Classes="no-bg no-hover-bg no-border noHoverBorder"
                         Background="{StaticResource HitTestableTransparent}"
                         Command="{Binding Parent.ShowOleFormatMenuCommand}"
                         CornerRadius="3"

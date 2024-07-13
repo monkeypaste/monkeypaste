@@ -2,7 +2,6 @@ using Avalonia;
 using Avalonia.Controls;
 using Avalonia.Controls.ApplicationLifetimes;
 using Avalonia.Layout;
-using Avalonia.Logging;
 using Avalonia.Markup.Xaml;
 using Avalonia.Media;
 using Avalonia.Threading;
@@ -10,6 +9,7 @@ using Avalonia.Threading;
 using AvaloniaWebView;
 #endif
 using MonkeyPaste.Common;
+using MonkeyPaste.Common.Avalonia;
 using MonkeyPaste.Common.Plugin;
 using PropertyChanged;
 using System;
@@ -17,11 +17,24 @@ using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Threading;
+using System.Windows.Input;
+
+#if ENABLE_XAML_HOT_RELOAD
+using HotAvalonia; 
+#endif
 
 namespace MonkeyPaste.Avalonia {
     [DoNotNotify]
     public partial class App : Application {
         #region Private Variable
+
+        private bool is_xaml_hot_reload_enabled =
+#if ENABLE_XAML_HOT_RELOAD
+            true;
+#else
+            false;
+#endif
+
         #endregion
 
         #region Constants
@@ -51,6 +64,9 @@ namespace MonkeyPaste.Avalonia {
                 }
 
                 if (_instance.ApplicationLifetime is IClassicDesktopStyleApplicationLifetime desktop) {
+                    if(MpAvThemeViewModel.Instance.IsWindowed) {
+                        return desktop.MainWindow.Content as Control;
+                    }
                     return desktop.MainWindow;
                 }
                 if (_instance.ApplicationLifetime is ISingleViewApplicationLifetime mobile) {
@@ -67,16 +83,17 @@ namespace MonkeyPaste.Avalonia {
 #endif
 
         public static void WaitForDebug(object[] args) {
-            if (args.Contains(WAIT_FOR_DEBUG_ARG)) {
-                Console.WriteLine("Attach debugger and use 'Set next statement'");
-                while (true) {
-                    Thread.Sleep(100);
-                    if (Debugger.IsAttached) {
-                        if(args.Contains(BREAK_ON_ATTACH_ARG)) {
-                            Debugger.Break();
-                        }
-                        break;
+            if (!args.Contains(WAIT_FOR_DEBUG_ARG)) {
+                return;
+            }
+            Console.WriteLine("Attach debugger and use 'Set next statement'");
+            while (true) {
+                Thread.Sleep(100);
+                if (Debugger.IsAttached) {
+                    if (args.Contains(BREAK_ON_ATTACH_ARG)) {
+                        Debugger.Break();
                     }
+                    break;
                 }
             }
         }
@@ -84,6 +101,10 @@ namespace MonkeyPaste.Avalonia {
             if (_instance == null ||
                 _instance.ApplicationLifetime is not ISingleViewApplicationLifetime sval ||
                 sval.MainView is not Border b) {
+                if(_instance != null && _instance.ApplicationLifetime is IClassicDesktopStyleApplicationLifetime lt) {
+                    lt.MainWindow.DataContext = c.DataContext;
+                    lt.MainWindow.Content = c;
+                }
                 return;
             }
             b.Child = c;
@@ -106,7 +127,7 @@ namespace MonkeyPaste.Avalonia {
         public static event EventHandler FrameworkInitialized;
         public static event EventHandler FrameworkShutdown;
 #endif
-        #endregion
+#endregion
 
         #region Constructors
         public App() {
@@ -120,6 +141,9 @@ namespace MonkeyPaste.Avalonia {
 
         #region Public Methods
         public override void Initialize() {
+#if ENABLE_XAML_HOT_RELOAD
+            this.EnableHotReload(); 
+#endif
             AvaloniaXamlLoader.Load(this);
         }
 #if SUGAR_WV
@@ -142,7 +166,6 @@ namespace MonkeyPaste.Avalonia {
             ReportCommandLineArgs(Args);
             bool is_login_load = HasStartupArg(LOGIN_LOAD_ARG);
 
-
             if (ApplicationLifetime is IClassicDesktopStyleApplicationLifetime desktop) {
 #if CEFNET_WV
                 desktop.Startup += Startup;
@@ -155,9 +178,6 @@ namespace MonkeyPaste.Avalonia {
                 var loader = new MpAvLoaderViewModel(is_login_load);
                 await loader.CreatePlatformAsync(startup_datetime);
                 await loader.InitAsync();
-#if WINDOWED
-                MpAvRootWindow.Instance.Show();
-#endif
             } else if (ApplicationLifetime is ISingleViewApplicationLifetime mobile) {
                 
                 mobile.MainView = new Border() {
@@ -166,13 +186,16 @@ namespace MonkeyPaste.Avalonia {
                     VerticalAlignment = VerticalAlignment.Stretch,
                     Background = Brushes.Silver,
                 };
+                if(mobile.MainView is Border b) {
+                    b.EffectiveViewportChanged += B_EffectiveViewportChanged;
+                }
 
                 var loader = new MpAvLoaderViewModel(is_login_load);
                 await loader.CreatePlatformAsync(startup_datetime);
 
                 Dispatcher.UIThread.Post(async () => {
-                    if (MpDeviceWrapper.Instance != null) {
-                        await MpDeviceWrapper.Instance.InitAsync(null);
+                    if (MpAvDeviceWrapper.Instance != null) {
+                        await MpAvDeviceWrapper.Instance.InitAsync(null);
                     }
                     MpAvPrefViewModel.Instance.IsRichHtmlContentEnabled = false;
                     await loader.InitAsync();
@@ -183,6 +206,19 @@ namespace MonkeyPaste.Avalonia {
 
 #if DEBUG && DESKTOP
             this.AttachDevTools(MpAvWindow.DefaultDevToolOptions);
+#endif
+        }
+
+        private void B_EffectiveViewportChanged(object sender, EffectiveViewportChangedEventArgs e) {
+            // measuring only seems wrong on android and ios would need to recalculate extents
+#if ANDROID
+            if (sender is not Control c) {
+                return;
+            }
+            MpConsole.WriteLine($"Screen: {MpAvDeviceWrapper.Instance.ScreenInfoCollection.Primary}");
+            MpConsole.WriteLine($"MainView: {c.Bounds}");
+            MpAvDeviceWrapper.Instance.ScreenInfoCollection.Primary.Bounds = c.Bounds.ToPortableRect();
+            MpAvDeviceWrapper.Instance.ScreenInfoCollection.Primary.WorkingArea = c.Bounds.ToPortableRect(); 
 #endif
         }
 
@@ -214,6 +250,24 @@ namespace MonkeyPaste.Avalonia {
         #endregion
 
         #region Commands
+        public ICommand ToggleXamlHotReloadCommand => new MpCommand(
+            () => {
+#if ENABLE_XAML_HOT_RELOAD
+                if(is_xaml_hot_reload_enabled) {
+                    Application.Current.DisableHotReload();
+                } else {
+                    Application.Current.EnableHotReload();
+                }
+                is_xaml_hot_reload_enabled = !is_xaml_hot_reload_enabled;
+                string msg = $"XAML Hot Reload: {(is_xaml_hot_reload_enabled ? "ENABLED" : "DISABLED")}";
+                MpConsole.WriteLine(msg);
+
+                Mp.Services.NotificationBuilder.ShowMessageAsync(MpNotificationType.Message,
+                    title: "XAML Hot Reload Changed",
+                    body: msg).FireAndForgetSafeAsync();
+#endif
+            });
+
         #endregion
 
 #if WINDOWS
@@ -233,38 +287,5 @@ namespace MonkeyPaste.Avalonia {
             }
         }
 #endif
-    }
-
-    internal class MpAvLogSink : ILogSink {
-        private ILogSink _defSink;
-
-        private (LogEventLevel, string)[] _disabledLogs = {
-            (LogEventLevel.Warning,LogArea.Binding)
-        };
-        public static void Init() {
-            _ = new MpAvLogSink();
-        }
-        private MpAvLogSink() {
-            if (Logger.Sink != this) {
-                _defSink = Logger.Sink;
-            }
-
-            Logger.Sink = this;
-        }
-
-        public bool IsEnabled(LogEventLevel level, string area) {
-            if (!_defSink.IsEnabled(level, area)) {
-                return false;
-            }
-            return _disabledLogs.All(x => x.Item1 != level && x.Item2 != area);
-        }
-
-        public void Log(LogEventLevel level, string area, object source, string messageTemplate) {
-            _defSink.Log(level, area, source, messageTemplate);
-        }
-
-        public void Log(LogEventLevel level, string area, object source, string messageTemplate, params object[] propertyValues) {
-            _defSink.Log(level, area, source, messageTemplate, propertyValues);
-        }
     }
 }

@@ -85,7 +85,7 @@ namespace MonkeyPaste.Avalonia {
         public string CurrentUrl =>
             MpAvDocusaurusHelpers.GetCustomUrl(
                 url: OnlineHelpUriLookup[LastLinkType],
-                hideNav: true,
+                hideNav: false,
                 hideSidebars: false,
                 isDark: MpAvPrefViewModel.Instance.IsThemeDark);
 

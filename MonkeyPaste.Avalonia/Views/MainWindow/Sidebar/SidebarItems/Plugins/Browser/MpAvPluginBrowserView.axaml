@@ -14,6 +14,70 @@
                        d:DesignHeight="450"
                        x:Class="MonkeyPaste.Avalonia.MpAvPluginBrowserView">
     <local:MpAvUserControl.Styles>
+
+        <!--  MOBILE DRILL DOWN LAYOUT  -->
+        <Style Selector="Grid#PluginRootContainer">
+            <Setter Property="local:MpAvOrientedGridExtension.HorizontalRowDefinitions"
+                    Value="Auto,*" />
+            <Setter Property="local:MpAvOrientedGridExtension.HorizontalColumnDefinitions"
+                    Value="*,Auto,*" />
+            <Setter Property="local:MpAvOrientedGridExtension.VerticalRowDefinitions"
+                    Value="Auto,*,Auto,*" />
+            <Setter Property="local:MpAvOrientedGridExtension.VerticalColumnDefinitions"
+                    Value="*" />
+        </Style>
+
+        <Style Selector="Grid#PluginHeaderContainer">
+            <Setter Property="local:MpAvOrientedGridExtension.HorizontalColumnDefinitions"
+                    Value="Auto,*,Auto" />
+            <Setter Property="local:MpAvOrientedGridExtension.VerticalRowDefinitions"
+                    Value="Auto,Auto" />
+        </Style>
+
+        <Style Selector="Grid#PluginRootContainer.mobile">
+            <Setter Property="local:MpAvOrientedGridExtension.HorizontalRowDefinitions"
+                    Value="Auto,*" />
+            <Setter Property="local:MpAvOrientedGridExtension.HorizontalColumnDefinitions"
+                    Value="*,Auto,0" />
+            <Setter Property="local:MpAvOrientedGridExtension.VerticalRowDefinitions"
+                    Value="Auto,*,Auto,0" />
+            <Setter Property="local:MpAvOrientedGridExtension.VerticalColumnDefinitions"
+                    Value="*" />
+        </Style>
+
+        <Style Selector="Grid#PluginRootContainer.mobile.sel">
+            <Setter Property="local:MpAvOrientedGridExtension.HorizontalRowDefinitions"
+                    Value="Auto,*" />
+            <Setter Property="local:MpAvOrientedGridExtension.HorizontalColumnDefinitions"
+                    Value="0,Auto,*" />
+            <Setter Property="local:MpAvOrientedGridExtension.VerticalRowDefinitions"
+                    Value="Auto,0,Auto,*" />
+            <Setter Property="local:MpAvOrientedGridExtension.VerticalColumnDefinitions"
+                    Value="*" />
+        </Style>
+
+        <Style Selector="Grid#PluginRootContainer.mobile ListBox#PluginSelectorListBox">
+            <Setter Property="local:MpAvOrientedGridExtension.VerticalRowSpan"
+                    Value="3" />
+        </Style>
+
+        <Style Selector="Grid#PluginRootContainer.mobile :is(Control).detail">
+            <Setter Property="IsVisible"
+                    Value="False" />
+        </Style>
+        <Style Selector="Grid#PluginRootContainer.mobile GridSplitter#ListDetailSplitter">
+            <Setter Property="IsVisible"
+                    Value="False" />
+        </Style>
+        <Style Selector="Grid#PluginRootContainer.mobile.sel :is(Control).master">
+            <Setter Property="IsVisible"
+                    Value="False" />
+        </Style>
+        <Style Selector="Grid#PluginRootContainer.mobile.sel :is(Control).detai:not(.pluginBrowserSplitter)">
+            <Setter Property="IsVisible"
+                    Value="True" />
+        </Style>
+
         <!--  FILTER BOX  -->
         <Style Selector="local|MpAvClipBorder#FilterContainer">
             <Setter Property="BorderBrush"
@@ -83,24 +147,35 @@
 
         </Style>
     </local:MpAvUserControl.Styles>
+
+    <!--  OUTER CNTR GRID  -->
+
     <Grid x:Name="PluginRootContainer"
-          local:MpAvHelpAnchorExtension.IsEnabled="True"
-          local:MpAvHelpAnchorExtension.LinkType="Plugins"
+          Classes="oriented"
+          Classes.mobile="{Binding IsMobileOrWindowed, Source={x:Static local:MpAvThemeViewModel.Instance}}"
           Classes.browse="{Binding SelectedTabType, ConverterParameter=Browse, Converter={x:Static local:MpAvEnumToBoolConverter.Instance}}"
           Classes.installed="{Binding SelectedTabType, ConverterParameter=Installed, Converter={x:Static local:MpAvEnumToBoolConverter.Instance}}"
           Classes.updates="{Binding SelectedTabType, ConverterParameter=Updates, Converter={x:Static local:MpAvEnumToBoolConverter.Instance}}"
-          RowDefinitions="Auto,*"
-          ColumnDefinitions="0.5*,1,0.5*"
+          Classes.sel="{Binding SelectedItem, Converter={x:Static local:MpAvIsNotNullZeroOrEmptyToBoolConverter.Instance}}"
+          local:MpAvHelpAnchorExtension.IsEnabled="True"
+          local:MpAvHelpAnchorExtension.LinkType="Plugins"
           Margin="10">
 
         <!--  FILTER  -->
+
         <Grid x:Name="PluginHeaderContainer"
-              Grid.Row="0"
-              Grid.ColumnSpan="3">
+              Classes="oriented master"
+              local:MpAvOrientedGridExtension.HorizontalRow="0"
+              local:MpAvOrientedGridExtension.HorizontalColumnSpan="3">
+            <!--  SEARCH CNTR  -->
             <StackPanel x:Name="PluginFilterBoxContainer"
                         Orientation="Horizontal"
                         VerticalAlignment="Center"
                         HorizontalAlignment="Left"
+                        local:MpAvOrientedGridExtension.HorizontalRow="0"
+                        local:MpAvOrientedGridExtension.HorizontalColumn="0"
+                        local:MpAvOrientedGridExtension.VerticalRow="1"
+                        local:MpAvOrientedGridExtension.VerticalColumn="0"
                         Margin="5"
                         Spacing="5">
 
@@ -157,7 +232,7 @@
                 <Button x:Name="RefreshFilterButton"
                         VerticalAlignment="Stretch"
                         HorizontalAlignment="Center"
-                        Classes="defaultButton noBg noHoverBg outline outlineOver square"
+                        Classes="default-button no-bg no-hover-bg outline outlineOver square"
                         IsEnabled="{Binding !IsBusy}"
                         Command="{Binding PerformFilterCommand}"
                         CommandParameter="Click">
@@ -175,7 +250,12 @@
             </StackPanel>
 
 
-            <StackPanel Grid.Column="1"
+            <!--  TABS CNTR  -->
+            <StackPanel local:MpAvOrientedGridExtension.HorizontalRow="0"
+                        local:MpAvOrientedGridExtension.HorizontalColumn="0"
+                        local:MpAvOrientedGridExtension.HorizontalColumnSpan="3"
+                        local:MpAvOrientedGridExtension.VerticalRow="0"
+                        local:MpAvOrientedGridExtension.VerticalColumn="0"
                         Orientation="Horizontal"
                         HorizontalAlignment="Center">
                 <!--  TABS  -->
@@ -199,15 +279,20 @@
                 </Border>
             </StackPanel>
 
+            <!--  TOOLS CNTR  -->
 
             <StackPanel Orientation="Horizontal"
+                        local:MpAvOrientedGridExtension.HorizontalRow="0"
+                        local:MpAvOrientedGridExtension.HorizontalColumn="2"
+                        local:MpAvOrientedGridExtension.VerticalRow="1"
+                        local:MpAvOrientedGridExtension.VerticalColumn="0"
                         Spacing="5"
                         VerticalAlignment="Center"
                         HorizontalAlignment="Right">
 
                 <!--  HELP BUTTON  -->
                 <Button x:Name="ShowPluginHelpButton"
-                        Classes="defaultButton noBg noHoverBg outline outlineOver square"
+                        Classes="default-button no-bg no-hover-bg outline outlineOver square"
                         Command="{Binding NavigateToHelpLinkCommand, Source={x:Static local:MpAvHelpViewModel.Instance}}"
                         CommandParameter="Plugins">
                     <ToolTip.Tip>
@@ -218,7 +303,8 @@
 
                 <!--  OPEN FOLDER BUTTON  -->
                 <Button x:Name="OpenPluginFolderButton"
-                        Classes="defaultButton noBg noHoverBg outline outlineOver square"
+                        IsVisible="{Binding IsDesktop, Source={x:Static local:MpAvThemeViewModel.Instance}}"
+                        Classes="default-button no-bg no-hover-bg outline outlineOver square"
                         Command="{Binding OpenPluginFolderCommand}">
                     <ToolTip.Tip>
                         <local:MpAvToolTipView ToolTipText="{Binding Source={x:Static local:R.U}, Path=CurrentUiStrings.PluginBrowserOpenPluginFolder}" />
@@ -231,13 +317,16 @@
 
         <!--  PLUGIN LIST  -->
         <ListBox x:Name="PluginSelectorListBox"
+                 local:MpAvOrientedGridExtension.HorizontalRow="1"
+                 local:MpAvOrientedGridExtension.HorizontalColumn="0"
+                 local:MpAvOrientedGridExtension.VerticalRow="1"
+                 local:MpAvOrientedGridExtension.VerticalColumn="0"
+                 Classes="master"
                  Margin="5,5,0,5"
                  CornerRadius="5"
                  BorderThickness="0.5"
                  Background="Transparent"
                  BorderBrush="{DynamicResource ThemeInteractiveColor}"
-                 Grid.Row="1"
-                 Grid.Column="0"
                  ItemsSource="{Binding FilteredItems}"
                  SelectedItem="{Binding SelectedItem, Mode=TwoWay}">
             <ListBox.ItemTemplate>
@@ -260,23 +349,31 @@
             </ListBox.ItemsPanel>
         </ListBox>
 
+
         <!--  BROWSE BUSY OVERLAY  -->
 
         <local:MpAvBusySpinnerView x:Name="SelectorBusyContainer"
-                                   Grid.Row="1"
-                                   Grid.Column="0"
+                                   Classes="master"
+                                   local:MpAvOrientedGridExtension.HorizontalRow="1"
+                                   local:MpAvOrientedGridExtension.HorizontalColumn="0"
+                                   local:MpAvOrientedGridExtension.VerticalRow="1"
+                                   local:MpAvOrientedGridExtension.VerticalColumn="0"
                                    Width="30"
                                    Height="30"
                                    HorizontalAlignment="Center"
                                    VerticalAlignment="Center"
                                    IsVisible="{Binding IsBusy}" />
+
         <!--  EMPTY LIST OVERLAY  -->
+
         <TextBlock x:Name="EmptPluginListTextBlock"
-                   Grid.Row="1"
-                   Grid.Column="0"
+                   local:MpAvOrientedGridExtension.HorizontalRow="1"
+                   local:MpAvOrientedGridExtension.HorizontalColumn="0"
+                   local:MpAvOrientedGridExtension.VerticalRow="1"
+                   local:MpAvOrientedGridExtension.VerticalColumn="0"
                    FontSize="24"
                    Text="{Binding Source={x:Static local:R.U}, Path=CurrentUiStrings.CommonEmptyListText}"
-                   Classes="disabled emptyOverlayText">
+                   Classes="disabled emptyOverlayText master">
             <TextBlock.IsVisible>
                 <MultiBinding Converter="{x:Static BoolConverters.And}">
                     <Binding Path="!IsBusy" />
@@ -288,9 +385,14 @@
         </TextBlock>
 
         <!--  SELECTED PLUGIN VIEW  -->
-        <Border Margin="10,0,0,0"
-                Grid.Row="1"
-                Grid.Column="2"
+
+        <Border x:Name="SelectedPluginContainer"
+                Classes="detail"
+                Margin="10,0,0,0"
+                local:MpAvOrientedGridExtension.HorizontalRow="1"
+                local:MpAvOrientedGridExtension.HorizontalColumn="2"
+                local:MpAvOrientedGridExtension.VerticalRow="3"
+                local:MpAvOrientedGridExtension.VerticalColumn="0"
                 IsVisible="{Binding SelectedItem, Converter={x:Static local:MpAvIsNotNullZeroOrEmptyToBoolConverter.Instance}}">
 
             <local:MpAvPluginDetailView x:Name="SelectedPluginOuterContainer"
@@ -309,10 +411,15 @@
 
             </local:MpAvPluginDetailView>
         </Border>
+
         <!--  SELECTED BUSY SPINNER  -->
+
         <local:MpAvBusySpinnerView x:Name="DetailBusyContainer"
-                                   Grid.Row="1"
-                                   Grid.Column="2"
+                                   Classes="detail"
+                                   local:MpAvOrientedGridExtension.HorizontalRow="1"
+                                   local:MpAvOrientedGridExtension.HorizontalColumn="2"
+                                   local:MpAvOrientedGridExtension.VerticalRow="3"
+                                   local:MpAvOrientedGridExtension.VerticalColumn="0"
                                    Width="30"
                                    Height="30"
                                    HorizontalAlignment="Center"
@@ -325,14 +432,19 @@
             </local:MpAvBusySpinnerView.IsVisible>
         </local:MpAvBusySpinnerView>
 
-        <!--  NO SELECTION OVERLAY  -->
-
         <!--  LIST/DETAIL SPLITTER  -->
+
         <GridSplitter x:Name="ListDetailSplitter"
-                      Grid.Row="1"
-                      Grid.Column="1"
-                      HorizontalAlignment="Stretch"
-                      Classes="vertical pluginBrowserSplitter">
+                      Background="Transparent"
+                      Width="1"
+                      local:MpAvOrientedGridExtension.HorizontalRow="1"
+                      local:MpAvOrientedGridExtension.HorizontalColumn="1"
+                      local:MpAvOrientedGridExtension.VerticalRow="2"
+                      local:MpAvOrientedGridExtension.VerticalColumn="0"
+                      ResizeBehavior="PreviousAndNext"
+                      Classes.horizontal="{Binding !IsHorizontalOrientation, Source={x:Static local:MpAvMainWindowViewModel.Instance}}"
+                      Classes.vertical="{Binding !IsVerticalOrientation, Source={x:Static local:MpAvMainWindowViewModel.Instance}}"
+                      Classes="detail stretch pluginBrowserSplitter">
             <GridSplitter.RenderTransform>
                 <TranslateTransform X="5" />
             </GridSplitter.RenderTransform>

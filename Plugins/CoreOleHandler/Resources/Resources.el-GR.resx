@@ -222,4 +222,10 @@
   <data name="ToFileExtHint" xml:space="preserve">
     <value>Η επέκταση αρχείου που χρησιμοποιείται όταν το '{0}' χρησιμοποιείται για τη δημιουργία αρχείου κατ' απαίτηση.</value>
   </data>
+  <data name="RtfParaTagNameHint" xml:space="preserve">
+    <value>Για την επισήμανση κώδικα χρησιμοποιήστε την ετικέτα "PRE" διαφορετικά το RTF θα αντιμετωπίζεται ως κανονικό εμπλουτισμένο κείμενο.</value>
+  </data>
+  <data name="RtfParaTagNameLabel" xml:space="preserve">
+    <value>Ετικέτα παραγράφου HTML</value>
+  </data>
 </root>

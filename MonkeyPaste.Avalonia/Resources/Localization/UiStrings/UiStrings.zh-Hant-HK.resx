@@ -2996,4 +2996,49 @@ feathback@monkeypaste.com</value>
   <data name="DonateLabel" xml:space="preserve">
     <value>捐</value>
   </data>
+  <data name="MobileCopiedNtfText" xml:space="preserve">
+    <value>複製到剪貼板</value>
+  </data>
+  <data name="PinTraySidebarLabel" xml:space="preserve">
+    <value>固定</value>
+  </data>
+  <data name="QueryTraySidebarLabel" xml:space="preserve">
+    <value>詢問</value>
+  </data>
+  <data name="PluginBrowserFormattedWindowTitle" xml:space="preserve">
+    <value>插件瀏覽器 -  {0}</value>
+  </data>
+  <data name="PluginBrowserWindowTitle" xml:space="preserve">
+    <value>插件瀏覽器</value>
+  </data>
+  <data name="AddNewActionLabel" xml:space="preserve">
+    <value>添新</value>
+  </data>
+  <data name="ClipboardSetMessage" xml:space="preserve">
+    <value>剪貼簿集</value>
+  </data>
+  <data name="EditorPasteButtonLabelMobile" xml:space="preserve">
+    <value>复制</value>
+  </data>
+  <data name="PrefSyntaxThemeHint" xml:space="preserve">
+    <value>該主題用於文本剪輯中檢測到的代碼塊。</value>
+  </data>
+  <data name="PrefSyntaxThemeLabel" xml:space="preserve">
+    <value>語法主題</value>
+  </data>
+  <data name="PrefCodeFontLabel" xml:space="preserve">
+    <value>句法</value>
+  </data>
+  <data name="CommonViewLabel" xml:space="preserve">
+    <value>看法</value>
+  </data>
+  <data name="WrapTextMenuLabel" xml:space="preserve">
+    <value>包裹文字</value>
+  </data>
+  <data name="ClipAssignShortcutLabel" xml:space="preserve">
+    <value>分配快捷方式...</value>
+  </data>
+  <data name="ClipUpdateShortcutLabel" xml:space="preserve">
+    <value>更新快捷方式...</value>
+  </data>
 </root>

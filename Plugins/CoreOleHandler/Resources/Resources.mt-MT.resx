@@ -222,4 +222,10 @@
   <data name="ToFileExtHint" xml:space="preserve">
     <value>L-estensjoni tal-fajl użata meta '{0}' tintuża biex toħloq fajl on-demand.</value>
   </data>
+  <data name="RtfParaTagNameHint" xml:space="preserve">
+    <value>Għall-enfasi tal-kodiċi uża t-tikketta 'Pre' inkella l-RTF jiġi ttrattat bħala test sinjur normali.</value>
+  </data>
+  <data name="RtfParaTagNameLabel" xml:space="preserve">
+    <value>Tag tal-paragrafu HTML</value>
+  </data>
 </root>

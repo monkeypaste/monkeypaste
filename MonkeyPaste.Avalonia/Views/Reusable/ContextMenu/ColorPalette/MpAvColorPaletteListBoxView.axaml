@@ -81,7 +81,7 @@
                 <Button x:Name="ColorItemButton"
                         x:DataType="local:MpAvMenuItemViewModel"
                         EffectiveViewportChanged="Btn_EffectiveViewportChanged"
-                        Classes="noBg noHoverBg noBorder"
+                        Classes="no-bg no-hover-bg no-border"
                         Classes.custom="{Binding IsVisible}"
                         Background="Transparent"
                         BorderThickness="0"

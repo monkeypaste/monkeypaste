@@ -222,4 +222,10 @@
   <data name="ToFileExtHint" xml:space="preserve">
     <value>Filutvidelsen som brukes når '{0}' brukes til å opprette en fil på forespørsel.</value>
   </data>
+  <data name="RtfParaTagNameHint" xml:space="preserve">
+    <value>For kode som fremhever bruk av "pre" -koden, ellers vil RTF bli behandlet som normal rik tekst.</value>
+  </data>
+  <data name="RtfParaTagNameLabel" xml:space="preserve">
+    <value>HTML PARAGRAPH -TAG</value>
+  </data>
 </root>

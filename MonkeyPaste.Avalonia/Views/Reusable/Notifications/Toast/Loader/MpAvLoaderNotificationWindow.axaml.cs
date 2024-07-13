@@ -6,8 +6,7 @@ using PropertyChanged;
 namespace MonkeyPaste.Avalonia {
     [DoNotNotify]
     public partial class MpAvLoaderNotificationWindow : MpAvNotificationWindow {
-        public MpAvLoaderNotificationWindow() : this(null) { }
-        public MpAvLoaderNotificationWindow(MpAvWindow owner = default) : base(owner) {
+        public MpAvLoaderNotificationWindow() {
             InitializeComponent();
         }
 

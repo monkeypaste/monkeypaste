@@ -222,4 +222,10 @@
   <data name="ToFileExtHint" xml:space="preserve">
     <value>Ֆայլի երկարացումը օգտագործվում է «{0}» -ում, որն օգտագործվում է ֆայլի պահանջարկ ստեղծելու համար:</value>
   </data>
+  <data name="RtfParaTagNameHint" xml:space="preserve">
+    <value>Կոդի ընդգծման համար օգտագործեք «նախապես» պիտակը, հակառակ դեպքում RTF- ը կվերաբերվի որպես նորմալ հարուստ տեքստ:</value>
+  </data>
+  <data name="RtfParaTagNameLabel" xml:space="preserve">
+    <value>HTML պարբերություն Tag</value>
+  </data>
 </root>

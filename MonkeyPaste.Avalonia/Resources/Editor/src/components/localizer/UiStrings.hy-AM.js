@@ -34,6 +34,7 @@ var UiStrings = {
 	EditorNextTemplateLabel: `Հաջորդ ձեւանմուշը`,
 	EditorPasteButtonAppendBeginLabel: `Հավելված ...`,
 	EditorPasteButtonLabel: `Մածուկ`,
+	EditorPasteButtonLabelMobile: `Պատճեն`,
 	EditorPasteTemplateWatermark: `Մուտքագրեք մածուկի տեքստը ...`,
 	EditorPrevTemplateLabel: `Նախորդ ձեւանմուշ`,
 	EditorRegExLabel: ` Պարբերաբար արտահայտում`,

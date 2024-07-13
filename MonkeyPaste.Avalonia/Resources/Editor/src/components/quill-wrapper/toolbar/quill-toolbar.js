@@ -7,13 +7,13 @@
 function initEditorToolbarQuillOptions(quillOptions, toolbarId) {
 	initFontFamilySelector();
 	let sizes = registerFontSizes();
-	quillOptions.modules = {
-		toolbar: toolbarId
-	};
+	if (isNullOrUndefined(quillOptions.modules)) {
+		quillOptions.modules = {};
+	}
+	quillOptions.modules['toolbar'] = toolbarId;
 
-	if (quillBetterTable === undefined || Quill === undefined) {
-		/// host load error case
-		debugger;
+	if (isNullOrUndefined(window.quillBetterTable) || Quill === undefined) {
+		return quillOptions;
 	}
 
 	Quill.register({ "modules/better-table": quillBetterTable }, true);

@@ -1,11 +1,15 @@
 ﻿using Avalonia;
 using Avalonia.Controls;
+using Avalonia.Controls.Primitives;
+using Avalonia.Controls.Shapes;
 using Avalonia.Data;
 using Avalonia.Layout;
 using Avalonia.Media;
 using Avalonia.Threading;
+using DynamicData;
 using MonkeyPaste.Common;
 using MonkeyPaste.Common.Avalonia;
+using MonkeyPaste.Common.Plugin;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -24,7 +28,9 @@ namespace MonkeyPaste.Avalonia {
         MpIActiveWindowViewModel,
         MpISelectableViewModel,
         MpISidebarItemViewModel,
-        MpIDesignerSettingsViewModel {
+        MpIDesignerSettingsViewModel,
+        MpAvIHeaderMenuViewModel 
+        {
         #region Private Variables
 
         #endregion
@@ -35,6 +41,7 @@ namespace MonkeyPaste.Avalonia {
 
         public const double DEFAULT_MIN_SCALE = 0.1;
         public const double DEFAULT_MAX_SCALE = 3.0d;
+        public const double MAX_TRANSLATE_OFFSET_MAGNITUDE = 1_000;
         const double DEFAULT_SCALE = 1.0d;
         #endregion
 
@@ -42,6 +49,34 @@ namespace MonkeyPaste.Avalonia {
         #endregion
 
         #region Interfaces
+
+        #region MpAvIFocusHeaderMenuViewModel Implementation
+
+        MpAvHeaderBackButtonType MpAvIHeaderMenuViewModel.BackButtonType =>
+            MpAvHeaderBackButtonType.Arrow;
+        IBrush MpAvIHeaderMenuViewModel.HeaderBackground =>
+            Mp.Services.PlatformResource.GetResource<IBrush>(MpThemeResourceKey.ThemeCompliment2Color);
+         string MpAvIHeaderMenuViewModel.HeaderTitle =>
+            UiStrings.ActionDesignerWindowTitle.Replace("'{0}'",string.Empty);
+        IEnumerable<MpAvIMenuItemViewModel> MpAvIHeaderMenuViewModel.HeaderMenuItems =>
+            [
+            new MpAvMenuItemViewModel() {
+                    IconSourceObj = "PlusImage",
+                    Command = ShowTriggerSelectorMenuCommand
+                },
+            ];
+        ICommand MpAvIHeaderMenuViewModel.BackCommand => new MpCommand(
+            () => {
+                IsWindowOpen = false;
+                MpAvMainView.Instance.FocusThisHeader();
+                if (MpAvSidebarItemCollectionViewModel.Instance.SelectedItem == this) {
+                    MpAvSidebarItemCollectionViewModel.Instance.ToggleIsSidebarItemSelectedCommand.Execute(this);
+                }
+            });
+        object MpAvIHeaderMenuViewModel.BackCommandParameter =>
+            null;
+
+        #endregion
 
         #region MpIZoomFactorViewModel Implementation
 
@@ -123,44 +158,44 @@ namespace MonkeyPaste.Avalonia {
 
         public bool IsGridVisible {
             get {
-                return ParseShowGrid(DesignerSettingsArg);
+                return SelectedTrigger == null ? true : SelectedTrigger.IsGridVisible;
             }
             set {
-                if (IsGridVisible != value) {
-                    SetDesignerItemSettings(ZoomFactor, TranslateOffsetX, TranslateOffsetY, value);
+                if (IsGridVisible != value && SelectedTrigger != null) {
+                    SelectedTrigger.IsGridVisible = value;
                     OnPropertyChanged(nameof(IsGridVisible));
                 }
             }
         }
         public double ZoomFactor {
             get {
-                return ParseScale(DesignerSettingsArg);
+                return SelectedTrigger == null ? 1 : SelectedTrigger.ZoomFactor;
             }
             set {
-                if (ZoomFactor != value) {
-                    SetDesignerItemSettings(Math.Clamp(value, MinZoomFactor, MaxZoomFactor), TranslateOffsetX, TranslateOffsetY, IsGridVisible);
+                if (ZoomFactor != value && SelectedTrigger != null) {
+                    SelectedTrigger.ZoomFactor = value;
                     OnPropertyChanged(nameof(ZoomFactor));
                 }
             }
         }
         public double TranslateOffsetX {
             get {
-                return ParseTranslationOffset(DesignerSettingsArg).X;
+                return SelectedTrigger == null ? 0 : SelectedTrigger.TranslateOffsetX;
             }
             set {
-                if (Math.Abs(TranslateOffsetX - value) > 0.1) {
-                    SetDesignerItemSettings(ZoomFactor, Math.Round(value, 1), TranslateOffsetY, IsGridVisible);
+                if (Math.Abs(TranslateOffsetX - value) > 0.1 && SelectedTrigger != null) {
+                    SelectedTrigger.TranslateOffsetX = value;
                     OnPropertyChanged(nameof(TranslateOffsetX));
                 }
             }
         }
         public double TranslateOffsetY {
             get {
-                return ParseTranslationOffset(DesignerSettingsArg).Y;
+                return SelectedTrigger == null ? 0 : SelectedTrigger.TranslateOffsetY;
             }
             set {
-                if (Math.Abs(TranslateOffsetY - value) > 0.1) {
-                    SetDesignerItemSettings(ZoomFactor, TranslateOffsetX, Math.Round(value, 1), IsGridVisible);
+                if (Math.Abs(TranslateOffsetY - value) > 0.1 && SelectedTrigger != null) {
+                    SelectedTrigger.TranslateOffsetY = value;
                     OnPropertyChanged(nameof(TranslateOffsetY));
                 }
             }
@@ -176,46 +211,81 @@ namespace MonkeyPaste.Avalonia {
                         mv.GetVisualDescendant<MpAvZoomBorder>() is MpAvZoomBorder mw_zb) {
                 zb = mw_zb;
             }
+            bool simple_reset = true || zb == null || SelectedTrigger == null;
+            if(simple_reset) {
+                ZoomFactor = 1;
+                var focus_loc = GetDesignerItemCenter(FocusAction);
+                TranslateOffsetX = focus_loc.X;
+                TranslateOffsetY = focus_loc.Y;
+                return;
+            }
+            MpAvActionViewModelBase focus_avm = FocusAction ?? SelectedTrigger;
 
-            //if (zb == null) {
+            //SelectedTrigger.SelfAndAllDescendants
+            //    .ForEach(x => x.Location = x.Location - focus_avm.Location);
+            double pad = 30;
+            MpRect total_rect = DesignerItemsRect.Inflate(pad,pad);
+            // 125, -30
+            var test = total_rect.Center;
+            double hw = ObservedDesignerBounds.Width / 2;
+            double hh = ObservedDesignerBounds.Height / 2;
+            double hw2 = focus_avm.ObservedDesignerItemBounds.Width;
+            double hh2 = focus_avm.ObservedDesignerItemBounds.Height/4;
+            TranslateOffsetX = hw - focus_avm.Location.X - hw2;
+            TranslateOffsetY = hh - focus_avm.Location.Y - hh2;
+            //TranslateOffsetX = DesignerCenterLocation.X;
+            //TranslateOffsetY = DesignerCenterLocation.Y - hh;
+
+            //TranslateOffsetX = total_rect.Left;
+            //TranslateOffsetY = total_rect.Bottom;
+
+            //TranslateOffsetX = -total_rect.Centroid().X;
+            //TranslateOffsetY = -total_rect.Centroid().Y;
+
+            // goal: 0, 125
+            //TranslateOffsetX = 0;
+            //TranslateOffsetY = 0;
+
+            //var scale = ObservedDesignerBounds.Size / total_rect.Size;
+            var scale = total_rect.Size / ObservedDesignerBounds.Size;
+
+            ZoomFactor = Math.Max(MinZoomFactor,Math.Min(scale.X,scale.Y));
+
+
             ZoomFactor = 1;
-            var focus_loc = GetDesignerItemCenter(FocusAction);
-            TranslateOffsetX = focus_loc.X;
-            TranslateOffsetY = focus_loc.Y;
-            return;
-            // }
+            //MpRect total_rect = null;//DesignerItemsRect;
+            //var lb = zb.GetVisualDescendant<ListBox>();
+            //for (int i = 0; i < lb.ItemCount; i++) {
+            //    if (lb.ContainerFromIndex(i) is not ListBoxItem lbi ||
+            //        lbi.GetVisualDescendant<Shape>() is not Shape s) {
+            //        continue;
+            //    }
+            //    MpRect cur_rect2 = s.Bounds.ToPortableRect();
+            //    var new_origin2 = s.TranslatePoint(new Point(), zb).Value.ToPortablePoint();
+            //    cur_rect2.Move(new_origin2);
+            //    total_rect = total_rect == null ? cur_rect2 : total_rect.Union(cur_rect2);
+            //}
+            //total_rect = total_rect.Inflate(20, 20);
 
-            //MpRect total_rect = DesignerItemsRect;
-            ////var lb = zb.GetVisualDescendant<ListBox>();
-            ////for (int i = 0; i < lb.ItemCount; i++) {
-            ////    if (lb.ContainerFromIndex(i) is ListBoxItem lbi
-            ////        && lbi.GetVisualDescendant<Shape>() is Shape s) {
-            ////        MpRect cur_rect2 = s.Bounds.ToPortableRect();
-            ////        var new_origin2 = s.TranslatePoint(new Point(), zb).Value.ToPortablePoint();
-            ////        cur_rect2.Move(new_origin2);
-            ////        total_rect = total_rect.Union(cur_rect2);
-            ////    }
-            ////}
-            ////total_rect = total_rect.Inflate(20, 20);
+            ////2.7
+            //double Scale = Math.Min(x_scale, y_scale);
 
-            //double x_scale = ObservedDesignerBounds.Width / total_rect.Width;
-            //double y_scale = ObservedDesignerBounds.Height / total_rect.Height;
-            //// 2.7
-            //Scale = Math.Min(x_scale, y_scale);
-
-            ////var container_size = ObservedDesignerBounds.Size.ToPortablePoint();
-            ////var rect_size = total_rect.Size.ToPortablePoint();
-            ////var trans = container_size - rect_size - (rect_size * 0.5);
-
+            //var container_size = ObservedDesignerBounds.Size;
+            //var rect_size = total_rect.Size;
+            //var trans = container_size - rect_size - (rect_size * 0.5);
+            //trans = total_rect.Centroid();
             ////var total_screen_tl = total_rect.TopLeft * Scale;
-            //var trans = total_rect.TopLeft; //DesignerCenterLocation - total_rect.Centroid();
-
+            ////var trans = total_rect.TopLeft; //DesignerCenterLocation - total_rect.Centroid();
+            ////var centeroid = total_rect.Centroid();
             ////var trans = (centeroid * Scale) + (DesignerCenterLocation * Scale);
 
-            //TranslateOffsetX = -trans.X;
-            //TranslateOffsetY = -trans.Y;
+            //TranslateOffsetX = trans.X;
+            //TranslateOffsetY = trans.Y;
+            
+            //TranslateOffsetX = -304;
+            //TranslateOffsetY = -1553;
 
-        }, () => FocusAction != null);
+        });
 
         private MpPoint GetDesignerItemCenter(MpAvActionViewModelBase avm) {
             return new MpPoint(
@@ -231,102 +301,53 @@ namespace MonkeyPaste.Avalonia {
 
         public MpRect DesignerItemsRect {
             get {
-                MpRect total_rect = null;
-                SelectedTrigger.SelfAndAllDescendants.ForEach(x =>
-                    total_rect = total_rect.Union(
-                        new MpRect(
-                            GetDesignerItemOrigin(x),
-                            new MpSize(DesignerItemDiameter, DesignerItemDiameter))));
-                return total_rect;
+                double l = double.MaxValue, t = double.MaxValue, r = double.MinValue, b = double.MinValue;
+                foreach(var avm in SelectedTrigger.SelfAndAllDescendants) {
+                    var avm_rect = new MpRect(
+                            avm.Location,
+                            new MpSize(DesignerItemDiameter, DesignerItemDiameter));
+                    l = Math.Min(l, avm_rect.Left);
+                    t = Math.Min(t, avm_rect.Top);
+                    r = Math.Max(r, avm_rect.Right);
+                    b = Math.Max(b, avm_rect.Bottom);
+
+                }
+                return new MpRect(l,t,Math.Max(0,r-l),Math.Max(0,b-t));
             }
         }
         public MpRect ObservedDesignerBounds { get; set; } = MpRect.Empty;
         public double DesignerItemDiameter => 50;
 
-        public MpPoint DesignerCenterLocation => ObservedDesignerBounds.Size.ToPortablePoint() / 2;
-        public MpPoint DefaultDesignerItemLocationLocation => new MpPoint(-DesignerItemDiameter / 2, -DesignerItemDiameter / 2);
+        public MpPoint DesignerCenterLocation => 
+            (ObservedDesignerBounds.Size.ToPortablePoint() / 2) - (DesignerItemDiameter / 2);
+        public MpPoint DefaultDesignerItemLocationLocation =>
+            MpPoint.Zero;//new MpPoint(-DesignerItemDiameter / 2, -DesignerItemDiameter / 2);
 
 
         public double FocusActionScreenX => FocusAction == null ? 0 : (DesignerCenterLocation.X - FocusAction.X) + (DesignerItemDiameter / 2);
         public double FocusActionScreenY => FocusAction == null ? 0 : (DesignerCenterLocation.Y - FocusAction.Y) + (DesignerItemDiameter / 2);
         #endregion
 
-        #region Designer Model Parsing Helpers
-
-        string DesignerSettingsArg {
-            get => SelectedTrigger == null ? null : SelectedTrigger.Arg1;
-            set {
-                if (SelectedTrigger == null) {
-                    return;
-                }
-                SelectedTrigger.Arg1 = value;
-            }
-        }
-        private void SetDesignerItemSettings(double scale, double offsetX, double offsetY, bool showGrid) {
-            string arg2 = string.Join(
-                ",",
-                new string[] {
-                    scale.ToString(),
-                    offsetX.ToString(), offsetY.ToString(),
-                    showGrid.ToString()});
-            DesignerSettingsArg = arg2;
-        }
-
-        private double ParseScale(string text) {
-            if (string.IsNullOrEmpty(DesignerSettingsArg)) {
-                return 1.0d;
-            }
-            var arg2Parts = DesignerSettingsArg.SplitNoEmpty(",");
-            if (arg2Parts.Length > 0) {
-                return double.Parse(arg2Parts[0]);
-            }
-            return 1.0d;
-        }
-
-        private MpPoint ParseTranslationOffset(string text) {
-            if (string.IsNullOrEmpty(DesignerSettingsArg)) {
-                return DesignerCenterLocation;
-            }
-            var arg2Parts = DesignerSettingsArg.SplitNoEmpty(",");
-            if (arg2Parts.Length >= 3) {
-                return new MpPoint() {
-                    X = double.Parse(arg2Parts[1]),
-                    Y = double.Parse(arg2Parts[2])
-                };
-            }
-            return DesignerCenterLocation;
-        }
-        private bool ParseShowGrid(string text) {
-            if (SelectedTrigger == null) {
-                return false;
-            }
-            if (string.IsNullOrEmpty(DesignerSettingsArg)) {
-                return true;
-            }
-            var arg2Parts = DesignerSettingsArg.SplitNoEmpty(",");
-            if (arg2Parts.Length >= 4) {
-                return arg2Parts[3].ToLowerInvariant() == "true";
-            }
-            return true;
-        }
-
-        #endregion
-
         #endregion
 
         #region MpISidebarItemViewModel Implementation
 
-        private double _defaultSelectorColumnVarDimLength_horiz = 800;
-        private double _defaultSelectorColumnVarDimLength_vert = 400;
+        private double _defaultSelectorColumnVarDimLength_horiz =>
+            MpAvThemeViewModel.Instance.IsMobileOrWindowed ? 400 : 800;
+        private double _defaultSelectorColumnVarDimLength_vert = 350;
         public double DefaultSidebarWidth {
             get {
                 if (IsWindowOpen) {
                     return 0;
                 }
                 if (MpAvMainWindowViewModel.Instance.IsVerticalOrientation) {
-                    return MpAvMainWindowViewModel.Instance.MainWindowWidth;
+                    return MpAvMainView.Instance.MainWindowTrayGrid.Bounds.Width;
                 }
-                return Math.Min(_defaultSelectorColumnVarDimLength_horiz, MpAvMainWindowViewModel.Instance.MainWindowWidth);
+                double def_w = Math.Min(_defaultSelectorColumnVarDimLength_horiz, MpAvMainWindowViewModel.Instance.MainWindowWidth);
+                //if(MpAvThemeViewModel.Instance.IsMobileOrWindowed) {
+                //    def_w = Math.Min(def_w, Mp.Services.ScreenInfoCollection.Primary.WorkingArea.Width / 2);
+                //}
+                return def_w;
             }
         }
         public double DefaultSidebarHeight {
@@ -335,19 +356,22 @@ namespace MonkeyPaste.Avalonia {
                     return 0;
                 }
                 if (MpAvMainWindowViewModel.Instance.IsHorizontalOrientation) {
-                    return MpAvClipTrayViewModel.Instance.ObservedQueryTrayScreenHeight;
+                    return MpAvMainView.Instance.MainWindowTrayGrid.Bounds.Height;
                 }
-                double h = _defaultSelectorColumnVarDimLength_vert;
+                double def_h = _defaultSelectorColumnVarDimLength_vert;
                 //if (SelectedItem != null) {
                 //    //h += _defaultParameterColumnVarDimLength;
                 //}
-                return h;
+                if (MpAvThemeViewModel.Instance.IsMobileOrWindowed) {
+                    def_h = Math.Min(def_h, Mp.Services.ScreenInfoCollection.Primary.WorkingArea.Height / 3);
+                }
+                return def_h;
             }
         }
         public double SidebarWidth { get; set; } = 0;
         public double SidebarHeight { get; set; } = 0;
         public string SidebarBgHexColor =>
-            (Mp.Services.PlatformResource.GetResource("ActionPropertyListBgBrush") as IBrush).ToHex();
+            (Mp.Services.PlatformResource.GetResource("ActionBgBrush") as IBrush).ToHex();
 
         bool MpISidebarItemViewModel.CanResize =>
             !IsWindowOpen;
@@ -371,6 +395,15 @@ namespace MonkeyPaste.Avalonia {
         public MpAvTriggerActionViewModelBase SelectedTrigger { get; set; }
         public MpAvActionViewModelBase FocusAction { get; set; }
 
+        public MpAvIHeaderMenuViewModel FocusHeaderViewModel {
+            get {
+                if(FocusAction == null) {
+                    return this;
+                }
+                return FocusAction;
+            }
+        }
+
         #endregion
 
         #region Appearance
@@ -380,6 +413,9 @@ namespace MonkeyPaste.Avalonia {
 
         public Orientation SidebarOrientation {
             get {
+                if(MpAvThemeViewModel.Instance.IsMobileOrWindowed) {
+                    return MpAvMainWindowViewModel.Instance.MainWindowLayoutOrientation;
+                }
                 if (IsWindowOpen) {
                     return Orientation.Horizontal;
                 }
@@ -393,7 +429,21 @@ namespace MonkeyPaste.Avalonia {
         #endregion
 
         #region State
-
+        private bool _isPropertyViewExpanded = true;
+        public bool IsPropertyViewExpanded {
+            get {
+                if(MpAvThemeViewModel.Instance.IsMultiWindow) {
+                    return true;
+                }
+                return _isPropertyViewExpanded;
+            }
+            set {
+                if(_isPropertyViewExpanded != value) {
+                    _isPropertyViewExpanded = value;
+                    OnPropertyChanged(nameof(IsPropertyViewExpanded));
+                }
+            }
+        }
         public bool HasShown { get; set; }
         public string[] DefaultActionGuids => new string[] {
             DEFAULT_ANNOTATOR_ANALYZE_GUID,
@@ -402,10 +452,6 @@ namespace MonkeyPaste.Avalonia {
 
         public string FocusActionName =>
             FocusAction == null ? string.Empty : FocusAction.Label;
-
-        public bool IsHorizontal =>
-            SidebarOrientation == Orientation.Horizontal;
-
 
         public int SelectedTriggerIdx {
             get => Triggers.IndexOf(SelectedTrigger);
@@ -571,6 +617,13 @@ namespace MonkeyPaste.Avalonia {
         #region Private Methods
         private void MpAvTriggerCollectionViewModel_PropertyChanged(object sender, System.ComponentModel.PropertyChangedEventArgs e) {
             switch (e.PropertyName) {
+                case nameof(IsSelected):
+                    HandleSidebarSelChange();
+                    ResetDesignerViewCommand.Execute(null);
+                    break;
+                case nameof(SidebarOrientation):
+                    ResetDesignerViewCommand.Execute(null);
+                    break;
                 case nameof(FocusAction):
                     Items.ForEach(x => x.OnPropertyChanged(nameof(x.IsSelected)));
                     OnPropertyChanged(nameof(SelectedTriggerIdx));
@@ -584,6 +637,9 @@ namespace MonkeyPaste.Avalonia {
                         }
                     }
                     OnPropertyChanged(nameof(FocusActionName));
+                    this.RefreshHeaderProperties();
+                    OnPropertyChanged(nameof(FocusHeaderViewModel));
+                    MpMessenger.SendGlobal(MpMessageType.FocusItemChanged);
                     break;
                 case nameof(SelectedTrigger):
                     FocusAction = SelectedTrigger;
@@ -597,6 +653,7 @@ namespace MonkeyPaste.Avalonia {
                     OnPropertyChanged(nameof(IsGridVisible));
                     Items.ForEach(x => x.OnPropertyChanged(nameof(x.IsActionDesignerVisible)));
                     OnPropertyChanged(nameof(Items));
+                    ResetDesignerViewCommand.Execute(null);
                     break;
             }
         }
@@ -627,7 +684,6 @@ namespace MonkeyPaste.Avalonia {
             switch (msg) {
                 case MpMessageType.SidebarItemSizeChanged:
                     OnPropertyChanged(nameof(SidebarOrientation));
-                    OnPropertyChanged(nameof(IsHorizontal));
                     break;
                 case MpMessageType.SelectedSidebarItemChangeEnd:
                     if (!IsSelected) {
@@ -641,6 +697,30 @@ namespace MonkeyPaste.Avalonia {
             }
         }
 
+        private void HandleSidebarSelChange() {
+            if(MpAvThemeViewModel.Instance.IsMultiWindow) {
+                return;
+            }
+
+            Dispatcher.UIThread.Post(async () => {
+                if(IsSelected) {
+                    if (MpAvMainWindowViewModel.Instance.IsVerticalOrientation) {
+                        await MpAvMainWindowViewModel.Instance.CycleOrientationCommand.ExecuteAsync("CW");
+                    }
+
+                    ShowDesignerWindowCommand.Execute(null);
+
+                    var tacv = await MpAvWindowManager.ActiveWindow.GetVisualDescendantAsync<MpAvTriggerActionChooserView>(true,5_000);
+                    if(tacv != null) {
+                        //tacv.ActionDesignerOuterContainerBorder.MinWidth = Mp.Services.ScreenInfoCollection.Primary.WorkingArea.Width / 2;
+                    }
+                } else {
+                    (this as MpAvIHeaderMenuViewModel).BackCommand.Execute(null);
+                }
+                MpAvMainWindowViewModel.Instance.IsOrientationLocked = IsSelected;
+                
+            });
+        }
 
         public async Task RestoreAllEnabledAsync() {
             // NOTE this is only called on init and needs to wait for dependant vm's to load so wait here
@@ -675,18 +755,30 @@ namespace MonkeyPaste.Avalonia {
 
         private MpAvWindow CreateDesignerWindow() {
             // WINDOW
+            var tacv = new MpAvTriggerActionChooserView();
+            Control content = tacv;
+            if(MpAvThemeViewModel.Instance.IsMobileOrWindowed) {
+                //content = new Viewbox() {
+                //    HorizontalAlignment = HorizontalAlignment.Stretch,
+                //    VerticalAlignment = VerticalAlignment.Top,
+                //    Child = tacv
+                //};
+            }
 
             var dw = new MpAvWindow() {
-                Width = 1000,
-                Height = 500,
+                Width = MpAvThemeViewModel.Instance.IsMobileOrWindowed ? double.NaN : 1000,
+                Height = MpAvThemeViewModel.Instance.IsMobileOrWindowed ? double.NaN : 500,
                 ShowInTaskbar = true,
                 Icon = MpAvIconSourceObjToBitmapConverter.Instance.Convert("BoltImage", typeof(MpAvWindowIcon), null, null) as MpAvWindowIcon,
                 WindowStartupLocation = WindowStartupLocation.CenterScreen,
-                Content = new MpAvTriggerActionChooserView(),
+                Content = content,
                 DataContext = this,
-                Padding = new Thickness(10),
-                Background = Brushes.DimGray
+                Padding = MpAvThemeViewModel.Instance.IsMobileOrWindowed ? new(): new Thickness(10),
+                Background = Mp.Services.PlatformResource.GetResource<IBrush>("ActionBgBrush")
             };
+            if(MpAvThemeViewModel.Instance.IsMobileOrWindowed && dw.Background is SolidColorBrush scb) {
+                dw.Background = dw.Background.AdjustOpacity(1);
+            }
             dw.Classes.Add("fadeIn");
             dw.Bind(
                 Window.TitleProperty,
@@ -699,8 +791,21 @@ namespace MonkeyPaste.Avalonia {
             void OnOpened(object sender, EventArgs e) {
                 dw.Opened -= OnOpened;
                 ResetDesignerViewCommand.Execute(null);
-                MpAvSidebarItemCollectionViewModel.Instance.ToggleIsSidebarItemSelectedCommand.Execute(this);
+                if(!IsSelected) {
+                    MpAvSidebarItemCollectionViewModel.Instance.ToggleIsSidebarItemSelectedCommand.Execute(this);
+                }                
             }
+#if MOBILE_OR_WINDOWED
+
+            dw.Bind(
+                MpAvChildWindow.HeaderViewModelProperty,
+                new Binding() {
+                    Source = this,
+                    Path = nameof(FocusHeaderViewModel)
+                }
+                );
+
+#endif
 
             dw.Opened += OnOpened;
             return dw;
@@ -910,7 +1015,16 @@ namespace MonkeyPaste.Avalonia {
                 MpAvActionViewModelBase toSelect_avmb = null;
                 int focusArgNum = 0;
                 string error_text = null;
-                if (args is MpAvActionViewModelBase) {
+                if(args is Control c && c.DataContext is MpAvActionViewModelBase avmb) {
+                    // select from action designer
+                    toSelect_avmb = avmb;
+                    if(c.GetVisualAncestor<MpAvActionDesignerItemView>() is { } adiv) {
+                        adiv.FocusThisHeader();
+
+                    } else {
+                        MpDebug.Break("Where's the item view?");
+                    }
+                } else if (args is MpAvActionViewModelBase) {
                     toSelect_avmb = args as MpAvActionViewModelBase;
                 } else if (args is int actionId) {
                     toSelect_avmb = Items.FirstOrDefault(x => x.ActionId == actionId);
@@ -944,6 +1058,14 @@ namespace MonkeyPaste.Avalonia {
             }, (args) => {
                 MpAvActionViewModelBase toSelect_avmb = null;
                 int focusArgNum = -1;
+                if(args is Control c && c.DataContext is MpAvActionViewModelBase avmb) {
+                    toSelect_avmb = avmb;
+                    if(c.GetVisualAncestor<MpAvActionDesignerItemView>() is { } adiv && 
+                        avmb.IsSelected) {
+                        // HACK deal w/ canceled action header to show again w/o changing selection
+                        adiv.FocusThisHeader();
+                    }
+                }
                 if (args is MpAvActionViewModelBase) {
                     toSelect_avmb = args as MpAvActionViewModelBase;
                 } else if (args is int actionId) {

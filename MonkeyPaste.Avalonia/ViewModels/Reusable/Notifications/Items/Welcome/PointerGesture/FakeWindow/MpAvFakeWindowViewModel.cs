@@ -113,10 +113,10 @@ namespace MonkeyPaste.Avalonia {
                     return new();
                 }
                 var fwr = ww.Screens.Primary.WorkingArea;
-                int w = fwr.Width;
+                int w = (int)fwr.Width;
                 int h = (int)((double)fwr.Height * 0.3d);
-                int x = fwr.X;
-                int y = fwr.Bottom - h;
+                int x = (int)fwr.X;
+                int y = (int)fwr.Bottom - h;
                 return new PixelRect(x, y, w, h);
             }
         }

@@ -1,0 +1,615 @@
+<local:MpAvUserControl xmlns="https://github.com/avaloniaui"
+                       xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                       xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+                       xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+                       xmlns:sys="using:System"
+                       xmlns:local="using:MonkeyPaste.Avalonia"
+                       xmlns:pcl="using:MonkeyPaste"
+                       x:DataType="local:MpAvClipTileViewModel"
+                       x:TypeArguments="local:MpAvClipTileViewModel"
+                       x:CompileBindings="True"
+                       mc:Ignorable="d"
+                       d:DesignWidth="800"
+                       d:DesignHeight="450"
+                       HorizontalAlignment="Stretch"
+                       VerticalAlignment="Stretch"
+                       HorizontalContentAlignment="Stretch"
+                       VerticalContentAlignment="Stretch"
+                       x:Class="MonkeyPaste.Avalonia.MpAvClipTileView">
+    <Interaction.Behaviors>
+        <local:MpAvHighlightSelectorBehavior />
+    </Interaction.Behaviors>
+    <local:MpAvUserControl.Styles>
+
+        <!--  TRASH OR DELETE OPACITY (hides clunky state changes)  -->
+
+        <Style Selector="local|MpAvClipBorder#ClipTileContainerBorder.trashOpTile">
+            <Setter Property="IsVisible"
+                    Value="False" />
+        </Style>
+
+        <!--  DETAIL COLOR  -->
+
+        <Style Selector="Grid#DetailContainerGrid[IsVisible=false]">
+            <Setter Property="RenderTransform"
+                    Value="translateY(20px)" />
+            <Setter Property="Opacity"
+                    Value="0" />
+        </Style>
+        <Style Selector="Grid#DetailContainerGrid[IsVisible=true]">
+            <Setter Property="RenderTransform"
+                    Value="translateY(0px)" />
+            <Setter Property="Opacity"
+                    Value="1" />
+        </Style>
+
+
+
+        <!--  PIN PLACEHOLDER OVERLAY  -->
+        <Style Selector="Grid#PinPlaceholderOverlay Image">
+            <Setter Property="Effect"
+                    Value="{StaticResource EmptyDropShadow}" />
+            <Setter Property="Source"
+                    Value="{Binding Source={StaticResource PinImage}, ConverterParameter=ThemeInteractiveColor, Converter={x:Static local:MpAvStringHexToBitmapTintConverter.Instance}}" />
+        </Style>
+
+        <Style Selector="Grid#PinPlaceholderOverlay TextBlock">
+            <Setter Property="Foreground"
+                    Value="{DynamicResource ThemeInteractiveBrush}" />
+        </Style>
+
+        <Style Selector="local|MpAvClipBorder#ClipTileContainerBorder.hover Grid#PinPlaceholderOverlay Image">
+            <Setter Property="Effect"
+                    Value="{StaticResource ThemeDropShadow}" />
+            <Setter Property="Source"
+                    Value="{Binding Source={StaticResource PinImage}, ConverterParameter=ThemeAccent1Color, Converter={x:Static local:MpAvStringHexToBitmapTintConverter.Instance}}" />
+        </Style>
+
+        <Style Selector="local|MpAvClipBorder#ClipTileContainerBorder.hover Grid#PinPlaceholderOverlay TextBlock">
+            <Setter Property="Foreground"
+                    Value="{DynamicResource ThemeAccent1BgBrush}" />
+        </Style>
+
+
+        <!--  CORNER BUTTON SCROLLBAR MARGIN  -->
+        <Style Selector="local|MpAvClipBorder#ClipTileContainerBorder.transOpen.hasVertContentScroll local|MpAvClipTileCornerButtonsView">
+            <Setter Property="Margin"
+                    Value="0,0,30,0" />
+        </Style>
+
+        <!--  CONTENT PADDING  -->
+        <Style Selector="local|MpAvClipBorder#ClipTileContainerBorder.compatMode ContentControl#ClipTileContentControl">
+            <Setter Property="Padding"
+                    Value="0,5" />
+        </Style>
+        <Style Selector="local|MpAvClipBorder#ClipTileContainerBorder.compatMode.contentReadOnly ContentControl#ClipTileContentControl">
+            <Setter Property="Padding"
+                    Value="5" />
+        </Style>
+
+        <!--  POPOUT MARGIN  -->
+        <Style Selector="local|MpAvClipBorder#ClipTileContainerBorder.popout local|MpAvClipTileContentView">
+            <Setter Property="Margin"
+                    Value="2,2,2,15" />
+        </Style>
+
+        <!--  TILE BORDER  -->
+        <Style Selector="local|MpAvClipBorder#ClipTileContainerBorder">
+            <Setter Property="BorderThickness"
+                    Value="{StaticResource TileBorderThickness}" />
+        </Style>
+        <Style Selector="local|MpAvClipBorder#ClipTileContainerBorder.popout">
+            <Setter Property="BorderThickness"
+                    Value="0" />
+        </Style>
+        <!--  USER BG COLOR  -->
+        <Style Selector="local|MpAvClipBorder#ClipTileContainerBorder">
+            <Setter Property="Background"
+                    Value="{DynamicResource ClipTileContentBackgroundBrush}" />
+        </Style>
+        <Style Selector="local|MpAvClipBorder#ClipTileContainerBorder.popout, local|MpAvClipBorder#ClipTileContainerBorder.userColor.mobile.popout">
+            <Setter Property="Background"
+                    Value="{DynamicResource ModalClipTileContentBackgroundBrush}" />
+        </Style>
+
+        <Style Selector="local|MpAvClipBorder#ClipTileContainerBorder.userColor"
+               x:DataType="local:MpAvClipTileViewModel">
+            <Setter Property="Background">
+                <Setter.Value>
+                    <SolidColorBrush Color="{Binding CopyItemHexColor, Converter={x:Static local:MpAvStringHexToColorConverter.Instance}}" Opacity="{DynamicResource GlobalBgOpacity}" />
+                </Setter.Value>
+            </Setter>
+        </Style>
+        <Style Selector="local|MpAvClipBorder#ClipTileContainerBorder.userColor.popout"
+               x:DataType="local:MpAvClipTileViewModel">
+            <Setter Property="Background">
+                <Setter.Value>
+                    <SolidColorBrush Color="{Binding CopyItemHexColor, Converter={x:Static local:MpAvStringHexToColorConverter.Instance}}" Opacity="{DynamicResource GlobalInteractiveOpacity}" />
+                </Setter.Value>
+            </Setter>
+        </Style>
+
+        <!--  CAP TOOLTIP ATTACH (PREVENTS DND BUG)  -->
+
+        <Style Selector="local|MpAvClipBorder#ClipTileContainerBorder"
+               x:DataType="local:MpAvClipTileViewModel">
+            <Setter Property="ToolTip.Tip"
+                    Value="{x:Null}" />
+        </Style>
+        <Style Selector="local|MpAvClipBorder#ClipTileContainerBorder.capTooltip:not(.drag)"
+               x:DataType="local:MpAvClipTileViewModel">
+            <Setter Property="ToolTip.Tip">
+                <Setter.Value>
+                    <Template>
+                        <local:MpAvToolTipView Classes="warning"
+                                               IsVisible="{Binding IsVisible, ElementName=AccountCapOverlayContainer}"
+                                               ToolTipText="{Binding CapToolTipText}" />
+                    </Template>
+                </Setter.Value>
+            </Setter>
+        </Style>
+
+        <!--  DETAIL TOOLTIP ATTACH (PREVENTS Empty tooltip)  -->
+
+        <Style Selector="Grid#DetailContainerGrid"
+               x:DataType="local:MpAvClipTileViewModel">
+            <Setter Property="ToolTip.Tip"
+                    Value="{x:Null}" />
+        </Style>
+        <Style Selector="Grid#DetailContainerGrid.detailTooltip"
+               x:DataType="local:MpAvClipTileViewModel">
+            <Setter Property="ToolTip.Tip">
+                <Setter.Value>
+                    <Template>
+                        <local:MpAvToolTipView ToolTipText="{Binding DetailTooltipText}" />
+                    </Template>
+                </Setter.Value>
+            </Setter>
+        </Style>
+
+        <!--  CAP OVERLAY  -->
+        <Style Selector="local|MpAvClipBorder#ClipTileContainerBorder.nexttrash Border#AccountCapOverlayContainer Image">
+            <Setter Property="Source"
+                    Value="{Binding Source={StaticResource RecycleBinImage}, Converter={x:Static local:MpAvStringHexToBitmapTintConverter.Instance}, ConverterParameter=ThemeInteractiveColor_norand}" />
+        </Style>
+        <Style Selector="local|MpAvClipBorder#ClipTileContainerBorder.nextremove Border#AccountCapOverlayContainer Image">
+            <Setter Property="Source"
+                    Value="{Binding Source={StaticResource TrashCanImage}, Converter={x:Static local:MpAvStringHexToBitmapTintConverter.Instance}, ConverterParameter=ThemeInteractiveColor_norand}" />
+        </Style>
+
+    </local:MpAvUserControl.Styles>
+    <!--  OUTER BORDER  -->
+    <local:MpAvClipBorder x:Name="ClipTileContainerBorder"
+                          ClipToBounds="True"
+                          HorizontalAlignment="Stretch"
+                          Classes.mobile="{Binding IsMobileOrWindowed, Source={x:Static local:MpAvThemeViewModel.Instance}}"
+                          Classes.append="{Binding IsAppendNotifier}"
+                          Classes.appendpaused="{Binding IsAppendPaused, Source={x:Static local:MpAvClipTrayViewModel.Instance}}"
+                          Classes.popout="{Binding IsWindowOpen}"
+                          Classes.transOpen="{Binding TransactionCollectionViewModel.IsTransactionPaneOpen}"
+                          Classes.hasVertContentScroll="{Binding IsVerticalScrollbarVisibile}"
+                          Classes.implicitHover="{Binding IsImplicitHover}"
+                          Classes.hover="{Binding IsHovering}"
+                          Classes.sel="{Binding IsSelected}"
+                          Classes.CanResize="{Binding CanResize}"
+                          Classes.contentReadOnly="{Binding IsContentReadOnly}"
+                          Classes.resize="{Binding IsResizing}"
+                          Classes.busy="{Binding IsAnyBusy}"
+                          Classes.frozen="{Binding IsFrozen}"
+                          Classes.trashed="{Binding IsTrashed}"
+                          Classes.drag="{Binding IsTileDragging}"
+                          Classes.nexttrash="{Binding IsNextTrashedByAccount}"
+                          Classes.nextremove="{Binding IsNextRemovedByAccount}"
+                          Classes.capTooltip="{Binding IsVisible, ElementName=AccountCapOverlayContainer}"
+                          Classes.userColor="{Binding CopyItemHexColor, Converter={x:Static local:MpAvIsNotNullZeroOrEmptyToBoolConverter.Instance}}"
+                          Classes.compatMode="{Binding !IsRichHtmlContentEnabled, Source={x:Static local:MpAvPrefViewModel.Instance}}"
+                          VerticalAlignment="Stretch"
+                          local:MpAvPointerCommandExtension.IsEnabled="True"
+                          local:MpAvPointerCommandExtension.DefaultRoutingStrategy="Tunnel"
+                          local:MpAvPointerCommandExtension.DoubleLeftPressCommand="{Binding DoubleLeftClickHandlerCommand}"
+                          local:MpAvPointerCommandExtension.RightPressCommand="{Binding ShowContextMenuCommand}"
+                          local:MpAvPointerCommandExtension.RightPressCommandParameter="{Binding $self}"
+                          ScrollViewer.HorizontalScrollBarVisibility="Hidden"
+                          ScrollViewer.VerticalScrollBarVisibility="Hidden"
+                          CornerRadius="{StaticResource TileCornerRadius}">
+
+        <Grid x:Name="TileGrid"
+              local:MpAvPointerCommandExtension.IsEnabled="True"
+              local:MpAvPointerCommandExtension.DefaultRoutingStrategy="Tunnel"
+              local:MpAvPointerCommandExtension.DefaultIsEventHandled="False"
+              local:MpAvPointerCommandExtension.LeftPressCommand="{Binding SelectClipTileCommand, Source={x:Static local:MpAvClipTrayViewModel.Instance}}"
+              local:MpAvPointerCommandExtension.LeftPressCommandParameter="{Binding .}"
+              HorizontalAlignment="Stretch"
+              VerticalAlignment="Stretch">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto"
+                               MaxHeight="40" />
+                <RowDefinition Height="*" />
+                <RowDefinition Height="Auto"
+                               MaxHeight="20" />
+            </Grid.RowDefinitions>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*" />
+                <ColumnDefinition Width="Auto">
+                    <ColumnDefinition.MaxWidth>
+                        <MultiBinding Converter="{x:Static local:MpAvMultiDoubleMathConverter.Instance}"
+                                      ConverterParameter="*">
+                            <Binding Path="Bounds.Width"
+                                     ElementName="ClipTileContainerBorder" />
+                            <Binding>
+                                <Binding.Source>
+                                    <sys:Double>0.5</sys:Double>
+                                </Binding.Source>
+                            </Binding>
+                        </MultiBinding>
+                    </ColumnDefinition.MaxWidth>
+                </ColumnDefinition>
+            </Grid.ColumnDefinitions>
+
+            <!--  CONTENT  -->
+            <local:MpAvClipTileContentView x:Name="ClipTileContentView"
+                                           Background="{StaticResource HitTestableTransparent}"
+                                           DragDrop.AllowDrop="True"
+                                           Grid.Row="1"
+                                           Grid.RowSpan="2"
+                                           Opacity="{Binding IsPinPlaceholder, ConverterParameter=0|1, Converter={x:Static local:MpAvBoolToDoubleConverter.Instance}}"
+                                           IsEnabled="{Binding !IsFrozen}"
+                                           local:MpAvIsHoveringExtension.IsEnabled="True"
+                                           local:MpAvIsHoveringExtension.IsHovering="{Binding IsContentHovering, Mode=TwoWay}"
+                                           HorizontalAlignment="Stretch"
+                                           VerticalAlignment="Stretch" />
+
+            <!--  TITLE  -->
+
+            <local:MpAvClipTileTitleView x:Name="TileTitleView"
+                                         Grid.Row="0"
+                                         ClipToBounds="False"
+                                         IsVisible="{Binding IsTitleVisible}"
+                                         Height="{Binding MaxTitleHeight, FallbackValue=0, TargetNullValue=0}"
+                                         HorizontalAlignment="Stretch"
+                                         VerticalAlignment="Stretch" />
+
+
+            <!--  CAP OVERLAY  -->
+
+            <Border x:Name="AccountCapOverlayContainer"
+                    Grid.ColumnSpan="2"
+                    Grid.RowSpan="3"
+                    IsHitTestVisible="False"
+                    HorizontalAlignment="Stretch"
+                    VerticalAlignment="Stretch">
+                <Border.IsVisible>
+                    <MultiBinding Converter="{x:Static BoolConverters.And}">
+                        <Binding Path="!IsAnyBusy" />
+                        <Binding Path="!IsPinPlaceholder" />
+                        <Binding Path="IsAnyNextCapByAccount" />
+                        <Binding Path="!HideCapWarnings"
+                                 Source="{x:Static local:MpAvPrefViewModel.Instance}" />
+                    </MultiBinding>
+                </Border.IsVisible>
+                <Border x:Name="AccountCapOverlay"
+                        Opacity="{Binding IsHovering, ConverterParameter=0.15|0.4, Converter={x:Static local:MpAvBoolToDoubleConverter.Instance}}"
+                        HorizontalAlignment="Stretch"
+                        VerticalAlignment="Stretch">
+                    <Border.Transitions>
+                        <Transitions>
+                            <DoubleTransition Property="Opacity"
+                                              Duration="0:0:0.3" />
+                        </Transitions>
+                    </Border.Transitions>
+                    <Border.Background>
+                        <SolidColorBrush Color="Black" Opacity="0.2" />
+                    </Border.Background>
+                    <Image Stretch="UniformToFill"
+                           Classes.shakeslow="{Binding IsHovering}"
+                           HorizontalAlignment="Center"
+                           VerticalAlignment="Center"
+                           Width="50"
+                           Height="50">
+                        <Image.RenderTransform>
+                            <RotateTransform />
+                        </Image.RenderTransform>
+                    </Image>
+                </Border>
+            </Border>
+
+            <!--  PIN PLACEHOLDER OVERLAY  -->
+
+            <Grid x:Name="PinPlaceholderOverlay"
+                  Cursor="Hand"
+                  Grid.ColumnSpan="2"
+                  Grid.RowSpan="3"
+                  RowDefinitions="0.5*,0.5*"
+                  IsVisible="{Binding IsPinPlaceholder}"
+                  local:MpAvDropExtension.IsEnabled="{Binding $self.IsVisible}"
+                  local:MpAvDropExtension.DragEnterCommand="{Binding DragEnterCommand}"
+                  local:MpAvDropExtension.DragLeaveCommand="{Binding DragLeaveCommand}"
+                  local:MpAvDropExtension.IsDragOverHandled="False"
+                  local:MpAvDropExtension.IsDropHandled="False"
+                  HorizontalAlignment="Stretch"
+                  VerticalAlignment="Stretch">
+                <Grid.Transitions>
+                    <Transitions>
+                        <DoubleTransition Property="Opacity"
+                                          Duration="0:0:0.3" />
+                    </Transitions>
+                </Grid.Transitions>
+                <Image Grid.Row="0"
+                       Opacity="{Binding IsHovering, ConverterParameter=1|0.2, Converter={x:Static local:MpAvBoolToDoubleConverter.Instance}}"
+                       Classes="square"
+                       MinWidth="50"
+                       MinHeight="50"
+                       Stretch="Uniform"
+                       HorizontalAlignment="Center"
+                       VerticalAlignment="Center"
+                       Source="{Binding Source={StaticResource PinImage}, ConverterParameter=ThemeInteractiveColor, Converter={x:Static local:MpAvStringHexToBitmapTintConverter.Instance}}">
+                    <Image.RenderTransform>
+                        <RotateTransform />
+                    </Image.RenderTransform>
+
+                    <Image.Transitions>
+                        <Transitions>
+                            <!--<EffectTransition Property="Effect"
+                                              Duration="0:0:0.5" />-->
+                        </Transitions>
+                    </Image.Transitions>
+
+                    <Image.Height>
+                        <MultiBinding Converter="{x:Static local:MpAvMultiDoubleMathConverter.Instance}"
+                                      ConverterParameter="/">
+                            <Binding Path="Bounds.Height"
+                                     ElementName="ClipTileContainerBorder" />
+                            <Binding>
+                                <Binding.Source>
+                                    <sys:Double>4</sys:Double>
+                                </Binding.Source>
+                            </Binding>
+                        </MultiBinding>
+                    </Image.Height>
+                </Image>
+                <TextBlock Grid.Row="1"
+                           TextAlignment="Center"
+                           TextWrapping="WrapWithOverflow"
+                           Opacity="{Binding IsHovering, ConverterParameter=1|0.2, Converter={x:Static local:MpAvBoolToDoubleConverter.Instance}}"
+                           Margin="30,15,30,0"
+                           HorizontalAlignment="Stretch"
+                           VerticalAlignment="Top">
+                    <TextBlock.Inlines>
+                        <InlineCollection>
+                            <Run Foreground="{DynamicResource ThemeAccent2Color}"
+                                 FontWeight="Bold"
+                                 Text="{Binding Source={x:Static local:R.U}, Path=CurrentUiStrings.ClipTilePinPlaceHolderLabelPrefix}" />
+                            <Run Text="{Binding PinPlaceholderLabel, StringFormat='\'{0}\'', Mode=OneWay}" />
+                        </InlineCollection>
+                    </TextBlock.Inlines>
+
+                </TextBlock>
+            </Grid>
+
+
+            <!--  BUSY OVERLAY (VISIBILITY SET IN MpAvClipTile theme style)  -->
+            <Border x:Name="TileBusyOverlay"
+                    Grid.Row="1"
+                    HorizontalAlignment="Stretch"
+                    VerticalAlignment="Stretch">
+
+                <local:MpAvBusySpinnerView HorizontalAlignment="Center"
+                                           VerticalAlignment="Center"
+                                           Classes="square">
+                    <local:MpAvBusySpinnerView.Height>
+                        <MultiBinding Converter="{x:Static local:MpAvMultiDoubleMathConverter.Instance}"
+                                      ConverterParameter="/">
+                            <Binding Path="Bounds.Height"
+                                     ElementName="ClipTileContainerBorder" />
+                            <Binding>
+                                <Binding.Source>
+                                    <sys:Double>4</sys:Double>
+                                </Binding.Source>
+                            </Binding>
+                        </MultiBinding>
+                    </local:MpAvBusySpinnerView.Height>
+                </local:MpAvBusySpinnerView>
+            </Border>
+
+            <!--  DETAIL  -->
+            <Grid x:Name="DetailContainerGrid"
+                  Grid.Row="2"
+                  Height="15"
+                  local:MpAvPointerCommandExtension.DefaultRoutingStrategy="Tunnel"
+                  local:MpAvPointerCommandExtension.DefaultIsEventHandled="True"
+                  local:MpAvPointerCommandExtension.LeftPressCommand="{Binding CycleDetailCommand}"
+                  Background="{Binding BorderBrush, ElementName=ClipTileContainerBorder}"
+                  Classes.subselect="{Binding IsSubSelectionEnabled}"
+                  Classes.detailTooltip="{Binding DetailTooltipText, Converter={x:Static local:MpAvIsNotNullZeroOrEmptyToBoolConverter.Instance}}"
+                  IsVisible="{Binding IsDetailVisible}"
+                  local:MpAvIsHoveringExtension.IsEnabled="True"
+                  local:MpAvIsHoveringExtension.IsHovering="{Binding IsOverDetailGrid, Mode=TwoWay}"
+                  HorizontalAlignment="Stretch"
+                  VerticalAlignment="Bottom">
+                <Grid.Transitions>
+                    <Transitions>
+                        <DoubleTransition Property="Opacity"
+                                          Duration="0:0:0.1" />
+                        <TransformOperationsTransition Property="RenderTransform"
+                                                       Easing="BounceEaseOut"
+                                                       Duration="0:0:0.1" />
+                    </Transitions>
+                </Grid.Transitions>
+                <TransitioningContentControl HorizontalAlignment="Center"
+                                             HorizontalContentAlignment="Center"
+                                             Content="{Binding DetailText}">
+                    <TransitioningContentControl.PageTransition>
+                        <CrossFade FadeInEasing="ExponentialEaseIn"
+                                   FadeOutEasing="ExponentialEaseOut"
+                                   Duration="0:00:01.0" />
+                    </TransitioningContentControl.PageTransition>
+                    <TransitioningContentControl.ContentTemplate>
+                        <DataTemplate DataType="sys:String">
+                            <TextBlock x:Name="DetailTextBlock"
+                                       HorizontalAlignment="Center"
+                                       VerticalAlignment="Bottom"
+                                       Background="Transparent"
+                                       MinHeight="10"
+                                       MinWidth="50"
+                                       FontSize="10"
+                                       Margin="0,0,0,1"
+                                       TextAlignment="Center"
+                                       Foreground="{Binding BorderBrush, ElementName=ClipTileContainerBorder, Converter={x:Static local:MpAvColorToContrastColorConverter.Instance}}"
+                                       IsHitTestVisible="False"
+                                       Text="{Binding .}" />
+                        </DataTemplate>
+                    </TransitioningContentControl.ContentTemplate>
+                </TransitioningContentControl>
+            </Grid>
+
+            <!--  CORNER BUTTONS  -->
+
+            <local:MpAvClipTileCornerButtonsView x:Name="CornerButtonOverlay"
+                                                 Grid.Row="0"
+                                                 Grid.RowSpan="3"
+                                                 Grid.Column="0"
+                                                 IsVisible="{Binding IsCornerButtonsVisible}"
+                                                 HorizontalAlignment="Stretch"
+                                                 VerticalAlignment="Stretch" />
+
+            <!--  TRANSACTION COLUMN  -->
+
+
+            <local:MpAvClipTileTransactionPaneView x:Name="TransactionPanelColumn"
+                                                   Grid.Column="1"
+                                                   Grid.Row="0"
+                                                   Grid.RowSpan="3"
+                                                   DataContext="{Binding TransactionCollectionViewModel}"
+                                                   Background="{DynamicResource ClipTileTransactionPaneBackgroundBrush}"
+                                                   HorizontalAlignment="Stretch"
+                                                   VerticalAlignment="Stretch">
+                <!--<local:MpAvClipTileTransactionPaneView.Transitions>
+                    <Transitions>
+                        <DoubleTransition Property="Width"
+                                          Duration="0:0:0.5" />
+                    </Transitions>
+                </local:MpAvClipTileTransactionPaneView.Transitions>-->
+                <local:MpAvClipTileTransactionPaneView.IsVisible>
+                    <MultiBinding Converter="{x:Static BoolConverters.And}">
+                        <Binding Path="Parent.IsWindowOpen" />
+                        <Binding Path="IsTransactionPaneOpen" />
+                        <Binding Path="!IsVisible"
+                                 ElementName="PinPlaceholderOverlay" />
+                    </MultiBinding>
+                </local:MpAvClipTileTransactionPaneView.IsVisible>
+            </local:MpAvClipTileTransactionPaneView>
+            <!--  TRANSACTION SPLITTER  -->
+
+            <GridSplitter x:Name="TransactionContentSplitter"
+                          DataContext="{Binding TransactionCollectionViewModel}"
+                          Grid.Column="1"
+                          Grid.Row="0"
+                          Grid.RowSpan="3"
+                          Classes="vertical"
+                          Classes.desktop="{Binding IsDesktop, Source={x:Static local:MpAvThemeViewModel.Instance}}"
+                          IsVisible="{Binding IsVisible, ElementName=TransactionPanelColumn}"
+                          HorizontalAlignment="Left"
+                          VerticalAlignment="Stretch" />
+
+            <!--  WIDTH RESIZER  -->
+
+            <Border x:Name="ClipTileWidthResizeBorder"
+                    Grid.Row="0"
+                    Grid.RowSpan="3"
+                    Grid.ColumnSpan="2"
+                    Cursor="{Binding IsResizerEnabled, Converter={x:Static local:MpAvBoolToCursorConverter.Instance}, ConverterParameter=SizeWestEast|unset}"
+                    local:MpAvResizeExtension.IsEnabled="{Binding IsResizerEnabled}"
+                    local:MpAvResizeExtension.MinHeight="{Binding MinHeight}"
+                    local:MpAvResizeExtension.MaxHeight="{Binding MaxHeight}"
+                    local:MpAvResizeExtension.MinWidth="{Binding MinWidth}"
+                    local:MpAvResizeExtension.MaxWidth="{Binding MaxWidth}"
+                    local:MpAvResizeExtension.BoundWidth="{Binding BoundWidth, Mode=TwoWay}"
+                    local:MpAvResizeExtension.BoundHeight="{Binding BoundHeight, Mode=TwoWay}"
+                    local:MpAvResizeExtension.DefaultWidth="{Binding MinWidth}"
+                    local:MpAvResizeExtension.DefaultHeight="{Binding MinHeight}"
+                    local:MpAvResizeExtension.IsResizable="{Binding IsResizable}"
+                    local:MpAvResizeExtension.CanResize="{Binding CanResize, Mode=TwoWay}"
+                    local:MpAvResizeExtension.IsResizing="{Binding IsResizing, Mode=TwoWay}"
+                    local:MpAvResizeExtension.XFactor="-1"
+                    local:MpAvResizeExtension.YFactor="0"
+                    local:MpAvResizeExtension.GlobalResizeMessage="None"
+                    local:MpAvPointerCommandExtension.IsEnabled="True"
+                    local:MpAvPointerCommandExtension.DoubleLeftPressCommand="{Binding ResetTileSizeToDefaultCommand}"
+                    local:MpAvPointerCommandExtension.DoubleLeftPressCommandParameter="width"
+                    local:MpAvIsHoveringExtension.IsEnabled="True"
+                    HorizontalAlignment="Right"
+                    VerticalAlignment="Stretch"
+                    Width="10"
+                    Background="Transparent"
+                    RenderTransform="translateX(5px)" />
+
+            <!--  HEIGHT RESIZER  -->
+
+            <Border x:Name="ClipTileHeightResizeBorder"
+                    Grid.Row="2"
+                    Grid.Column="0"
+                    Grid.ColumnSpan="2"
+                    Cursor="{Binding IsResizerEnabled, Converter={x:Static local:MpAvBoolToCursorConverter.Instance}, ConverterParameter=SizeNorthSouth|unset}"
+                    IsHitTestVisible="{Binding IsResizerEnabled}"
+                    local:MpAvResizeExtension.IsEnabled="{Binding IsResizerEnabled}"
+                    local:MpAvResizeExtension.MinHeight="{Binding MinHeight}"
+                    local:MpAvResizeExtension.MaxHeight="{Binding MaxHeight}"
+                    local:MpAvResizeExtension.MinWidth="{Binding MinWidth}"
+                    local:MpAvResizeExtension.MaxWidth="{Binding MaxWidth}"
+                    local:MpAvResizeExtension.BoundWidth="{Binding BoundWidth, Mode=TwoWay}"
+                    local:MpAvResizeExtension.BoundHeight="{Binding BoundHeight, Mode=TwoWay}"
+                    local:MpAvResizeExtension.DefaultWidth="{Binding MinWidth}"
+                    local:MpAvResizeExtension.DefaultHeight="{Binding MinHeight}"
+                    local:MpAvResizeExtension.IsResizable="{Binding IsResizable}"
+                    local:MpAvResizeExtension.CanResize="{Binding CanResize, Mode=TwoWay}"
+                    local:MpAvResizeExtension.IsResizing="{Binding IsResizing, Mode=TwoWay}"
+                    local:MpAvResizeExtension.XFactor="0"
+                    local:MpAvResizeExtension.YFactor="-1"
+                    local:MpAvResizeExtension.GlobalResizeMessage="None"
+                    local:MpAvPointerCommandExtension.IsEnabled="True"
+                    local:MpAvPointerCommandExtension.DoubleLeftPressCommand="{Binding ResetTileSizeToDefaultCommand}"
+                    local:MpAvPointerCommandExtension.DoubleLeftPressCommandParameter="height"
+                    local:MpAvPointerCommandExtension.DefaultRoutingStrategy="Tunnel"
+                    local:MpAvIsHoveringExtension.IsEnabled="True"
+                    HorizontalAlignment="Stretch"
+                    VerticalAlignment="Bottom"
+                    Height="10"
+                    Background="Transparent"
+                    RenderTransform="translateY(5px)" />
+
+            <!--  MULTI RESIZER  -->
+
+            <Border x:Name="ClipTileMultiResizeBorder"
+                    Grid.ColumnSpan="2"
+                    Grid.RowSpan="3"
+                    Cursor="{Binding IsResizerEnabled, Converter={x:Static local:MpAvBoolToCursorConverter.Instance}, ConverterParameter=BottomRightCorner|unset}"
+                    IsHitTestVisible="{Binding IsResizerEnabled}"
+                    local:MpAvResizeExtension.IsEnabled="{Binding IsResizerEnabled}"
+                    local:MpAvResizeExtension.MinHeight="{Binding MinHeight}"
+                    local:MpAvResizeExtension.MaxHeight="{Binding MaxHeight}"
+                    local:MpAvResizeExtension.MinWidth="{Binding MinWidth}"
+                    local:MpAvResizeExtension.MaxWidth="{Binding MaxWidth}"
+                    local:MpAvResizeExtension.BoundWidth="{Binding BoundWidth, Mode=TwoWay}"
+                    local:MpAvResizeExtension.BoundHeight="{Binding BoundHeight, Mode=TwoWay}"
+                    local:MpAvResizeExtension.DefaultWidth="{Binding MinWidth}"
+                    local:MpAvResizeExtension.DefaultHeight="{Binding MinHeight}"
+                    local:MpAvResizeExtension.IsResizable="{Binding IsResizable}"
+                    local:MpAvResizeExtension.CanResize="{Binding CanResize, Mode=TwoWay}"
+                    local:MpAvResizeExtension.IsResizing="{Binding IsResizing, Mode=TwoWay}"
+                    local:MpAvResizeExtension.XFactor="-1"
+                    local:MpAvResizeExtension.YFactor="-1"
+                    local:MpAvResizeExtension.GlobalResizeMessage="None"
+                    local:MpAvPointerCommandExtension.IsEnabled="True"
+                    local:MpAvPointerCommandExtension.DoubleLeftPressCommand="{Binding ResetTileSizeToDefaultCommand}"
+                    local:MpAvPointerCommandExtension.DefaultRoutingStrategy="Tunnel"
+                    local:MpAvIsHoveringExtension.IsEnabled="True"
+                    HorizontalAlignment="Right"
+                    VerticalAlignment="Bottom"
+                    Width="10"
+                    Height="10"
+                    Background="Transparent"
+                    RenderTransform="translateX(5px) translateY(5px)" />
+
+        </Grid>
+    </local:MpAvClipBorder>
+</local:MpAvUserControl>

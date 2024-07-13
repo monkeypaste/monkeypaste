@@ -1,0 +1,16 @@
+﻿using System.Windows.Input;
+
+namespace MonkeyPaste.Avalonia {
+    public interface MpISaveOrCancelableViewModel : MpIViewModel {
+        ICommand SaveCommand { get; }
+        ICommand CancelCommand { get; }
+
+        bool IsSaveCancelEnabled { get; }
+
+        bool CanSaveOrCancel { get; }
+    }
+    //public interface MpIPluginComponentViewModel : MpIViewModel {
+    //    public MpPresetParamaterHost ComponentFormat { get; }
+    //}
+
+}

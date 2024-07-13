@@ -54,7 +54,7 @@
             Classes.gesture="{Binding InputGestureText, ElementName=ToolTipView, Converter={x:Static local:MpAvIsNotNullZeroOrEmptyToBoolConverter.Instance}}"
             Classes.html="{Binding IsHtml, ElementName=ToolTipView}"
             Classes.text="{Binding !IsHtml, ElementName=ToolTipView}"
-            Classes.bright-fg="{Binding $self.Foreground, Converter={x:Static local:MpAvBrushToIsBrightBoolConverter.Instance}}"
+            Classes.bright-fg="{Binding Foreground, Converter={x:Static local:MpAvBrushToIsBrightBoolConverter.Instance}, ElementName=ToolTipView}"
             CornerRadius="10">
         <DockPanel x:Name="ToolTipTextContainer">
             <local:MpAvShortcutLabel Margin="5,0,0,0"
@@ -77,7 +77,6 @@
                               MaxWidth="600"
                               IsVisible="{Binding IsHtml, ElementName=ToolTipView}"
                               local:MpAvHtmlStylerExtension.HtmlStyleType="Tooltip"
-                              local:MpAvHtmlStylerExtension.IsUniqueStyleRequired="True"
                               local:MpAvHtmlStylerExtension.DefaultFontSize="14"
                               local:MpAvHtmlStylerExtension.DefaultHexColor="{Binding Background, ElementName=TooltipOuterContainer, ConverterParameter=hex, Converter={x:Static local:MpAvColorToContrastColorConverter.Instance}}"
                               local:MpAvHtmlStylerExtension.IsEnabled="True"

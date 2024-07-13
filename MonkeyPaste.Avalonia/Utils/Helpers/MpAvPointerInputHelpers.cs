@@ -4,6 +4,7 @@ using Avalonia.Input;
 using Avalonia.Interactivity;
 using Avalonia.VisualTree;
 using MonkeyPaste.Common;
+using MonkeyPaste.Common.Avalonia;
 using System;
 using System.Diagnostics;
 
@@ -57,7 +58,7 @@ namespace MonkeyPaste.Avalonia {
                 MpDebug.Break();
                 return null;
             }
-            var root_mp = mp.TranslatePoint(vroot, isLocalMp);
+            MpPoint root_mp = mp.TranslatePoint(vroot, isLocalMp);
             Pointer pointer = new Pointer(Pointer.GetNextFreeId(), PointerType.Mouse, true);
             RoutedEventArgs out_event;
 

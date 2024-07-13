@@ -1,4 +1,8 @@
-﻿using Avalonia.Threading;
+﻿using Avalonia;
+using Avalonia.Controls;
+using Avalonia.Input;
+using Avalonia.Layout;
+using Avalonia.Threading;
 using MonkeyPaste.Common;
 using MonkeyPaste.Common.Avalonia;
 using MonkeyPaste.Common.Plugin;
@@ -47,6 +51,7 @@ namespace MonkeyPaste.Avalonia {
                         // SHOW/HIDE MW
 
                         new MpAvMenuItemViewModel() {
+                            IsVisible = MpAvThemeViewModel.Instance.IsMultiWindow,
                             HeaderSrcObj = MpAvMainWindowViewModel.Instance,
                             HeaderPropPath = nameof(MpAvMainWindowViewModel.Instance.ShowOrHideLabel),
                             IconSrcBindingObj = MpAvMainWindowViewModel.Instance,
@@ -62,6 +67,7 @@ namespace MonkeyPaste.Avalonia {
                         // PAUSE/RESUME CB
 
                         new MpAvMenuItemViewModel() {
+                            IsVisible = MpAvThemeViewModel.Instance.IsMultiWindow,
                             HeaderSrcObj = MpAvClipTrayViewModel.Instance,
                             HeaderPropPath = nameof(MpAvClipTrayViewModel.Instance.PlayOrPauseLabel),
                             IconSrcBindingObj = MpAvClipTrayViewModel.Instance,
@@ -178,6 +184,7 @@ namespace MonkeyPaste.Avalonia {
                         // SETTINGS
 
                         new MpAvMenuItemViewModel() {
+                            IsVisible = MpAvThemeViewModel.Instance.IsMultiWindow,
                             Header = UiStrings.CommonSettingsTitle,
                             IconSourceObj = "CogColorImage",
                             CommandSrcObj = MpAvSettingsViewModel.Instance,
@@ -293,6 +300,7 @@ namespace MonkeyPaste.Avalonia {
                         // QUIT
 
                         new MpAvMenuItemViewModel() {
+                            IsVisible = MpAvThemeViewModel.Instance.IsMultiWindow,
                             Header = UiStrings.SysTrayQuitHeader,
                             IconResourceKey = "SignOutImage",
                             Command = ExitApplicationCommand,
@@ -469,6 +477,13 @@ namespace MonkeyPaste.Avalonia {
                 Mp.Services.ShutdownHelper.ShutdownApp(MpShutdownType.UserTrayCmd, $"systray cmd - '{args.ToStringOrEmpty("no detail (likely quit cmd) ")}'");
             });
 
+        public ICommand ShowSysTrayContextMenu => new MpCommand<object>(
+            (args) => {
+                if(args is not Control c) {
+                    return;
+                }
+                MpAvMenuView.ShowMenu(c, TrayMenuItemViewModel);
+            });
 
         #region Test Commands
         public ICommand NavigateToCefNetUriCommand => new MpAsyncCommand(
@@ -500,40 +515,32 @@ namespace MonkeyPaste.Avalonia {
         public ICommand GenericTestCommand1 => new MpAsyncCommand(
             async () => {
                 await Task.Delay(1);
-                Mp.Services.NotificationBuilder.ShowMessageAsync(
-                           title: UiStrings.NtfRateAppTitle,
-                           body: UiStrings.NtfRateAppText,
-                           msgType: MpNotificationType.RateApp,
-                           iconSourceObj: "MonkeyWinkImage",
-                           maxShowTimeMs: 5_000).FireAndForgetSafeAsync();
+                MpAvClipTrayContainerView.Instance.ClipTraySplitter.ApplyDelta(new Vector(100,0));
             });
 
         public ICommand GenericTestCommand2 => new MpAsyncCommand(
             async () => {
-                await MpAvClipTrayViewModel.Instance.ReloadAllCommand.ExecuteAsync();
+                await Task.Delay(1);
+                MpAvShortcutCollectionViewModel.Instance.ResetAllShortcutsCommand.Execute(null);
             });
         public ICommand GenericTestCommand3 => new MpAsyncCommand(
             async () => {
-                // NOTE this one will clear rwwv after dnd
-
+                // expands pin tray
                 await Task.Delay(1);
-                MpAvClipTrayViewModel.Instance.ReloadAllContentCommand.Execute(null);
+                MpAvMainWindowViewModel.Instance.CycleOrientationCommand.Execute("CCW");
             });
         public ICommand GenericTestCommand4 => new MpAsyncCommand(
             async () => {
+                // expands query tray
                 await Task.Delay(1);
-                //MpAvClipTrayViewModel.Instance.ClearAllSelection();
-                Mp.Services.DataObjectTools
-                .WriteToClipboardAsync(
-                    new MpAvDataObject(MpPortableDataFormats.Text, MpAvDocusaurusHelpers.GetShortcutsMarkdown()), true).FireAndForgetSafeAsync();
+                //MpAvClipTrayViewModel.Instance.ExpandQueryTrayCommand.Execute(null);
+                MpAvMainView.Instance.UpdateMainViewLayout();
             });
 
         public ICommand GenericTestCommand5 => new MpAsyncCommand(
             async () => {
-                //await Mp.Services.DataObjectTools.WriteToClipboardAsync(new MpAvDataObject(MpPortableDataFormats.Image, MpBase64Images.AppIcon), true);
-                //MpAvImageExtensions.Test();
                 await Task.Delay(1);
-                MpAvSubscriptionPurchaseViewModel.Instance.NavigateToBuyUpgradeCommand.Execute(null);
+                MpAvThemeViewModel.Instance.SaveThemeToFileCommand.Execute(null);
             });
 
         #endregion

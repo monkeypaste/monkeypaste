@@ -156,7 +156,7 @@ function onFontColorOrBgColorPaletteItemClick(chex) {
 	const font_sel_doc_idx = getSelDocIdxForFontColor();
 	let bg_chex = null;
 	let fg_chex = null;
-	let source = 'api';
+	let source = 'user';
 	if (globals.ColorPaletteAnchorElement == getFontBackgroundToolbarButton()) {
 		// remove theme override if preset
 		removeThemeAttrFromDocRange(sel, true, source);

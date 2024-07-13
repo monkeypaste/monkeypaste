@@ -222,4 +222,10 @@
   <data name="ToFileExtHint" xml:space="preserve">
     <value>Zgjatja e skedarit e përdorur kur '{0}' përdoret për të krijuar një skedar sipas kërkesës.</value>
   </data>
+  <data name="RtfParaTagNameHint" xml:space="preserve">
+    <value>Për theksimin e kodit përdorni etiketën 'Pre' përndryshe RTF do të trajtohet si tekst i pasur normal.</value>
+  </data>
+  <data name="RtfParaTagNameLabel" xml:space="preserve">
+    <value>Etiketa e paragrafit html</value>
+  </data>
 </root>

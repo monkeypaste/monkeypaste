@@ -49,6 +49,9 @@ function initTemplateEmbedBlot_quill2() {
     }
 
     Quill.register(TemplateEmbedBlot, true);
+
+    // allow templates in code-blocks
+    Quill.imports['formats/code-block'].allowedChildren.push(Quill.imports['formats/template'])
 }
 
 function initTemplateEmbedBlot_quill1() {

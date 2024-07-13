@@ -13,44 +13,96 @@
                        x:DataType="local:MpAvLoaderNotificationViewModel"
                        x:CompileBindings="True"
                        x:Class="MonkeyPaste.Avalonia.MpAvMobileLoaderView">
-    <local:MpAvUserControl.Styles>
-    </local:MpAvUserControl.Styles>
-    <StackPanel HorizontalAlignment="Center"
-                VerticalAlignment="Center"
-                DataContext="{Binding ProgressLoader}"
-                Spacing="15">
-        <!--  LOGO  -->
-        <Image x:Name="LogoImage"
-               Classes="applogo"
-               Width="100"
-               Height="100"
-               Source="{Binding Source={StaticResource AppImage}, Converter={x:Static local:MpAvIconSourceObjToBitmapConverter.Instance}}"
-               HorizontalAlignment="Center" />
-        <!--  PROGRESS BAR  -->
-        <ProgressBar Margin="50,0"
-                     Height="20"
-                     Minimum="0"
-                     Maximum="1"
-                     HorizontalAlignment="Center"
-                     Value="{Binding PercentLoaded}"
-                     ShowProgressText="True" />
-        <!--  PROGRESS INFO  -->
-        <TransitioningContentControl x:Name="ProgressInfoTransitioningContentControl"
-                                     HorizontalAlignment="Center"
-                                     Content="{Binding Body}">
-            <TransitioningContentControl.PageTransition>
-                <CrossFade Duration="0:00:00.500" />
-            </TransitioningContentControl.PageTransition>
-            <TransitioningContentControl.ContentTemplate>
-                <DataTemplate DataType="sys:String">
-                    <TextBlock x:Name="ProgressInfoBlock"
-                               ClipToBounds="False"
-                               FontSize="12"
-                               TextAlignment="Center"
-                               Text="{Binding}" />
-                </DataTemplate>
-            </TransitioningContentControl.ContentTemplate>
-        </TransitioningContentControl>
 
-    </StackPanel>
+    <local:MpAvUserControl.Background>
+        <RadialGradientBrush Center="100%, 100%" GradientOrigin="100%, 110%" Radius="0.75">
+            <RadialGradientBrush.GradientStops>
+                <GradientStop Color="{DynamicResource ThemeColor}" Offset="0" />
+                <GradientStop Color="{DynamicResource ThemeDarkColor}" Offset="1" />
+            </RadialGradientBrush.GradientStops>
+        </RadialGradientBrush>
+    </local:MpAvUserControl.Background>
+    <local:MpAvUserControl.Styles>
+        <Style Selector="Image#LogoImage">
+            <Setter Property="Source"
+                    Value="{Binding Source={StaticResource AppImage}, Converter={x:Static local:MpAvIconSourceObjToBitmapConverter.Instance}}" />
+            <Setter Property="Width"
+                    Value="70" />
+            <Setter Property="Height"
+                    Value="70" />
+        </Style>
+        <Style Selector="Image#LogoImage.show-spinner">
+            <Setter Property="Source"
+                    Value="{Binding Source={StaticResource HourGlassImage}, Converter={x:Static local:MpAvIconSourceObjToBitmapConverter.Instance}}" />
+            <Setter Property="Width"
+                    Value="40" />
+            <Setter Property="Height"
+                    Value="40" />
+        </Style>
+    </local:MpAvUserControl.Styles>
+    <Grid>
+        <StackPanel HorizontalAlignment="Center"
+                    VerticalAlignment="Center"
+                    DataContext="{Binding ProgressLoader}"
+                    Spacing="15">
+            <Grid Width="150"
+                  Height="150">
+                <local:MpAvProgressSpinner HorizontalAlignment="Center"
+                                           VerticalAlignment="Center"
+                                           ShowBusyWhenDone="False"
+                                           Width="150"
+                                           Height="150"
+                                           ArcWidth="1.5"
+                                           RingBrush="{DynamicResource ThemeAccent1BgColor}"
+                                           PercentBrush="{DynamicResource ThemeAccent5Brush}"
+                                           LabelBrush="Transparent"
+                                           Percent="{Binding PercentLoaded}" />
+
+                <!--
+                    LOGO
+                    Classes.show-spinner="{Binding ShowSpinner}"
+                    Classes.shake="{Binding ShowSpinner}"
+                -->
+                <Image x:Name="LogoImage"
+                       Classes="applogo"
+                       HorizontalAlignment="Center"
+                       VerticalAlignment="Center">
+                    <Image.RenderTransform>
+                        <RotateTransform />
+                    </Image.RenderTransform>
+                </Image>
+
+            </Grid>
+
+            <!--  PROGRESS INFO  -->
+            <TransitioningContentControl x:Name="ProgressInfoTransitioningContentControl"
+                                         IsVisible="False"
+                                         Opacity="{Binding ShowSpinner, ConverterParameter=0|1, Converter={x:Static local:MpAvBoolToDoubleConverter.Instance}}"
+                                         HorizontalAlignment="Center"
+                                         Content="{Binding Body}">
+                <TransitioningContentControl.PageTransition>
+                    <CrossFade Duration="0:00:00.500" />
+                </TransitioningContentControl.PageTransition>
+                <TransitioningContentControl.ContentTemplate>
+                    <DataTemplate DataType="sys:String">
+                        <TextBlock x:Name="ProgressInfoBlock"
+                                   Foreground="WhiteSmoke"
+                                   ClipToBounds="False"
+                                   FontSize="12"
+                                   TextAlignment="Center"
+                                   Text="{Binding}" />
+                    </DataTemplate>
+                </TransitioningContentControl.ContentTemplate>
+            </TransitioningContentControl>
+
+        </StackPanel>
+
+        <TextBlock HorizontalAlignment="Right"
+                   VerticalAlignment="Bottom"
+                   TextAlignment="Right"
+                   FontSize="8"
+                   Margin="3"
+                   Foreground="{Binding Source={DynamicResource ThemeColor}, Converter={x:Static local:MpAvColorToContrastColorConverter.Instance}}"
+                   Text="{Binding ThisAppVersionDisplayValue, Source={x:Static local:MpAvThisAppVersionViewModel.Instance}}" />
+    </Grid>
 </local:MpAvUserControl>

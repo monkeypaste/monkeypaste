@@ -100,4 +100,18 @@
         <Setter Property="VerticalAlignment"
                 Value="Stretch" />
     </Style>
+
+    <Style Selector="Border.dark-bevel-3">
+        <Setter Property="BoxShadow"
+                Value="inset 0 0 3 3 #46000000" />
+    </Style>
+    <Style Selector="Border.light-bevel-3">
+        <Setter Property="BoxShadow"
+                Value="inset 0 0 3 3 #469B979E" />
+    </Style>
+    <Style Selector="Border.light-bevel-5">
+        <Setter Property="BoxShadow"
+                Value="inset 0 0 5 5 #469B979E" />
+    </Style>
+
 </Styles>

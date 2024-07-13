@@ -1,10 +1,16 @@
-﻿using Avalonia.Controls;
+﻿using Avalonia;
+using Avalonia.Controls;
+using Avalonia.Input;
+using Avalonia.Layout;
 using Avalonia.Threading;
 using MonkeyPaste.Common;
+using MonkeyPaste.Common.Avalonia;
+using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Diagnostics;
 using System.Linq;
+using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Input;
 
@@ -13,6 +19,7 @@ namespace MonkeyPaste.Avalonia {
         MpAvViewModelBase,
         MpIAnimatedSizeViewModel {
         #region Private Variable
+        private Control _currentSidebarItem;
         #endregion
 
         #region Constants
@@ -26,9 +33,26 @@ namespace MonkeyPaste.Avalonia {
         #endregion
 
         #region MpIAnimatedSizeViewModel Implementation
-
-        public double ContainerBoundWidth { get; set; }
-        public double ContainerBoundHeight { get; set; }
+        private double _containerBoundWidth;
+        public double ContainerBoundWidth { 
+            get => _containerBoundWidth;
+            set {
+                if(ContainerBoundWidth != value && value >= 0) {
+                    _containerBoundWidth = value;
+                    OnPropertyChanged(nameof(ContainerBoundWidth));
+                }
+            }
+        }
+        private double _containerBoundHeight;
+        public double ContainerBoundHeight {
+            get => _containerBoundHeight;
+            set {
+                if (ContainerBoundHeight != value && value >= 0) {
+                    _containerBoundHeight = value;
+                    OnPropertyChanged(nameof(ContainerBoundHeight));
+                }
+            }
+        }
 
         public bool IsAnimating { get; set; }
         #endregion
@@ -49,6 +73,7 @@ namespace MonkeyPaste.Avalonia {
                 SelectedItem = value < 0 || value >= Items.Count ? null : Items[value];
             }
         }
+        public MpISidebarItemViewModel BoundItem { get; private set; }
         public MpISidebarItemViewModel SelectedItem { get; private set; }
         public MpISidebarItemViewModel LastSelectedItem { get; set; }
 
@@ -56,7 +81,12 @@ namespace MonkeyPaste.Avalonia {
 
         #region Layout
 
-        public double ButtonGroupFixedDimensionLength => 40;
+        public double ButtonGroupFixedDimensionLength =>
+#if MOBILE_OR_WINDOWED
+            60;
+#else
+            40;
+#endif
 
         public double SelectedItemWidth {
             get {
@@ -64,9 +94,9 @@ namespace MonkeyPaste.Avalonia {
                     return 0;
                 }
                 return
-                    SelectedItem.SidebarWidth +
-                    (MpAvMainWindowViewModel.Instance.IsHorizontalOrientation ?
-                        MpAvThemeViewModel.Instance.DefaultGridSplitterFixedDimensionLength : 0);
+                    SelectedItem.SidebarWidth;// +
+                    //(MpAvMainWindowViewModel.Instance.IsHorizontalOrientation ?
+                    //    MpAvThemeViewModel.Instance.DefaultGridSplitterFixedDimensionLength : 0);
             }
         }
 
@@ -76,9 +106,9 @@ namespace MonkeyPaste.Avalonia {
                     return 0;
                 }
                 return
-                    SelectedItem.SidebarHeight +
-                    (MpAvMainWindowViewModel.Instance.IsHorizontalOrientation ?
-                        0 : MpAvThemeViewModel.Instance.DefaultGridSplitterFixedDimensionLength);
+                    SelectedItem.SidebarHeight;// +
+                    //(MpAvMainWindowViewModel.Instance.IsHorizontalOrientation ?
+                    //    0 : MpAvThemeViewModel.Instance.DefaultGridSplitterFixedDimensionLength);
             }
         }
 
@@ -94,27 +124,14 @@ namespace MonkeyPaste.Avalonia {
                MpAvFilterMenuViewModel.Instance.DefaultFilterMenuFixedSize :
                ButtonGroupFixedDimensionLength + SelectedItemHeight;
 
-        public int MouseModeHorizontalOffset =>
-            MpAvMainWindowViewModel.Instance.IsHorizontalOrientation ?
-                20 : 10;
-
-        public int MouseModeVerticalOffset =>
-            MpAvMainWindowViewModel.Instance.IsHorizontalOrientation ?
-                0 : 10;
-
-        public PlacementMode MouseModeFlyoutPlacement =>
-            MpAvMainWindowViewModel.Instance.IsHorizontalOrientation ?
-                PlacementMode.Right :
-                PlacementMode.Top;
-
-        #endregion
+#endregion
 
         #region State
 
         bool HasSetStartupSelection { get; set; } = false;
         #endregion
 
-        #endregion
+#endregion
 
         #region Constructors
         private MpAvSidebarItemCollectionViewModel() {
@@ -125,6 +142,7 @@ namespace MonkeyPaste.Avalonia {
         #endregion
 
         #region Public Methods
+
         #endregion
 
         #region Protected Methods
@@ -149,55 +167,106 @@ namespace MonkeyPaste.Avalonia {
             Items.Add(sbivm);
             sbivm.PropertyChanged += Sbivm_PropertyChanged;
         }
-        private void NotifySidebarSelectionChanging() {
-            Dispatcher.UIThread.Post(async () => {
-                MpMessenger.SendGlobal(MpMessageType.SelectedSidebarItemChangeBegin);
-                var sw = Stopwatch.StartNew();
-                while (!IsAnimating) {
-                    // wait for anim to start
-                    if (sw.ElapsedMilliseconds > 3_000) {
-                        // time out, anim not significant size
-                        break;
-                    }
-                    await Task.Delay(100);
+        private async Task HandleSidebarSelectionChangedAsync() {
+            double start_w,start_h,end_w,end_h;
+            bool is_horiz = MpAvMainWindowViewModel.Instance.IsHorizontalOrientation;
+            bool is_closing = SelectedItem == null;
+            if(is_closing) {
+                // closing
+                start_w = LastSelectedItem == null ? 0 : LastSelectedItem.SidebarWidth;
+                start_h = LastSelectedItem == null ? 0 : LastSelectedItem.SidebarHeight;
+                if(is_horiz) {
+                    end_w = 0;
+                    end_h = start_h;
+                } else {
+                    end_w = start_w;
+                    end_h = 0;
                 }
-                sw.Restart();
-                while (IsAnimating) {
-                    if (sw.ElapsedMilliseconds > 3_000) {
-                        // time out, anim not significant size
-                        break;
-                    }
-                    // wait for anim to finish
-                    await Task.Delay(100);
+            } else {
+                // opening
+                if(is_horiz) {
+                    start_w = 0;
+                    start_h = SelectedItem.DefaultSidebarHeight;
+                    end_w = SelectedItem.DefaultSidebarWidth;
+                    end_h = start_h;
+                } else {
+                    start_w = SelectedItem.DefaultSidebarWidth;
+                    start_h = 0;
+                    end_w = start_w;
+                    end_h = SelectedItem.DefaultSidebarHeight;
                 }
-                MpMessenger.SendGlobal(MpMessageType.SelectedSidebarItemChangeEnd);
-            });
-        }
+            }
+            var ss_start = new MpSize(start_w, start_h);
+            var ss_end = new MpSize(end_w, end_h);
+            IsAnimating = true;
+            await AnimateSidebarAsync(ss_start, ss_end, is_closing, 0.1, 100);
 
+            if(is_closing) {
+                // manually clear both dim AFTER animation (or constraints could be wrong after orientation change)
+                ResetSize();
+            }
+            MpAvMainView.Instance.UpdateMainViewLayout();
+            IsAnimating = false;
+            // handle sidebar focus
+            if (SelectedItem is MpICloseWindowViewModel cwvm &&
+                cwvm.IsWindowOpen &&
+                MpAvWindowManager.LocateWindow(SelectedItem) is MpAvWindow w) {
+                // trigger sidebar pop out
+                w.WindowState = WindowState.Normal;
+                w.Activate();
+            } 
+
+            if(MpAvThemeViewModel.Instance.IsMobileOrWindowed) {
+                FocusSidebarOrFallbackCommand.Execute(null);
+            }
+        }
+        private void ResetSize() {
+            SetSidebarSize(-ContainerBoundWidth, -ContainerBoundHeight);
+        }
+        private async Task AnimateSidebarAsync(
+            MpSize start, 
+            MpSize end, 
+            bool isClosing,
+            double tt = 0.25, 
+            double fps = 120) {
+            double op_start = isClosing ? 1 : 0;
+            double op_end = isClosing ? 0 : 1;
+
+            await Task.WhenAll([
+                start.AnimatePointAsync(
+                    end: end,
+                    tts: tt,
+                    fps: fps,
+                    tick: (d) => {
+                        SetSidebarSize(d.X,d.Y);
+                    }),
+                op_start.AnimateDoubleAsync(
+                    end: op_end,
+                    tts: tt,
+                    fps: fps,
+                    tick: (d) => {
+                        SetSidebarContentOpacity(d);
+                    })
+                ]);
+            _currentSidebarItem = null;
+        }
         private void MpAvSidebarItemCollectionViewModel_PropertyChanged(object sender, System.ComponentModel.PropertyChangedEventArgs e) {
             switch (e.PropertyName) {
                 case nameof(SelectedItem):
-                    if (MpAvMainView.Instance == null) {
-                        return;
-                    }
-
-                    if (SelectedItem != null) {
+                    Items.ForEach(x => x.IsSelected = x == SelectedItem);
+                    if (SelectedItem == null) {
+                    } else {
+                        BoundItem = SelectedItem;
                         LastSelectedItem = SelectedItem;
-                        SelectedItem.OnPropertyChanged(nameof(SelectedItem.IsSelected));
                     }
-                    NotifySidebarSelectionChanging();
-
-                    MpAvMainView.Instance.UpdateContentLayout();
-                    OnPropertyChanged(nameof(SelectedItemIdx));
-
-                    if (SelectedItem is MpICloseWindowViewModel cwvm &&
-                        cwvm.IsWindowOpen &&
-                        MpAvWindowManager.LocateWindow(SelectedItem) is MpAvWindow w) {
-                        // trigger sidebar pop out
-                        w.WindowState = WindowState.Normal;
-                        w.Activate();
-                        //w.Topmost = true;
-                    }
+                    Dispatcher.UIThread.Post(async () => {
+                        MpMessenger.SendGlobal(MpMessageType.SelectedSidebarItemChangeBegin);
+                        await HandleSidebarSelectionChangedAsync();
+                        OnPropertyChanged(nameof(SelectedItemIdx));
+                        BoundItem = SelectedItem;
+                        MpMessenger.SendGlobal(MpMessageType.SelectedSidebarItemChangeEnd);
+                    });
+                  
                     break;
             }
         }
@@ -213,6 +282,9 @@ namespace MonkeyPaste.Avalonia {
                     OnPropertyChanged(nameof(SelectedItemHeight));
                     MpMessenger.SendGlobal(MpMessageType.SidebarItemSizeChanged);
                     break;
+                case nameof(SelectedItem):
+                    OnPropertyChanged(nameof(SelectedItemIdx));
+                    break;
                 case nameof(SelectedItemIdx):
 
                     break;
@@ -223,35 +295,69 @@ namespace MonkeyPaste.Avalonia {
                 case MpMessageType.MainWindowLoadComplete:
                     Init();
                     break;
+                case MpMessageType.MainWindowOrientationChangeBegin:
+                    ResetSize();
+                    break;
                 case MpMessageType.MainWindowOrientationChangeEnd:
-                    OnPropertyChanged(nameof(MouseModeFlyoutPlacement));
-                    OnPropertyChanged(nameof(MouseModeHorizontalOffset));
-                    OnPropertyChanged(nameof(MouseModeVerticalOffset));
+                    HandleSidebarSelectionChangedAsync().FireAndForgetSafeAsync();
                     break;
                 case MpMessageType.MainWindowOpened:
-#if DESKTOP
+//#if MULTI_WINDOW
                     if (MpAvMainWindowViewModel.Instance.IsMainWindowInHiddenLoadState ||
                                     HasSetStartupSelection) {
                         break;
                     }
-                    SelectSidebarItemCommand.Execute(MpAvTagTrayViewModel.Instance);
                     HasSetStartupSelection = true;
-#endif
+                    //SelectSidebarItemCommand.Execute(MpAvTagTrayViewModel.Instance);
+//#endif
                     break;
             }
         }
 
+
+
+        public void SetSidebarSizeByDelta(double dw, double dh) {
+            SetSidebarSize(ContainerBoundWidth + dw, ContainerBoundHeight + dh);
+        }
+        public void SetSidebarSize(double w, double h) {
+            double dw = w - ContainerBoundWidth;
+            double dh = h - ContainerBoundHeight;
+            ContainerBoundWidth = w;
+            ContainerBoundHeight = h;
+
+            if (MpAvMainWindowViewModel.Instance.IsVerticalOrientation) {
+                MpAvClipTrayViewModel.Instance.ContainerBoundHeight -= dh;
+            } else {
+                MpAvClipTrayViewModel.Instance.ContainerBoundWidth -= dw;
+            }
+        }
+
+        private void SetSidebarContentOpacity(double opacity) {
+            if (_currentSidebarItem == null &&
+                MpAvMainView.Instance.SelectedSidebarContainerBorder.GetVisualDescendants<MpAvUserControl>().OfType<MpAvISidebarContentView>().FirstOrDefault() is Control sbc) {
+                _currentSidebarItem = sbc;
+            }
+            if(_currentSidebarItem == null) {
+                return;
+            }
+            _currentSidebarItem.Opacity = opacity;
+        }
         #endregion
 
         #region Commands
 
-        public ICommand SelectSidebarItemCommand => new MpCommand<object>(
-            (args) => {
+        public ICommand SelectSidebarItemCommand => new MpAsyncCommand<object>(
+            async(args) => {
                 var sbivm = args as MpISidebarItemViewModel;
                 if (sbivm == null) {
                     return;
                 }
                 SelectedItem = sbivm;
+
+                // BUG pre-selecting tags doesn't show selected in sidebar buttons, waiting a bit..
+                await Task.Delay(300);
+                OnPropertyChanged(nameof(SelectedItemIdx));
+                OnPropertyChanged(nameof(SelectedItem));
             });
 
         public ICommand ToggleIsSidebarItemSelectedCommand => new MpCommand<object>(
@@ -287,6 +393,7 @@ namespace MonkeyPaste.Avalonia {
                     SelectedItemIdx = itemIdx;
                 }
                 OnPropertyChanged(nameof(SelectedItemIdx));
+                
             });
 
         public ICommand SidebarButtonDragEnterCommand => new MpCommand<object>(
@@ -320,6 +427,19 @@ namespace MonkeyPaste.Avalonia {
 
                 MpAvClipTrayViewModel.Instance.ContainerBoundHeight -= dh;
                 MpAvSidebarItemCollectionViewModel.Instance.ContainerBoundHeight += dh;
+            });
+
+        public ICommand FocusSidebarOrFallbackCommand => new MpCommand(
+            () => {
+                if (SelectedItem is MpAvTriggerCollectionViewModel &&
+                        MpAvMainView.Instance.GetVisualDescendant<MpAvTriggerActionChooserView>() is { } tw) {
+
+                    tw.FocusThisHeader();
+                } else if (SelectedItem == null) {
+                    MpAvMainView.Instance.FocusThisHeader();
+                } else {
+
+                }
             });
 
         #endregion

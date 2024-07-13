@@ -1,4 +1,5 @@
-﻿using Avalonia.Threading;
+﻿using Avalonia.Controls;
+using Avalonia.Threading;
 using HtmlAgilityPack;
 using MonkeyPaste.Common;
 using MonkeyPaste.Common.Plugin;

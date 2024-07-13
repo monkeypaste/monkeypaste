@@ -78,7 +78,7 @@
                       Command="{Binding ToggleAutoCopyModeCommand, Source={x:Static local:MpAvClipTrayViewModel.Instance}}">
             <ToolTip.Tip>
                 <local:MpAvToolTipView ToolTipText="{Binding Source={x:Static local:R.U}, Path=CurrentUiStrings.AppModeToggleLeftClickCopyHint}"
-                                       InputGestureText="{Binding ., ConverterParameter=ToggleAutoCopyMode, Converter={x:Static local:MpAvShortcutTypeOrCommandObjToKeyStringConverter.Instance}}" />
+                                       InputGestureText="{Binding $self.DataContext, ConverterParameter=ToggleAutoCopyMode, Converter={x:Static local:MpAvShortcutTypeOrCommandObjToKeyStringConverter.Instance}}" />
             </ToolTip.Tip>
             <Image Source="{Binding Source={StaticResource MouseLeftClickImage}, Converter={x:Static local:MpAvIconSourceObjToBitmapConverter.Instance}}" />
         </ToggleButton>
@@ -92,7 +92,7 @@
                       Command="{Binding ToggleRightClickPasteCommand, Source={x:Static local:MpAvClipTrayViewModel.Instance}}">
             <ToolTip.Tip>
                 <local:MpAvToolTipView ToolTipText="{Binding Source={x:Static local:R.U}, Path=CurrentUiStrings.AppModeToggleRightClickPasteHint}"
-                                       InputGestureText="{Binding ., ConverterParameter=ToggleRightClickPasteMode, Converter={x:Static local:MpAvShortcutTypeOrCommandObjToKeyStringConverter.Instance}}" />
+                                       InputGestureText="{Binding $self.DataContext, ConverterParameter=ToggleRightClickPasteMode, Converter={x:Static local:MpAvShortcutTypeOrCommandObjToKeyStringConverter.Instance}}" />
             </ToolTip.Tip>
             <Image Source="{Binding Source={StaticResource MouseRightClickImage}, Converter={x:Static local:MpAvIconSourceObjToBitmapConverter.Instance}}" />
         </ToggleButton>

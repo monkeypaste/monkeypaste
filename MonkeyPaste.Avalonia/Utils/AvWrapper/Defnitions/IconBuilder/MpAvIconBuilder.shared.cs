@@ -8,6 +8,7 @@ using System.Threading.Tasks;
 
 namespace MonkeyPaste.Avalonia {
     public partial class MpAvIconBuilder : MpIIconBuilder {
+        const MpIconSize DEF_ICON_SIZE = MpIconSize.ExtraLargeIcon128;
 
         public async Task<MpIcon> CreateAsync(
             string iconBase64,

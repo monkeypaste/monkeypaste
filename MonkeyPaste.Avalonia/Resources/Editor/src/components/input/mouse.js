@@ -64,7 +64,15 @@ function getScreenMousePos(e) {
 // #endregion Setters
 
 // #region State
-
+function isLeftDownEvent(e) {
+	if (isNullOrUndefined(e)) {
+		return false;
+	}
+	if (e.which === 1 || e.button === 0) {
+		return true;
+	}
+	return false;
+}
 // #endregion State
 
 // #region Actions
@@ -77,7 +85,7 @@ function updateWindowMouseState(e, eventType) {
 			(eventType == 'down' || eventType == 'dragStart')) {
 			globals.WindowMouseDownLoc = globals.WindowMouseLoc;
 		}
-		sendHostMouseState(eventType, true);
+		sendHostMouseState(eventType, isLeftDownEvent(e));
 	}
 	
 	if (globals.WindowMouseDownLoc &&
@@ -148,7 +156,7 @@ function onWindowContextMenu(e) {
 	// NOTE using this for right mouse button clicks not normal events since
 	// mouse can have N buttons 
 
-	sendHostMouseState('up', false);
+	sendHostMouseState('up', true);
 	if (!isRunningOnHost()) {
 		e.handled = false;
 		return;

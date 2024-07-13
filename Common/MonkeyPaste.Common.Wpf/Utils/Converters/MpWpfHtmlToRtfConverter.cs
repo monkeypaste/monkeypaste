@@ -160,7 +160,7 @@ namespace MonkeyPaste.Common.Wpf {
                     break;
                 case "span":
                 case "code":
-                case "pre":
+                //case "pre":
                     te = new Span();
                     break;
                 case "strong":
@@ -214,6 +214,7 @@ namespace MonkeyPaste.Common.Wpf {
                 //    break;
 
                 case "div":
+                case "pre":
                     // should only occur for code-block if its qhtml
                     if (n.HasClass("ql-code-block")) {
                         te = new Paragraph() {

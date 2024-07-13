@@ -1,6 +1,10 @@
 ﻿namespace MonkeyPaste.Avalonia {
     public class MpAvPlatformInfo_desktop : MpAvPlatformInfoBase {
         public override bool IsTouchInputEnabled =>
-            false;// App.Args.Contains(App.MULTI_TOUCH_ARG);
+#if DEBUG
+            true;// App.Args.Contains(App.MULTI_TOUCH_ARG);
+#else
+            false;
+#endif
     }
 }

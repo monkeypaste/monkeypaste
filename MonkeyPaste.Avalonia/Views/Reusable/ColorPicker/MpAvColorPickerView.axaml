@@ -22,7 +22,7 @@
                     VerticalAlignment="Center"
                     HorizontalContentAlignment="Center"
                     FontWeight="SemiBold"
-                    Classes="defaultButton textOnlyButton">
+                    Classes="default-button textOnlyButton">
                 Cancel
             </Button>
             <Button x:Name="OkButton"
@@ -32,7 +32,7 @@
                     HorizontalAlignment="Right"
                     HorizontalContentAlignment="Center"
                     FontWeight="SemiBold"
-                    Classes="defaultButton textOnlyButton">
+                    Classes="default-button textOnlyButton">
                 Ok
             </Button>
         </DockPanel>

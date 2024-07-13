@@ -2996,4 +2996,49 @@ FANDUCE@ONKEYPASTET.com</value>
   <data name="DonateLabel" xml:space="preserve">
     <value>ଦାନ କରନ୍ତୁ |</value>
   </data>
+  <data name="MobileCopiedNtfText" xml:space="preserve">
+    <value>କ୍ଲିପବୋର୍ଡରେ କପି କରାଯାଇଛି |</value>
+  </data>
+  <data name="PinTraySidebarLabel" xml:space="preserve">
+    <value>ପିନ୍ କଲେ</value>
+  </data>
+  <data name="QueryTraySidebarLabel" xml:space="preserve">
+    <value>ଜିଜ୍ଞାସା</value>
+  </data>
+  <data name="ClipboardSetMessage" xml:space="preserve">
+    <value>କ୍ଲିପବୋର୍ଡ ସେଟ୍ |</value>
+  </data>
+  <data name="AddNewActionLabel" xml:space="preserve">
+    <value>ନୂତନ ଯୋଡନ୍ତୁ</value>
+  </data>
+  <data name="PluginBrowserFormattedWindowTitle" xml:space="preserve">
+    <value>ପ୍ଲଗଇନ୍ ବ୍ରାଉଜର୍ - {0} |</value>
+  </data>
+  <data name="PluginBrowserWindowTitle" xml:space="preserve">
+    <value>ପ୍ଲଗଇନ୍ ବ୍ରାଉଜର୍ |</value>
+  </data>
+  <data name="EditorPasteButtonLabelMobile" xml:space="preserve">
+    <value>କପି କରନ୍ତୁ |</value>
+  </data>
+  <data name="PrefSyntaxThemeHint" xml:space="preserve">
+    <value>ପାଠ୍ୟ କ୍ଲିପ୍ସରେ ଚିହ୍ନଟ ହୋଇଥିବା କୋଡ୍ ର ବ୍ଲକଗୁଡିକ ପାଇଁ ବ୍ୟବହୃତ ଥିମ୍ |</value>
+  </data>
+  <data name="PrefSyntaxThemeLabel" xml:space="preserve">
+    <value>ବାକ୍ୟବିନ୍ୟାସ ଥିମ୍ |</value>
+  </data>
+  <data name="PrefCodeFontLabel" xml:space="preserve">
+    <value>ବାକ୍ୟବିନ୍ୟାସ</value>
+  </data>
+  <data name="CommonViewLabel" xml:space="preserve">
+    <value>ଦର୍ଶନ</value>
+  </data>
+  <data name="WrapTextMenuLabel" xml:space="preserve">
+    <value>ପାଠ୍ୟକୁ ଗୁଡ଼ାଇ ରଖ |</value>
+  </data>
+  <data name="ClipAssignShortcutLabel" xml:space="preserve">
+    <value>ସର୍ଟକଟ୍ ନ୍ୟସ୍ତ କରନ୍ତୁ ...</value>
+  </data>
+  <data name="ClipUpdateShortcutLabel" xml:space="preserve">
+    <value>ସର୍ଟକଟ୍ ଅପଡେଟ୍ କରନ୍ତୁ ...</value>
+  </data>
 </root>

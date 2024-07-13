@@ -1,0 +1,155 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:local="clr-namespace:iosKeyboardTest"
+             Background="Brown"
+             mc:Ignorable="d"
+             d:DesignWidth="800"
+             d:DesignHeight="450"
+             ClipToBounds="False"
+             x:DataType="local:KeyboardViewModel"
+             x:Class="iosKeyboardTest.KeyboardGridView">
+    <UserControl.Resources>
+        <SolidColorBrush x:Key="FgBrush2">Silver</SolidColorBrush>
+        <SolidColorBrush x:Key="FgBrush">White</SolidColorBrush>
+        <SolidColorBrush x:Key="BgBrush">Black</SolidColorBrush>
+        <SolidColorBrush x:Key="HoldBgBrush">Gold</SolidColorBrush>
+        <SolidColorBrush x:Key="HoldFocusBgBrush">Orange</SolidColorBrush>
+        <SolidColorBrush x:Key="HoldFgBrush">Black</SolidColorBrush>
+        <SolidColorBrush x:Key="PressedBgBrush">Gray</SolidColorBrush>
+        <SolidColorBrush x:Key="ShiftBrush">Cyan</SolidColorBrush>
+
+        <LinearGradientBrush x:Key="DefaultKeyBgBrush" TransformOrigin="50%,50%" StartPoint="15%,0%" EndPoint="15%,100%">
+            <LinearGradientBrush.GradientStops>
+                <GradientStop Color="Silver" Offset="0" />
+                <GradientStop Color="DimGray" Offset="0.09" />
+                <GradientStop Color="#444444" Offset="0.8" />
+                <GradientStop Color="#444444" Offset="1" />
+            </LinearGradientBrush.GradientStops>
+        </LinearGradientBrush>
+        <LinearGradientBrush x:Key="SpecialKeyBgBrush" TransformOrigin="50%,50%" StartPoint="15%,0%" EndPoint="15%,100%">
+            <LinearGradientBrush.GradientStops>
+                <GradientStop Color="DimGray" Offset="0" />
+                <GradientStop Color="#333333" Offset="0.07" />
+                <GradientStop Color="#333333" Offset="0.8" />
+                <GradientStop Color="#222222" Offset="1" />
+            </LinearGradientBrush.GradientStops>
+        </LinearGradientBrush>
+    </UserControl.Resources>
+    <UserControl.Styles>
+        <!--  KEY LOCATION  -->
+        <Style Selector="ItemsControl#KeyItemsControl ContentPresenter"
+               x:DataType="local:KeyViewModel">
+            <Setter Property="Canvas.Left"
+                    Value="{Binding X}" />
+            <Setter Property="Canvas.Top"
+                    Value="{Binding Y}" />
+            <Setter Property="Width"
+                    Value="{Binding Width}" />
+            <Setter Property="Height"
+                    Value="{Binding Height}" />
+        </Style>
+
+        <!--  KEY FOREGROUND  -->
+
+        <Style Selector="local|KeyView TextBlock">
+            <Setter Property="Foreground"
+                    Value="{DynamicResource FgBrush}" />
+        </Style>
+        <Style Selector="local|KeyView TextBlock#SecondaryKeyTextBlock">
+            <Setter Property="Foreground"
+                    Value="{DynamicResource FgBrush2}" />
+        </Style>
+
+        <Style Selector="local|KeyView.shift TextBlock">
+            <Setter Property="Foreground"
+                    Value="{DynamicResource ShiftBrush}" />
+        </Style>
+      <Style Selector="local|KeyView.popup-key:not(.down) TextBlock">
+        <Setter Property="Foreground"
+                Value="{DynamicResource HoldFgBrush}" />
+      </Style>
+
+        <!--  KEY BACKGROUND  -->
+        <Style Selector="local|KeyView Border#KeyBgRect">
+            <Setter Property="Background"
+                    Value="{DynamicResource DefaultKeyBgBrush}" />
+        </Style>
+        <Style Selector="local|KeyView:not(.popup-key):not(.down) Border#KeyBgRect">
+            <!--<Setter Property="BoxShadow"
+                    Value="0 0.5 0 0 whitesmoke" />-->
+        </Style>
+        <Style Selector="local|KeyView.special:not(.down) Border#KeyBgRect">
+            <Setter Property="Background"
+                    Value="{DynamicResource SpecialKeyBgBrush}" />
+        </Style>
+        <Style Selector="local|KeyView.down Border#KeyBgRect">
+            <Setter Property="Background"
+                    Value="{DynamicResource PressedBgBrush}" />
+        </Style>
+        <Style Selector="local|KeyView.shift-lock:not(.down) Border#KeyBgRect">
+            <Setter Property="Background"
+                    Value="{DynamicResource ShiftBrush}" />
+        </Style>
+        <Style Selector="local|KeyView.popup-key:not(.down) Border#KeyBgRect">
+            <Setter Property="Background"
+                    Value="{DynamicResource HoldBgBrush}" />
+        </Style>
+        <Style Selector="local|KeyView.hold-focus-key:not(.down) Border#KeyBgRect">
+            <Setter Property="Background"
+                    Value="{DynamicResource HoldFocusBgBrush}" />
+        </Style>
+
+        <!--  DEFAULT TEXT LAYOUTS  -->
+
+        <Style Selector="ItemsControl#KeyItemsControl TextBlock#KeyTextBlock">
+            <Setter Property="HorizontalAlignment"
+                    Value="Center" />
+            <Setter Property="VerticalAlignment"
+                    Value="Center" />
+        </Style>
+        <Style Selector="ItemsControl#KeyItemsControl TextBlock#SecondaryKeyTextBlock">
+            <Setter Property="HorizontalAlignment"
+                    Value="Right" />
+            <Setter Property="VerticalAlignment"
+                    Value="Top" />
+        </Style>
+    </UserControl.Styles>
+    <Grid RowDefinitions="Auto,*">
+
+        <!--  KEYBOARD  -->
+
+        <ItemsControl x:Name="KeyItemsControl"
+                      ClipToBounds="False"
+                      Grid.Row="1"
+                      HorizontalAlignment="Left"
+                      VerticalAlignment="Top"
+                      Width="{Binding KeyboardWidth}"
+                      Height="{Binding KeyboardHeight}"
+                      Background="{DynamicResource BgBrush}"
+                      ItemsSource="{Binding Keys}">
+            <ItemsControl.ItemTemplate>
+                <DataTemplate x:DataType="local:KeyViewModel">
+                    <local:KeyView IsVisible="{Binding IsVisible}"
+                                   Classes.down="{Binding IsPressed}"
+                                   Classes.hold-focus-key="{Binding IsActiveKey}"
+                                   Classes.popup-key="{Binding IsPopupKey}"
+                                   Classes.special="{Binding IsSpecial}"
+                                   Classes.shift="{Binding IsShiftOn}"
+                                   Classes.shift-lock="{Binding IsShiftLock}">
+                        <!--<local:KeyView.RenderTransform>
+                        <TranslateTransform X="{Binding OuterTranslateX, FallbackValue=0, TargetNullValue=0}" />
+                    </local:KeyView.RenderTransform>-->
+                    </local:KeyView>
+                </DataTemplate>
+            </ItemsControl.ItemTemplate>
+            <ItemsControl.ItemsPanel>
+                <ItemsPanelTemplate>
+                    <Canvas HorizontalAlignment="Stretch"
+                            VerticalAlignment="Stretch" />
+                </ItemsPanelTemplate>
+            </ItemsControl.ItemsPanel>
+        </ItemsControl>
+    </Grid>
+</UserControl>

@@ -34,6 +34,7 @@ var UiStrings = {
 	EditorNextTemplateLabel: `அடுத்த வார்ப்புரு`,
 	EditorPasteButtonAppendBeginLabel: `சேர்க்க ...`,
 	EditorPasteButtonLabel: `ஒட்டவும்`,
+	EditorPasteButtonLabelMobile: `நகலெடு`,
 	EditorPasteTemplateWatermark: `பேஸ்ட் உரையை உள்ளிடவும் ...`,
 	EditorPrevTemplateLabel: `முந்தைய வார்ப்புரு`,
 	EditorRegExLabel: ` வழக்கமான வெளிப்பாடு`,

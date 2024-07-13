@@ -3,40 +3,42 @@
         xmlns:sys="clr-namespace:System;assembly=mscorlib"
         xmlns:converters="using:Avalonia.Controls.Converters"
         xmlns:local="using:MonkeyPaste.Avalonia">
+  <Design.PreviewWith>
+    <Border Padding="60">
+      <StackPanel Spacing="20">
+        <SplitButton Content="SplitButton">
+          <SplitButton.Flyout>
+            <Flyout>Hello</Flyout>
+          </SplitButton.Flyout>
+        </SplitButton>
+        <SplitButton CornerRadius="16"
+                     Content="Rounded">
+          <SplitButton.Flyout>
+            <Flyout>Hello</Flyout>
+          </SplitButton.Flyout>
+        </SplitButton>
+        <SplitButton IsEnabled="False">Disabled</SplitButton>
+        <ToggleSplitButton Content="ToggleSplitButton">
+          <ToggleSplitButton.Flyout>
+            <Flyout>Hello</Flyout>
+          </ToggleSplitButton.Flyout>
+        </ToggleSplitButton>
+        <ToggleSplitButton Content="Checked"
+                           IsChecked="True">
+          <ToggleSplitButton.Flyout>
+            <Flyout>Hello</Flyout>
+          </ToggleSplitButton.Flyout>
+        </ToggleSplitButton>
+        <ToggleSplitButton Content="Checked Disabled"
+                           IsChecked="True"
+                           IsEnabled="False" />
+        <ToggleSwitch Content="Test"/>
+        <ToggleSwitch Content="Test"/>
+      </StackPanel>
+    </Border>
+  </Design.PreviewWith>
     <Styles.Resources>
         <ResourceDictionary>
-            <Design.PreviewWith>
-                <Border Padding="60">
-                    <StackPanel Spacing="20">
-                        <SplitButton Content="SplitButton">
-                            <SplitButton.Flyout>
-                                <Flyout>Hello</Flyout>
-                            </SplitButton.Flyout>
-                        </SplitButton>
-                        <SplitButton CornerRadius="16"
-                                     Content="Rounded">
-                            <SplitButton.Flyout>
-                                <Flyout>Hello</Flyout>
-                            </SplitButton.Flyout>
-                        </SplitButton>
-                        <SplitButton IsEnabled="False">Disabled</SplitButton>
-                        <ToggleSplitButton Content="ToggleSplitButton">
-                            <ToggleSplitButton.Flyout>
-                                <Flyout>Hello</Flyout>
-                            </ToggleSplitButton.Flyout>
-                        </ToggleSplitButton>
-                        <ToggleSplitButton Content="Checked"
-                                           IsChecked="True">
-                            <ToggleSplitButton.Flyout>
-                                <Flyout>Hello</Flyout>
-                            </ToggleSplitButton.Flyout>
-                        </ToggleSplitButton>
-                        <ToggleSplitButton Content="Checked Disabled"
-                                           IsChecked="True"
-                                           IsEnabled="False" />
-                    </StackPanel>
-                </Border>
-            </Design.PreviewWith>
 
             <x:Double x:Key="SplitButtonPrimaryButtonSize">32</x:Double>
             <x:Double x:Key="SplitButtonSecondaryButtonSize">32</x:Double>

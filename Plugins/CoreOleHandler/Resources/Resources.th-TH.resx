@@ -222,4 +222,10 @@
   <data name="ToFileExtHint" xml:space="preserve">
     <value>ส่วนขยายไฟล์ที่ใช้เมื่อใช้ '{0}' เพื่อสร้างไฟล์ตามความต้องการ</value>
   </data>
+  <data name="RtfParaTagNameHint" xml:space="preserve">
+    <value>สำหรับรหัสที่เน้นการใช้แท็ก 'pre' มิฉะนั้น RTF จะถือว่าเป็นข้อความที่สมบูรณ์แบบปกติ</value>
+  </data>
+  <data name="RtfParaTagNameLabel" xml:space="preserve">
+    <value>แท็กย่อหน้า HTML</value>
+  </data>
 </root>

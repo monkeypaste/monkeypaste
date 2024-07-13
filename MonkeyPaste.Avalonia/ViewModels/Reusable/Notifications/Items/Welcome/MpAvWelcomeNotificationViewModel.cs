@@ -35,7 +35,7 @@ namespace MonkeyPaste.Avalonia {
             bool will_show =
                 forceShow ||
                 !MpAvPrefViewModel.Instance.IsWelcomeComplete;
-#if !DESKTOP
+#if MOBILE_OR_WINDOWED
             will_show = false;
             MpAvPrefViewModel.Instance.IsWelcomeComplete = true;
 #endif

@@ -1609,6 +1609,15 @@ namespace MonkeyPaste.Avalonia {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Modal Settings Frame Menu.
+        /// </summary>
+        public static string MpNotificationType_ModalSettingsFrameMenu {
+            get {
+                return ResourceManager.GetString("MpNotificationType_ModalSettingsFrameMenu", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Modal Shutdown Later.
         /// </summary>
         public static string MpNotificationType_ModalShutdownLater {
@@ -2437,6 +2446,15 @@ namespace MonkeyPaste.Avalonia {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Enter Key Action.
+        /// </summary>
+        public static string MpShortcutType_EnterKeyAction {
+            get {
+                return ResourceManager.GetString("MpShortcutType_EnterKeyAction", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Exit Application.
         /// </summary>
         public static string MpShortcutType_ExitApplication {
@@ -2779,6 +2797,15 @@ namespace MonkeyPaste.Avalonia {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Toggle Content Wrap.
+        /// </summary>
+        public static string MpShortcutType_ToggleContentWrap {
+            get {
+                return ResourceManager.GetString("MpShortcutType_ToggleContentWrap", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Toggle Filter Menu Visible.
         /// </summary>
         public static string MpShortcutType_ToggleFilterMenuVisible {
@@ -2838,6 +2865,15 @@ namespace MonkeyPaste.Avalonia {
         public static string MpShortcutType_ToggleRightClickPasteMode {
             get {
                 return ResourceManager.GetString("MpShortcutType_ToggleRightClickPasteMode", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Toggle Xaml Hot Reload.
+        /// </summary>
+        public static string MpShortcutType_ToggleXamlHotReload {
+            get {
+                return ResourceManager.GetString("MpShortcutType_ToggleXamlHotReload", resourceCulture);
             }
         }
         

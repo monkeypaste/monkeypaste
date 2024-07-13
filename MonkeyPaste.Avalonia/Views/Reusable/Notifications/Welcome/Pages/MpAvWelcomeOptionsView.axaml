@@ -50,9 +50,9 @@
                     Value="Transparent" />
         </Style>
         <Style Selector="Border.unlim">
-            <!--<Setter Property="local:MpAvIsHoveringExtension.IsBorderFollowEnabled"
+            <!--<Setter Property="local:MpAvBorderFollowExtension.IsBorderFollowEnabled"
                     Value="True" />-->
-            <Setter Property="local:MpAvIsHoveringExtension.IsBorderTimerEnabled"
+            <Setter Property="local:MpAvBorderFollowExtension.IsBorderTimerEnabled"
                     Value="True" />
             <Setter Property="BorderBrush"
                     Value="{StaticResource ThemedRainbowBrush}" />
@@ -263,7 +263,7 @@
                       Grid.Row="3"
                       DataContext="{x:Static local:MpAvWelcomeNotificationViewModel.Instance}"
                       x:DataType="local:MpAvWelcomeNotificationViewModel"
-                      Classes="defaultButton"
+                      Classes="default-button"
                       Foreground="Black"
                       FontSize="16"
                       HorizontalAlignment="Center"
@@ -309,7 +309,7 @@
                                     BorderThickness="2.5"
                                     CornerRadius="7"
                                     Margin="15">
-                                <RadioButton Classes="defaultButton optButton effectTrans"
+                                <RadioButton Classes="default-button optButton effectTrans"
                                              Classes.busy="{Binding IsBusy}"
                                              Theme="{StaticResource SwitchlessRadioButton}"
                                              IsEnabled="{Binding IsEnabled}"

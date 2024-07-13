@@ -46,7 +46,7 @@ namespace MonkeyPaste.Avalonia {
         public string Body { get; set; } = string.Empty;
 
         public string Detail {
-            get => $"{(int)(PercentLoaded * 100.0)}%";
+            get => ShowSpinner ? UiStrings.CommonBusyLabel : $"{(int)Math.Min(100,PercentLoaded * 100.0)}%";
             set => throw new NotImplementedException();
         }
 
@@ -128,7 +128,11 @@ namespace MonkeyPaste.Avalonia {
             // init cefnet (if needed) BEFORE window creation
             // or chromium child process stuff will re-initialize (and show loader again)
             await LoadItemsAsync(BaseItems);
-            await Mp.Services.NotificationBuilder.ShowLoaderNotificationAsync(this);
+            await Mp.Services.NotificationBuilder.ShowNotificationAsync(
+                title: this.Title,
+                notificationType: MpNotificationType.Loader,
+                maxShowTimeMs: -1,
+                loader: this);
         }
         public async Task BeginLoaderAsync() {
             await LoadItemsAsync(CoreItems);
@@ -161,7 +165,6 @@ namespace MonkeyPaste.Avalonia {
         #region Protected Methods
 
         private void CreateLoaderItems() {
-            //#if DESKTOP
             BaseItems.AddRange(new[] {
 #if MOBILE
                 new MpAvLoaderItemViewModel(typeof(MpConsole),UiStrings.LoaderLoggerLabel, [Mp.Services.PlatformInfo.IsTraceEnabled ? Mp.Services.PlatformInfo.LogPath : null, App.HasStartupArg(App.WAIT_FOR_DEBUG_ARG)]),
@@ -169,9 +172,8 @@ namespace MonkeyPaste.Avalonia {
                 new MpAvLoaderItemViewModel(typeof(MpAvSystemTray), UiStrings.LoaderSysTrayLabel),
                 new MpAvLoaderItemViewModel(typeof(MpAvThemeViewModel),UiStrings.LoaderThemeLabel),
                 new MpAvLoaderItemViewModel(typeof(MpDb), UiStrings.LoaderDataLabel),
-                new MpAvLoaderItemViewModel(typeof(MpAvAccountViewModel), UiStrings.LoaderAccountLabel),
+                //new MpAvLoaderItemViewModel(typeof(MpAvAccountViewModel), UiStrings.LoaderAccountLabel),
             }.ToList());
-            //#endif
 
             CoreItems.AddRange(
                new List<MpAvLoaderItemViewModel>() {
@@ -181,9 +183,6 @@ namespace MonkeyPaste.Avalonia {
                     new MpAvLoaderItemViewModel(typeof(MpDataFormatRegistrar),UiStrings.LoaderClipboardLabel, Mp.Services.DataObjectRegistrar),
                     //new MpAvLoaderItemViewModel(typeof(MpAvTemplateModelHelper), "Templates"),
                     new MpAvLoaderItemViewModel(typeof(MpPluginLoader), UiStrings.LoaderAnalyzersLabel),
-#if WINDOWS
-		new MpAvLoaderItemViewModel(typeof(MpAvTaskbarViewModel), UiStrings.LoaderTaskbarLabel),  
-#endif
                     new MpAvLoaderItemViewModel(typeof(MpAvSoundPlayerViewModel), UiStrings.LoaderSoundLabel),
                     new MpAvLoaderItemViewModel(typeof(MpAvIconCollectionViewModel), UiStrings.LoaderIconsLabel),
                     new MpAvLoaderItemViewModel(typeof(MpAvAppCollectionViewModel), UiStrings.LoaderAppLabel),
@@ -202,27 +201,17 @@ namespace MonkeyPaste.Avalonia {
                     new MpAvLoaderItemViewModel(typeof(MpAvExternalPasteHandler), UiStrings.LoaderPasteLabel),
                     //new MpAvLoaderItemViewModel(typeof(MpDataModelProvider), "Querying"),
                     new MpAvLoaderItemViewModel(typeof(MpAvTriggerCollectionViewModel), UiStrings.LoaderTriggersLabel),
-                    new MpAvLoaderItemViewModel(typeof(MpAvExternalDropWindowViewModel), UiStrings.LoaderDropWidgetLabel),
-                    new MpAvLoaderItemViewModel(typeof(MpAvShortcutCollectionViewModel), UiStrings.LoaderShortcutsLabel),
+                    //new MpAvLoaderItemViewModel(typeof(MpAvExternalDropWindowViewModel), UiStrings.LoaderDropWidgetLabel),
+#if DESKTOP
+            		new MpAvLoaderItemViewModel(typeof(MpAvShortcutCollectionViewModel), UiStrings.LoaderShortcutsLabel),  
+#endif
                }); ;
 
-            if (Mp.Services.PlatformInfo.IsDesktop) {
-                PlatformItems.AddRange(
+            PlatformItems.AddRange(
                    new List<MpAvLoaderItemViewModel>() {
                         new MpAvLoaderItemViewModel(typeof(MpAvMenuView),  UiStrings.LoaderMainWindowLabel),
-                        new MpAvLoaderItemViewModel(typeof(MpAvMainView), UiStrings.LoaderMainWindowLabel),
                         new MpAvLoaderItemViewModel(typeof(MpAvMainWindowViewModel),  UiStrings.LoaderMainWindowLabel)
                    });
-            } else {
-                PlatformItems.AddRange(
-                   new List<MpAvLoaderItemViewModel>() {
-                        new MpAvLoaderItemViewModel(typeof(MpAvMainView),  UiStrings.LoaderMainWindowLabel),
-#if OUTSYS_WV || CEFNET_WV || MOBILE || SUGAR_WV
-		                new MpAvLoaderItemViewModel(typeof(MpAvPlainHtmlConverter), UiStrings.LoaderConvertersLabel),  
-#endif
-                        new MpAvLoaderItemViewModel(typeof(MpAvMainWindowViewModel),  UiStrings.LoaderMainWindowLabel)
-                   });
-            }
         }
 
         private async Task LoadItemAsync(MpAvLoaderItemViewModel item, int index, bool affectsCount) {
@@ -263,9 +252,7 @@ namespace MonkeyPaste.Avalonia {
             switch (e.PropertyName) {
                 case nameof(IsCoreLoaded):
                     OnPropertyChanged(nameof(ShowSpinner));
-                    if (ShowSpinner) {
-
-                    }
+                    OnPropertyChanged(nameof(Detail));
                     break;
             }
         }

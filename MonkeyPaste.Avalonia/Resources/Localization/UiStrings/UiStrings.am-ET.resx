@@ -2996,4 +2996,49 @@
   <data name="DonateLabel" xml:space="preserve">
     <value>ለገሱ</value>
   </data>
+  <data name="MobileCopiedNtfText" xml:space="preserve">
+    <value>ወደ ቅንጥብ ሰሌዳ ተቀድቷል።</value>
+  </data>
+  <data name="PinTraySidebarLabel" xml:space="preserve">
+    <value>ተሰክቷል።</value>
+  </data>
+  <data name="QueryTraySidebarLabel" xml:space="preserve">
+    <value>መጠይቅ</value>
+  </data>
+  <data name="PluginBrowserFormattedWindowTitle" xml:space="preserve">
+    <value>ተሰኪ አሳሽ - {0}</value>
+  </data>
+  <data name="PluginBrowserWindowTitle" xml:space="preserve">
+    <value>ተሰኪ አሳሽ</value>
+  </data>
+  <data name="ClipboardSetMessage" xml:space="preserve">
+    <value>የቅንጥብ ሰሌዳ አዘጋጅ</value>
+  </data>
+  <data name="AddNewActionLabel" xml:space="preserve">
+    <value>አዲስ አስገባ</value>
+  </data>
+  <data name="EditorPasteButtonLabelMobile" xml:space="preserve">
+    <value>ቅጂ</value>
+  </data>
+  <data name="PrefSyntaxThemeHint" xml:space="preserve">
+    <value>በጽሑፍ ቅንጥቦች ውስጥ ለኮድ ብሎኮች ጥቅም ላይ የዋለው ጭብጥ።</value>
+  </data>
+  <data name="PrefSyntaxThemeLabel" xml:space="preserve">
+    <value>የአገባብ ጭብጥ</value>
+  </data>
+  <data name="PrefCodeFontLabel" xml:space="preserve">
+    <value>አገባብ</value>
+  </data>
+  <data name="CommonViewLabel" xml:space="preserve">
+    <value>እይታ</value>
+  </data>
+  <data name="WrapTextMenuLabel" xml:space="preserve">
+    <value>ጥቅል ጽሑፍ</value>
+  </data>
+  <data name="ClipAssignShortcutLabel" xml:space="preserve">
+    <value>አቋራጭ መድብ...</value>
+  </data>
+  <data name="ClipUpdateShortcutLabel" xml:space="preserve">
+    <value>አቋራጭ አዘምን...</value>
+  </data>
 </root>

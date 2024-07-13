@@ -2996,4 +2996,49 @@
   <data name="DonateLabel" xml:space="preserve">
     <value>ದಾನ ಮಾಡು</value>
   </data>
+  <data name="MobileCopiedNtfText" xml:space="preserve">
+    <value>ಕ್ಲಿಪ್‌ಬೋರ್ಡ್‌ಗೆ ನಕಲಿಸಲಾಗಿದೆ</value>
+  </data>
+  <data name="PinTraySidebarLabel" xml:space="preserve">
+    <value>ಪಿನ್ -ಹಾಕಿದ</value>
+  </data>
+  <data name="QueryTraySidebarLabel" xml:space="preserve">
+    <value>ಪ್ರಶ್ನಿಸು</value>
+  </data>
+  <data name="PluginBrowserFormattedWindowTitle" xml:space="preserve">
+    <value>ಪ್ಲಗಿನ್ ಬ್ರೌಸರ್ - {0}</value>
+  </data>
+  <data name="PluginBrowserWindowTitle" xml:space="preserve">
+    <value>ಪ್ಲಗಿನ್ ಬ್ರೌಸರ್</value>
+  </data>
+  <data name="ClipboardSetMessage" xml:space="preserve">
+    <value>ಕ್ಲಿಪ್‌ಬೋರ್ಡ್ ಸೆಟ್</value>
+  </data>
+  <data name="AddNewActionLabel" xml:space="preserve">
+    <value>ಹೊಸದನ್ನು ಸೇರಿಸಿ</value>
+  </data>
+  <data name="EditorPasteButtonLabelMobile" xml:space="preserve">
+    <value>ನಕಲು</value>
+  </data>
+  <data name="PrefSyntaxThemeHint" xml:space="preserve">
+    <value>ಪಠ್ಯ ತುಣುಕುಗಳಲ್ಲಿ ಪತ್ತೆಯಾದ ಕೋಡ್‌ನ ಬ್ಲಾಕ್‌ಗಳಿಗೆ ಬಳಸುವ ಥೀಮ್.</value>
+  </data>
+  <data name="PrefSyntaxThemeLabel" xml:space="preserve">
+    <value>ಸಿಂಟ್ಯಾಕ್ಸ್ ಥೀಮ್</value>
+  </data>
+  <data name="PrefCodeFontLabel" xml:space="preserve">
+    <value>ಅಂತರ್ರಚನೆ</value>
+  </data>
+  <data name="CommonViewLabel" xml:space="preserve">
+    <value>ನೋಟ</value>
+  </data>
+  <data name="WrapTextMenuLabel" xml:space="preserve">
+    <value>ಪಠ್ಯವನ್ನು ಸುತ್ತು</value>
+  </data>
+  <data name="ClipAssignShortcutLabel" xml:space="preserve">
+    <value>ಶಾರ್ಟ್‌ಕಟ್ ಅನ್ನು ನಿಯೋಜಿಸಿ ...</value>
+  </data>
+  <data name="ClipUpdateShortcutLabel" xml:space="preserve">
+    <value>ಶಾರ್ಟ್‌ಕಟ್ ನವೀಕರಿಸಿ ...</value>
+  </data>
 </root>

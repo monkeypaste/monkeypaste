@@ -2996,4 +2996,49 @@ Các phím tắt toàn cầu hiện có thể được bật trong menu khay h�
   <data name="DonateLabel" xml:space="preserve">
     <value>Quyên tặng</value>
   </data>
+  <data name="MobileCopiedNtfText" xml:space="preserve">
+    <value>Sao chép vào clipboard</value>
+  </data>
+  <data name="PinTraySidebarLabel" xml:space="preserve">
+    <value>Ghim</value>
+  </data>
+  <data name="QueryTraySidebarLabel" xml:space="preserve">
+    <value>Truy vấn</value>
+  </data>
+  <data name="PluginBrowserFormattedWindowTitle" xml:space="preserve">
+    <value>Trình duyệt plugin - {0}</value>
+  </data>
+  <data name="PluginBrowserWindowTitle" xml:space="preserve">
+    <value>Trình duyệt plugin</value>
+  </data>
+  <data name="ClipboardSetMessage" xml:space="preserve">
+    <value>Bộ tạm</value>
+  </data>
+  <data name="AddNewActionLabel" xml:space="preserve">
+    <value>Thêm mới</value>
+  </data>
+  <data name="EditorPasteButtonLabelMobile" xml:space="preserve">
+    <value>Sao chép</value>
+  </data>
+  <data name="PrefSyntaxThemeHint" xml:space="preserve">
+    <value>Chủ đề được sử dụng cho các khối mã được phát hiện trong các clip văn bản.</value>
+  </data>
+  <data name="PrefSyntaxThemeLabel" xml:space="preserve">
+    <value>Chủ đề cú pháp</value>
+  </data>
+  <data name="PrefCodeFontLabel" xml:space="preserve">
+    <value>Cú pháp</value>
+  </data>
+  <data name="CommonViewLabel" xml:space="preserve">
+    <value>Xem</value>
+  </data>
+  <data name="WrapTextMenuLabel" xml:space="preserve">
+    <value>Bao text</value>
+  </data>
+  <data name="ClipAssignShortcutLabel" xml:space="preserve">
+    <value>Gán phím tắt ...</value>
+  </data>
+  <data name="ClipUpdateShortcutLabel" xml:space="preserve">
+    <value>Cập nhật phím tắt ...</value>
+  </data>
 </root>

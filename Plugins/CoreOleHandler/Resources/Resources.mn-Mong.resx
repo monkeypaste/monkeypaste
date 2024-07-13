@@ -222,4 +222,10 @@
   <data name="ToFileExtHint" xml:space="preserve">
     <value>'{0 {0}' нь эрэлт хэрэгцээг бий болгоход ашигласан файлын өргөтгөл.</value>
   </data>
+  <data name="RtfParaTagNameHint" xml:space="preserve">
+    <value>Кодын хувьд тодруулсан кодыг 'Pre' шошго ашиглана уу.</value>
+  </data>
+  <data name="RtfParaTagNameLabel" xml:space="preserve">
+    <value>HTML параграфын шошго</value>
+  </data>
 </root>

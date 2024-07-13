@@ -1565,6 +1565,15 @@ namespace MonkeyPaste.Avalonia {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Add New.
+        /// </summary>
+        public static string AddNewActionLabel {
+            get {
+                return ResourceManager.GetString("AddNewActionLabel", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Url already exists: &apos;{0}&apos;.
         /// </summary>
         public static string AddUrlNtfDupText {
@@ -1925,6 +1934,15 @@ namespace MonkeyPaste.Avalonia {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Assign Shortcut....
+        /// </summary>
+        public static string ClipAssignShortcutLabel {
+            get {
+                return ResourceManager.GetString("ClipAssignShortcutLabel", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Clipboard listener disabled.
         /// </summary>
         public static string ClipboardListenerDisabledText {
@@ -1975,6 +1993,15 @@ namespace MonkeyPaste.Avalonia {
         public static string ClipboardPluginHandlersHeader {
             get {
                 return ResourceManager.GetString("ClipboardPluginHandlersHeader", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Clipboard Set.
+        /// </summary>
+        public static string ClipboardSetMessage {
+            get {
+                return ResourceManager.GetString("ClipboardSetMessage", resourceCulture);
             }
         }
         
@@ -2329,6 +2356,15 @@ namespace MonkeyPaste.Avalonia {
         public static string ClipTrayDeleteAllMessageText {
             get {
                 return ResourceManager.GetString("ClipTrayDeleteAllMessageText", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Update Shortcut....
+        /// </summary>
+        public static string ClipUpdateShortcutLabel {
+            get {
+                return ResourceManager.GetString("ClipUpdateShortcutLabel", resourceCulture);
             }
         }
         
@@ -3053,6 +3089,15 @@ namespace MonkeyPaste.Avalonia {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to View.
+        /// </summary>
+        public static string CommonViewLabel {
+            get {
+                return ResourceManager.GetString("CommonViewLabel", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Please wait....
         /// </summary>
         public static string CommonWaitLabel {
@@ -3519,6 +3564,15 @@ namespace MonkeyPaste.Avalonia {
         public static string EditorPasteButtonLabel {
             get {
                 return ResourceManager.GetString("EditorPasteButtonLabel", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Copy.
+        /// </summary>
+        public static string EditorPasteButtonLabelMobile {
+            get {
+                return ResourceManager.GetString("EditorPasteButtonLabelMobile", resourceCulture);
             }
         }
         
@@ -4543,6 +4597,15 @@ namespace MonkeyPaste.Avalonia {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Copied to clipboard.
+        /// </summary>
+        public static string MobileCopiedNtfText {
+            get {
+                return ResourceManager.GetString("MobileCopiedNtfText", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Auto Copy Selection Mode: {0}.
         /// </summary>
         public static string MouseModeAutoCopyNtfText {
@@ -4988,6 +5051,15 @@ namespace MonkeyPaste.Avalonia {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Pinned.
+        /// </summary>
+        public static string PinTraySidebarLabel {
+            get {
+                return ResourceManager.GetString("PinTraySidebarLabel", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Clear.
         /// </summary>
         public static string PinTrayUnpinAllLabel {
@@ -5047,6 +5119,15 @@ namespace MonkeyPaste.Avalonia {
         public static string PluginBrowserDonateLabel {
             get {
                 return ResourceManager.GetString("PluginBrowserDonateLabel", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Plugin Browser - {0}.
+        /// </summary>
+        public static string PluginBrowserFormattedWindowTitle {
+            get {
+                return ResourceManager.GetString("PluginBrowserFormattedWindowTitle", resourceCulture);
             }
         }
         
@@ -5182,6 +5263,15 @@ namespace MonkeyPaste.Avalonia {
         public static string PluginBrowserVersionLabel {
             get {
                 return ResourceManager.GetString("PluginBrowserVersionLabel", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Plugin Browser.
+        /// </summary>
+        public static string PluginBrowserWindowTitle {
+            get {
+                return ResourceManager.GetString("PluginBrowserWindowTitle", resourceCulture);
             }
         }
         
@@ -5445,6 +5535,15 @@ namespace MonkeyPaste.Avalonia {
         public static string PrefClearSearchesLabel {
             get {
                 return ResourceManager.GetString("PrefClearSearchesLabel", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Syntax.
+        /// </summary>
+        public static string PrefCodeFontLabel {
+            get {
+                return ResourceManager.GetString("PrefCodeFontLabel", resourceCulture);
             }
         }
         
@@ -6099,6 +6198,24 @@ namespace MonkeyPaste.Avalonia {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to The theme used for blocks of code detected in text clips..
+        /// </summary>
+        public static string PrefSyntaxThemeHint {
+            get {
+                return ResourceManager.GetString("PrefSyntaxThemeHint", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Syntax Theme.
+        /// </summary>
+        public static string PrefSyntaxThemeLabel {
+            get {
+                return ResourceManager.GetString("PrefSyntaxThemeLabel", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Caution! Other palette colors are chosen using math not eyes! So be aware some color and style combinations may not have proper contrast for readability..
         /// </summary>
         public static string PrefThemeColorHint {
@@ -6243,6 +6360,15 @@ namespace MonkeyPaste.Avalonia {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Query.
+        /// </summary>
+        public static string QueryTraySidebarLabel {
+            get {
+                return ResourceManager.GetString("QueryTraySidebarLabel", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to There was a problem. You need to manually restart the application..
         /// </summary>
         public static string RestarterErrorNtfText {
@@ -6257,6 +6383,15 @@ namespace MonkeyPaste.Avalonia {
         public static string RestoreTrashNtfText {
             get {
                 return ResourceManager.GetString("RestoreTrashNtfText", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Scale Image.
+        /// </summary>
+        public static string ScaleImageLabel {
+            get {
+                return ResourceManager.GetString("ScaleImageLabel", resourceCulture);
             }
         }
         
@@ -7844,6 +7979,24 @@ namespace MonkeyPaste.Avalonia {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Unscale Image.
+        /// </summary>
+        public static string UnscaleImageLabel {
+            get {
+                return ResourceManager.GetString("UnscaleImageLabel", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Unwrap Text.
+        /// </summary>
+        public static string UnwrapTextLabel {
+            get {
+                return ResourceManager.GetString("UnwrapTextLabel", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Do you really want to goto &apos;{0}&apos;?.
         /// </summary>
         public static string UrlNavConfirmText {
@@ -8305,6 +8458,15 @@ namespace MonkeyPaste.Avalonia {
         public static string WelcomeTranslatedTitle {
             get {
                 return ResourceManager.GetString("WelcomeTranslatedTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Wrap Text.
+        /// </summary>
+        public static string WrapTextMenuLabel {
+            get {
+                return ResourceManager.GetString("WrapTextMenuLabel", resourceCulture);
             }
         }
     }

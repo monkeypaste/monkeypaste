@@ -1,0 +1,263 @@
+<local:MpAvUserControl xmlns="https://github.com/avaloniaui"
+                       xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                       xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+                       xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+                       xmlns:sys="clr-namespace:System;assembly=mscorlib"
+                       xmlns:local="using:MonkeyPaste.Avalonia"
+                       xmlns:pcl="using:MonkeyPaste"
+                       x:DataType="local:MpAvClipTileViewModel"
+                       x:TypeArguments="local:MpAvClipTileViewModel"
+                       x:CompileBindings="True"
+                       mc:Ignorable="d"
+                       d:DesignWidth="800"
+                       d:DesignHeight="450"
+                       x:Class="MonkeyPaste.Avalonia.MpAvClipTileCornerButtonsView">
+    <local:MpAvUserControl.Styles>
+        <Style Selector=":is(Button)">
+            <!--<Setter Property="local:MpAvPointerCommandExtension.IsEnabled"
+                    Value="True" />
+            <Setter Property="local:MpAvPointerCommandExtension.DefaultRoutingStrategy"
+                    Value="Tunnel" />-->
+            <!--<Setter Property="local:MpAvPointerCommandExtension.DefaultIsEventHandled"
+                    Value="True" />-->
+            <Setter Property="Padding"
+                    Value="0" />
+        </Style>
+        <Style Selector=":is(Button) /template/ ContentPresenter">
+            <Setter Property="Padding"
+                    Value="0" />
+        </Style>
+
+        <!--  BUTTON PLACEMENT  -->
+        <Style Selector=":is(Button).top">
+            <Setter Property="VerticalAlignment"
+                    Value="Top" />
+        </Style>
+        <Style Selector=":is(Button).bottom">
+            <Setter Property="VerticalAlignment"
+                    Value="Bottom" />
+        </Style>
+
+        <Style Selector=":is(Button).left">
+            <Setter Property="HorizontalAlignment"
+                    Value="Left" />
+        </Style>
+        <Style Selector=":is(Button).right">
+            <Setter Property="HorizontalAlignment"
+                    Value="Right" />
+        </Style>
+
+        <!--  BUTTON ICONS  -->
+
+        <Style Selector=":is(Button).cornerButton local|MpAvTintedImage">
+            <Setter Property="Width"
+                    Value="10" />
+            <Setter Property="Height"
+                    Value="10" />
+        </Style>
+
+        <!--  BUTTON ICONS TINT  -->
+
+
+        <Style Selector=":is(Button).cornerButton.top local|MpAvTintedImage">
+            <Setter Property="Tint"
+                    Value="{DynamicResource ThemeInteractiveColor}" />
+        </Style>
+
+        <Style Selector=":is(Button).cornerButton.top:pointerover local|MpAvTintedImage">
+            <Setter Property="Tint"
+                    Value="{DynamicResource ThemeAccent1Color}" />
+        </Style>
+
+        <Style Selector=":is(Button).cornerButton.bottom local|MpAvTintedImage">
+            <Setter Property="Tint"
+                    Value="{Binding $parent[local:MpAvClipBorder].BorderBrush, Converter={x:Static local:MpAvColorToContrastColorConverter.Instance}}" />
+        </Style>
+        <Style Selector=":is(Button).cornerButton.bottom:pointerover local|MpAvTintedImage">
+            <!--<Setter Property="local:MpAvImageTintExtension.Tint"
+                    Value="{Binding $parent[local:MpAvClipBorder].BorderBrush, Converter={x:Static local:MpAvColorToContrastColorConverter.Instance}, ConverterParameter=compliment}" />-->
+            <Setter Property="Tint"
+                    Value="{DynamicResource ThemeAccent5BgColor}" />
+        </Style>
+
+
+        <Style Selector="ToggleButton.cornerButton:checked local|MpAvTintedImage">
+            <Setter Property="Tint"
+                    Value="{DynamicResource ThemeAccent5BgColor}" />
+        </Style>
+
+        <Style Selector="local|MpAvTintedImage.activeHotkey">
+            <Setter Property="Tint"
+                    Value="{DynamicResource ThemeAccent2Color}" />
+        </Style>
+
+        <!--  TL PIN IMAGE  -->
+
+        <Style Selector="ToggleButton#PinTileButton">
+            <Setter Property="RotateTransform.Angle"
+                    Value="0" />
+        </Style>
+
+        <Style Selector="ToggleButton#PinTileButton:pointerover, ToggleButton#PinTileButton:checked">
+            <Setter Property="RotateTransform.Angle"
+                    Value="-45" />
+        </Style>
+
+        <!--  BL WRAP TT  -->
+
+        <Style Selector="ToggleButton#ClipTileToggleWrapButton">
+            <Setter Property="IsVisible"
+                    Value="False" />
+            <Setter Property="ToolTip.Tip"
+                    Value="{x:Null}" />
+        </Style>
+
+        <Style Selector="ToggleButton#ClipTileToggleWrapButton.text">
+            <Setter Property="IsVisible"
+                    Value="True" />
+            <Setter Property="ToolTip.Tip">
+                <Setter.Value>
+                    <Template>
+                        <local:MpAvToolTipView InputGestureText="{Binding ., Converter={x:Static local:MpAvShortcutTypeOrCommandObjToKeyStringConverter.Instance}, ConverterParameter=ToggleContentWrap}"
+                                               ToolTipText="{Binding Source={x:Static local:R.U}, Path=CurrentUiStrings.WrapTextMenuLabel}" />
+                    </Template>
+                </Setter.Value>
+            </Setter>
+        </Style>
+        <Style Selector="ToggleButton#ClipTileToggleWrapButton:checked.text">
+            <Setter Property="ToolTip.Tip">
+                <Setter.Value>
+                    <Template>
+                        <local:MpAvToolTipView InputGestureText="{Binding ., Converter={x:Static local:MpAvShortcutTypeOrCommandObjToKeyStringConverter.Instance}, ConverterParameter=ToggleContentWrap}"
+                                               ToolTipText="{Binding Source={x:Static local:R.U}, Path=CurrentUiStrings.UnwrapTextLabel}" />
+                    </Template>
+                </Setter.Value>
+            </Setter>
+        </Style>
+        <Style Selector="ToggleButton#ClipTileToggleWrapButton.image">
+            <Setter Property="IsVisible"
+                    Value="True" />
+            <Setter Property="ToolTip.Tip">
+                <Setter.Value>
+                    <Template>
+                        <local:MpAvToolTipView InputGestureText="{Binding ., Converter={x:Static local:MpAvShortcutTypeOrCommandObjToKeyStringConverter.Instance}, ConverterParameter=ToggleContentWrap}"
+                                               ToolTipText="{Binding Source={x:Static local:R.U}, Path=CurrentUiStrings.ScaleImageLabel}" />
+                    </Template>
+                </Setter.Value>
+            </Setter>
+        </Style>
+        <Style Selector="ToggleButton#ClipTileToggleWrapButton:checked.image">
+            <Setter Property="ToolTip.Tip">
+                <Setter.Value>
+                    <Template>
+                        <local:MpAvToolTipView InputGestureText="{Binding ., Converter={x:Static local:MpAvShortcutTypeOrCommandObjToKeyStringConverter.Instance}, ConverterParameter=ToggleContentWrap}"
+                                               ToolTipText="{Binding Source={x:Static local:R.U}, Path=CurrentUiStrings.UnscaleImageLabel}" />
+                    </Template>
+                </Setter.Value>
+            </Setter>
+        </Style>
+
+        <!--  MAC BOTTOM INDENT  -->
+
+        <Style Selector="Grid#OuterGrid.mac.windowed :is(Button).bottom.left">
+            <Setter Property="Margin"
+                    Value="15,0,0,0" />
+        </Style>
+        <Style Selector="Grid#OuterGrid.mac.windowed :is(Button).bottom.right">
+            <Setter Property="Margin"
+                    Value="0,0,15,0" />
+        </Style>
+
+    </local:MpAvUserControl.Styles>
+    <Grid x:Name="OuterGrid"
+          Classes.tileHover="{Binding IsHovering}"
+          Classes.subselect="{Binding IsSubSelectionEnabled}"
+          Classes.windowed="{Binding IsWindowOpen}"
+          Classes.mac="{Binding IsMac, Source={x:Static local:MpAvThemeViewModel.Instance}}"
+          HorizontalAlignment="Stretch"
+          VerticalAlignment="Stretch"
+          Margin="2">
+
+        <!--  TL Pin Tile Button  -->
+
+        <ToggleButton x:Name="PinTileButton"
+                      Classes="no-bg no-hover-bg no-border cornerButton top left"
+                      local:MpAvIsHoveringExtension.IsEnabled="True"
+                      local:MpAvIsHoveringExtension.IsHovering="{Binding IsPinButtonHovering, Mode=TwoWay}"
+                      Command="{Binding ToggleTileIsPinnedCommand, Source={x:Static local:MpAvClipTrayViewModel.Instance}}"
+                      CommandParameter="{Binding}"
+                      IsChecked="{Binding IsPinned}"
+                      IsVisible="{Binding !IsWindowOpen}">
+            <ToggleButton.Transitions>
+                <Transitions>
+                    <DoubleTransition Property="RotateTransform.Angle"
+                                      Duration="0:0:0.5" />
+                </Transitions>
+            </ToggleButton.Transitions>
+
+            <ToggleButton.RenderTransform>
+                <RotateTransform />
+            </ToggleButton.RenderTransform>
+            <ToolTip.Tip>
+                <local:MpAvToolTipView InputGestureText="{Binding ., ConverterParameter=TogglePinned, Converter={x:Static local:MpAvShortcutTypeOrCommandObjToKeyStringConverter.Instance}}"
+                                       ToolTipText="{Binding Source={x:Static local:R.U}, Path=CurrentUiStrings.ClipTileTogglePinnedLabel}" />
+            </ToolTip.Tip>
+            <local:MpAvTintedImage Source="{Binding Source={StaticResource PinImage}, Converter={x:Static local:MpAvIconSourceObjToBitmapConverter.Instance}}" />
+
+        </ToggleButton>
+
+
+        <!--  BR Pop Out Button (IMAGE ONLY)  -->
+
+        <Button x:Name="OpenWindowButton"
+                IsVisible="{Binding CopyItemType, ConverterParameter=Image, Converter={x:Static local:MpAvEnumToBoolConverter.Instance}}"
+                Classes="no-bg no-hover-bg no-border cornerButton bottom right tt_near_bottom"
+                Command="{Binding PinToPopoutWindowCommand}"
+                CommandParameter="{Binding}">
+            <ToolTip.Tip>
+                <local:MpAvToolTipView InputGestureText="{Binding ., ConverterParameter=OpenInWindow, Converter={x:Static local:MpAvShortcutTypeOrCommandObjToKeyStringConverter.Instance}}"
+                                       ToolTipText="{Binding Source={x:Static local:R.U}, Path=CurrentUiStrings.CommonFloatWindowLabel}" />
+            </ToolTip.Tip>
+            <local:MpAvTintedImage Source="{Binding Source={StaticResource OpenImage}, Converter={x:Static local:MpAvIconSourceObjToBitmapConverter.Instance}}" />
+
+        </Button>
+
+
+        <!--  BR Edit Toggle Button  -->
+        <ToggleButton x:Name="ClipTileToggleEditButton"
+                      IsVisible="{Binding !IsVisible, ElementName=OpenWindowButton}"
+                      Classes="no-bg no-hover-bg no-border cornerButton bottom right tt_near_bottom"
+                      Command="{Binding ToggleIsContentReadOnlyCommand}"
+                      IsChecked="{Binding !IsContentReadOnly, Mode=OneWay}">
+            <ToolTip.Tip>
+                <local:MpAvToolTipView InputGestureText="{Binding ., ConverterParameter=ToggleContentReadOnly, Converter={x:Static local:MpAvShortcutTypeOrCommandObjToKeyStringConverter.Instance}}"
+                                       ToolTipText="{Binding Source={x:Static local:R.U}, Path=CurrentUiStrings.ClipTileToggleEditLabel}" />
+            </ToolTip.Tip>
+            <local:MpAvTintedImage Source="{Binding Source={StaticResource EditImage}, Converter={x:Static local:MpAvIconSourceObjToBitmapConverter.Instance}}" />
+        </ToggleButton>
+
+        <!--  TR Hotkey Button  -->
+        <Button x:Name="ClipTileHotkeyButton"
+                IsVisible="False"
+                Classes="no-bg no-hover-bg no-border cornerButton top right "
+                Command="{Binding ShowAssignShortcutDialogCommand, Source={x:Static local:MpAvShortcutCollectionViewModel.Instance}}"
+                CommandParameter="{Binding}">
+            <ToolTip.Tip>
+                <local:MpAvToolTipView InputGestureText="{Binding ., Converter={x:Static local:MpAvShortcutTypeOrCommandObjToKeyStringConverter.Instance}, ConverterParameter=AssignShortcut}"
+                                       ToolTipText="{Binding ShortcutTooltipText}" />
+            </ToolTip.Tip>
+            <local:MpAvTintedImage Classes.activeHotkey="{Binding KeyString, Converter={x:Static local:MpAvIsNotNullZeroOrEmptyToBoolConverter.Instance}}"
+                                   Source="{Binding Source={StaticResource JoystickImage}, Converter={x:Static local:MpAvIconSourceObjToBitmapConverter.Instance}}" />
+        </Button>
+
+        <!--  BL TOGGLE WRAP  -->
+        <ToggleButton x:Name="ClipTileToggleWrapButton"
+                      Classes.text="{Binding CopyItemType, ConverterParameter=Text, Converter={x:Static local:MpAvEnumToBoolConverter.Instance}}"
+                      Classes.image="{Binding CopyItemType, ConverterParameter=Image, Converter={x:Static local:MpAvEnumToBoolConverter.Instance}}"
+                      Classes="no-bg no-hover-bg no-border cornerButton bottom left tt_near_bottom"
+                      Command="{Binding ToggleIsWrappingEnabledCommand}"
+                      IsChecked="{Binding !IsWrappingEnabled, Mode=OneWay}">
+            <local:MpAvTintedImage Source="{Binding Source={StaticResource WrapImage}, Converter={x:Static local:MpAvIconSourceObjToBitmapConverter.Instance}}" />
+        </ToggleButton>
+    </Grid>
+</local:MpAvUserControl>

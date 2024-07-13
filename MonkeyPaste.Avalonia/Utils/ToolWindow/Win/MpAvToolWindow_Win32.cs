@@ -8,20 +8,9 @@ using static MonkeyPaste.Common.Wpf.WinApi;
 #endif
 namespace MonkeyPaste.Avalonia {
     public static class MpAvToolWindow_Win32 {
-        //[DllImport("user32.dll", SetLastError = true)]
-        //public static extern int GetWindowLong(IntPtr hWnd, int nIndex);
-        //[DllImport("user32.dll")]
-        //public static extern int SetWindowLong(IntPtr hWnd, int nIndex, int dwNewLong);
-        //[DllImport("kernel32.dll", EntryPoint = "SetLastError")]
-        //public static extern void SetLastError(int dwErrorCode);
-        //[DllImport("user32.dll", EntryPoint = "SetWindowLongPtr", SetLastError = true)]
-        //public static extern IntPtr IntSetWindowLongPtr(IntPtr hWnd, int nIndex, IntPtr dwNewLong);
-
-        //[DllImport("user32.dll", EntryPoint = "SetWindowLong", SetLastError = true)]
-        //public static extern int IntSetWindowLong(IntPtr hWnd, int nIndex, int dwNewLong);
 
         public static void SetAsToolWindow(IntPtr handle) {
-#if WINDOWS
+#if MULTI_WINDOW
             int cur_style_val = GetWindowLong(handle, (int)GetWindowLongFields.GWL_EXSTYLE);
             cur_style_val |= (int)ExtendedWindowStyles.WS_EX_TOOLWINDOW;
             SetWindowLong(handle, (int)GetWindowLongFields.GWL_EXSTYLE, (IntPtr)cur_style_val);
@@ -29,7 +18,7 @@ namespace MonkeyPaste.Avalonia {
         }
 
         public static void UnsetAsToolWindow(IntPtr handle) {
-#if WINDOWS
+#if MULTI_WINDOW
             GetWindowLongFields cur_style = (GetWindowLongFields)GetWindowLong(handle, (int)GetWindowLongFields.GWL_EXSTYLE);
             MpDebug.Assert(IsToolWindow(handle), "Warning, not tool window");
             cur_style.RemoveFlag(GetWindowLongFields.GWL_EXSTYLE);
@@ -40,7 +29,7 @@ namespace MonkeyPaste.Avalonia {
         }
 
         public static bool IsToolWindow(IntPtr handle) {
-#if WINDOWS
+#if MULTI_WINDOW
             GetWindowLongFields cur_style = (GetWindowLongFields)GetWindowLong(handle, (int)GetWindowLongFields.GWL_EXSTYLE);
             return cur_style.HasFlag(GetWindowLongFields.GWL_EXSTYLE);
 #else
@@ -51,7 +40,7 @@ namespace MonkeyPaste.Avalonia {
         public static void SetAsNoHitTestWindow(IntPtr handle) {
             // from https://github.com/AvaloniaUI/Avalonia/issues/4956
             // see thread for other platforms
-#if WINDOWS
+#if MULTI_WINDOW
             int cur_style_val = GetWindowLong(handle, (int)GetWindowLongFields.GWL_EXSTYLE);
             SetWindowLong(handle, (int)GetWindowLongFields.GWL_EXSTYLE, cur_style_val | (int)ExtendedWindowStyles.WS_EX_LAYERED | (int)ExtendedWindowStyles.WS_EX_TRANSPARENT);
 #endif
@@ -59,7 +48,7 @@ namespace MonkeyPaste.Avalonia {
         }
 
         public static void RemoveNoHitTestWindow(IntPtr handle) {
-#if WINDOWS
+#if MULTI_WINDOW
             int cur_style_val = GetWindowLong(handle, (int)GetWindowLongFields.GWL_EXSTYLE);
             int with_hit_test_style_val = cur_style_val & (~(int)ExtendedWindowStyles.WS_EX_LAYERED) & (~(int)ExtendedWindowStyles.WS_EX_TRANSPARENT);
             SetWindowLong(handle, (int)GetWindowLongFields.GWL_EXSTYLE, with_hit_test_style_val);

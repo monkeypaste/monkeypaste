@@ -2,9 +2,9 @@
 
   <PropertyGroup>
     <TargetFramework>netstandard2.0</TargetFramework>
-    <RunPostBuildEvent>Always</RunPostBuildEvent>
-    <DisableFastUpToDateCheck>true</DisableFastUpToDateCheck>
-    <Platforms>$(DefaultPlatforms)</Platforms>
+    <!--<RunPostBuildEvent>Always</RunPostBuildEvent>-->
+    <!--<DisableFastUpToDateCheck>true</DisableFastUpToDateCheck>-->
+    <!--<Platforms>$(DefaultPlatforms)</Platforms>-->
   </PropertyGroup>
   
   <Target Name="PostBuild" AfterTargets="PostBuildEvent" Condition="'$(BuildOs)' == 'ANDROID'">

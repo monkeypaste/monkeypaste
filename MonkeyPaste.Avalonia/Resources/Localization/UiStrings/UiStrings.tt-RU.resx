@@ -2996,4 +2996,49 @@ Changeзгәрешләр өчен сылтамага иярегез
   <data name="DonateLabel" xml:space="preserve">
     <value>Бүләк итегез</value>
   </data>
+  <data name="MobileCopiedNtfText" xml:space="preserve">
+    <value>Буферга күчерелгән</value>
+  </data>
+  <data name="PinTraySidebarLabel" xml:space="preserve">
+    <value>Кадакланган</value>
+  </data>
+  <data name="QueryTraySidebarLabel" xml:space="preserve">
+    <value>Сорау</value>
+  </data>
+  <data name="PluginBrowserFormattedWindowTitle" xml:space="preserve">
+    <value>Плагин браузеры - {0}</value>
+  </data>
+  <data name="ClipboardSetMessage" xml:space="preserve">
+    <value>Буфер</value>
+  </data>
+  <data name="AddNewActionLabel" xml:space="preserve">
+    <value>Яңа өстәгез</value>
+  </data>
+  <data name="PluginBrowserWindowTitle" xml:space="preserve">
+    <value>Плагин браузеры</value>
+  </data>
+  <data name="EditorPasteButtonLabelMobile" xml:space="preserve">
+    <value>Күчереп алу</value>
+  </data>
+  <data name="PrefSyntaxThemeHint" xml:space="preserve">
+    <value>Текст блоклары өчен кулланылган тема текст клипларында күрсәтелгән.</value>
+  </data>
+  <data name="PrefSyntaxThemeLabel" xml:space="preserve">
+    <value>Синтаксис темасы</value>
+  </data>
+  <data name="PrefCodeFontLabel" xml:space="preserve">
+    <value>Синтаксис</value>
+  </data>
+  <data name="CommonViewLabel" xml:space="preserve">
+    <value>Карау</value>
+  </data>
+  <data name="WrapTextMenuLabel" xml:space="preserve">
+    <value>Текстны төрү</value>
+  </data>
+  <data name="ClipAssignShortcutLabel" xml:space="preserve">
+    <value>Кыска юл билгеләгез ...</value>
+  </data>
+  <data name="ClipUpdateShortcutLabel" xml:space="preserve">
+    <value>Кыска юл ...</value>
+  </data>
 </root>

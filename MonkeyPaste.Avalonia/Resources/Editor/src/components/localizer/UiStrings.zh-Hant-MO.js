@@ -34,6 +34,7 @@ var UiStrings = {
 	EditorNextTemplateLabel: `下一个模板`,
 	EditorPasteButtonAppendBeginLabel: `附加...`,
 	EditorPasteButtonLabel: `粘贴`,
+	EditorPasteButtonLabelMobile: `复制`,
 	EditorPasteTemplateWatermark: `输入糊状文字...`,
 	EditorPrevTemplateLabel: `以前的模板`,
 	EditorRegExLabel: ` 正则表达式`,

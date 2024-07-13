@@ -2996,4 +2996,49 @@ Os atalhos globais agora podem ser ativados no menu da bandeja do sistema</value
   <data name="DonateLabel" xml:space="preserve">
     <value>Doar</value>
   </data>
+  <data name="MobileCopiedNtfText" xml:space="preserve">
+    <value>Copiado para a área de transferência</value>
+  </data>
+  <data name="PinTraySidebarLabel" xml:space="preserve">
+    <value>Preso</value>
+  </data>
+  <data name="QueryTraySidebarLabel" xml:space="preserve">
+    <value>Consulta</value>
+  </data>
+  <data name="AddNewActionLabel" xml:space="preserve">
+    <value>Adicionar novo</value>
+  </data>
+  <data name="PluginBrowserFormattedWindowTitle" xml:space="preserve">
+    <value>Navegador de plug-in - {0}</value>
+  </data>
+  <data name="PluginBrowserWindowTitle" xml:space="preserve">
+    <value>Navegador de plug-ins</value>
+  </data>
+  <data name="ClipboardSetMessage" xml:space="preserve">
+    <value>Conjunto de área de transferência</value>
+  </data>
+  <data name="EditorPasteButtonLabelMobile" xml:space="preserve">
+    <value>cópia de</value>
+  </data>
+  <data name="PrefSyntaxThemeHint" xml:space="preserve">
+    <value>O tema usado para blocos de código detectado nos clipes de texto.</value>
+  </data>
+  <data name="PrefSyntaxThemeLabel" xml:space="preserve">
+    <value>Tema sintaxe</value>
+  </data>
+  <data name="PrefCodeFontLabel" xml:space="preserve">
+    <value>Sintaxe</value>
+  </data>
+  <data name="CommonViewLabel" xml:space="preserve">
+    <value>Visualizar</value>
+  </data>
+  <data name="WrapTextMenuLabel" xml:space="preserve">
+    <value>Enrole o texto</value>
+  </data>
+  <data name="ClipAssignShortcutLabel" xml:space="preserve">
+    <value>Atribua atalho ...</value>
+  </data>
+  <data name="ClipUpdateShortcutLabel" xml:space="preserve">
+    <value>Atualizar atalho ...</value>
+  </data>
 </root>

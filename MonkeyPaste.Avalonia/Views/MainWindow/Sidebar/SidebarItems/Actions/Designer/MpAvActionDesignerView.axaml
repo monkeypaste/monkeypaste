@@ -116,24 +116,28 @@
 
             <local:MpAvZoomBorder HorizontalAlignment="Stretch"
                                   VerticalAlignment="Stretch"
+                                  Focusable="True"
                                   local:MpAvBoundsObserverExtension.IsEnabled="True"
                                   local:MpAvBoundsObserverExtension.ObservedBounds="{Binding ObservedDesignerBounds, Mode=TwoWay}"
                                   local:MpAvBoundsObserverExtension.ToScreen="True"
-                                  Background="{StaticResource HitTestableTransparent}"
+                                  Background="{DynamicResource HitTestableTransparent}"
                                   Classes="actionDesigner"
                                   ClipToBounds="False"
-                                  GridLineBrush="BurlyWood"
+                                  GridLineBrush="{DynamicResource ThemeCompliment5Brush}"
                                   GridLineSpacing="50"
                                   GridLineThickness="0.5"
                                   IsVisible="{Binding SelectedTrigger, Converter={x:Static local:MpAvIsNotNullZeroOrEmptyToBoolConverter.Instance}}"
                                   MaxScale="{Binding MaxZoomFactor}"
                                   MinScale="{Binding MinZoomFactor}"
-                                  OriginBrush="Chocolate"
+                                  OriginBrush="{DynamicResource ThemeAccent1BgBrush}"
                                   OriginThickness="1.5"
                                   ShowGrid="{Binding IsGridVisible, FallbackValue=False, TargetNullValue=False}"
                                   TailWidth="3"
                                   TipLength="20"
                                   TipWidth="10"
+                                  Scale="{Binding ZoomFactor, Mode=TwoWay}"
+                                  TranslateOffsetX="{Binding TranslateOffsetX, Mode=TwoWay}"
+                                  TranslateOffsetY="{Binding TranslateOffsetY, Mode=TwoWay}"
                                   TransitionLineDefaultBorderBrush="{DynamicResource ThemeWhiteColor}"
                                   TransitionLineDisabledFillBrush="{DynamicResource DisabledHighlightBrush}"
                                   TransitionLineEnabledFillBrush="{DynamicResource EnabledHighlightBrush}"
@@ -142,6 +146,8 @@
                                   WarningBrush1="{DynamicResource DefaultWarningBrush1}"
                                   WarningBrush2="{DynamicResource DefaultWarningBrush2}">
                 <ListBox x:Name="ActionDesignerListBox"
+                         ScrollViewer.IsScrollChainingEnabled="False"
+                         AutoScrollToSelectedItem="False"
                          HorizontalAlignment="Stretch"
                          VerticalAlignment="Stretch"
                          Classes="actionDesigner"
@@ -162,8 +168,8 @@
                                     ClipToBounds="False">
                                 <Canvas.RenderTransform>
                                     <TransformGroup>
-                                        <ScaleTransform ScaleX="{Binding ZoomFactor, Mode=TwoWay, Source={x:Static local:MpAvTriggerCollectionViewModel.Instance}}" ScaleY="{Binding ZoomFactor, Mode=TwoWay, Source={x:Static local:MpAvTriggerCollectionViewModel.Instance}}" />
-                                        <TranslateTransform X="{Binding TranslateOffsetX, Mode=TwoWay, Source={x:Static local:MpAvTriggerCollectionViewModel.Instance}}" Y="{Binding TranslateOffsetY, Mode=TwoWay, Source={x:Static local:MpAvTriggerCollectionViewModel.Instance}}" />
+                                        <ScaleTransform ScaleX="{Binding ZoomFactor, Source={x:Static local:MpAvTriggerCollectionViewModel.Instance}}" ScaleY="{Binding ZoomFactor, Source={x:Static local:MpAvTriggerCollectionViewModel.Instance}}" />
+                                        <TranslateTransform X="{Binding TranslateOffsetX, Source={x:Static local:MpAvTriggerCollectionViewModel.Instance}}" Y="{Binding TranslateOffsetY, Source={x:Static local:MpAvTriggerCollectionViewModel.Instance}}" />
                                     </TransformGroup>
                                 </Canvas.RenderTransform>
                             </Canvas>
@@ -171,7 +177,11 @@
                     </ListBox.ItemsPanel>
                     <ListBox.ItemTemplate>
                         <DataTemplate DataType="local:MpAvActionViewModelBase">
-                            <local:MpAvActionDesignerItemView ClipToBounds="False" />
+                            <local:MpAvActionDesignerItemView Focusable="True"
+                                                              local:MpAvPointerCommandExtension.IsEnabled="True"
+                                                              local:MpAvPointerCommandExtension.LeftReleaseCommand="{Binding SelectActionCommand, Source={x:Static local:MpAvTriggerCollectionViewModel.Instance}}"
+                                                              local:MpAvPointerCommandExtension.LeftReleaseCommandParameter="{Binding $self}"
+                                                              ClipToBounds="False" />
                         </DataTemplate>
                     </ListBox.ItemTemplate>
                 </ListBox>
@@ -195,7 +205,7 @@
 
                     <ToggleButton x:Name="ShowGridToggleButton"
                                   Grid.Column="0"
-                                  Classes="defaultButton textOnlyButton outline outlineOver"
+                                  Classes="default-button textOnlyButton outline outlineOver"
                                   Content="{Binding Source={x:Static local:R.U}, Path=CurrentUiStrings.TriggerDesignerToggleGridLabel}"
                                   IsChecked="{Binding IsGridVisible, Mode=TwoWay}"
                                   IsEnabled="{Binding SelectedTrigger, Converter={x:Static local:MpAvIsNotNullZeroOrEmptyToBoolConverter.Instance}}"
@@ -206,7 +216,7 @@
 
                     <Button x:Name="ResetViewButton"
                             Grid.Column="2"
-                            Classes="defaultButton textOnlyButton outline outlineOver"
+                            Classes="default-button textOnlyButton outline outlineOver"
                             Command="{Binding ResetDesignerViewCommand}"
                             Content="{Binding Source={x:Static local:R.U}, Path=CurrentUiStrings.CommonResetLabel}" />
 
@@ -216,10 +226,17 @@
                     <!--  POP OUT WINDOW BUTTON  -->
 
                     <Button x:Name="ShowDesignerWindowButton"
-                            Classes="noBg noHoverBg defaultButton outline outlineOver"
+                            Classes="no-bg no-hover-bg default-button outline outlineOver"
                             Grid.Column="4"
                             Command="{Binding ShowDesignerWindowCommand}"
                             IsVisible="{Binding !IsWindowOpen}">
+                        <!--<Button.IsVisible>
+                            <MultiBinding Converter="{x:Static BoolConverters.And}">
+                                <Binding Path="!IsWindowOpen" />
+                                <Binding Path="IsMultiWindow"
+                                         Source="{x:Static local:MpAvThemeViewModel.Instance}" />
+                            </MultiBinding>
+                        </Button.IsVisible>-->
                         <ToolTip.Tip>
                             <local:MpAvToolTipView InputGestureText="{Binding ., ConverterParameter=OpenInWindow, Converter={x:Static local:MpAvShortcutTypeOrCommandObjToKeyStringConverter.Instance}}"
                                                    ToolTipText="{Binding Source={x:Static local:R.U}, Path=CurrentUiStrings.SearchCriteriaHeadePopoutTooltipText}" />
@@ -274,7 +291,7 @@
                         VerticalAlignment="Stretch"
                         Background="Transparent"
                         BorderThickness="0"
-                        Classes="noBg noHoverBg"
+                        Classes="no-bg no-hover-bg"
                         Command="{Binding ShowTriggerSelectorMenuCommand}"
                         CommandParameter="{Binding $self}">
                     <StackPanel Orientation="Vertical">
@@ -294,9 +311,8 @@
                                        VerticalAlignment="Center"
                                        Fill="DimGray" />
                         </Grid>
-                        <Label HorizontalAlignment="Center">
-                            Add New
-                        </Label>
+                        <Label HorizontalAlignment="Center"
+                               Content="{Binding Source={x:Static local:R.U}, Path=CurrentUiStrings.AddNewActionLabel}" />
                     </StackPanel>
                 </Button>
             </Border>

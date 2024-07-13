@@ -2996,4 +2996,49 @@ feedback@monkeypaste.com</value>
   <data name="DonateLabel" xml:space="preserve">
     <value>לִתְרוֹם</value>
   </data>
+  <data name="MobileCopiedNtfText" xml:space="preserve">
+    <value>הועתק ללוח</value>
+  </data>
+  <data name="PinTraySidebarLabel" xml:space="preserve">
+    <value>מוצמד</value>
+  </data>
+  <data name="QueryTraySidebarLabel" xml:space="preserve">
+    <value>שאילתא</value>
+  </data>
+  <data name="PluginBrowserFormattedWindowTitle" xml:space="preserve">
+    <value>דפדפן תוסף - {0}</value>
+  </data>
+  <data name="PluginBrowserWindowTitle" xml:space="preserve">
+    <value>דפדפן תוסף</value>
+  </data>
+  <data name="ClipboardSetMessage" xml:space="preserve">
+    <value>סט לוח</value>
+  </data>
+  <data name="AddNewActionLabel" xml:space="preserve">
+    <value>הוסף חדש</value>
+  </data>
+  <data name="EditorPasteButtonLabelMobile" xml:space="preserve">
+    <value>עותק</value>
+  </data>
+  <data name="PrefSyntaxThemeHint" xml:space="preserve">
+    <value>הנושא המשמש לבלוקי קוד שהתגלו בקטעי טקסט.</value>
+  </data>
+  <data name="PrefSyntaxThemeLabel" xml:space="preserve">
+    <value>נושא תחביר</value>
+  </data>
+  <data name="PrefCodeFontLabel" xml:space="preserve">
+    <value>תחביר</value>
+  </data>
+  <data name="CommonViewLabel" xml:space="preserve">
+    <value>נוף</value>
+  </data>
+  <data name="WrapTextMenuLabel" xml:space="preserve">
+    <value>גלישת טקסט</value>
+  </data>
+  <data name="ClipAssignShortcutLabel" xml:space="preserve">
+    <value>הקצה קיצור דרך ...</value>
+  </data>
+  <data name="ClipUpdateShortcutLabel" xml:space="preserve">
+    <value>עדכן קיצור דרך ...</value>
+  </data>
 </root>

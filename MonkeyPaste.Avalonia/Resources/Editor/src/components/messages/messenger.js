@@ -95,8 +95,10 @@ function sendMessage(fn, msg) {
 			msgType: fn,
 			msgData: msg,
 			handle: globals.ContentHandle
-		}; 
+		};
+
 		window.webkit.messageHandlers.webview.postMessage(JSON.stringify(resp));
+		
 		return;
 	}
 	if (isRunningOnCef()) {

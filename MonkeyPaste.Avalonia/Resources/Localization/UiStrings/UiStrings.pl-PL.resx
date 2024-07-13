@@ -2996,4 +2996,49 @@ Globalne skróty można teraz włączyć w menu taca systemu</value>
   <data name="DonateLabel" xml:space="preserve">
     <value>Podarować</value>
   </data>
+  <data name="MobileCopiedNtfText" xml:space="preserve">
+    <value>Skopiowane do schowka</value>
+  </data>
+  <data name="PinTraySidebarLabel" xml:space="preserve">
+    <value>Przypięty</value>
+  </data>
+  <data name="QueryTraySidebarLabel" xml:space="preserve">
+    <value>Zapytanie</value>
+  </data>
+  <data name="PluginBrowserFormattedWindowTitle" xml:space="preserve">
+    <value>Przeglądarka wtyczki - {0}</value>
+  </data>
+  <data name="PluginBrowserWindowTitle" xml:space="preserve">
+    <value>Przeglądarka wtyczek</value>
+  </data>
+  <data name="ClipboardSetMessage" xml:space="preserve">
+    <value>Zestaw schowka</value>
+  </data>
+  <data name="AddNewActionLabel" xml:space="preserve">
+    <value>Dodaj nowe</value>
+  </data>
+  <data name="EditorPasteButtonLabelMobile" xml:space="preserve">
+    <value>Kopiuj</value>
+  </data>
+  <data name="PrefSyntaxThemeHint" xml:space="preserve">
+    <value>Motyw używany do bloków kodu wykrytych w klipach tekstowych.</value>
+  </data>
+  <data name="PrefSyntaxThemeLabel" xml:space="preserve">
+    <value>Motyw składni</value>
+  </data>
+  <data name="PrefCodeFontLabel" xml:space="preserve">
+    <value>Składnia</value>
+  </data>
+  <data name="CommonViewLabel" xml:space="preserve">
+    <value>Pogląd</value>
+  </data>
+  <data name="WrapTextMenuLabel" xml:space="preserve">
+    <value>Tekst owinięcia</value>
+  </data>
+  <data name="ClipAssignShortcutLabel" xml:space="preserve">
+    <value>Przypisz skrót ...</value>
+  </data>
+  <data name="ClipUpdateShortcutLabel" xml:space="preserve">
+    <value>Zaktualizuj skrót ...</value>
+  </data>
 </root>

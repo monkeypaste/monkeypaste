@@ -222,4 +222,10 @@
   <data name="ToFileExtHint" xml:space="preserve">
     <value>Failo plėtinys, naudojamas „{0}“, naudojamas failui sukurti pagal pareikalavimą.</value>
   </data>
+  <data name="RtfParaTagNameHint" xml:space="preserve">
+    <value>Kodo paryškinimui Naudokite „Pre“ žymą, kitaip RTF bus traktuojamas kaip įprastas turtingas tekstas.</value>
+  </data>
+  <data name="RtfParaTagNameLabel" xml:space="preserve">
+    <value>HTML pastraipos žyma</value>
+  </data>
 </root>

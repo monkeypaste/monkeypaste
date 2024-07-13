@@ -20,7 +20,8 @@ namespace MonkeyPaste.Common {
 #endif
 
         public static bool HasInitialized { get; set; } = false;
-
+        public static bool HideAllStamps { get; set; }
+        public static bool IsConsoleApp { get; set; }
         static bool IsTraceEnabled =>
             LogFilePath != null && HasInitialized;
         static string LogFilePath { get; set; }
@@ -73,7 +74,7 @@ namespace MonkeyPaste.Common {
                 return;
             }
             var sb = new StringBuilder();
-            if (!stampless) {
+            if (!stampless && !HideAllStamps) {
                 sb.Append($"{GetLogStamp(level)}");
             }
             sb.Append(line == null ? string.Empty : line);
@@ -85,8 +86,10 @@ namespace MonkeyPaste.Common {
                 return;
             }
             line = line == null ? string.Empty : line;
-
-            line = $"{GetLogStamp(level)} {line}";
+            if(!HideAllStamps) {
+                line = $"{GetLogStamp(level)} {line}";
+            }
+            
             WriteLineWrapper("", true);
             WriteLineWrapper(@"-----------------------------------------------------------------------", true);
             WriteLineWrapper("File: " + callerFilePath, true);
@@ -140,7 +143,7 @@ namespace MonkeyPaste.Common {
             if (IsTraceEnabled) {
                 Trace.Write(sb.ToString());
             } else if (LogToConsole) {
-                if (Debugger.IsAttached) {
+                if (Debugger.IsAttached && !IsConsoleApp) {
                     Debug.WriteLine(sb.ToString().TrimEnd());
                 } else {
                     Console.WriteLine(sb.ToString().TrimEnd());

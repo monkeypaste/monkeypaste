@@ -2996,4 +2996,49 @@ Nú er hægt að virkja alþjóðlegar flýtileiðir í kerfisbakkavalmyndinni</
   <data name="DonateLabel" xml:space="preserve">
     <value>Gefðu</value>
   </data>
+  <data name="MobileCopiedNtfText" xml:space="preserve">
+    <value>Afritað á klemmuspjald</value>
+  </data>
+  <data name="PinTraySidebarLabel" xml:space="preserve">
+    <value>Fest</value>
+  </data>
+  <data name="QueryTraySidebarLabel" xml:space="preserve">
+    <value>Fyrirspurn</value>
+  </data>
+  <data name="PluginBrowserWindowTitle" xml:space="preserve">
+    <value>Viðbót vafra</value>
+  </data>
+  <data name="ClipboardSetMessage" xml:space="preserve">
+    <value>Klemmuspjald sett</value>
+  </data>
+  <data name="AddNewActionLabel" xml:space="preserve">
+    <value>Bæta við nýju</value>
+  </data>
+  <data name="PluginBrowserFormattedWindowTitle" xml:space="preserve">
+    <value>Plugin vafri - {0}</value>
+  </data>
+  <data name="EditorPasteButtonLabelMobile" xml:space="preserve">
+    <value>Afritaðu</value>
+  </data>
+  <data name="PrefSyntaxThemeHint" xml:space="preserve">
+    <value>Þemað sem notað er fyrir kóða kóða sem greindist í textaklemmum.</value>
+  </data>
+  <data name="PrefSyntaxThemeLabel" xml:space="preserve">
+    <value>Setningafræði þema</value>
+  </data>
+  <data name="PrefCodeFontLabel" xml:space="preserve">
+    <value>Setningafræði</value>
+  </data>
+  <data name="CommonViewLabel" xml:space="preserve">
+    <value>Útsýni</value>
+  </data>
+  <data name="WrapTextMenuLabel" xml:space="preserve">
+    <value>Vafðu texta</value>
+  </data>
+  <data name="ClipAssignShortcutLabel" xml:space="preserve">
+    <value>Úthlutaðu flýtileið ...</value>
+  </data>
+  <data name="ClipUpdateShortcutLabel" xml:space="preserve">
+    <value>Uppfærðu flýtileið ...</value>
+  </data>
 </root>

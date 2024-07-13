@@ -15,9 +15,11 @@ namespace MonkeyPaste.Avalonia {
 
     [TemplatePart("PART_HorizontalScrollBar", typeof(MpAvPagingScrollBar))]
     [TemplatePart("PART_VerticalScrollBar", typeof(MpAvPagingScrollBar))]
+    [TemplatePart("PART_ContainerGrid", typeof(Grid))]
     public class MpAvPagingScrollViewer : ScrollViewer {
         //Type IStyleable.StyleKey => typeof(MpAvPagingScrollViewer);
 
+        public Grid InnerGrid { get; private set; }
         public IReadOnlyList<MpAvPagingScrollBar> ScrollBars { get; private set; }
 
         private List<Track> _tracks;
@@ -35,6 +37,8 @@ namespace MonkeyPaste.Avalonia {
 
         protected override void OnApplyTemplate(TemplateAppliedEventArgs e) {
             base.OnApplyTemplate(e);
+            InnerGrid = e.NameScope.Find<Grid>("PART_ContainerGrid");
+
             var hsb = e.NameScope.Find<MpAvPagingScrollBar>("PART_HorizontalScrollBar");
             var vsb = e.NameScope.Find<MpAvPagingScrollBar>("PART_VerticalScrollBar");
             MpDebug.Assert(hsb != null && vsb != null, "Need scrollbars...");

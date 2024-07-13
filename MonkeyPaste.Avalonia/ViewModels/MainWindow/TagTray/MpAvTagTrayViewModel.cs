@@ -22,8 +22,6 @@ namespace MonkeyPaste.Avalonia {
         MpITagQueryTools,
         MpIPopupMenuPicker {
         #region Private Variables
-
-
         #endregion
 
         #region Statics
@@ -44,6 +42,8 @@ namespace MonkeyPaste.Avalonia {
 
         #region MpAvIMenuItemViewModel Implementation
 
+        string MpAvIMenuItemViewModel.IconTintHexStr =>
+            null;
         string MpAvIMenuItemViewModel.IconBorderHexColor =>
             MpSystemColors.Transparent;
 
@@ -55,7 +55,7 @@ namespace MonkeyPaste.Avalonia {
         string MpAvIMenuItemViewModel.InputGestureText { get; }
         bool MpAvIMenuItemViewModel.StaysOpenOnClick => false;
         bool MpAvIMenuItemViewModel.HasLeadingSeparator => true;
-        bool MpAvIMenuItemViewModel.IsVisible => true;
+        bool MpAvIIsVisibleViewModel.IsVisible => true;
         bool? MpAvIMenuItemViewModel.IsChecked => false;
         bool MpAvIMenuItemViewModel.IsThreeState => false;
         bool MpAvIMenuItemViewModel.IsSubMenuOpen { get; set; }
@@ -127,16 +127,16 @@ namespace MonkeyPaste.Avalonia {
         public double DefaultSidebarWidth {
             get {
                 if (MpAvMainWindowViewModel.Instance.IsHorizontalOrientation) {
-                    return 200;// MpMeasurements.Instance.DefaultTagTreePanelWidth;
+                    return 225;// MpMeasurements.Instance.DefaultTagTreePanelWidth;
                 } else {
-                    return MpAvMainWindowViewModel.Instance.MainWindowWidth;
+                    return MpAvMainView.Instance.MainWindowTrayGrid.Bounds.Width; //MpAvMainWindowViewModel.Instance.MainWindowWidth;
                 }
             }
         }
         public double DefaultSidebarHeight {
             get {
                 if (MpAvMainWindowViewModel.Instance.IsHorizontalOrientation) {
-                    return MpAvClipTrayViewModel.Instance.ObservedQueryTrayScreenHeight;
+                    return MpAvMainView.Instance.MainWindowTrayGrid.Bounds.Height;
                 } else {
                     return 250;
                 }
@@ -415,6 +415,7 @@ namespace MonkeyPaste.Avalonia {
                     OnPropertyChanged(nameof(ShowAddTagButton));
                     OnPropertyChanged(nameof(ShowAddTagButton));
                     OnPropertyChanged(nameof(LastSelectedTagName));
+                    MpMessenger.SendGlobal(MpMessageType.FocusItemChanged);
                     break;
             }
         }
@@ -466,7 +467,10 @@ namespace MonkeyPaste.Avalonia {
             Items.ForEach(x => x.UpdateLinkToSelectedClipTile(tag_ids_for_selected_copy_item));
 
             // Notify clip tray context menu changed if was selected w/ right click
-            MpAvClipTrayViewModel.Instance.OnPropertyChanged(nameof(MpAvClipTrayViewModel.Instance.ContextMenuViewModel));
+            if(MpAvClipTrayViewModel.Instance.SelectedItem is not { } sctvm) {
+                return;
+            }
+            sctvm.OnPropertyChanged(nameof(sctvm.ContextMenuViewModel));
         }
 
         private async Task<MpAvTagTileViewModel> CreateTagTileViewModelAsync(MpTag tag) {
@@ -689,6 +693,10 @@ namespace MonkeyPaste.Avalonia {
                     await Task.Delay(300);
                     while (MpAvClipTrayViewModel.Instance.IsAnyBusy) {
                         await Task.Delay(100);
+                    }
+                    if(MpAvThemeViewModel.Instance.IsMobileOrWindowed) {
+                        // expand query tray on mobile
+                        MpAvClipTrayViewModel.Instance.ExpandQueryTrayCommand.Execute(null);
                     }
                 }
                 IsSelecting = false;

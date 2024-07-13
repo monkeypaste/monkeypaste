@@ -3061,4 +3061,49 @@ Qlobal Qısayolları indi Sistem Tablası Menyusunda aktivləşdirmək olar</val
   <data name="DonateLabel" xml:space="preserve">
     <value>Bağışlayın</value>
   </data>
+  <data name="MobileCopiedNtfText" xml:space="preserve">
+    <value>Buferə kopyalandı</value>
+  </data>
+  <data name="PinTraySidebarLabel" xml:space="preserve">
+    <value>Saxlanmış</value>
+  </data>
+  <data name="QueryTraySidebarLabel" xml:space="preserve">
+    <value>Sorğu</value>
+  </data>
+  <data name="PluginBrowserFormattedWindowTitle" xml:space="preserve">
+    <value>Plugin Brauzeri - {0}</value>
+  </data>
+  <data name="PluginBrowserWindowTitle" xml:space="preserve">
+    <value>Plugin brauzeri</value>
+  </data>
+  <data name="ClipboardSetMessage" xml:space="preserve">
+    <value>Bufer dəsti</value>
+  </data>
+  <data name="AddNewActionLabel" xml:space="preserve">
+    <value>Yeni əlavə et</value>
+  </data>
+  <data name="EditorPasteButtonLabelMobile" xml:space="preserve">
+    <value>Surətini çıxarmaq</value>
+  </data>
+  <data name="PrefSyntaxThemeHint" xml:space="preserve">
+    <value>Mətn kliplərində aşkarlanan kod blokları üçün istifadə olunan mövzu.</value>
+  </data>
+  <data name="PrefSyntaxThemeLabel" xml:space="preserve">
+    <value>Sintaksis mövzusu</value>
+  </data>
+  <data name="PrefCodeFontLabel" xml:space="preserve">
+    <value>Sintaksis</value>
+  </data>
+  <data name="CommonViewLabel" xml:space="preserve">
+    <value>Baxış</value>
+  </data>
+  <data name="WrapTextMenuLabel" xml:space="preserve">
+    <value>Mətni Sarma</value>
+  </data>
+  <data name="ClipAssignShortcutLabel" xml:space="preserve">
+    <value>Qısayol təyin edin...</value>
+  </data>
+  <data name="ClipUpdateShortcutLabel" xml:space="preserve">
+    <value>Qısayolu yeniləyin...</value>
+  </data>
 </root>

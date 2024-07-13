@@ -2996,4 +2996,49 @@ feedback@monkeypaste.com</value>
   <data name="DonateLabel" xml:space="preserve">
     <value>Дарете</value>
   </data>
+  <data name="MobileCopiedNtfText" xml:space="preserve">
+    <value>Копирано в клипборда</value>
+  </data>
+  <data name="PinTraySidebarLabel" xml:space="preserve">
+    <value>Фиксирано</value>
+  </data>
+  <data name="QueryTraySidebarLabel" xml:space="preserve">
+    <value>Запитване</value>
+  </data>
+  <data name="PluginBrowserFormattedWindowTitle" xml:space="preserve">
+    <value>Браузър на приставки – {0}</value>
+  </data>
+  <data name="PluginBrowserWindowTitle" xml:space="preserve">
+    <value>Plugin Browser</value>
+  </data>
+  <data name="ClipboardSetMessage" xml:space="preserve">
+    <value>Комплект клипборд</value>
+  </data>
+  <data name="AddNewActionLabel" xml:space="preserve">
+    <value>Добави нов</value>
+  </data>
+  <data name="EditorPasteButtonLabelMobile" xml:space="preserve">
+    <value>копие</value>
+  </data>
+  <data name="PrefSyntaxThemeHint" xml:space="preserve">
+    <value>Темата, използвана за блокове от код, открити в текстови клипове.</value>
+  </data>
+  <data name="PrefSyntaxThemeLabel" xml:space="preserve">
+    <value>Тема за синтаксис</value>
+  </data>
+  <data name="PrefCodeFontLabel" xml:space="preserve">
+    <value>Синтаксис</value>
+  </data>
+  <data name="CommonViewLabel" xml:space="preserve">
+    <value>Преглед</value>
+  </data>
+  <data name="WrapTextMenuLabel" xml:space="preserve">
+    <value>Обвиване на текст</value>
+  </data>
+  <data name="ClipAssignShortcutLabel" xml:space="preserve">
+    <value>Задаване на пряк път...</value>
+  </data>
+  <data name="ClipUpdateShortcutLabel" xml:space="preserve">
+    <value>Актуализиране на пряк път...</value>
+  </data>
 </root>

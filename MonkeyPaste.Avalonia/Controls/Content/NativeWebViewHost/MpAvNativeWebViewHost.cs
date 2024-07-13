@@ -2,9 +2,12 @@
 using Avalonia;
 using Avalonia.Controls;
 using Avalonia.Platform;
+
 using MonkeyPaste.Common;
 using MonkeyPaste.Common.Avalonia;
+
 using PropertyChanged;
+
 using System;
 using System.Linq;
 #if ANDROID
@@ -12,6 +15,10 @@ using Android.Content;
 #endif
 
 namespace MonkeyPaste.Avalonia {
+    public interface MpAvINativeControlBuilder {
+        IPlatformHandle Build(IPlatformHandle parent, Func<IPlatformHandle> createDefault, MpIWebViewHost host);
+    }
+
     public interface MpAvIWebViewInterop {
         void SendMessage(MpAvIPlatformHandleHost nwvh, string msg);
 
@@ -161,7 +168,7 @@ namespace MonkeyPaste.Avalonia {
                     osrs.Buffer != null &&
                     osrs.Buffer.Length > 0) {
                 if (_scale == 0) {
-                    _scale = MpDeviceWrapper.Instance.ScreenInfoCollection.Screens.FirstOrDefault().Scaling;
+                    _scale = MpAvDeviceWrapper.Instance.ScreenInfoCollection.Screens.FirstOrDefault().Scaling;
                 }
                 var bmp = osrs.Buffer.ToAvBitmap();
                 //var test1 = bmp.PixelSize;

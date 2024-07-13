@@ -1,0 +1,106 @@
+<local:MpAvUserControl x:Name="HeaderMenuView"
+                       xmlns="https://github.com/avaloniaui"
+                       xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                       xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+                       xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+                       xmlns:sys="clr-namespace:System;assembly=mscorlib"
+                       xmlns:local="using:MonkeyPaste.Avalonia"
+                       x:DataType="local:MpAvIHeaderMenuViewModel"
+                       x:TypeArguments="local:MpAvIHeaderMenuViewModel"
+                       mc:Ignorable="d"
+                       d:DesignWidth="800"
+                       d:DesignHeight="450"
+                       x:Class="MonkeyPaste.Avalonia.MpAvHeaderMenuView">
+    <local:MpAvUserControl.Styles>
+        <!--  TITLE  -->
+        <Style Selector="TextBlock#TitleTextBlock">
+            <Setter Property="Text"
+                    Value="{Binding $parent[local:MpAvChildWindow].Title}" />
+        </Style>
+
+        <Style Selector="TextBlock#TitleTextBlock.has-title"
+               x:DataType="local:MpAvIHeaderMenuViewModel">
+            <Setter Property="Text"
+                    Value="{Binding HeaderTitle}" />
+        </Style>
+
+        <!--  BACK BUTTON  -->
+        <Style Selector=":is(Button)#BackButton">
+            <Setter Property="Command"
+                    Value="{Binding DefaultBackCommand, ElementName=HeaderMenuView}" />
+        </Style>
+        <Style Selector=":is(Button)#BackButton.has-back-cmd"
+               x:DataType="local:MpAvIHeaderMenuViewModel">
+            <Setter Property="Command"
+                    Value="{Binding BackCommand}" />
+            <Setter Property="CommandParameter"
+                    Value="{Binding BackCommandParameter}" />
+        </Style>
+
+        <Style Selector=":is(Button)#BackButton.arrow local|MpAvTintedImage">
+            <Setter Property="Source"
+                    Value="{Binding Source={StaticResource LeftImage}, Converter={x:Static local:MpAvIconSourceObjToBitmapConverter.Instance}}" />
+        </Style>
+        <Style Selector=":is(Button)#BackButton.close local|MpAvTintedImage">
+            <Setter Property="Source"
+                    Value="{Binding Source={StaticResource CloseImage}, Converter={x:Static local:MpAvIconSourceObjToBitmapConverter.Instance}}" />
+        </Style>
+    </local:MpAvUserControl.Styles>
+
+    <Border x:Name="HeaderBorder"
+            Background="{Binding HeaderBackground}"
+            Classes="light-bevel-5">
+
+        <Grid x:Name="HeaderContainer"
+              Margin="7,0">
+            <!--  BACK BUTTON  -->
+            <Button x:Name="BackButton"
+                    HorizontalAlignment="Left"
+                    Classes.arrow="{Binding BackButtonType, ConverterParameter=Arrow, Converter={x:Static local:MpAvEnumToBoolConverter.Instance}}"
+                    Classes.close="{Binding BackButtonType, ConverterParameter=Close, Converter={x:Static local:MpAvEnumToBoolConverter.Instance}}"
+                    Classes="no-bg no-hover-bg no-border default-button header-button"
+                    Classes.has-back-cmd="{Binding BackCommand, Converter={x:Static local:MpAvIsNotNullZeroOrEmptyToBoolConverter.Instance}}">
+                <local:MpAvTintedImage Tint="{Binding Background, ElementName=HeaderBorder, Converter={x:Static local:MpAvColorToContrastColorConverter.Instance}}" />
+            </Button>
+
+            <!--  ACTION MENU  -->
+            <local:MpAvMenuStripView x:Name="ActionMenu"
+                                     DataContext="{Binding HeaderMenuItems}"
+                                     Foreground="{Binding Foreground, ElementName=TitleTextBlock}"
+                                     HorizontalAlignment="Right"
+                                     VerticalAlignment="Center" />
+
+            <!--  TITLE  -->
+
+            <Viewbox HorizontalAlignment="Center"
+                     Margin="0,5">
+                <TextBlock x:Name="TitleTextBlock"
+                           Classes.has-title="{Binding HeaderTitle, Converter={x:Static local:MpAvIsNotNullZeroOrEmptyToBoolConverter.Instance}}"
+                           Effect="{Binding $self.Foreground, Converter={x:Static local:MpAvBrushToDropShadowEffectConverter.Instance}}"
+                           Foreground="{Binding Background, ElementName=HeaderBorder, Converter={x:Static local:MpAvColorToContrastColorConverter.Instance}}"
+                           FontSize="26"
+                           FontWeight="Bold"
+                           VerticalAlignment="Center"
+                           TextWrapping="WrapWithOverflow"
+                           TextAlignment="Center">
+
+                    <TextBlock.MaxWidth>
+                        <MultiBinding Converter="{x:Static local:MpAvMultiDoubleMathConverter.Instance}"
+                                      ConverterParameter="*">
+                            <Binding Path="Bounds.Width"
+                                     ElementName="HeaderMenuView" />
+                            <Binding>
+                                <Binding.Source>
+                                    <sys:Double>0.5</sys:Double>
+                                </Binding.Source>
+                            </Binding>
+                        </MultiBinding>
+                    </TextBlock.MaxWidth>
+
+                </TextBlock>
+
+            </Viewbox>
+        </Grid>
+
+    </Border>
+</local:MpAvUserControl>

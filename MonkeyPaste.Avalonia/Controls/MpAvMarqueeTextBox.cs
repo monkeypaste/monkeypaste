@@ -537,9 +537,6 @@ namespace MonkeyPaste.Avalonia {
         #endregion
 
         public MpAvMarqueeTextBox() {
-#if MOBILE
-            this.Classes.Add("mobile");
-#endif
             this.AcceptsReturn = false;
             this.AcceptsTab = false;
             this.TextWrapping = TextWrapping.NoWrap;

@@ -1,4 +1,5 @@
 ﻿using Avalonia.Controls;
+using Avalonia.Media;
 using Avalonia.Threading;
 using MonkeyPaste.Common;
 using MonkeyPaste.Common.Plugin;
@@ -62,7 +63,7 @@ namespace MonkeyPaste.Avalonia {
                     string newColor = await ShowCustomColorMenuAsync(
                         selectedColor: selectedColor,
                         title: null,
-                        ucvm: ucvm);
+                        ucvmObj: ucvm);
                 }
             });
 
@@ -70,7 +71,7 @@ namespace MonkeyPaste.Avalonia {
         public async Task<string> ShowCustomColorMenuAsync(
             string selectedColor,
             string title = null,
-            MpIUserColorViewModel ucvm = null,
+            object ucvmObj = null,
             object owner = null,
             string[] fixedPalette = null,
             bool allowAlpha = false) {
@@ -88,6 +89,7 @@ namespace MonkeyPaste.Avalonia {
                     SystemDecorations = SystemDecorations.Full,
                     WindowStartupLocation = WindowStartupLocation.CenterOwner,
                     Content = new MpAvColorPickerView(selectedColor, fixedPalette, allowAlpha),
+                    Background = Mp.Services.PlatformResource.GetResource<IBrush>(MpThemeResourceKey.ThemeInteractiveBgColor)
                 };
 
                 // NOTE pre-closing context menu cause it'll make funny activation behavior
@@ -102,10 +104,10 @@ namespace MonkeyPaste.Avalonia {
                 //    MpAvMainWindowViewModel.Instance.IsMainWindowSilentLocked = false;
                 //}
                 if (result is string newColor) {
-                    if (ucvm != null) {
+                    if (ucvmObj is MpIUserColorViewModel ucvm) {
 
                         ucvm.UserHexColor = newColor;
-                        MpConsole.WriteLine($"Custom color for '{ucvm}' set to '{newColor}'");
+                        MpConsole.WriteLine($"Custom color for '{ucvmObj}' set to '{newColor}'");
                     }
                     return newColor;
                 }

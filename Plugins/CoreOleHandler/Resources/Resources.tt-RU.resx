@@ -222,4 +222,10 @@
   <data name="ToFileExtHint" xml:space="preserve">
     <value>Файлны киңәйтү "{0}" таләптә файл булдыру өчен кулланыла.</value>
   </data>
+  <data name="RtfParaTagNameHint" xml:space="preserve">
+    <value>Кодны яктырту өчен 'При' 'Тэгны кулланыгыз, башкача RTF гадәти бай текст булып каралачак.</value>
+  </data>
+  <data name="RtfParaTagNameLabel" xml:space="preserve">
+    <value>HTML абзац</value>
+  </data>
 </root>

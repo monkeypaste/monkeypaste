@@ -122,7 +122,7 @@
 
     </local:MpAvUserControl.Styles>
 
-    <ScrollViewer MinHeight="300">
+    <ScrollViewer>
         <Grid>
             <Grid x:Name="SelectedPluginContainer"
                   IsVisible="{Binding !IsVisible, ElementName=PluginConfigureView}"
@@ -162,7 +162,7 @@
                         <Button x:Name="ToggleInstallSelectedPluginButton"
                                 Classes.installed="{Binding HasInstallation}"
                                 Classes.has-progress="{Binding InstallProgressViewModel, Converter={x:Static local:MpAvIsNotNullZeroOrEmptyToBoolConverter.Instance}}"
-                                Classes="defaultButton textOnlyButton manageButton progButton"
+                                Classes="default-button textOnlyButton manageButton progButton"
                                 local:MpAvShowDisabledTooltipExtension.ShowOnDisabled="{Binding ShowDisabledInstallTooltip}"
                                 Command="{Binding ToggleIsPluginInstalledCommand}">
                             <ToolTip.Tip>
@@ -180,7 +180,7 @@
 
                     <!--  DONATE BUTTON  -->
                     <Button x:Name="DonateToPluginButton"
-                            Classes="defaultButton textOnlyButton manageButton"
+                            Classes="default-button textOnlyButton manageButton"
                             Command="{Binding NavigateToUriCommand, Source={x:Static local:MpAvUriNavigator.Instance}}"
                             CommandParameter="{Binding PluginDonateUri}"
                             IsVisible="{Binding PluginDonateUri, Converter={x:Static local:MpAvIsNotNullZeroOrEmptyToBoolConverter.Instance}}">
@@ -196,7 +196,7 @@
                     <Button x:Name="UpdateSelectedPluginButton"
                             Classes.installed="{Binding HasInstallation}"
                             Classes.has-progress="{Binding UpdateProgressViewModel, Converter={x:Static local:MpAvIsNotNullZeroOrEmptyToBoolConverter.Instance}}"
-                            Classes="defaultButton textOnlyButton manageButton progButton"
+                            Classes="default-button textOnlyButton manageButton progButton"
                             local:MpAvShowDisabledTooltipExtension.ShowOnDisabled="{Binding ShowDisabledUpdateTooltip}"
                             IsVisible="{Binding HasInstallation}"
                             Command="{Binding UpdatePluginCommand}">
@@ -214,7 +214,7 @@
 
                     <!--  CONFIGURE BUTTON  -->
                     <Button x:Name="ConfigurePluginButton"
-                            Classes="defaultButton textOnlyButton manageButton"
+                            Classes="default-button textOnlyButton manageButton"
                             IsVisible="{Binding CanConfigure}"
                             Command="{Binding ShowConfigurePanelCommand}">
                         <TextBlock Text="{Binding Source={x:Static local:R.U}, Path=CurrentUiStrings.CommonConfigureLabel}" />

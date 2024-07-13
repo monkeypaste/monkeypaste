@@ -3061,4 +3061,49 @@ Total restoration cannot be guaranteed and may reduce performance or even crash 
   <data name="DonateLabel" xml:space="preserve">
     <value>ਦਾਨ</value>
   </data>
+  <data name="MobileCopiedNtfText" xml:space="preserve">
+    <value>ਕਲਿੱਪਬੋਰਡ ਵਿੱਚ ਨਕਲ ਕੀਤਾ</value>
+  </data>
+  <data name="PinTraySidebarLabel" xml:space="preserve">
+    <value>ਪਿੰਨਡ</value>
+  </data>
+  <data name="QueryTraySidebarLabel" xml:space="preserve">
+    <value>ਸਵਾਲ</value>
+  </data>
+  <data name="ClipboardSetMessage" xml:space="preserve">
+    <value>ਕਲਿੱਪਬੋਰਡ ਸੈਟ</value>
+  </data>
+  <data name="AddNewActionLabel" xml:space="preserve">
+    <value>ਨਵਾਂ ਸ਼ਾਮਲ ਕਰੋ</value>
+  </data>
+  <data name="PluginBrowserFormattedWindowTitle" xml:space="preserve">
+    <value>ਪਲੱਗਇਨ ਬ੍ਰਾਊਜ਼ਰ - {0}</value>
+  </data>
+  <data name="PluginBrowserWindowTitle" xml:space="preserve">
+    <value>ਪਲੱਗਇਨ ਬਰਾਊਜ਼ਰ</value>
+  </data>
+  <data name="EditorPasteButtonLabelMobile" xml:space="preserve">
+    <value>ਕਾਪੀ</value>
+  </data>
+  <data name="PrefSyntaxThemeHint" xml:space="preserve">
+    <value>ਟੈਕਸਟ ਕਲਿੱਪ ਵਿੱਚ ਖੋਜਿਆ ਕੋਡ ਦੇ ਬਲਾਕਾਂ ਲਈ ਥੀਮ.</value>
+  </data>
+  <data name="PrefSyntaxThemeLabel" xml:space="preserve">
+    <value>ਸਿੰਟੈਕਸ ਥੀਮ</value>
+  </data>
+  <data name="PrefCodeFontLabel" xml:space="preserve">
+    <value>ਸਿੰਟੈਕਸ</value>
+  </data>
+  <data name="CommonViewLabel" xml:space="preserve">
+    <value>ਵੇਖੋ</value>
+  </data>
+  <data name="WrapTextMenuLabel" xml:space="preserve">
+    <value>ਟੈਕਸਟ ਲਪੇਟੋ</value>
+  </data>
+  <data name="ClipAssignShortcutLabel" xml:space="preserve">
+    <value>ਸ਼ਾਰਟਕੱਟ ਨਿਰਧਾਰਤ ...</value>
+  </data>
+  <data name="ClipUpdateShortcutLabel" xml:space="preserve">
+    <value>ਸ਼ਾਰਟਕੱਟ ਅਪਡੇਟ ਕਰੋ ...</value>
+  </data>
 </root>

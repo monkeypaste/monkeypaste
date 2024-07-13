@@ -1,0 +1,24 @@
+<Window xmlns="https://github.com/avaloniaui"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="using:MonkeyPaste.Avalonia"
+        xmlns:pcl="using:MonkeyPaste"
+        mc:Ignorable="d"
+        d:DesignWidth="800"
+        d:DesignHeight="450"
+        x:Name="UserActionNotificationWindow"
+        x:DataType="local:MpAvUserActionNotificationViewModel"
+        x:CompileBindings="True"
+        x:Class="MonkeyPaste.Avalonia.MpAvUserActionNotificationWindow"
+        MaxHeight="150"
+        MaxWidth="350"
+        Classes="ntfw userAction"
+        Classes.textbox="{Binding ShowTextBox}"
+        Classes.params="{Binding HasParams}"
+        Classes.reset="{Binding ShowResetPresetButtons}">
+    <Window.Styles>
+        <StyleInclude Source="avares://MonkeyPaste.Avalonia/Themes/Default/Controls/Notifications.axaml" />
+    </Window.Styles>
+    <local:MpAvUserActionNotificationView />
+</Window>

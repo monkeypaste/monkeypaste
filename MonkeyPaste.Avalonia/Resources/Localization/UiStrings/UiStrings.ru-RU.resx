@@ -2996,4 +2996,49 @@
   <data name="DonateLabel" xml:space="preserve">
     <value>Пожертвовать</value>
   </data>
+  <data name="MobileCopiedNtfText" xml:space="preserve">
+    <value>Скопировано в буфер обмена</value>
+  </data>
+  <data name="PinTraySidebarLabel" xml:space="preserve">
+    <value>Прикреплен</value>
+  </data>
+  <data name="QueryTraySidebarLabel" xml:space="preserve">
+    <value>Запрос</value>
+  </data>
+  <data name="PluginBrowserFormattedWindowTitle" xml:space="preserve">
+    <value>Браузер плагинов — {0}</value>
+  </data>
+  <data name="PluginBrowserWindowTitle" xml:space="preserve">
+    <value>Плагин браузера</value>
+  </data>
+  <data name="ClipboardSetMessage" xml:space="preserve">
+    <value>Набор буфера обмена</value>
+  </data>
+  <data name="AddNewActionLabel" xml:space="preserve">
+    <value>Добавить новое</value>
+  </data>
+  <data name="EditorPasteButtonLabelMobile" xml:space="preserve">
+    <value>Копия</value>
+  </data>
+  <data name="PrefSyntaxThemeHint" xml:space="preserve">
+    <value>Тема, используемая для блоков кода, обнаруженной в текстовых клипах.</value>
+  </data>
+  <data name="PrefSyntaxThemeLabel" xml:space="preserve">
+    <value>Синтаксическая тема</value>
+  </data>
+  <data name="PrefCodeFontLabel" xml:space="preserve">
+    <value>Синтаксис</value>
+  </data>
+  <data name="CommonViewLabel" xml:space="preserve">
+    <value>Вид</value>
+  </data>
+  <data name="WrapTextMenuLabel" xml:space="preserve">
+    <value>Обернуть текст</value>
+  </data>
+  <data name="ClipAssignShortcutLabel" xml:space="preserve">
+    <value>Назначьте ярлык ...</value>
+  </data>
+  <data name="ClipUpdateShortcutLabel" xml:space="preserve">
+    <value>Обновить ярлык ...</value>
+  </data>
 </root>

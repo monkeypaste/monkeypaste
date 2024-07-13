@@ -2996,4 +2996,49 @@ Dabar „System Tray“ meniu galima įjungti globalius nuorodas</value>
   <data name="DonateLabel" xml:space="preserve">
     <value>Paaukoti</value>
   </data>
+  <data name="MobileCopiedNtfText" xml:space="preserve">
+    <value>Nukopijuota į mainų sritį</value>
+  </data>
+  <data name="PinTraySidebarLabel" xml:space="preserve">
+    <value>Prigludęs</value>
+  </data>
+  <data name="QueryTraySidebarLabel" xml:space="preserve">
+    <value>Užklausa</value>
+  </data>
+  <data name="PluginBrowserWindowTitle" xml:space="preserve">
+    <value>Papildinio naršyklė</value>
+  </data>
+  <data name="AddNewActionLabel" xml:space="preserve">
+    <value>Pridėti naują</value>
+  </data>
+  <data name="PluginBrowserFormattedWindowTitle" xml:space="preserve">
+    <value>Papildinių naršyklė – {0}</value>
+  </data>
+  <data name="ClipboardSetMessage" xml:space="preserve">
+    <value>Iškarpinės rinkinys</value>
+  </data>
+  <data name="EditorPasteButtonLabelMobile" xml:space="preserve">
+    <value>Kopijuoti</value>
+  </data>
+  <data name="PrefSyntaxThemeHint" xml:space="preserve">
+    <value>TEKSTO KOMPLEKSO KODENTO BLOKS NAUDOJAMA TEMACIJA.</value>
+  </data>
+  <data name="PrefSyntaxThemeLabel" xml:space="preserve">
+    <value>Sintaksės tema</value>
+  </data>
+  <data name="PrefCodeFontLabel" xml:space="preserve">
+    <value>Sintaksė</value>
+  </data>
+  <data name="CommonViewLabel" xml:space="preserve">
+    <value>Vaizdas</value>
+  </data>
+  <data name="WrapTextMenuLabel" xml:space="preserve">
+    <value>Apvyniokite tekstą</value>
+  </data>
+  <data name="ClipAssignShortcutLabel" xml:space="preserve">
+    <value>Priskirkite nuorodą ...</value>
+  </data>
+  <data name="ClipUpdateShortcutLabel" xml:space="preserve">
+    <value>Atnaujinkite nuorodą ...</value>
+  </data>
 </root>

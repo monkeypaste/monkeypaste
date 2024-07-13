@@ -49,7 +49,6 @@
                     Value="False" />
         </Style>
 
-        <!--  UNPIN ALL/BUSY BUTTON  -->
         <Style Selector="Button#UnpinAllButton Image">
             <Setter Property="Source"
                     Value="{Binding Source={StaticResource ClearGridImage}, Converter={x:Static local:MpAvStringHexToBitmapTintConverter.Instance}, ConverterParameter=ThemeInteractiveColor_norand}" />
@@ -67,38 +66,38 @@
                     Value="{Binding IsSubSelectionEnabled}" />
         </Style>
 
-        <!--  TRAY BUTTONS  -->
-        <Style Selector="Button.pinTrayButton">
-            <Setter Property="Width"
-                    Value="25" />
-            <Setter Property="Height"
-                    Value="25" />
+        <!--  BUTTON STRIP  -->
+        <Style Selector="Grid#PinTrayContainerGrid.mobile.sel StackPanel#ButtonPanel">
+            <Setter Property="IsVisible"
+                    Value="False" />
+        </Style>
+        <Style Selector="Grid#PinTrayContainerGrid.mobile StackPanel#ButtonPanel">
+            <Setter Property="HorizontalAlignment"
+                    Value="Left" />
+        </Style>
+        <Style Selector="Grid#PinTrayContainerGrid.mobile.vert StackPanel#ButtonPanel, Grid#PinTrayContainerGrid StackPanel#ButtonPanel">
+            <Setter Property="HorizontalAlignment"
+                    Value="Right" />
         </Style>
     </local:MpAvUserControl.Styles>
     <Border x:Name="PinTrayContainerBorder"
             HorizontalAlignment="Stretch"
             VerticalAlignment="Stretch">
-        <Grid HorizontalAlignment="Stretch"
+        <Grid x:Name="PinTrayContainerGrid"
+              Classes.sel="{Binding IsAnySelectedAndTrayVisible}"
+              Classes.mobile="{Binding IsMobileOrWindowed, Source={x:Static local:MpAvThemeViewModel.Instance}}"
+              Classes.vert="{Binding IsVerticalOrientation, Source={x:Static local:MpAvMainWindowViewModel.Instance}}"
+              HorizontalAlignment="Stretch"
               VerticalAlignment="Stretch">
-            <Border HorizontalAlignment="Stretch"
-                    VerticalAlignment="Stretch"
-                    IsVisible="False"
-                    IsHitTestVisible="False"
-                    Opacity="0.2">
-                <Border.Background>
-                    <ImageBrush DestinationRect="0 0 690 690"
-                                TileMode="Tile"
-                                Source="{Binding Source={StaticResource BurlapTextureImage}, Converter={x:Static local:MpAvIconSourceObjToBitmapConverter.Instance}}" />
-                </Border.Background>
-            </Border>
             <ListBox x:Name="PinTrayListBox"
-                     Classes="clipTileListBox pinListBox"
+                     AutoScrollToSelectedItem="False"
+                     Classes="clipTileListBox pinListBox focus-item-vm"
                      Classes.bright="{Binding $parent[Border].Background, Converter={x:Static local:MpAvBrushToIsBrightBoolConverter.Instance}}"
                      Background="Transparent"
                      MaxWidth="{Binding MaxPinTrayScreenWidth}"
                      MaxHeight="{Binding MaxPinTrayScreenHeight}"
                      ScrollViewer.HorizontalScrollBarVisibility="Disabled"
-                     ScrollViewer.VerticalScrollBarVisibility="Visible"
+                     ScrollViewer.VerticalScrollBarVisibility="Auto"
                      HorizontalAlignment="Stretch"
                      VerticalAlignment="Stretch"
                      SelectedItem="{Binding SelectedPinTrayItem, Mode=TwoWay}"
@@ -123,33 +122,30 @@
                 <ListBox.ItemsPanel>
                     <ItemsPanelTemplate>
                         <WrapPanel HorizontalAlignment="Stretch"
-                                   VerticalAlignment="Stretch"
-                                   Margin="0,0,40,0" />
+                                   VerticalAlignment="Stretch" />
                     </ItemsPanelTemplate>
                 </ListBox.ItemsPanel>
             </ListBox>
 
-            <!--  IsEmpty Overlay  -->
+            <!--  EMPTY OVERLAY  -->
 
-            <Border x:Name="PinTrayEmptyContainer"
-                    HorizontalAlignment="Stretch"
-                    VerticalAlignment="Stretch"
-                    IsHitTestVisible="False"
-                    IsVisible="{Binding InternalPinnedItems, ConverterParameter=flip, Converter={x:Static local:MpAvIsNotNullZeroOrEmptyToBoolConverter.Instance}}"
-                    Background="Transparent">
+            <Button x:Name="PinTrayEmptyContainer"
+                    Classes="link empty-overlay"
+                    Command="{Binding AddClipboardAsItemCommand}"
+                    IsVisible="{Binding IsPinTrayEmpty}">
                 <TextBlock Text="{Binding Source={x:Static local:R.U}, Path=CurrentUiStrings.PinTrayEmptyLabel}"
-                           Classes="disabled emptyOverlayText" />
-            </Border>
+                           Classes="disabled" />
+            </Button>
 
             <!--  BUTTON GRID  -->
-            <StackPanel HorizontalAlignment="Right"
-                        VerticalAlignment="Top"
-                        Spacing="7"
-                        Margin="0,5,20,0">
+            <StackPanel x:Name="ButtonPanel"
+                        IsVisible="{Binding IsMultiWindow, Source={x:Static local:MpAvThemeViewModel.Instance}}"
+                        Margin="0,5,10,0"
+                        Spacing="7">
                 <!--  UNPIN All/Busy  -->
 
                 <Button x:Name="UnpinAllButton"
-                        Classes="defaultButton pinTrayButton"
+                        Classes="default-button clipTrayButton"
                         IsEnabled="{Binding !IsPinTrayBusy}"
                         Command="{Binding UnpinAllCommand}">
                     <ToolTip.Tip>
@@ -184,9 +180,9 @@
                 <!--  ADD FROM CLIPBOARD BUTTON  -->
 
                 <Button x:Name="AddFromClipboardButton"
-                        Classes="defaultButton pinTrayButton outlineOver"
+                        Classes="default-button clipTrayButton outlineOver"
                         IsVisible="{Binding CanAddItemWhileIgnoringClipboard}"
-                        Command="{Binding AddItemWhileIgnoringClipboardCommand}">
+                        Command="{Binding AddClipboardAsItemCommand}">
                     <Image Source="{Binding Source={StaticResource BullsEyeImage}, Converter={x:Static local:MpAvStringHexToBitmapTintConverter.Instance}, ConverterParameter=ThemeAccent2Color}" />
                     <ToolTip.Tip>
                         <local:MpAvToolTipView InputGestureText="{Binding ., ConverterParameter=ManuallyAddFromClipboard, Converter={x:Static local:MpAvShortcutTypeOrCommandObjToKeyStringConverter.Instance}}"
@@ -195,8 +191,6 @@
                 </Button>
 
             </StackPanel>
-
-
         </Grid>
     </Border>
 </local:MpAvUserControl>

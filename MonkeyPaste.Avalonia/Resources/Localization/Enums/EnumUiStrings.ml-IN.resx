@@ -1186,4 +1186,16 @@
   <data name="MpShortcutType_ToggleGlobalHooks" xml:space="preserve">
     <value>ആഗോള കൊളുത്തുകൾ ടോഗിൾ ചെയ്യുക</value>
   </data>
+  <data name="MpNotificationType_ModalSettingsFrameMenu" xml:space="preserve">
+    <value>മോഡൽ ക്രമീകരണ ഫ്രെയിം മെനു</value>
+  </data>
+  <data name="MpShortcutType_EnterKeyAction" xml:space="preserve">
+    <value>പ്രധാന പ്രവർത്തനം നൽകുക</value>
+  </data>
+  <data name="MpShortcutType_ToggleXamlHotReload" xml:space="preserve">
+    <value>Xaml Hot Holl ലോഡുചെയ്യാൻ ടോഗിൾ ചെയ്യുക</value>
+  </data>
+  <data name="MpShortcutType_ToggleContentWrap" xml:space="preserve">
+    <value>ഉള്ളടക്ക റാപ് ടോഗിൾ ചെയ്യുക</value>
+  </data>
 </root>

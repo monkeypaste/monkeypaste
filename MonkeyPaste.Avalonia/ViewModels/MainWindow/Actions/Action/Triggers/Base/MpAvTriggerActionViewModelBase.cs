@@ -114,6 +114,8 @@ namespace MonkeyPaste.Avalonia {
         #endregion
 
         #region State
+
+        bool HasDesignerChanged { get; set; }
         protected virtual MpIActionComponent TriggerComponent { get; }
         public bool IsAllValid =>
             IsValid && AllDescendants.All(x => x.IsValid);
@@ -149,6 +151,73 @@ namespace MonkeyPaste.Avalonia {
             }
         }
 
+        #region Designer Settings
+        public double TranslateOffsetX {
+            get {
+                if (DesignerSettings == null) {
+                    return 0;
+                }
+                return DesignerSettings.TranslateOffsetX;
+            }
+            set {
+                if (TranslateOffsetX != value) {
+                    DesignerSettings.TranslateOffsetX = value;
+                    HasDesignerChanged = true;
+                    OnPropertyChanged(nameof(TranslateOffsetX));
+                }
+            }
+        }
+        public double TranslateOffsetY {
+            get {
+                if (DesignerSettings == null) {
+                    return 0;
+                }
+                return DesignerSettings.TranslateOffsetY;
+            }
+            set {
+                if (TranslateOffsetY != value) {
+                    DesignerSettings.TranslateOffsetY = value;
+                    HasDesignerChanged = true;
+                    OnPropertyChanged(nameof(TranslateOffsetY));
+                }
+            }
+        }
+
+        public double ZoomFactor {
+            get {
+                if (DesignerSettings == null) {
+                    return 0;
+                }
+                return DesignerSettings.ZoomFactor;
+            }
+            set {
+                if (ZoomFactor != value) {
+                    DesignerSettings.ZoomFactor = value;
+                    HasDesignerChanged = true;
+                    OnPropertyChanged(nameof(ZoomFactor));
+                }
+            }
+        }
+        
+        public bool IsGridVisible {
+            get {
+                if (DesignerSettings == null) {
+                    return true;
+                }
+                return DesignerSettings.IsGridVisible;
+            }
+            set {
+                if (IsGridVisible != value) {
+                    DesignerSettings.IsGridVisible = value;
+                    HasDesignerChanged = true;
+                    OnPropertyChanged(nameof(IsGridVisible));
+                }
+            }
+        }
+
+        public MpTriggerDesignerSettings DesignerSettings { get; set; }
+        #endregion
+
         #endregion
 
         #endregion
@@ -159,11 +228,22 @@ namespace MonkeyPaste.Avalonia {
             PropertyChanged += MpAvTriggerActionViewModelBase_PropertyChanged;
         }
 
-
         #endregion
 
         #region Public Methods
 
+        public override async Task InitializeAsync(MpAction a) {
+            IsBusy = true;
+            if(a != null) {
+                DesignerSettings = await MpDataModelProvider.GetTriggerDesignerSettingsByActionId(a.Id);
+            }
+            if(DesignerSettings == null) {
+                DesignerSettings = new();
+            }
+            
+            await base.InitializeAsync(a);
+            IsBusy = false;
+        }
         #endregion
 
         #region Protected Methods
@@ -183,28 +263,33 @@ namespace MonkeyPaste.Avalonia {
 
 
         protected virtual async Task ShowUserEnableChangeNotification() {
-            await Dispatcher.UIThread.InvokeAsync(async () => {
-                if (_isShowEnabledChangedNotification) {
-                    // BUG not sure why but IsEnable change gets fired twice so this avoids 2 notifications
-                    // maybe cause it depends on base Arg2? dunno tried to fix, sorry
-                    return;
-                }
+            if(MpAvThemeViewModel.Instance.IsMobileOrWindowed) {
+                // hide on mobile..
+                return;
+            }
+            if(!Dispatcher.UIThread.CheckAccess()) {
+                await Dispatcher.UIThread.InvokeAsync(ShowUserEnableChangeNotification);
+                return;
+            }
+            if (_isShowEnabledChangedNotification) {
+                // BUG not sure why but IsEnable change gets fired twice so this avoids 2 notifications
+                // maybe cause it depends on base Arg2? dunno tried to fix, sorry
+                return;
+            }
 
-                _isShowEnabledChangedNotification = true;
+            _isShowEnabledChangedNotification = true;
 
-                string enabledText = IsEnabled ? UiStrings.CommonEnabledLabel : UiStrings.CommonDisabledLabel;
-                string typeStr = ParentActionId == 0 ? UiStrings.TriggerLabel : UiStrings.ActionLabel;
-                string notificationText = $"{typeStr} '{FullName}':  {enabledText}";
+            string enabledText = IsEnabled ? UiStrings.CommonEnabledLabel : UiStrings.CommonDisabledLabel;
+            string typeStr = ParentActionId == 0 ? UiStrings.TriggerLabel : UiStrings.ActionLabel;
+            string notificationText = $"{typeStr} '{FullName}':  {enabledText}";
 
-                await Mp.Services.NotificationBuilder.ShowMessageAsync(
-                    iconSourceObj: IconResourceObj.ToString(),
-                    title: $"{typeStr.ToUpper()} {UiStrings.CommonStatusLabel}",
-                    body: notificationText,
-                    msgType: MpNotificationType.TriggerEnabled);
+            await Mp.Services.NotificationBuilder.ShowMessageAsync(
+                iconSourceObj: IconResourceObj.ToString(),
+                title: $"{typeStr.ToUpper()} {UiStrings.CommonStatusLabel}",
+                body: notificationText,
+                msgType: MpNotificationType.TriggerEnabled);
 
-                _isShowEnabledChangedNotification = false;
-
-            });
+            _isShowEnabledChangedNotification = false;
         }
 
         protected override async Task PerformActionAsync(object arg) {
@@ -246,6 +331,15 @@ namespace MonkeyPaste.Avalonia {
                 case nameof(IsBusy):
                     if (Parent != null) {
                         Parent.OnPropertyChanged(nameof(Parent.IsAnyBusy));
+                    }
+                    break;
+
+                case nameof(HasDesignerChanged):
+                    if (HasDesignerChanged) {
+                        Task.Run(async () => {
+                            await DesignerSettings.WriteToDatabaseAsync();
+                            HasDesignerChanged = false;
+                        });
                     }
                     break;
 

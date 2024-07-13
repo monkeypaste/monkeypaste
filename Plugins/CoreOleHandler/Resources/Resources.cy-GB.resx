@@ -222,4 +222,10 @@
   <data name="ToFileExtHint" xml:space="preserve">
     <value>Yr estyniad ffeil a ddefnyddir pan ddefnyddir '{0}' i greu ffeil ar-alw.</value>
   </data>
+  <data name="RtfParaTagNameHint" xml:space="preserve">
+    <value>Ar gyfer amlygu cod defnyddiwch y tag 'PRE' neu bydd yr RTF yn cael ei drin fel testun cyfoethog arferol.</value>
+  </data>
+  <data name="RtfParaTagNameLabel" xml:space="preserve">
+    <value>Tag Paragraff HTML</value>
+  </data>
 </root>

@@ -20,6 +20,7 @@
         RestartNowLater,
         ModalShutdownLater,
         DeleteIgnoreFix,
-        YesShutdown
+        YesShutdown,
+        BackDone
     }
 }

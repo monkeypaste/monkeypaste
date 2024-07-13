@@ -222,4 +222,10 @@
   <data name="ToFileExtHint" xml:space="preserve">
     <value>فائل کی توسیع جب '{0}' کا استعمال آن ڈیمانڈ پر فائل بنانے کے لئے کیا جاتا ہے۔</value>
   </data>
+  <data name="RtfParaTagNameHint" xml:space="preserve">
+    <value>کوڈ کو اجاگر کرنے کے لئے 'پری' ٹیگ استعمال کریں بصورت دیگر آر ٹی ایف کو معمول سے بھرپور متن کے طور پر سمجھا جائے گا۔</value>
+  </data>
+  <data name="RtfParaTagNameLabel" xml:space="preserve">
+    <value>HTML پیراگراف ٹیگ</value>
+  </data>
 </root>

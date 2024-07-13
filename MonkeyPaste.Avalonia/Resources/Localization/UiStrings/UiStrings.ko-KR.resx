@@ -2996,4 +2996,49 @@
   <data name="DonateLabel" xml:space="preserve">
     <value>기부</value>
   </data>
+  <data name="MobileCopiedNtfText" xml:space="preserve">
+    <value>클립 보드에 복사</value>
+  </data>
+  <data name="PinTraySidebarLabel" xml:space="preserve">
+    <value>고정</value>
+  </data>
+  <data name="QueryTraySidebarLabel" xml:space="preserve">
+    <value>질문</value>
+  </data>
+  <data name="PluginBrowserFormattedWindowTitle" xml:space="preserve">
+    <value>플러그인 브라우저 - {0}</value>
+  </data>
+  <data name="PluginBrowserWindowTitle" xml:space="preserve">
+    <value>플러그인 브라우저</value>
+  </data>
+  <data name="ClipboardSetMessage" xml:space="preserve">
+    <value>클립 보드 세트</value>
+  </data>
+  <data name="AddNewActionLabel" xml:space="preserve">
+    <value>새로운 걸 더하다</value>
+  </data>
+  <data name="EditorPasteButtonLabelMobile" xml:space="preserve">
+    <value>복사</value>
+  </data>
+  <data name="PrefSyntaxThemeHint" xml:space="preserve">
+    <value>텍스트 클립에서 감지 된 코드 블록에 사용되는 테마.</value>
+  </data>
+  <data name="PrefSyntaxThemeLabel" xml:space="preserve">
+    <value>구문 테마</value>
+  </data>
+  <data name="PrefCodeFontLabel" xml:space="preserve">
+    <value>통사론</value>
+  </data>
+  <data name="CommonViewLabel" xml:space="preserve">
+    <value>보다</value>
+  </data>
+  <data name="WrapTextMenuLabel" xml:space="preserve">
+    <value>텍스트를 랩합니다</value>
+  </data>
+  <data name="ClipAssignShortcutLabel" xml:space="preserve">
+    <value>바로 가기 할당 ...</value>
+  </data>
+  <data name="ClipUpdateShortcutLabel" xml:space="preserve">
+    <value>바로 가기 업데이트 ...</value>
+  </data>
 </root>

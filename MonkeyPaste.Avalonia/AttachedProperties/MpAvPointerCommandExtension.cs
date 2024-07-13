@@ -7,23 +7,39 @@ using Avalonia.VisualTree;
 using MonkeyPaste.Common;
 using MonkeyPaste.Common.Avalonia;
 using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using System.Windows.Input;
 
 namespace MonkeyPaste.Avalonia {
+    public class MpAvPointerCommandRules {
+        public bool IsEventHandled { get; set; }
+        public RoutingStrategies Routing { get; set; }
+    }
     public static class MpAvPointerCommandExtension {
         #region Private Variables
-
         #endregion
 
         #region Constants
         #endregion
         static MpAvPointerCommandExtension() {
             IsEnabledProperty.Changed.AddClassHandler<Control>((x, y) => HandleIsEnabledChanged(x, y));
+
+            LeftPressCommandProperty.Changed.AddClassHandler<Control>((x, y) => BindCommand(LeftPressCommandProperty, x));
+            LeftReleaseCommandProperty.Changed.AddClassHandler<Control>((x, y) => BindCommand(LeftReleaseCommandProperty, x));
+            DoubleLeftPressCommandProperty.Changed.AddClassHandler<Control>((x, y) => BindCommand(DoubleLeftPressCommandProperty, x));
+
+            RightPressCommandProperty.Changed.AddClassHandler<Control>((x, y) => BindCommand(RightPressCommandProperty, x));
+            RightReleaseCommandProperty.Changed.AddClassHandler<Control>((x, y) => BindCommand(RightReleaseCommandProperty, x));
+            DoubleRightPressCommandProperty.Changed.AddClassHandler<Control>((x, y) => BindCommand(DoubleRightPressCommandProperty, x));
+
+            HoldCommandProperty.Changed.AddClassHandler<Control>((x, y) => BindCommand(HoldCommandProperty, x));
         }
 
         #region Properties
+
+        #region Pointer Commands
 
         #region LeftPressCommand AvaloniaProperty
         public static ICommand GetLeftPressCommand(AvaloniaObject obj) {
@@ -54,6 +70,23 @@ namespace MonkeyPaste.Avalonia {
         public static readonly AttachedProperty<object> LeftPressCommandParameterProperty =
             AvaloniaProperty.RegisterAttached<object, Control, object>(
                 "LeftPressCommandParameter",
+                null,
+                false);
+
+        #endregion
+        
+        #region LeftPressRules AvaloniaProperty
+        public static MpAvPointerCommandRules GetLeftPressRules(AvaloniaObject obj) {
+            return obj.GetValue(LeftPressRulesProperty);
+        }
+
+        public static void SetLeftPressRules(AvaloniaObject obj, MpAvPointerCommandRules value) {
+            obj.SetValue(LeftPressRulesProperty, value);
+        }
+
+        public static readonly AttachedProperty<MpAvPointerCommandRules> LeftPressRulesProperty =
+            AvaloniaProperty.RegisterAttached<object, Control, MpAvPointerCommandRules>(
+                "LeftPressRules",
                 null,
                 false);
 
@@ -93,6 +126,23 @@ namespace MonkeyPaste.Avalonia {
 
         #endregion
 
+        #region LeftReleaseRules AvaloniaProperty
+        public static MpAvPointerCommandRules GetLeftReleaseRules(AvaloniaObject obj) {
+            return obj.GetValue(LeftReleaseRulesProperty);
+        }
+
+        public static void SetLeftReleaseRules(AvaloniaObject obj, MpAvPointerCommandRules value) {
+            obj.SetValue(LeftReleaseRulesProperty, value);
+        }
+
+        public static readonly AttachedProperty<MpAvPointerCommandRules> LeftReleaseRulesProperty =
+            AvaloniaProperty.RegisterAttached<object, Control, MpAvPointerCommandRules>(
+                "LeftReleaseRules",
+                null,
+                false);
+
+        #endregion
+
         #region DoubleLeftPressCommand AvaloniaProperty
         public static ICommand GetDoubleLeftPressCommand(AvaloniaObject obj) {
             return obj.GetValue(DoubleLeftPressCommandProperty);
@@ -122,6 +172,23 @@ namespace MonkeyPaste.Avalonia {
         public static readonly AttachedProperty<object> DoubleLeftPressCommandParameterProperty =
             AvaloniaProperty.RegisterAttached<object, Control, object>(
                 "DoubleLeftPressCommandParameter",
+                null,
+                false);
+
+        #endregion
+
+        #region DoubleLeftPressRules AvaloniaProperty
+        public static MpAvPointerCommandRules GetDoubleLeftPressRules(AvaloniaObject obj) {
+            return obj.GetValue(DoubleLeftPressRulesProperty);
+        }
+
+        public static void SetDoubleLeftPressRules(AvaloniaObject obj, MpAvPointerCommandRules value) {
+            obj.SetValue(DoubleLeftPressRulesProperty, value);
+        }
+
+        public static readonly AttachedProperty<MpAvPointerCommandRules> DoubleLeftPressRulesProperty =
+            AvaloniaProperty.RegisterAttached<object, Control, MpAvPointerCommandRules>(
+                "DoubleLeftPressRules",
                 null,
                 false);
 
@@ -161,6 +228,23 @@ namespace MonkeyPaste.Avalonia {
 
         #endregion
 
+        #region RightPressRules AvaloniaProperty
+        public static MpAvPointerCommandRules GetRightPressRules(AvaloniaObject obj) {
+            return obj.GetValue(RightPressRulesProperty);
+        }
+
+        public static void SetRightPressRules(AvaloniaObject obj, MpAvPointerCommandRules value) {
+            obj.SetValue(RightPressRulesProperty, value);
+        }
+
+        public static readonly AttachedProperty<MpAvPointerCommandRules> RightPressRulesProperty =
+            AvaloniaProperty.RegisterAttached<object, Control, MpAvPointerCommandRules>(
+                "RightPressRules",
+                null,
+                false);
+
+        #endregion
+
         #region RightReleaseCommand AvaloniaProperty
         public static ICommand GetRightReleaseCommand(AvaloniaObject obj) {
             return obj.GetValue(RightReleaseCommandProperty);
@@ -195,72 +279,172 @@ namespace MonkeyPaste.Avalonia {
 
         #endregion
 
-        #region RoutingStrategy AvaloniaProperty
-        public static RoutingStrategies GetRoutingStrategy(AvaloniaObject obj) {
-            return obj.GetValue(RoutingStrategyProperty);
+        #region RightReleaseRules AvaloniaProperty
+        public static MpAvPointerCommandRules GetRightReleaseRules(AvaloniaObject obj) {
+            return obj.GetValue(RightReleaseRulesProperty);
         }
 
-        public static void SetRoutingStrategy(AvaloniaObject obj, RoutingStrategies value) {
-            obj.SetValue(RoutingStrategyProperty, value);
+        public static void SetRightReleaseRules(AvaloniaObject obj, MpAvPointerCommandRules value) {
+            obj.SetValue(RightReleaseRulesProperty, value);
         }
 
-        public static readonly AttachedProperty<RoutingStrategies> RoutingStrategyProperty =
+        public static readonly AttachedProperty<MpAvPointerCommandRules> RightReleaseRulesProperty =
+            AvaloniaProperty.RegisterAttached<object, Control, MpAvPointerCommandRules>(
+                "RightReleaseRules",
+                null,
+                false);
+
+        #endregion
+
+        #region DoubleRightPressCommand AvaloniaProperty
+        public static ICommand GetDoubleRightPressCommand(AvaloniaObject obj) {
+            return obj.GetValue(DoubleRightPressCommandProperty);
+        }
+
+        public static void SetDoubleRightPressCommand(AvaloniaObject obj, ICommand value) {
+            obj.SetValue(DoubleRightPressCommandProperty, value);
+        }
+
+        public static readonly AttachedProperty<ICommand> DoubleRightPressCommandProperty =
+            AvaloniaProperty.RegisterAttached<object, Control, ICommand>(
+                "DoubleRightPressCommand",
+                null,
+                false);
+
+        #endregion
+
+        #region DoubleRightPressCommandParameter AvaloniaProperty
+        public static object GetDoubleRightPressCommandParameter(AvaloniaObject obj) {
+            return obj.GetValue(DoubleRightPressCommandParameterProperty);
+        }
+
+        public static void SetDoubleRightPressCommandParameter(AvaloniaObject obj, object value) {
+            obj.SetValue(DoubleRightPressCommandParameterProperty, value);
+        }
+
+        public static readonly AttachedProperty<object> DoubleRightPressCommandParameterProperty =
+            AvaloniaProperty.RegisterAttached<object, Control, object>(
+                "DoubleRightPressCommandParameter",
+                null,
+                false);
+
+        #endregion
+
+        #region DoubleRightPressRules AvaloniaProperty
+        public static MpAvPointerCommandRules GetDoubleRightPressRules(AvaloniaObject obj) {
+            return obj.GetValue(DoubleRightPressRulesProperty);
+        }
+
+        public static void SetDoubleRightPressRules(AvaloniaObject obj, MpAvPointerCommandRules value) {
+            obj.SetValue(DoubleRightPressRulesProperty, value);
+        }
+
+        public static readonly AttachedProperty<MpAvPointerCommandRules> DoubleRightPressRulesProperty =
+            AvaloniaProperty.RegisterAttached<object, Control, MpAvPointerCommandRules>(
+                "DoubleRightPressRules",
+                null,
+                false);
+
+        #endregion
+
+        #region HoldCommand AvaloniaProperty
+        public static ICommand GetHoldCommand(AvaloniaObject obj) {
+            return obj.GetValue(HoldCommandProperty);
+        }
+
+        public static void SetHoldCommand(AvaloniaObject obj, ICommand value) {
+            obj.SetValue(HoldCommandProperty, value);
+        }
+
+        public static readonly AttachedProperty<ICommand> HoldCommandProperty =
+            AvaloniaProperty.RegisterAttached<object, Control, ICommand>(
+                "HoldCommand",
+                null,
+                false);
+
+        #endregion
+
+        #region HoldCommandParameter AvaloniaProperty
+        public static object GetHoldCommandParameter(AvaloniaObject obj) {
+            return obj.GetValue(HoldCommandParameterProperty);
+        }
+
+        public static void SetHoldCommandParameter(AvaloniaObject obj, object value) {
+            obj.SetValue(HoldCommandParameterProperty, value);
+        }
+
+        public static readonly AttachedProperty<object> HoldCommandParameterProperty =
+            AvaloniaProperty.RegisterAttached<object, Control, object>(
+                "HoldCommandParameter",
+                null,
+                false);
+
+        #endregion
+
+        #region HoldRules AvaloniaProperty
+        public static MpAvPointerCommandRules GetHoldRules(AvaloniaObject obj) {
+            return obj.GetValue(HoldRulesProperty);
+        }
+
+        public static void SetHoldRules(AvaloniaObject obj, MpAvPointerCommandRules value) {
+            obj.SetValue(HoldRulesProperty, value);
+        }
+
+        public static readonly AttachedProperty<MpAvPointerCommandRules> HoldRulesProperty =
+            AvaloniaProperty.RegisterAttached<object, Control, MpAvPointerCommandRules>(
+                "HoldRules",
+                null,
+                false);
+
+        #endregion
+
+        #endregion
+
+        #region DefaultRoutingStrategy AvaloniaProperty
+        public static RoutingStrategies GetDefaultRoutingStrategy(AvaloniaObject obj) {
+            return obj.GetValue(DefaultRoutingStrategyProperty);
+        }
+
+        public static void SetDefaultRoutingStrategy(AvaloniaObject obj, RoutingStrategies value) {
+            obj.SetValue(DefaultRoutingStrategyProperty, value);
+        }
+
+        public static readonly AttachedProperty<RoutingStrategies> DefaultRoutingStrategyProperty =
             AvaloniaProperty.RegisterAttached<object, Control, RoutingStrategies>(
-                "RoutingStrategy",
+                "DefaultRoutingStrategy",
                 RoutingStrategies.Direct);
 
         #endregion
 
-        #region RouteHoldToRightPress AvaloniaProperty
-        public static bool GetRouteHoldToRightPress(AvaloniaObject obj) {
-            return obj.GetValue(RouteHoldToRightPressProperty);
+        #region RouteRightPressToHold AvaloniaProperty
+        public static bool GetRouteRightPressToHold(AvaloniaObject obj) {
+            return obj.GetValue(RouteRightPressToHoldProperty);
         }
 
-        public static void SetRouteHoldToRightPress(AvaloniaObject obj, bool value) {
-            obj.SetValue(RouteHoldToRightPressProperty, value);
+        public static void SetRouteRightPressToHold(AvaloniaObject obj, bool value) {
+            obj.SetValue(RouteRightPressToHoldProperty, value);
         }
 
-        public static readonly AttachedProperty<bool> RouteHoldToRightPressProperty =
+        public static readonly AttachedProperty<bool> RouteRightPressToHoldProperty =
             AvaloniaProperty.RegisterAttached<object, Control, bool>(
-                "RouteHoldToRightPress",
-#if DESKTOP
-                false);
-#else
-                true);
-#endif
+                "RouteRightPressToHold",
+                MpAvThemeViewModel.Instance.IsMobileOrWindowed ? true : false);
 
         #endregion
 
-        #region IsEventHandled AvaloniaProperty
-        public static bool GetIsEventHandled(AvaloniaObject obj) {
-            return obj.GetValue(IsEventHandledProperty);
+        #region DefaultIsEventHandled AvaloniaProperty
+        public static bool GetDefaultIsEventHandled(AvaloniaObject obj) {
+            return obj.GetValue(DefaultIsEventHandledProperty);
         }
 
-        public static void SetIsEventHandled(AvaloniaObject obj, bool value) {
-            obj.SetValue(IsEventHandledProperty, value);
+        public static void SetDefaultIsEventHandled(AvaloniaObject obj, bool value) {
+            obj.SetValue(DefaultIsEventHandledProperty, value);
         }
 
-        public static readonly AttachedProperty<bool> IsEventHandledProperty =
+        public static readonly AttachedProperty<bool> DefaultIsEventHandledProperty =
             AvaloniaProperty.RegisterAttached<object, Control, bool>(
-                "IsEventHandled",
+                "DefaultIsEventHandled",
                 true);
-
-        #endregion
-
-        #region PointerGestureDelayMs AvaloniaProperty
-        public static int GetPointerGestureDelayMs(AvaloniaObject obj) {
-            return obj.GetValue(PointerGestureDelayMsProperty);
-        }
-
-        public static void SetPointerGestureDelayMs(AvaloniaObject obj, int value) {
-            obj.SetValue(PointerGestureDelayMsProperty, value);
-        }
-
-        public static readonly AttachedProperty<int> PointerGestureDelayMsProperty =
-            AvaloniaProperty.RegisterAttached<object, Control, int>(
-                "PointerGestureDelayMs",
-                500,
-                false);
 
         #endregion
 
@@ -282,223 +466,191 @@ namespace MonkeyPaste.Avalonia {
             if (element is Control control &&
                 e.NewValue is bool isEnabledVal) {
                 if (isEnabledVal) {
-                    control.AttachedToVisualTree += EnabledControl_AttachedToVisualHandler;
-                    control.DetachedFromVisualTree += DisabledControl_DetachedToVisualHandler;
-                    if (control.IsInitialized) {
-                        EnabledControl_AttachedToVisualHandler(control, null);
-                    }
+                    control.Unloaded += Control_Unloaded;
                 } else {
-                    DisabledControl_DetachedToVisualHandler(element, null);
+                    Control_Unloaded(element, null);
                 }
             }
 
         }
+
 
         #endregion
 
         #endregion
 
-        #region Control Event Handlers
+        #region Private Methods
 
-        private static void EnabledControl_AttachedToVisualHandler(object s, VisualTreeAttachmentEventArgs? e) {
-            if (s is Control control) {
-                bool has_any_press =
-                    GetLeftPressCommand(control) != null ||
-                    GetRightPressCommand(control) != null ||
-                    GetDoubleLeftPressCommand(control) != null;
-
-
-                if (has_any_press) {
-                    if (control is Button b && GetLeftPressCommand(control) != null) {
-                        // NOTE pointerpress is swallowed by button unless tunneled, may need for other controls too...
-                        b.AddHandler(Button.PointerPressedEvent, Control_PointerPressed, RoutingStrategies.Tunnel);
-                    }
-                    control.AddHandler(Control.PointerPressedEvent, Control_PointerPressed, GetRoutingStrategy(control));
-
-                    if (GetRightPressCommand(control) is ICommand rght_press_cmd && GetRouteHoldToRightPress(control)) {
-                        control.AddHandler(Control.HoldingEvent, Control_Holding, RoutingStrategies.Tunnel);
-
-#if MOBILE
-                        //control.AddHandler(Control.PointerPressedEvent, (s, e) => {
-                        //    e.Handled = true;
-                        //}, RoutingStrategies.Tunnel);
-#endif
-                    }
-                }
-
-                if (GetLeftReleaseCommand(control) != null || GetRightReleaseCommand(control) != null) {
-                    control.AddHandler(Control.PointerReleasedEvent, Control_PointerReleased, GetRoutingStrategy(control));
-                }
-            }
-        }
-
-        private static void DisabledControl_DetachedToVisualHandler(object s, VisualTreeAttachmentEventArgs? e) {
-            if (s is Control control) {
-                control.AttachedToVisualTree -= EnabledControl_AttachedToVisualHandler;
-                control.DetachedFromVisualTree -= DisabledControl_DetachedToVisualHandler;
-                control.PointerPressed -= Control_PointerPressed;
-                control.Holding -= Control_Holding;
-            }
-        }
-
-        private static void Control_PointerPressed(object sender, PointerPressedEventArgs e) {
-            var control = ResolveEventControl(sender, e);
-            ICommand cmd = null;
-            object param = null;
-
-            if (e.IsLeftPress(control)) {
-                if (e.ClickCount == 2) {
-                    cmd = GetDoubleLeftPressCommand(control);
-                    param = GetDoubleLeftPressCommandParameter(control);
+        private static void BindCommand(AvaloniaProperty cmdProp, Control cmdControl) {
+            var info = GetCmdInfo(cmdProp, cmdControl);
+            cmdControl.AddHandler(info.evt, info.handler, info.rules.Routing);
+            if(cmdProp == RightPressCommandProperty && GetRouteRightPressToHold(cmdControl)) {                
+                if(GetHoldRules(cmdControl) is { } hold_rules) {
+                    cmdControl.AddHandler(Control.HoldingEvent, HoldHandler, hold_rules.Routing);
                 } else {
-                    bool can_left_press = GetLeftPressCommand(control) != null &&
-                         GetLeftPressCommand(control).CanExecute(GetLeftPressCommandParameter(control));
-                    bool can_left_release = GetLeftReleaseCommand(control) != null &&
-                         GetLeftReleaseCommand(control).CanExecute(GetLeftReleaseCommandParameter(control));
-                    bool can_double_left_press = GetDoubleLeftPressCommand(control) != null &&
-                        GetDoubleLeftPressCommand(control).CanExecute(GetDoubleLeftPressCommandParameter(control));
-                    bool can_hold = GetRouteHoldToRightPress(control) &&
-                          GetRightPressCommand(control) != null &&
-                          GetRightPressCommand(control).CanExecute(GetRightPressCommandParameter(control));
-
-                    bool needs_double_delay_check =
-                        // press vs double press
-                        (can_left_press || can_left_release) && can_double_left_press;
-
-                    bool needs_hold_check =
-                          // press vs hold
-                          /*(can_left_press || can_left_release) &&*/ can_hold;
-
-                    if (needs_double_delay_check ||
-                        needs_hold_check) {
-                        //e.Handled = true;
-
-                        Dispatcher.UIThread.Post(async () => {
-                            bool is_still_down = true;
-                            double drag_dist = 0;
-                            if (needs_hold_check) {
-                                MpPoint down_mp = e.GetPosition(control).ToPortablePoint();
-                                void move_handler(object s, PointerEventArgs e) {
-                                    if (!e.IsLeftDown(control)) {
-                                        is_still_down = false;
-                                        control.RemoveHandler(Control.PointerMovedEvent, move_handler);
-                                        return;
-                                    }
-                                    drag_dist = e.GetPosition(control).ToPortablePoint().Distance(down_mp);
-                                }
-                                void release_handler(object s, PointerReleasedEventArgs e) {
-                                    is_still_down = false;
-                                    control.RemoveHandler(Control.PointerReleasedEvent, release_handler);
-                                    control.RemoveHandler(Control.PointerMovedEvent, move_handler);
-                                }
-                                control.AddHandler(Control.PointerMovedEvent, move_handler, RoutingStrategies.Tunnel);
-                                control.AddHandler(Control.PointerReleasedEvent, release_handler, RoutingStrategies.Tunnel);
-                            }
-                            DateTime this_press_dt = DateTime.Now;
-                            bool was_new_press = false;
-                            if (needs_double_delay_check) {
-                                EventHandler<PointerPressedEventArgs> next_press_handler = null;
-                                next_press_handler = (s, e) => {
-                                    was_new_press = true;
-                                    control.RemoveHandler(Control.PointerPressedEvent, next_press_handler);
-                                };
-                                control.AddHandler(Control.PointerPressedEvent, next_press_handler, RoutingStrategies.Tunnel);
-                            }
-                            // to disable single vs double wait for delay if no more click
-                            while (true) {
-                                if (was_new_press) {
-                                    // double click, reject single
-                                    return;
-                                }
-                                if (control.DataContext is MpIDraggable dvm && dvm.IsDragging) {
-                                    // drag, reject press
-                                    return;
-                                }
-                                if (DateTime.Now - this_press_dt > TimeSpan.FromMilliseconds(GetPointerGestureDelayMs(control))) {
-                                    if (needs_hold_check &&
-                                        is_still_down &&
-                                        drag_dist < 5) {
-                                        // hold 
-                                        cmd = GetRightPressCommand(control);
-                                        param = GetRightPressCommandParameter(control);
-                                    } else {
-                                        // single click
-                                        cmd = GetLeftPressCommand(control);
-                                        param = GetLeftPressCommandParameter(control);
-                                    }
-                                    if (cmd != null &&
-                                        cmd.CanExecute(param)) {
-                                        cmd.Execute(param);
-                                        e.Handled = GetIsEventHandled(control);
-                                    }
-                                    return;
-                                }
-                                await Task.Delay(100);
-                            }
-                        });
-                        return;
-                    } else {
-                        cmd = GetLeftPressCommand(control);
-                        param = GetLeftPressCommandParameter(control);
-                    }
-
+                    cmdControl.AddHandler(Control.HoldingEvent, HoldHandler, info.rules.Routing);
                 }
-            } else if (e.IsRightPress(control)) {
-                cmd = GetRightPressCommand(control);
-                param = GetRightPressCommandParameter(control);
-            }
-            if (cmd != null && cmd.CanExecute(param)) {
-                cmd.Execute(param);
-                e.Handled = GetIsEventHandled(control);
             }
         }
 
+        private static (RoutedEvent evt, Delegate handler, MpAvPointerCommandRules rules) GetCmdInfo(AvaloniaProperty cmdProp, Control cmdControl) {
+            MpAvPointerCommandRules rules = null;
+            RoutedEvent re = null;
+            Delegate handler = null;
+            if (cmdProp == LeftPressCommandProperty) {
+                rules = GetLeftPressRules(cmdControl);
+                re = Control.PointerPressedEvent;
+                handler = LeftPressedHandler;
+            } else if (cmdProp == LeftReleaseCommandProperty) {
+                rules = GetLeftReleaseRules(cmdControl);
+                re = Control.PointerReleasedEvent;
+                handler = LeftReleaseHandler;
+            } else if (cmdProp == DoubleLeftPressCommandProperty) {
+                rules = GetDoubleLeftPressRules(cmdControl);
+                re = Control.PointerPressedEvent;
+                handler = DoubleLeftPressedHandler;
+            } else if (cmdProp == RightPressCommandProperty) {
+                rules = GetRightPressRules(cmdControl);
+                re = Control.PointerPressedEvent;
+                handler = RightPressedHandler;
+            } else if (cmdProp == RightReleaseCommandProperty) {
+                rules = GetRightReleaseRules(cmdControl);
+                re = Control.PointerReleasedEvent;
+                handler = RightReleaseHandler;
+            } else if (cmdProp == DoubleRightPressCommandProperty) {
+                rules = GetDoubleRightPressRules(cmdControl);
+                re = Control.PointerPressedEvent;
+                handler = DoubleRightPressedHandler;
+            } else if (cmdProp == HoldCommandProperty) {
+                rules = GetHoldRules(cmdControl);
+                re = Control.HoldingEvent;
+                handler = HoldHandler;
+            }
+            if(rules == null) {
+                rules = new MpAvPointerCommandRules() {
+                    IsEventHandled = GetDefaultIsEventHandled(cmdControl),
+                    Routing = GetDefaultRoutingStrategy(cmdControl)
+                };
+            }
+            return (re, handler, rules);
+        }
 
-        private static void Control_PointerReleased(object sender, PointerReleasedEventArgs e) {
-            if (ResolveEventControl(sender, e) is not Control control) {
+        #region Pointer Event Handlers
+        private static void HoldHandler(object sender, HoldingRoutedEventArgs e) {
+            if (sender is not Control c ||
+                GetHoldCommand(c) is not { } cmd) {
                 return;
             }
-            if (e.IsLeftRelease(control) &&
-                GetLeftReleaseCommand(control) is ICommand cmd) {
-                cmd.Execute(GetLeftReleaseCommandParameter(control));
-                e.Handled = GetIsEventHandled(control);
+            object param = GetHoldCommandParameter(c);
+            if (!cmd.CanExecute(param)) {
                 return;
             }
-            if (e.IsRightRelease(control) &&
-                GetRightReleaseCommand(control) is ICommand cmd2) {
-                cmd2.Execute(GetRightReleaseCommandParameter(control));
-                e.Handled = GetIsEventHandled(control);
+            cmd.Execute(param);
+            e.Handled = GetCmdInfo(HoldCommandProperty, c).rules.IsEventHandled;
+        }
+
+        private static void DoubleLeftPressedHandler(object sender, PointerPressedEventArgs e) {
+            if (e.ClickCount != 2 ||
+                sender is not Control c ||
+                !e.IsLeftPress(c) ||
+                GetDoubleLeftPressCommand(c) is not { } cmd) {
                 return;
             }
-        }
-        private static void Control_Holding(object sender, HoldingRoutedEventArgs e) {
-            // handled manually in press evt
-            e.Handled = true;
+            object param = GetDoubleLeftPressCommandParameter(c);
+            if (!cmd.CanExecute(param)) {
+                return;
+            }
+            cmd.Execute(param);
+            e.Handled = GetCmdInfo(LeftPressCommandProperty, c).rules.IsEventHandled;
         }
 
-        private static Control ResolveEventControl(object sender, RoutedEventArgs e) {
-            var control = sender as Control;
-            if (control == null && e.Source == null) {
-                return null;
+        private static void LeftReleaseHandler(object sender, PointerReleasedEventArgs e) {
+            if (sender is not Control c ||
+                !e.IsLeftRelease(c) ||
+                GetLeftReleaseCommand(c) is not { } cmd) {
+                return;
             }
-            if (sender != e.Source &&
-                e.Source is Control sc &&
-                sc.GetSelfAndVisualAncestors().FirstOrDefault(x => GetIsEnabled(x)) is Control c) {
-                // give source precedence (likely a child element)
-                control = c;
+            object param = GetLeftReleaseCommandParameter(c);
+            if (!cmd.CanExecute(param)) {
+                return;
             }
-#if MAC
-            // BUG (this could a debug thing from pause/resume but) for some reason when press event shows a dialog on mac the source button captures the pointer
-            // and after the dialog closes it just keeps thinking the pointer is over that source control so 
-            // trying to verify by position here
-            //if (e is PointerPressedEventArgs ppe && ppe.GetPosition(control) is { } control_mp &&
-            //        !control.Bounds.Contains(control_mp)) {
-            //    control = null;
-            //} 
-#endif
-            return control;
+            cmd.Execute(param);
+            e.Handled = GetCmdInfo(LeftReleaseCommandProperty, c).rules.IsEventHandled;
         }
 
+        private static void LeftPressedHandler(object sender, PointerPressedEventArgs e) {
+            if (sender is not Control c ||
+                !e.IsLeftPress(c) ||
+                GetLeftPressCommand(c) is not { } cmd) {
+                return;
+            }
+            object param = GetLeftPressCommandParameter(c);
+            if (!cmd.CanExecute(param)) {
+                return;
+            }
+            cmd.Execute(param);
+            e.Handled = GetCmdInfo(LeftPressCommandProperty, c).rules.IsEventHandled;
+        }
+
+        private static void DoubleRightPressedHandler(object sender, PointerPressedEventArgs e) {
+            if (e.ClickCount != 2 ||
+                sender is not Control c || 
+                !e.IsRightPress(c) ||
+                GetDoubleRightPressCommand(c) is not { } cmd) {
+                return;
+            }
+            object param = GetDoubleRightPressCommandParameter(c);
+            if (!cmd.CanExecute(param)) {
+                return;
+            }
+            cmd.Execute(param);
+            e.Handled = GetCmdInfo(DoubleRightPressCommandProperty, c).rules.IsEventHandled;
+        }
+
+        private static void RightReleaseHandler(object sender, PointerReleasedEventArgs e) {
+            if (sender is not Control c ||
+                !e.IsRightRelease(c) ||
+                GetRightReleaseCommand(c) is not { } cmd) {
+                return;
+            }
+            object param = GetRightReleaseCommandParameter(c);
+            if (!cmd.CanExecute(param)) {
+                return;
+            }
+            cmd.Execute(param);
+            e.Handled = GetCmdInfo(RightReleaseCommandProperty, c).rules.IsEventHandled;
+        }
+
+        private static void RightPressedHandler(object sender, PointerPressedEventArgs e) {
+            if (sender is not Control c ||
+                !e.IsRightPress(c) ||
+                GetRightPressCommand(c) is not { } cmd) {
+                return;
+            }
+            object param = GetRightPressCommandParameter(c);
+            if (!cmd.CanExecute(param)) {
+                return;
+            }
+            cmd.Execute(param);
+            e.Handled = GetCmdInfo(RightPressCommandProperty, c).rules.IsEventHandled;
+        }
+        #endregion
+
+        private static void Control_Unloaded(object sender, RoutedEventArgs e) {
+            if (sender is not Control c) {
+                return;
+            }
+            c.Unloaded -= Control_Unloaded;
+            c.PointerPressed -= LeftPressedHandler;
+            c.PointerPressed -= RightPressedHandler;
+            c.PointerPressed -= DoubleLeftPressedHandler;
+            c.PointerPressed -= DoubleRightPressedHandler;
+            
+            c.PointerReleased -= LeftReleaseHandler;
+            c.PointerReleased -= RightReleaseHandler;
+
+            c.Holding -= HoldHandler;
+        }
 
         #endregion
     }

@@ -12,7 +12,7 @@ using System.Diagnostics;
 using System.Linq;
 
 namespace MonkeyPaste.Avalonia {
-    public partial class MpAvTagTreeView : MpAvUserControl<MpAvTagTrayViewModel> {
+    public partial class MpAvTagTreeView : MpAvUserControl<MpAvTagTrayViewModel>, MpAvISidebarContentView {
         #region Private Variables
         #endregion
         public MpAvTagTreeView() {

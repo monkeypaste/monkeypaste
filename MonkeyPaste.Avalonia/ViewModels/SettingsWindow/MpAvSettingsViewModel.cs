@@ -18,9 +18,11 @@ using System.Windows.Input;
 namespace MonkeyPaste.Avalonia {
     public class MpAvSettingsViewModel :
         MpAvViewModelBase,
+        MpAvIMenuItemViewModel,
         MpICloseWindowViewModel,
         MpIActiveWindowViewModel,
-        MpIWantsTopmostWindowViewModel {
+        MpIWantsTopmostWindowViewModel,
+        MpAvIHeaderMenuViewModel {
         #region Private Variables
 
         private string[] _restartContentParams => new string[] {
@@ -32,8 +34,10 @@ namespace MonkeyPaste.Avalonia {
         };
 
         private string[] _reinitContentParams => new string[] {
+            nameof(MpAvPrefViewModel.Instance.IsContentWrapEnabledByDefault),
             nameof(MpAvPrefViewModel.Instance.DefaultReadOnlyFontFamily),
             nameof(MpAvPrefViewModel.Instance.DefaultEditableFontFamily),
+            nameof(MpAvPrefViewModel.Instance.DefaultCodeFontFamily),
             nameof(MpAvPrefViewModel.Instance.IsDataTransferDestinationFormattingEnabled),
             nameof(MpAvPrefViewModel.Instance.DefaultFontSize),
             nameof(MpAvPrefViewModel.Instance.IsSpellCheckEnabled),
@@ -41,6 +45,7 @@ namespace MonkeyPaste.Avalonia {
             nameof(MpAvPrefViewModel.Instance.ThemeColor),
             nameof(MpAvPrefViewModel.Instance.GlobalBgOpacity),
             nameof(MpAvPrefViewModel.Instance.CurrentCultureCode),
+            nameof(MpAvPrefViewModel.Instance.SelectedSyntaxTheme),
         };
 
         public string[] HiddenParamIds => new string[] {
@@ -70,7 +75,76 @@ namespace MonkeyPaste.Avalonia {
 
         #region Interfaces
 
-        #region MpIWindowViewModel Implementatiosn
+        #region MpAvIHeaderMenuViewModel Implementation
+
+        MpAvHeaderBackButtonType MpAvIHeaderMenuViewModel.BackButtonType =>
+            MpAvHeaderBackButtonType.Arrow;
+        IBrush MpAvIHeaderMenuViewModel.HeaderBackground =>
+            Mp.Services.PlatformResource.GetResource<IBrush>(MpThemeResourceKey.ThemeDarkColor);
+        string MpAvIHeaderMenuViewModel.HeaderTitle =>
+            UiStrings.CommonSettingsTitle;
+        IEnumerable<MpAvIMenuItemViewModel> MpAvIHeaderMenuViewModel.HeaderMenuItems =>
+            [
+                new MpAvMenuItemViewModel() {
+                    IconSourceObj = "SearchImage",
+                    Command = ToggleExpandFilterCommand
+                },
+                new MpAvMenuItemViewModel() {
+                    IconSourceObj = "Dots3x1Image",
+                    Command = new MpCommand<object>(
+                        (args)=>{
+                            if(args is not Control c) {
+                                return;
+                            }
+                            var sub_menu = new MpAvMenuItemViewModel() {
+                                SubItems = [
+                                    new MpAvMenuItemViewModel() {
+                                        Header = UiStrings.PrefRestoreDefaultsLabel,
+                                        Command = RestoreDefaultsCommand
+                                    }
+                                    ]
+                            };
+                            MpAvMenuView.ShowMenu(c, sub_menu);
+                        })
+                }
+            ];
+        ICommand MpAvIHeaderMenuViewModel.BackCommand =>
+            null;
+        object MpAvIHeaderMenuViewModel.BackCommandParameter =>
+            null;
+
+        #endregion
+
+        #region MpAvIMenuItemViewModel Implementation
+
+        string MpAvIMenuItemViewModel.IconTintHexStr =>
+            null;
+        ICommand MpAvIMenuItemViewModel.Command =>
+            null;
+        object MpAvIMenuItemViewModel.CommandParameter =>
+            null;
+        string MpAvIMenuItemViewModel.Header =>
+            UiStrings.AccountLoginWindowTitle;
+        object MpAvIMenuItemViewModel.IconSourceObj =>
+            "CogColorImage";
+        string MpAvIMenuItemViewModel.InputGestureText =>
+            null;
+        bool MpAvIMenuItemViewModel.StaysOpenOnClick { get; }
+        bool MpAvIMenuItemViewModel.HasLeadingSeparator { get; }
+        bool MpAvIIsVisibleViewModel.IsVisible =>
+            true;
+        bool? MpAvIMenuItemViewModel.IsChecked { get; }
+        bool MpAvIMenuItemViewModel.IsThreeState { get; }
+        bool MpAvIMenuItemViewModel.IsSubMenuOpen { get; set; }
+        string MpAvIMenuItemViewModel.IconBorderHexColor { get; }
+        MpMenuItemType MpAvIMenuItemViewModel.MenuItemType { get; } = MpMenuItemType.Default;
+        IEnumerable<MpAvIMenuItemViewModel> MpAvIMenuItemViewModel.SubItems =>
+            Items;
+        bool MpIHoverableViewModel.IsHovering { get; set; }
+
+        #endregion
+
+        #region MpIWindowViewModel Implementation
         public MpWindowType WindowType =>
             MpWindowType.Settings;
 
@@ -106,7 +180,10 @@ namespace MonkeyPaste.Avalonia {
             FilteredTabLookup == null ? null : FilteredTabLookup[MpSettingsTabType.Account];
 
         public IEnumerable<MpAvSettingsFrameViewModel> FilteredPreferenceFrames =>
-             FilteredTabLookup == null ? null : FilteredTabLookup[MpSettingsTabType.Preferences];
+             FilteredTabLookup == null ? 
+                null : 
+            FilteredTabLookup[MpSettingsTabType.Preferences]
+            .OrderBy(x=>x.Items.Where(x=>x.IsVisible).Count());
         public MpAvSettingsFrameViewModel SelectedItem {
             get =>
                 Items
@@ -139,7 +216,14 @@ namespace MonkeyPaste.Avalonia {
         #endregion
 
         #region State
-
+        public override bool IsLoadable =>
+            true;
+        public bool IsFilterExpanded { get; private set; } =
+#if MOBILE_OR_WINDOWED
+            false;
+#else
+            true;
+#endif
         public MpSettingsTabType DefaultSelectedTab {
             get {
                 if (string.IsNullOrEmpty(MpAvPrefViewModel.Instance.LastSelectedSettingsTabTypeStr)) {
@@ -224,9 +308,14 @@ namespace MonkeyPaste.Avalonia {
         #region Public Methods
 
         public async Task InitAsync() {
-            await InitSettingFramesAsync();
-            UpdateFilters();
-            InitRuntimeParams();
+            //await Task.Delay(1);
+            //Dispatcher.UIThread.Post(async () => {
+                //IsLoaded = false;
+                await InitSettingFramesAsync();
+                UpdateFilters();
+                InitRuntimeParams();
+                //IsLoaded = true;
+            //}, (DispatcherPriority)((int)DispatcherPriority.Normal - 1));
         }
         #endregion
 
@@ -237,6 +326,7 @@ namespace MonkeyPaste.Avalonia {
                     MpSettingsTabType.Account,
                     new [] {
                         new MpAvSettingsFrameViewModel(MpSettingsFrameType.Status) {
+                            IsVisible = false,
                             PluginFormat = new MpRuntimePlugin() {
                                 headless = new MpHeadlessComponent() {
                                     parameters = new List<MpParameterFormat>() {
@@ -303,6 +393,7 @@ namespace MonkeyPaste.Avalonia {
                             }
                         },
                         new MpAvSettingsFrameViewModel(MpSettingsFrameType.Register) {
+                            IsVisible = false,
                             FrameHint = UiStrings.PrefRegistrationFrameHint,
                             PluginFormat = new MpRuntimePlugin() {
                                 headless = new MpHeadlessComponent() {
@@ -359,6 +450,7 @@ namespace MonkeyPaste.Avalonia {
                             }
                         },
                         new MpAvSettingsFrameViewModel(MpSettingsFrameType.Login) {
+                            IsVisible = false,
                             PluginFormat = new MpRuntimePlugin() {
                                 headless = new MpHeadlessComponent() {
                                     parameters = new List<MpParameterFormat>() {
@@ -437,7 +529,21 @@ namespace MonkeyPaste.Avalonia {
                                                     value = MpRuntimePrefParamType.ThemeHexColor.ToString()
                                                 }
                                             }
-                                        }
+                                        },
+                                        new MpParameterFormat() {
+                                            paramId = nameof(MpAvPrefViewModel.Instance.SelectedSyntaxTheme),
+                                            controlType = MpParameterControlType.ComboBox,
+                                            unitType = MpParameterValueUnitType.PlainText,
+                                            label = UiStrings.PrefSyntaxThemeLabel,
+                                            description = UiStrings.PrefSyntaxThemeHint,
+                                            values = 
+                                                MpAvSyntaxThemeHelpers.SyntaxThemeNames
+                                                .Select(x=>new MpParameterValueFormat() {
+                                                    isDefault = MpAvPrefViewModel.Instance.SelectedSyntaxTheme == x,
+                                                    label = x.Replace("-"," ").ToProperCase(),
+                                                    value = x,
+                                                }).ToList()
+                                        },
                                     }
                                 }
                             }
@@ -476,6 +582,22 @@ namespace MonkeyPaste.Avalonia {
                                                 .OrderBy(x=>x)
                                                 .Select(x=>new MpParameterValueFormat() {
                                                     isDefault = MpAvThemeViewModel.Instance.DefaultEditableFontFamily.ToLowerInvariant() == x.ToLowerInvariant(),
+                                                    value = x
+                                                }).ToList()
+                                        },
+                                        new MpParameterFormat() {
+                                            paramId = nameof(MpAvPrefViewModel.Instance.DefaultCodeFontFamily),
+                                            controlType = MpParameterControlType.ComboBox,
+                                            unitType = MpParameterValueUnitType.PlainText,
+                                            label = UiStrings.PrefCodeFontLabel,
+                                            values =
+                                                FontManager.Current.SystemFonts
+                                                .Select(x=>x.Name)
+                                                .Where(x=>!string.IsNullOrEmpty(x))
+                                                .Union(MpAvThemeViewModel.Instance.CustomFontFamilyNames)
+                                                .OrderBy(x=>x)
+                                                .Select(x=>new MpParameterValueFormat() {
+                                                    isDefault = MpAvPrefViewModel.Instance.DefaultCodeFontFamily.ToLowerInvariant() == x.ToLowerInvariant(),
                                                     value = x
                                                 }).ToList()
                                         },
@@ -531,6 +653,7 @@ namespace MonkeyPaste.Avalonia {
                             }
                         },
                         new MpAvSettingsFrameViewModel(MpSettingsFrameType.Window) {
+                            IsVisible = MpAvThemeViewModel.Instance.IsDesktop,
                             PluginFormat = new MpRuntimePlugin() {
                                 headless = new MpHeadlessComponent() {
                                     parameters = new List<MpParameterFormat>() {
@@ -820,6 +943,7 @@ namespace MonkeyPaste.Avalonia {
                                                 }).ToList()
                                         },
                                         new MpParameterFormat() {
+                                            isVisible = MpAvThemeViewModel.Instance.IsDesktop,
                                             paramId = nameof(MpAvPrefViewModel.Instance.IsClipboardListeningOnStartup),
                                             controlType = MpParameterControlType.CheckBox,
                                             unitType = MpParameterValueUnitType.Bool,
@@ -972,6 +1096,16 @@ namespace MonkeyPaste.Avalonia {
                                             }
                                         },
                                         new MpParameterFormat() {
+                                            paramId = nameof(MpAvPrefViewModel.Instance.IsContentWrapEnabledByDefault),
+                                            controlType = MpParameterControlType.CheckBox,
+                                            unitType = MpParameterValueUnitType.Bool,
+                                            label = UiStrings.WrapTextMenuLabel,
+                                            value = new MpParameterValueFormat() {
+                                                    isDefault = true,
+                                                    value = MpAvPrefViewModel.Instance.IsContentWrapEnabledByDefault.ToString()
+                                                }
+                                        },
+                                        new MpParameterFormat() {
                                             paramId = nameof(MpAvPrefViewModel.Instance.IsDataTransferDestinationFormattingEnabled),
                                             controlType = MpParameterControlType.CheckBox,
                                             unitType = MpParameterValueUnitType.Bool,
@@ -1026,6 +1160,7 @@ namespace MonkeyPaste.Avalonia {
                             }
                         },
                         new MpAvSettingsFrameViewModel(MpSettingsFrameType.TopScreenEdgeGestures) {
+                            IsVisible = MpAvThemeViewModel.Instance.IsDesktop,
                             PluginFormat = new MpRuntimePlugin() {
                                 headless = new MpHeadlessComponent() {
                                     parameters = new List<MpParameterFormat>() {
@@ -1069,6 +1204,7 @@ namespace MonkeyPaste.Avalonia {
                             }
                         },
                         new MpAvSettingsFrameViewModel(MpSettingsFrameType.Shortcuts) {
+                            IsVisible = MpAvThemeViewModel.Instance.IsDesktop,
                             PluginFormat = new MpRuntimePlugin() {
                                 headless = new MpHeadlessComponent() {
                                     parameters = new List<MpParameterFormat>() {
@@ -1147,6 +1283,7 @@ namespace MonkeyPaste.Avalonia {
                                             }
                                         },
                                         new MpParameterFormat() {
+                                            isVisible = MpAvThemeViewModel.Instance.IsDesktop,
                                             paramId = MpRuntimePrefParamType.ResetShortcuts.ToString(),
                                             controlType = MpParameterControlType.Button,
                                             label = UiStrings.PrefResetShortcutsLabel,
@@ -1256,6 +1393,14 @@ namespace MonkeyPaste.Avalonia {
                         }
                         SetupFontFamilyComboBox(cb);
                     }
+                },{
+                    nameof(MpAvPrefViewModel.Instance.DefaultCodeFontFamily),
+                    (piv) => {
+                        if(piv.GetVisualDescendant<ComboBox>() is not ComboBox cb) {
+                            return;
+                        }
+                        SetupFontFamilyComboBox(cb);
+                    }
                 },
                 {
                     MpRuntimePrefParamType.ThemeHexColor.ToString(),
@@ -1292,15 +1437,13 @@ namespace MonkeyPaste.Avalonia {
                     nameof(MpAvPrefViewModel.Instance.IsRichHtmlContentEnabled),
                     (piv) => {
                         
-#if DESKTOP
+
+#if CEFNET_WV
                         if(piv.GetVisualDescendant<CheckBox>() is not CheckBox cb) {
                             return;
                         }
-
-#if CEFNET_WV
-		// ensure rich content cb reflects webview availability
+		                // ensure rich content cb reflects webview availability
                         cb.IsEnabled = MpAvCefNetApplication.IsCefNetLoaded;    
-#endif
 #endif
                     }
                 },
@@ -1397,7 +1540,7 @@ namespace MonkeyPaste.Avalonia {
                     DataContext = this,
                     Content = new MpAvSettingsView()
                 };
-                sw.Classes.Add("fadeIn");
+                //sw.Classes.Add("fadeIn");
             }
 
             void Sw_Opened(object sender, EventArgs e) {
@@ -1422,7 +1565,6 @@ namespace MonkeyPaste.Avalonia {
             return sw;
         }
         private void UpdateFilters() {
-
             TabLookup.ForEach(x => x.Value.ForEach(y => y.OnPropertyChanged(nameof(y.FilteredItems))));
             OnPropertyChanged(nameof(FilteredTabLookup));
             OnPropertyChanged(nameof(FilteredAccountFrames));
@@ -1437,6 +1579,17 @@ namespace MonkeyPaste.Avalonia {
 
             IsTabButtonVisible3 = MpAvShortcutCollectionViewModel.Instance.FilteredItems.Any();
 
+#if MOBILE_OR_WINDOWED
+            var fc = TabLookup.SelectMany(x => x.Value);
+            if(string.IsNullOrEmpty(FilterText)) {
+                // unexpand all non-user expanded frames
+                fc.ForEach(x => x.RestoreExpandedCommand.Execute(null));
+            } else {
+                // expand visible frames
+                fc.Where(x => x.IsVisible && !x.IsExpanded)
+                    .ForEach(x => x.ExpandFrameCommand.Execute("system"));
+            }
+#endif
             AddOrUpdateRecentFilterTextsAsync(FilterText).FireAndForgetSafeAsync();
         }
         private async Task AddOrUpdateRecentFilterTextsAsync(string st) {
@@ -1648,7 +1801,7 @@ namespace MonkeyPaste.Avalonia {
 
         #endregion
 
-        #endregion
+#endregion
 
         #region Param Locators
         public Tuple<MpAvSettingsFrameViewModel, MpAvParameterViewModelBase> GetParamAndFrameViewModelsByParamId(string paramId, MpSettingsFrameType frameType = MpSettingsFrameType.None) {
@@ -1766,23 +1919,22 @@ namespace MonkeyPaste.Avalonia {
                     IsWindowOpen = false;
                     return;
                 }
-                ShowSettingsWindowCommand.Execute(null);
+                ShowSettingsWindowCommand.Execute(args);
             });
         public MpIAsyncCommand<object> ShowSettingsWindowCommand => new MpAsyncCommand<object>(
             async (args) => {
                 UpdateFilters();
-#if DESKTOP
                 if (IsWindowOpen) {
                     IsWindowActive = true;
-                } else if (Mp.Services.PlatformInfo.IsDesktop) {
+                } else {
+//#if MULTI_WINDOW
                     var sw = CreateSettingsWindow();
-
-                    sw.Show();
+                    sw.Show(); 
+//#else
+//                    MpAvMenuView.ShowMenu(args as Control, this);
+//#endif
                     MpMessenger.SendGlobal(MpMessageType.SettingsWindowOpened);
                 }
-#else
-                App.SetPrimaryView(MpAvSettingsView.Instance);
-#endif
                 await SelectTabCommand.ExecuteAsync(args);
             });
         public ICommand CloseSettingsCommand => new MpCommand(
@@ -2012,6 +2164,28 @@ namespace MonkeyPaste.Avalonia {
 
                 MpAvAppRestarter.ShutdownWithRestartTaskAsync("Restoring Default Preferences").FireAndForgetSafeAsync();
 
+            });
+        public ICommand ExpandFilterCommand => new MpCommand<object>(
+            (args) => {
+                IsFilterExpanded = true;
+                if(MpAvWindowManager.LocateWindow(this) is not { } sw ||
+                    sw.Content is not MpAvSettingsView sv ||
+                    sv.FilterBox.GetVisualDescendant<TextBox>() is not { } tb) {
+                    return;
+                }
+                tb.TrySetFocusAsync().FireAndForgetSafeAsync();
+            });
+        public ICommand UnexpandFilterCommand => new MpCommand<object>(
+            (args) => {
+                IsFilterExpanded = false;
+            });
+        public ICommand ToggleExpandFilterCommand => new MpCommand<object>(
+            (args) => {
+                if (IsFilterExpanded) {
+                    UnexpandFilterCommand.Execute(null);
+                } else {
+                    ExpandFilterCommand.Execute(null);
+                }
             });
         #endregion
     }

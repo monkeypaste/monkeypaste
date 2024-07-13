@@ -1,7 +1,9 @@
 using Avalonia.Controls;
+using Avalonia.VisualTree;
 using MonkeyPaste.Common;
 using MonkeyPaste.Common.Avalonia;
 using System;
+using System.Linq;
 
 namespace MonkeyPaste.Avalonia {
     public partial class MpAvClipTrayContainerView : MpAvUserControl<MpAvClipTrayViewModel> {
@@ -10,8 +12,8 @@ namespace MonkeyPaste.Avalonia {
         public MpAvClipTrayContainerView() {
             if (Instance != null) {
                 // ensure singleton
-                MpDebug.Break();
-                return;
+                //MpDebug.Break();
+                //return;
             }
             Instance = this;
 
@@ -23,10 +25,22 @@ namespace MonkeyPaste.Avalonia {
                 MpAvClipTrayContainerView_DataContextChanged(null, null);
             }
 
-            var gs = this.FindControl<GridSplitter>("ClipTraySplitter");
-            gs.DragStarted += (s, e) => MpMessenger.SendGlobal(MpMessageType.PinTrayResizeBegin);
-            gs.DragCompleted += (s, e) => MpMessenger.SendGlobal(MpMessageType.PinTrayResizeEnd);
-            gs.DragDelta += (s, e) => MpMessenger.SendGlobal(MpMessageType.PinTraySizeChanged);
+            ClipTraySplitter.DragStarted += (s, e) => MpMessenger.SendGlobal(MpMessageType.PinTrayResizeBegin);
+            ClipTraySplitter.DragCompleted += (s, e) => MpMessenger.SendGlobal(MpMessageType.PinTrayResizeEnd);
+            ClipTraySplitter.DragDelta += (s, e) => MpMessenger.SendGlobal(MpMessageType.PinTraySizeChanged);
+
+            //PinTrayView.PinTrayEmptyContainer.Loaded += (s, e) => SetupEmptyMsgFix(PinTrayView.PinTrayEmptyContainer);
+            //QueryTrayView.QueryTrayEmptyContainer.Loaded += (s, e) => SetupEmptyMsgFix(QueryTrayView.QueryTrayEmptyContainer);
+        }
+
+
+        private void SetupEmptyMsgFix(Control empty_cntr) {
+            if (empty_cntr.GetVisualAncestors().OfType<Control>() is not { } empty_cntr_al) {
+                return;
+            }
+            empty_cntr_al.ForEach(x => x.EffectiveViewportChanged += (s, e) => {
+                empty_cntr.InvalidateAll();
+            });
         }
 
         private void MpAvClipTrayContainerView_DataContextChanged(object sender, EventArgs e) {
@@ -42,11 +56,9 @@ namespace MonkeyPaste.Avalonia {
             if (ctvm == null) {
                 return;
             }
-            if (ctvm.IsPinned &&
-                this.GetVisualDescendant<MpAvPinTrayView>() is { } ptrv &&
-                ptrv.GetVisualDescendant<ListBox>() is { } ptr_lb) {
+            if (ctvm.IsPinned) {
                 int ctvm_pin_idx = BindingContext.PinnedItems.IndexOf(ctvm);
-                var ptr_ctvm_lbi = ptr_lb.ContainerFromIndex(ctvm_pin_idx);
+                var ptr_ctvm_lbi = PinTrayView.PinTrayListBox.ContainerFromIndex(ctvm_pin_idx);
                 ptr_ctvm_lbi?.BringIntoView();
                 return;
             }
@@ -56,5 +68,11 @@ namespace MonkeyPaste.Avalonia {
             //ctr_ctvm_lbi?.BringIntoView();
             return;
         }
+
+        public double GetQueryTrayRatio() {
+            return MpAvClipTrayContainerView.Instance.QueryTrayView.Bounds.Width /
+                MpAvClipTrayContainerView.Instance.ClipTrayContainerGrid.Bounds.Width;
+        }
+
     }
 }

@@ -138,18 +138,26 @@ namespace MonkeyPaste.Avalonia {
         public double DefaultSidebarWidth {
             get {
                 if (MpAvMainWindowViewModel.Instance.IsHorizontalOrientation) {
-                    return 750;
+                    double def_w = 750;
+                    if(MpAvThemeViewModel.Instance.IsMobileOrWindowed) {
+                        def_w = Math.Min(def_w, Mp.Services.ScreenInfoCollection.Primary.WorkingArea.Width / 2);
+                    }
+                    return def_w;
                 } else {
-                    return MpAvMainWindowViewModel.Instance.MainWindowWidth;
+                    return MpAvMainView.Instance.MainWindowTrayGrid.Bounds.Width;
                 }
             }
         }
         public double DefaultSidebarHeight {
             get {
                 if (MpAvMainWindowViewModel.Instance.IsHorizontalOrientation) {
-                    return MpAvClipTrayViewModel.Instance.ObservedQueryTrayScreenHeight;
+                    return MpAvMainView.Instance.MainWindowTrayGrid.Bounds.Height;
                 } else {
-                    return 300;
+                    double def_h = 300;
+                    if (MpAvThemeViewModel.Instance.IsMobileOrWindowed) {
+                        def_h = Math.Min(def_h, Mp.Services.ScreenInfoCollection.Primary.WorkingArea.Height / 3);
+                    }
+                    return def_h;
                 }
             }
         }
@@ -395,9 +403,9 @@ namespace MonkeyPaste.Avalonia {
                 }
             }
 
-            while (Items.Any(x => x.IsBusy)) {
-                await Task.Delay(100);
-            }
+            //while (Items.Any(x => x.IsBusy)) {
+            //    await Task.Delay(100);
+            //}
 
             OnPropertyChanged(nameof(Items));
 

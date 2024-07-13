@@ -9,7 +9,7 @@ namespace MonkeyPaste.Avalonia.Android {
     public static class MpAvAdAssetMover {
         static bool IGNORE_OVERWRITE =
 #if DEBUG
-            false;
+            true;
 #else
             true;
 #endif
@@ -20,7 +20,7 @@ namespace MonkeyPaste.Avalonia.Android {
             MpConsole.WriteLine($"Total asset move time: {sw.ElapsedMilliseconds}ms");
         }
         private static void MovePlugins() {
-            string core_dat_dir = Path.Combine(MpDeviceWrapper.Instance.PlatformInfo.ExecutingDir, MpPluginLoader.DAT_FOLDER_NAME);
+            string core_dat_dir = Path.Combine(MpAvDeviceWrapper.Instance.PlatformInfo.ExecutingDir, MpPluginLoader.DAT_FOLDER_NAME);
             if (core_dat_dir.IsDirectory()) {
                 // already moved
                 if (IGNORE_OVERWRITE) {
@@ -53,7 +53,7 @@ namespace MonkeyPaste.Avalonia.Android {
         }
 
         private static void MoveResources() {
-            var pi = MpDeviceWrapper.Instance.PlatformInfo;
+            var pi = MpAvDeviceWrapper.Instance.PlatformInfo;
             var asset_lookup = new Dictionary<string, string>() {
                 { Path.Combine("dat","editor.zip"), Path.GetDirectoryName(pi.EditorPath) },
                 { Path.Combine("dat","terms.zip"), Path.GetDirectoryName(pi.TermsPath) },
@@ -68,24 +68,7 @@ namespace MonkeyPaste.Avalonia.Android {
                 //}
                 UnzipAsset(asset_kvp.Key, asset_kvp.Value);
             }
-        }
-
-        private static bool IsAssetNewer(string assetPath, string targetDir) {
-            try {
-                // BUG can't read file info from assets so ignoring for now
-                long dat_ticks = new Java.IO.File(assetPath).LastModified();
-                long dir_ticks = MpFileIo.GetDateTimeInfo(targetDir, true, false).Value.Ticks;
-                bool result = dat_ticks > dir_ticks;
-                MpConsole.WriteLine($"Asset '{assetPath}' mod datetime: {new DateTime(dat_ticks)}", true);
-                MpConsole.WriteLine($"Dir '{targetDir}' mod datetime: {new DateTime(dir_ticks)}");
-                MpConsole.WriteLine($"Asset is {(result ? "NEWER" : "OLDER")}");
-                return result;
-            }
-            catch (Exception ex) {
-                MpConsole.WriteTraceLine($"Error moving asset at path '{assetPath}' to dir '{targetDir}'.", ex);
-                return true;
-            }
-        }
+        }        
 
         private static void UnzipAsset(string assetPath, string targetDir) {
             if (targetDir.IsDirectory()) {
@@ -113,5 +96,22 @@ namespace MonkeyPaste.Avalonia.Android {
             target.Close();
             source.Close();
         }
+
+        //private static bool IsAssetNewer(string assetPath, string targetDir) {
+        //    try {
+        //        // BUG can't read file info from assets so ignoring for now
+        //        long dat_ticks = new Java.IO.File(assetPath).LastModified();
+        //        long dir_ticks = MpFileIo.GetDateTimeInfo(targetDir, true, false).Value.Ticks;
+        //        bool result = dat_ticks > dir_ticks;
+        //        MpConsole.WriteLine($"Asset '{assetPath}' mod datetime: {new DateTime(dat_ticks)}", true);
+        //        MpConsole.WriteLine($"Dir '{targetDir}' mod datetime: {new DateTime(dir_ticks)}");
+        //        MpConsole.WriteLine($"Asset is {(result ? "NEWER" : "OLDER")}");
+        //        return result;
+        //    }
+        //    catch (Exception ex) {
+        //        MpConsole.WriteTraceLine($"Error moving asset at path '{assetPath}' to dir '{targetDir}'.", ex);
+        //        return true;
+        //    }
+        //}
     }
 }

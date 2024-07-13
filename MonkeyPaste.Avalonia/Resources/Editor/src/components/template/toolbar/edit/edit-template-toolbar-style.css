@@ -1,4 +1,6 @@
 ﻿#editTemplateToolbar {
+    display: flex;
+    flex-wrap: wrap;
     background-color: var(--edittemplatebgcolor);
     padding: 10px;
 }
@@ -38,6 +40,7 @@
     font-weight: bolder;
     height: 30px;
     padding-left: 5px;
+    margin-left: auto;
 }
 
     #editTemplateDeleteButton:hover {

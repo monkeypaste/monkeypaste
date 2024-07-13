@@ -2996,4 +2996,49 @@ Pintasan global kini boleh didayakan dalam menu dulang sistem</value>
   <data name="DonateLabel" xml:space="preserve">
     <value>Menderma</value>
   </data>
+  <data name="MobileCopiedNtfText" xml:space="preserve">
+    <value>Disalin ke papan klip</value>
+  </data>
+  <data name="PinTraySidebarLabel" xml:space="preserve">
+    <value>Disematkan</value>
+  </data>
+  <data name="QueryTraySidebarLabel" xml:space="preserve">
+    <value>Pertanyaan</value>
+  </data>
+  <data name="ClipboardSetMessage" xml:space="preserve">
+    <value>Set papan klip</value>
+  </data>
+  <data name="PluginBrowserFormattedWindowTitle" xml:space="preserve">
+    <value>Pelayar Pemalam - {0}</value>
+  </data>
+  <data name="PluginBrowserWindowTitle" xml:space="preserve">
+    <value>Pelayar Plugin</value>
+  </data>
+  <data name="AddNewActionLabel" xml:space="preserve">
+    <value>Tambah baru</value>
+  </data>
+  <data name="EditorPasteButtonLabelMobile" xml:space="preserve">
+    <value>Salinan</value>
+  </data>
+  <data name="PrefSyntaxThemeHint" xml:space="preserve">
+    <value>Tema yang digunakan untuk blok kod yang dikesan dalam klip teks.</value>
+  </data>
+  <data name="PrefSyntaxThemeLabel" xml:space="preserve">
+    <value>Tema sintaks</value>
+  </data>
+  <data name="PrefCodeFontLabel" xml:space="preserve">
+    <value>Sintaks</value>
+  </data>
+  <data name="CommonViewLabel" xml:space="preserve">
+    <value>Lihat</value>
+  </data>
+  <data name="WrapTextMenuLabel" xml:space="preserve">
+    <value>Balut teks</value>
+  </data>
+  <data name="ClipAssignShortcutLabel" xml:space="preserve">
+    <value>Tetapkan pintasan ...</value>
+  </data>
+  <data name="ClipUpdateShortcutLabel" xml:space="preserve">
+    <value>Kemas kini pintasan ...</value>
+  </data>
 </root>

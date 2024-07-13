@@ -311,7 +311,12 @@ namespace MonkeyPaste.Avalonia {
                 await ApplyRejectStateToOtherDomainUrlsAsync(block_url, block_domain);
 
             }, (args) => {
-                if(args is not string rejectType) {
+                if (Parent == null ||
+                    !Parent.CanRejectUrls) {
+                    return false;
+                }
+
+                if (args is not string rejectType) {
                     return false;
                 }
                 if(rejectType == "domain") {

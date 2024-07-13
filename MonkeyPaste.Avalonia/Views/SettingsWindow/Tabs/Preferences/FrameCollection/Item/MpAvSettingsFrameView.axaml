@@ -15,36 +15,117 @@
                        IsVisible="{Binding IsVisible}"
                        x:Class="MonkeyPaste.Avalonia.MpAvSettingsFrameView">
     <UserControl.Styles>
+
+        <!--  EXPANDER  -->
+        <Style Selector="local|MpAvTintedImage#ExpanderImage">
+            <Setter Property="Source"
+                    Value="{Binding Source={StaticResource EdgeArrowRightImage}, ConverterParameter=test, Converter={x:Static local:MpAvIconSourceObjToBitmapConverter.Instance}}" />
+        </Style>
+        <Style Selector="local|MpAvTintedImage#ExpanderImage.expanded">
+            <Setter Property="Source"
+                    Value="{Binding Source={StaticResource EdgeArrowDownImage}, ConverterParameter=test, Converter={x:Static local:MpAvIconSourceObjToBitmapConverter.Instance}}" />
+        </Style>
+
+        <Style Selector="local|MpAvClipBorder#OuterBorder">
+            <Setter Property="Padding"
+                    Value="5" />
+            <Setter Property="BorderThickness"
+                    Value="0" />
+        </Style>
+        <Style Selector="local|MpAvClipBorder#OuterBorder.mobile StackPanel#FrameHeaderPanel"
+               x:DataType="local:MpAvSettingsFrameViewModel">
+            <Setter Property="local:MpAvPointerCommandExtension.IsEnabled"
+                    Value="True" />
+            <Setter Property="local:MpAvPointerCommandExtension.DefaultRoutingStrategy"
+                    Value="Tunnel" />
+            <Setter Property="local:MpAvPointerCommandExtension.DefaultIsEventHandled"
+                    Value="True" />
+            <Setter Property="local:MpAvPointerCommandExtension.LeftReleaseCommand"
+                    Value="{Binding ToggleExpandFrameCommand}" />
+            <Setter Property="Background"
+                    Value="{StaticResource HitTestableTransparent}" />
+        </Style>
+
+        <Style Selector="local|MpAvClipBorder#OuterBorder Image#FrameIcon, local|MpAvClipBorder#OuterBorder.mobile Image#FrameIcon.expanded"
+               x:DataType="local:MpAvSettingsFrameViewModel">
+            <Setter Property="IsVisible"
+                    Value="{Binding IconResourceObj, Converter={x:Static local:MpAvIsNotNullZeroOrEmptyToBoolConverter.Instance}}" />
+        </Style>
+        <Style Selector="local|MpAvClipBorder#OuterBorder.mobile Image#FrameIcon"
+               x:DataType="local:MpAvSettingsFrameViewModel">
+            <Setter Property="IsVisible"
+                    Value="False" />
+        </Style>
     </UserControl.Styles>
-    <local:MpAvClipBorder Padding="5"
-                          BorderThickness="0"
+    <local:MpAvClipBorder x:Name="OuterBorder"
+                          Classes.mobile="{Binding IsMobileOrWindowed, Source={x:Static local:MpAvThemeViewModel.Instance}}"
                           CornerRadius="10"
                           BorderBrush="{Binding $parent[local:MpAvSettingsView].Background, Converter={x:Static local:MpAvColorToContrastColorConverter.Instance}}">
         <Grid RowDefinitions="Auto,*">
-            <StackPanel Orientation="Vertical"
+
+            <!--  HEADER  -->
+
+            <StackPanel x:Name="FrameHeaderPanel"
+                        Orientation="Vertical"
                         Spacing="5">
                 <StackPanel Classes="header frame"
                             Orientation="Horizontal">
-                    <Image Classes="frame header icon"
-                           IsVisible="{Binding IconResourceObj, Converter={x:Static local:MpAvIsNotNullZeroOrEmptyToBoolConverter.Instance}}"
+
+                    <!--  EXPAND BUTTON  -->
+
+                    <local:MpAvTintedImage x:Name="ExpanderImage"
+                                           Width="25"
+                                           Height="25"
+                                           Tint="{DynamicResource ThemeInteractiveBrush}"
+                                           IsVisible="{Binding IsMobileOrWindowed, Source={x:Static local:MpAvThemeViewModel.Instance}}"
+                                           Classes.expanded="{Binding IsExpanded}">
+                        <local:MpAvTintedImage.Transitions>
+                            <Transitions>
+                                <TransformOperationsTransition Property="RenderTransform"
+                                                               Duration="0:0:0.5" />
+                            </Transitions>
+                        </local:MpAvTintedImage.Transitions>
+
+                    </local:MpAvTintedImage>
+
+                    <!--  FRAME ICON  -->
+
+                    <Image x:Name="FrameIcon"
+                           Width="25"
+                           Height="25"
+                           Classes="frame header icon"
+                           Classes.expanded="{Binding IsExpanded}"
                            Source="{Binding IconResourceObj, Converter={x:Static local:MpAvStringHexToBitmapTintConverter.Instance}, ConverterParameter=ThemeInteractiveColor}" />
+
+                    <!--  FRAME TITLE  -->
+
                     <TextBlock Classes="frame header text"
                                Text="{Binding LabelText}" />
+
+                    <!--  FRAME HINT  -->
+
                     <local:MpAvToolTipHintView ToolTipText="{Binding FrameHint}"
-                                                   Classes.info="{Binding FrameHintType, ConverterParameter=Info, Converter={x:Static local:MpAvEnumToBoolConverter.Instance}}"
-                                                   Classes.warning="{Binding FrameHintType, ConverterParameter=Warning, Converter={x:Static local:MpAvEnumToBoolConverter.Instance}}"
-                                                   Classes.error="{Binding FrameHintType, ConverterParameter=Error, Converter={x:Static local:MpAvEnumToBoolConverter.Instance}}"
-                                                   IsVisible="{Binding FrameHint, Converter={x:Static local:MpAvIsNotNullZeroOrEmptyToBoolConverter.Instance}}" />
+                                               Classes.info="{Binding FrameHintType, ConverterParameter=Info, Converter={x:Static local:MpAvEnumToBoolConverter.Instance}}"
+                                               Classes.warning="{Binding FrameHintType, ConverterParameter=Warning, Converter={x:Static local:MpAvEnumToBoolConverter.Instance}}"
+                                               Classes.error="{Binding FrameHintType, ConverterParameter=Error, Converter={x:Static local:MpAvEnumToBoolConverter.Instance}}"
+                                               IsVisible="{Binding FrameHint, Converter={x:Static local:MpAvIsNotNullZeroOrEmptyToBoolConverter.Instance}}" />
 
                 </StackPanel>
 
+                <!--  UNDERLINE  -->
+
                 <Border Classes="labelUnderline"
+                        IsVisible="{Binding IsExpanded}"
                         Margin="0" />
             </StackPanel>
+
+            <!--  PARAMS  -->
             <local:MpAvParameterCollectionView x:Name="ParameterCollectionView"
                                                Grid.Row="1"
+                                               Classes="expand-height"
+                                               Height="{Binding IsExpanded, ConverterParameter=NaN|0, Converter={x:Static local:MpAvBoolToDoubleConverter.Instance}}"
                                                HorizontalAlignment="Stretch"
-                                               VerticalAlignment="Top" />
+                                               VerticalAlignment="Stretch" />
         </Grid>
     </local:MpAvClipBorder>
 

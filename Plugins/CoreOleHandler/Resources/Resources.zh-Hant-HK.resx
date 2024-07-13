@@ -222,4 +222,10 @@
   <data name="ToFileExtHint" xml:space="preserve">
     <value>使用“ {0}”時使用的文件擴展名來按需創建文件。</value>
   </data>
+  <data name="RtfParaTagNameHint" xml:space="preserve">
+    <value>對於代碼突出顯示使用“ Pre”標籤，否則RTF將被視為普通文本。</value>
+  </data>
+  <data name="RtfParaTagNameLabel" xml:space="preserve">
+    <value>html段落標籤</value>
+  </data>
 </root>

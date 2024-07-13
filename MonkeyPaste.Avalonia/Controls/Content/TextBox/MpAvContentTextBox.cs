@@ -2,6 +2,7 @@
 using Avalonia.Controls;
 using Avalonia.Controls.Documents;
 using Avalonia.Controls.Presenters;
+using Avalonia.Controls.Primitives;
 using Avalonia.Input;
 using Avalonia.Media;
 using Avalonia.Threading;
@@ -146,7 +147,7 @@ namespace MonkeyPaste.Avalonia {
         #endregion
 
         #region Properties
-
+        TextPresenter TextPresenter { get; set; }
         public MpAvClipTileViewModel BindingContext {
             get {
                 if (DataContext is MpAvClipTileViewModel) {
@@ -191,18 +192,19 @@ namespace MonkeyPaste.Avalonia {
             }
             base.OnPointerPressed(e);
         }
+
+        protected override void OnApplyTemplate(TemplateAppliedEventArgs e) {
+            base.OnApplyTemplate(e);
+            TextPresenter = e.NameScope.Find<TextPresenter>("PART_TextPresenter");
+        }
         #endregion
 
         #region Private Methods
         private void OnFontFamilyChanged() {
-            Dispatcher.UIThread.Post(async () => {
-                var tp = await this.GetVisualDescendantAsync<TextPresenter>();
-                if (tp == null) {
-                    return;
-                }
-                TextElement.SetFontFamily(tp, this.FontFamily);
-            });
-
+            if(TextPresenter == null) {
+                return;
+            }
+            TextElement.SetFontFamily(TextPresenter, this.FontFamily);
         }
 
 

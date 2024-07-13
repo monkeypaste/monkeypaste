@@ -222,4 +222,10 @@
   <data name="ToFileExtHint" xml:space="preserve">
     <value>'{0}'이 주문형 파일을 생성하는 데 사용될 때 사용되는 파일 확장자가 사용됩니다.</value>
   </data>
+  <data name="RtfParaTagNameHint" xml:space="preserve">
+    <value>코드 강조 표시의 경우 'Pre'태그를 사용하십시오. 그렇지 않으면 RTF는 정상적인 풍부한 텍스트로 취급됩니다.</value>
+  </data>
+  <data name="RtfParaTagNameLabel" xml:space="preserve">
+    <value>HTML 단락 태그</value>
+  </data>
 </root>

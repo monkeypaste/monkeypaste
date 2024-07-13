@@ -1,0 +1,44 @@
+<local:MpAvUserControl xmlns="https://github.com/avaloniaui"
+                       xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                       xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+                       xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+                       xmlns:local="using:MonkeyPaste.Avalonia"
+                       x:DataType="local:MpAvClipTileViewModel"
+                       x:TypeArguments="local:MpAvClipTileViewModel"
+                       x:CompileBindings="False"
+                       mc:Ignorable="d"
+                       d:DesignWidth="800"
+                       d:DesignHeight="450"
+                       x:Class="MonkeyPaste.Avalonia.MpAvContentWebViewContainer">
+    <local:MpAvUserControl.Styles>
+        <Style Selector="local|MpAvContentWebView.drag">
+            <Setter Property="ToolTip.Tip"
+                    Value="{x:Null}" />
+        </Style>
+        <Style Selector="local|MpAvContentWebView:not(.sugarwv)">
+            <Setter Property="Interaction.Behaviors">
+                <Setter.Value>
+                    <BehaviorCollection>
+                        <local:MpAvContentWebViewHighlightBehavior />
+                    </BehaviorCollection>
+                </Setter.Value>
+            </Setter>
+        </Style>
+    </local:MpAvUserControl.Styles>
+    <local:MpAvContentWebView x:Name="ContentWebView"
+                              DragDrop.AllowDrop="{Binding CanDrop}"
+                              Classes.drag="{Binding IsTileDragging}"
+                              Classes.sugarwv="{Binding IsSugarWv}"
+                              Focusable="{Binding IsSubSelectionEnabled}"
+                              ContentId="{Binding CopyItemId, Mode=OneWay}"
+                              ContentScale="{Binding ZoomFactor}"
+                              IsEditorLoaded="{Binding IsEditorLoaded, Mode=TwoWay}"
+                              IsContentResizing="{Binding IsResizing}"
+                              IsContentSelected="{Binding IsSelected}"
+                              IsContentReadOnly="{Binding IsContentReadOnly, Mode=TwoWay}"
+                              IsContentSubSelectable="{Binding IsSubSelectionEnabled, Mode=TwoWay}"
+                              IsContentFindAndReplaceVisible="{Binding IsFindAndReplaceVisible, Mode=TwoWay}"
+                              HorizontalAlignment="Stretch"
+                              VerticalAlignment="Stretch">
+    </local:MpAvContentWebView>
+</local:MpAvUserControl>

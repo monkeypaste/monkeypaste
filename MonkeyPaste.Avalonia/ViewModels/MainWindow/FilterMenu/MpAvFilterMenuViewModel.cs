@@ -1,5 +1,9 @@
-﻿using System;
+﻿using Avalonia.Controls;
+using Avalonia.Media;
+using MonkeyPaste.Common;
+using System;
 using System.Linq;
+using System.Windows.Input;
 
 namespace MonkeyPaste.Avalonia {
     public class MpAvFilterMenuViewModel :
@@ -13,9 +17,20 @@ namespace MonkeyPaste.Avalonia {
 
         #region Properties
 
+        #region State
+        public bool IsExpanded { get; set; } =
+#if MOBILE_OR_WINDOWED
+            false;
+#else
+            true;
+#endif
+
+        #endregion
+
         #region Layout
         public int FilterAnimTimeMs => 300; // NOTE needs to match resource time
-        public double DefaultFilterMenuFixedSize => 40;
+        public double DefaultFilterMenuFixedSize =>
+            !IsExpanded ? 0 : MpAvThemeViewModel.Instance.IsMobileOrWindowed ? 50 : 40;
 
         public double FilterMenuHeight { get; set; }
 
@@ -29,7 +44,7 @@ namespace MonkeyPaste.Avalonia {
 
         #endregion
 
-        #endregion
+#endregion
 
         #region Constructors
 
@@ -49,6 +64,9 @@ namespace MonkeyPaste.Avalonia {
                 case nameof(ObservedTagTrayWidth):
                     UpdateFilterLayouts();
                     break;
+                case nameof(IsExpanded):
+                    MpMessenger.SendGlobal(MpMessageType.FilterExpandedChanged);
+                    break;
 
             }
         }
@@ -66,41 +84,46 @@ namespace MonkeyPaste.Avalonia {
         }
 
         private void UpdateFilterLayouts() {
+            var fmv = MpAvMainView.Instance.FilterMenuView;
             var ttrvm = MpAvTagTrayViewModel.Instance;
-            double total_item_width = ttrvm.PinnedItems.Count() * 130.0d;
 
-            double sbw = MpAvSearchBoxViewModel.Instance.IsExpanded ?
-                335.0d :
-                ObservedSearchBoxWidth;
+            if(fmv.TagTrayView.IsVisible) {
+                double tag_tray_pad = 25;
+                MaxTagTrayScreenWidth =
+                fmv.Bounds.Width -
+                fmv.SearchBoxView.Bounds.Width -
+                fmv.SortView.Bounds.Width -
+                tag_tray_pad;
 
-            double svw = MpAvClipTileSortDirectionViewModel.Instance.IsExpanded ?
-                160 :
-                ObservedSortViewWidth;
-
-            MaxTagTrayScreenWidth =
-                ObservedFilterMenuWidth -
-                svw -
-                sbw;
-
-            if (total_item_width > MaxTagTrayScreenWidth) {
-                double total_navs_width = ((ttrvm.NavButtonSize + 15) * 2);
-                MaxTagTrayScreenWidth -= total_navs_width;
-                ttrvm.IsNavButtonsVisible = MaxTagTrayScreenWidth > total_navs_width;
+                double total_item_width = fmv.TagTrayView.IsVisible ? fmv.TagTrayView.TagTray.Bounds.Width : 0;
+                if (MpAvThemeViewModel.Instance.IsMultiWindow &&
+                    total_item_width >= MaxTagTrayScreenWidth) {
+                    double total_navs_width = ((ttrvm.NavButtonSize + 15) * 2);
+                    MaxTagTrayScreenWidth -= total_navs_width;
+                    ttrvm.IsNavButtonsVisible = MaxTagTrayScreenWidth > total_navs_width;
+                } else {
+                    ttrvm.IsNavButtonsVisible = false;
+                }
+                MaxTagTrayScreenWidth = Math.Max(0, MaxTagTrayScreenWidth); 
+                
+                MaxSearchBoxWidth =
+                fmv.Bounds.Width -
+                    fmv.TagTrayView.Bounds.Width -
+                    fmv.SortView.Bounds.Width;
             } else {
-                ttrvm.IsNavButtonsVisible = false;
-            }
-            MaxTagTrayScreenWidth = Math.Max(0, MaxTagTrayScreenWidth);
-
-            MaxSearchBoxWidth =
-                Math.Max(
-                    MpAvSearchBoxViewModel.Instance.IsExpanded ?
-                        sbw :
-                        35,
-                    ObservedFilterMenuWidth -
-                    ObservedTagTrayWidth -
-                    svw);
-
+                MaxTagTrayScreenWidth = 0;
+                MaxSearchBoxWidth = double.PositiveInfinity;
+            }            
         }
+        #endregion
+
+        #region Commands
+
+        public ICommand ToggleIsFilterMenuExpandedCommand => new MpCommand(
+            () => {
+                IsExpanded = !IsExpanded;
+            });
+
         #endregion
     }
 }

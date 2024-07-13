@@ -222,4 +222,10 @@
   <data name="ToFileExtHint" xml:space="preserve">
     <value>Uppbygging skráarinnar sem notuð er þegar '{0}' er notuð til að búa til skrá á eftirspurn.</value>
   </data>
+  <data name="RtfParaTagNameHint" xml:space="preserve">
+    <value>Fyrir kóða hápunktur notaðu „pre“ merkið annars verður RTF meðhöndlað sem venjulegur ríkur texti.</value>
+  </data>
+  <data name="RtfParaTagNameLabel" xml:space="preserve">
+    <value>HTML málsgreinamerki</value>
+  </data>
 </root>

@@ -222,4 +222,10 @@
   <data name="ToFileExtHint" xml:space="preserve">
     <value>「{0}」が使用されたときに使用されるファイル拡張機能は、オンデマンドファイルを作成します。</value>
   </data>
+  <data name="RtfParaTagNameHint" xml:space="preserve">
+    <value>強調表示するコードの場合、「pre」タグを使用します。そうしないと、RTFは通常のリッチテキストとして扱われます。</value>
+  </data>
+  <data name="RtfParaTagNameLabel" xml:space="preserve">
+    <value>HTML段落タグ</value>
+  </data>
 </root>

@@ -34,6 +34,7 @@ var UiStrings = {
 	EditorNextTemplateLabel: `ପରବର୍ତ୍ତୀ ଟେମ୍ପଲେଟ୍ |`,
 	EditorPasteButtonAppendBeginLabel: `ଯୋଡ ...`,
 	EditorPasteButtonLabel: `ପେଷ୍ଟ କରନ୍ତୁ |`,
+	EditorPasteButtonLabelMobile: `କପି କରନ୍ତୁ |`,
 	EditorPasteTemplateWatermark: `ପେଷ୍ଟ ଟେକ୍ସଟ୍ ପ୍ରବେଶ କରନ୍ତୁ ...`,
 	EditorPrevTemplateLabel: `ପୂର୍ବ ଟେମ୍ପଲେଟ୍ |`,
 	EditorRegExLabel: ` ନିୟମିତ ଅଭିବ୍ୟକ୍ତି |`,

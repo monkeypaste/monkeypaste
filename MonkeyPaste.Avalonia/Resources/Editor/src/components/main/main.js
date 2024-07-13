@@ -53,6 +53,19 @@ function initDefaults(defaultsObj) {
 	}
 		
 	
+	if (!isNullOrUndefined(defaultsObj.isMobile)) {
+		globals.IsMobile = defaultsObj.isMobile;
+		if (globals.IsMobile) {
+			getEditorContainerElement().classList.remove('desktop');
+			getEditorContainerElement().classList.add('mobile');
+		} else {
+			getEditorContainerElement().classList.add('desktop');
+			getEditorContainerElement().classList.remove('mobile');
+		}
+	}
+	if (!isNullOrUndefined(defaultsObj.wwwroot)) {
+		globals.wwwroot = defaultsObj.wwwroot;
+	}
 	if (!isNullOrUndefined(defaultsObj.maxUndo)) {
 		globals.MaxUndoLimit = defaultsObj.maxUndo;
 	}
@@ -65,16 +78,26 @@ function initDefaults(defaultsObj) {
 	if (!isNullOrUndefined(defaultsObj.isRightToLeft)) {
 		globals.IsRtl = defaultsObj.isRightToLeft;
 	}
+	if (!isNullOrUndefined(defaultsObj.selectedSyntaxTheme)) {
+		globals.SelectedSyntaxTheme = defaultsObj.selectedSyntaxTheme;
+	}
 	
 	if (!isNullOrUndefined(defaultsObj.bgOpacity)) {
 		setElementComputedStyleProp(document.body, '--editableopacity', parseFloat(defaultsObj.bgOpacity));
 	}
+	if (!isNullOrUndefined(defaultsObj.syntaxFontFamily)) {
+		setElementComputedStyleProp(document.body, '--syntaxFontFamily', defaultsObj.syntaxFontFamily);
+	}
 
-	const bg_opacity =  isRunningOnHost() ? 0:30;// parseFloat(getElementComputedStyleProp(document.body, '--editableopacity'));
+	const bg_opacity = isRunningOnHost() ? 0 : 1;// 
+	const code_opacity = parseFloat(getElementComputedStyleProp(document.body, '--editableopacity'));
 	if(!isNullOrUndefined(defaultsObj.currentTheme)) {
 		globals.EditorTheme = defaultsObj.currentTheme;
 
+		// light theme
 		let no_sel_bg = 'transparent';		
+		let code_bg = `rgba(35,36,31,${code_opacity})`;
+		let code_fg = `rgba(248,248,242,${code_opacity})`;
 		let edit_bg = `rgba(255,248,220,${bg_opacity})`;
 		let edit_op_bg = `white`;
 		let def_content_fg = 'black';
@@ -93,9 +116,12 @@ function initDefaults(defaultsObj) {
 		let link_hover_color = 'red';
 
 		if (defaultsObj.currentTheme.toLowerCase() == 'dark') {
+			// dark theme
 			getEditorContainerElement().classList.remove('light');
 			getEditorContainerElement().classList.add('dark');
-
+			
+			let code_bg = `rgba(248,248,242,${code_opacity})`;
+			let code_fg = `rgba(35,36,31,${code_opacity})`;
 			no_sel_bg = `rgba(30,30,30,${bg_opacity})`;
 			sub_sel_bg = `rgba(67,67,67,${bg_opacity})`;
 			edit_bg = `rgba(30,30,30,${bg_opacity})`;
@@ -139,6 +165,8 @@ function initDefaults(defaultsObj) {
 		setElementComputedStyleProp(document.body, '--hovercolor', cleanHexColor(hover_color,null,false));
 		setElementComputedStyleProp(document.body, '--linkcolor', cleanHexColor(link_color,null,false));
 		setElementComputedStyleProp(document.body, '--linkhovercolor', cleanHexColor(link_hover_color,null,false));
+		setElementComputedStyleProp(document.body, '--codebg', cleanHexColor(code_bg,null,false));
+		setElementComputedStyleProp(document.body, '--codefg', cleanHexColor(code_fg,null,false));
 
 	}
 	if(!isNullOrUndefined(defaultsObj.defaultFontFamily)) {
@@ -252,6 +280,7 @@ function updateAllSizeAndPositions() {
 	updateAnnotationSizesAndPositions();
 	updateScrollBarSizeAndPositions();
 	updateTablesSizesAndPositions();
+	updateWrapToolbarButtonToSelection();
 
 	if (globals.EnvName == "android") {
 		//var viewportBottom = window.scrollY + window.innerHeight;
@@ -269,7 +298,7 @@ function updateAllSizeAndPositions() {
 }
 
 function updateAllElements() {
-	if (!globals.IsLoaded) {
+	if (!globals.IsEditorLoaded) {
 		return;
 	}
 	updateAllSizeAndPositions();

@@ -2996,4 +2996,49 @@ feedback@monkeypales.com</value>
   <data name="DonateLabel" xml:space="preserve">
     <value>បរិច្ចាក</value>
   </data>
+  <data name="MobileCopiedNtfText" xml:space="preserve">
+    <value>បានចម្លងទៅក្ដារតម្បៀតខ្ទាស់</value>
+  </data>
+  <data name="PinTraySidebarLabel" xml:space="preserve">
+    <value>ខ្ទាស់</value>
+  </data>
+  <data name="QueryTraySidebarLabel" xml:space="preserve">
+    <value>សយរ</value>
+  </data>
+  <data name="PluginBrowserFormattedWindowTitle" xml:space="preserve">
+    <value>កម្មវិធីរុករកកម្មវិធីជំនួយ - {0}</value>
+  </data>
+  <data name="PluginBrowserWindowTitle" xml:space="preserve">
+    <value>កម្មវិធីរុករកកម្មវិធីជំនួយ</value>
+  </data>
+  <data name="ClipboardSetMessage" xml:space="preserve">
+    <value>ឈុតក្តារតម្បៀតខ្ទាស់</value>
+  </data>
+  <data name="AddNewActionLabel" xml:space="preserve">
+    <value>បន្ថែម​ថ្មី</value>
+  </data>
+  <data name="EditorPasteButtonLabelMobile" xml:space="preserve">
+    <value>ការចម្លង</value>
+  </data>
+  <data name="PrefSyntaxThemeHint" xml:space="preserve">
+    <value>ស្បែកដែលបានប្រើសម្រាប់ប្លុកនៃកូដដែលបានរកឃើញនៅក្នុងឈុតអត្ថបទ។</value>
+  </data>
+  <data name="PrefSyntaxThemeLabel" xml:space="preserve">
+    <value>ស្បែកវាក្យសម្ព័ន្ធ</value>
+  </data>
+  <data name="PrefCodeFontLabel" xml:space="preserve">
+    <value>វាក្យសម្ពេច</value>
+  </data>
+  <data name="CommonViewLabel" xml:space="preserve">
+    <value>កមហើញ</value>
+  </data>
+  <data name="WrapTextMenuLabel" xml:space="preserve">
+    <value>រុំអត្ថបទ</value>
+  </data>
+  <data name="ClipAssignShortcutLabel" xml:space="preserve">
+    <value>ចាត់តាំងផ្លូវកាត់ ...</value>
+  </data>
+  <data name="ClipUpdateShortcutLabel" xml:space="preserve">
+    <value>ធ្វើបច្ចុប្បន្នភាពផ្លូវកាត់ ...</value>
+  </data>
 </root>

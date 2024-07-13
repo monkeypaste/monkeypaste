@@ -18,20 +18,40 @@
                 Value="Center" />
     </Style>
 
-    <Style Selector=":is(Button).defaultButton">
+    <Style Selector=":is(Button).default-button, :is(Button).no-bg">
         <Setter Property="Transitions">
             <Transitions>
                 <TransformOperationsTransition Property="RenderTransform"
-                                               Duration="0:0:.075" />
+                                               Duration="0:0:0.275" />
+                <BrushTransition Property="Background"
+                                 Duration="0:0:0.5" />
             </Transitions>
         </Setter>
     </Style>
-    <Style Selector=":is(Button).defaultButton:pressed">
+
+    <Style Selector=":is(Button).default-button local|MpAvTintedImage">
+        <Setter Property="Tint"
+                Value="{DynamicResource ThemeInteractiveBrush}" />
+        <Setter Property="Margin"
+                Value="0" />
+        <Setter Property="Width"
+                Value="15" />
+        <Setter Property="Height"
+                Value="15" />
+        <Setter Property="VerticalAlignment"
+                Value="Center" />
+    </Style>
+    <Style Selector=":is(Button).default-button:pointerover local|MpAvTintedImage">
+        <Setter Property="Tint"
+                Value="{DynamicResource ThemeAccent2Brush}" />
+    </Style>
+
+    <Style Selector=":is(Button).default-button:pressed">
         <Setter Property="RenderTransform"
                 Value="scale(0.70)" />
     </Style>
 
-    <Style Selector=":is(Button).noBg">
+    <Style Selector=":is(Button).no-bg">
         <Setter Property="Padding"
                 Value="0" />
     </Style>
@@ -54,7 +74,7 @@
                 Value="{DynamicResource ThemeAccent1Color}" />
     </Style>
 
-    <Style Selector=":is(Button).defaultButton Image">
+    <Style Selector=":is(Button).default-button Image">
         <Setter Property="Margin"
                 Value="0" />
         <Setter Property="Width"
@@ -65,7 +85,20 @@
                 Value="Center" />
     </Style>
 
-    <Style Selector=":is(Button).defaultButton TextBlock">
+    <Style Selector=":is(Button).header-button Image">
+        <Setter Property="Width"
+                Value="25" />
+        <Setter Property="Height"
+                Value="25" />
+    </Style>
+    <Style Selector=":is(Button).header-button local|MpAvTintedImage">
+        <Setter Property="Width"
+                Value="25" />
+        <Setter Property="Height"
+                Value="25" />
+    </Style>
+
+    <Style Selector=":is(Button).default-button TextBlock">
         <Setter Property="VerticalAlignment"
                 Value="Center" />
         <Setter Property="ClipToBounds"
@@ -76,19 +109,64 @@
                 Value="False" />
     </Style>
 
-    <Style Selector=":is(Button).defaultButton:not(.textOnlyButton) DockPanel TextBlock">
+    <Style Selector=":is(Button).default-button:not(.textOnlyButton) DockPanel TextBlock">
         <Setter Property="Margin"
                 Value="7,0,0,0" />
     </Style>
 
-    <Style Selector=":is(Button):disabled, :is(Button).disabled">
+    <Style Selector=":is(Button):disabled:not(.link), :is(Button).disabled:not(.link)">
         <Setter Property="Foreground"
                 Value="{DynamicResource ThemeGrayAccent3Brush}" />
         <Setter Property="Cursor"
                 Value="No" />
     </Style>
-    <Style Selector=":is(Button):disabled TextBlock, :is(Button).disabled TextBlock">
+    <Style Selector=":is(Button):disabled:not(.link) TextBlock, :is(Button).disabled:not(.link) TextBlock">
         <Setter Property="Foreground"
                 Value="{DynamicResource ThemeGrayAccent3Brush}" />
+    </Style>
+
+    <Style Selector="ToggleButton.no-bg:checked /template/ ContentPresenter">
+        <Setter Property="Background"
+                Value="Transparent" />
+    </Style>
+
+
+
+    <!--  EMPTY TEXT  -->
+    <Style Selector=":is(Button).empty-overlay">
+        <Setter Property="ClipToBounds"
+                Value="False" />
+        <Setter Property="Background"
+                Value="Transparent" />
+        <Setter Property="Width"
+                Value="{Binding $parent[Control].Bounds.Width}" />
+        <Setter Property="Height"
+                Value="{Binding $parent[Control].Bounds.Height}" />
+        <Setter Property="HorizontalContentAlignment"
+                Value="Center" />
+        <Setter Property="VerticalContentAlignment"
+                Value="Center" />
+    </Style>
+    <Style Selector=":is(Button).empty-overlay TextBlock">
+        <Setter Property="FontStyle"
+                Value="Italic" />
+        <Setter Property="FontSize"
+                Value="42" />
+        <Setter Property="Foreground"
+                Value="{DynamicResource ThemeInteractiveColor}" />
+        <Setter Property="Margin"
+                Value="20" />
+        <Setter Property="TextWrapping"
+                Value="WrapWithOverflow" />
+        <Setter Property="TextAlignment"
+                Value="Center" />
+        <Setter Property="HorizontalAlignment"
+                Value="Center" />
+        <Setter Property="VerticalAlignment"
+                Value="Center" />
+        <Setter Property="ClipToBounds"
+                Value="False" />
+        <Setter Property="Effect"
+                Value="{DynamicResource ThemeBgGlow}" />
     </Style>
 </Styles>

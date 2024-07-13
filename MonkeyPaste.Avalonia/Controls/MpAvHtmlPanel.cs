@@ -2,6 +2,7 @@
 using Avalonia.Controls.Primitives;
 using Avalonia.Input;
 using MonkeyPaste.Common;
+using MonkeyPaste.Common.Avalonia;
 using PropertyChanged;
 using System;
 using System.Threading.Tasks;

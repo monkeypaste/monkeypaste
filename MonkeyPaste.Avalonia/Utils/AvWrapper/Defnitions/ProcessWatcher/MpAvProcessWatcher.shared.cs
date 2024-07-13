@@ -7,7 +7,9 @@ namespace MonkeyPaste.Avalonia {
 
     public partial class MpAvProcessWatcher : MpIProcessWatcher {
         #region Private Variables
-        private DispatcherTimer _timer;
+#if DESKTOP
+        private DispatcherTimer _timer; 
+#endif
 
 #if MAC
         //private int _lastActiveWindowNum;
@@ -55,7 +57,11 @@ namespace MonkeyPaste.Avalonia {
 
         #region Properties
         public bool IsWatching =>
-            _timer != null && _timer.IsEnabled;
+#if MOBILE
+            false;
+#else
+            _timer != null && _timer.IsEnabled; 
+#endif
 
         private nint _thisAppHandle = IntPtr.Zero;
         protected nint ThisAppHandle {
@@ -138,7 +144,11 @@ namespace MonkeyPaste.Avalonia {
 #endif
         }
         public void StopWatcher() {
-            _timer?.Stop();
+#if MOBILE
+            return;
+#else
+            _timer?.Stop(); 
+#endif
         }
 
         public MpPortableProcessInfo GetProcessInfoFromScreenPoint(MpPoint pixelPoint) {

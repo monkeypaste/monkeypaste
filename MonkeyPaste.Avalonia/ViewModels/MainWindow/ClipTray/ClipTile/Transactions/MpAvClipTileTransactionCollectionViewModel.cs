@@ -166,6 +166,7 @@ namespace MonkeyPaste.Avalonia {
 
                                     // add domain reject thing (if not top level)
                                     if (!MpUrlHelpers.IsUrlTopLevel(url.UrlPath) &&
+                                        MpAvUrlCollectionViewModel.Instance.CanRejectUrls &&
                                         MpAvUrlCollectionViewModel.Instance.Items.FirstOrDefault(x => x.UrlId == url.Id) is { } uvm) {
 
                                         // TOGGLE REJECT SOURCE DOMAIN
@@ -721,6 +722,11 @@ namespace MonkeyPaste.Avalonia {
         public MpIAsyncCommand<object> OpenTransactionPaneCommand => new MpAsyncCommand<object>(
             async (args) => {
                 Dispatcher.UIThread.VerifyAccess();
+                if(MpAvThemeViewModel.Instance.IsMobileOrWindowed &&
+                    MpAvMainWindowViewModel.Instance.IsVerticalOrientation) {
+                    // TODO add vertical trans panel layout, just force horizontal for now
+                    MpAvMainWindowViewModel.Instance.CycleOrientationCommand.Execute("CW");
+                }
 
                 await Task.Delay(1);
                 IsTransactionPaneOpen = true;

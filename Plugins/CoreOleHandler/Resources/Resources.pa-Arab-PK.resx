@@ -222,4 +222,10 @@
   <data name="ToFileExtHint" xml:space="preserve">
     <value>ਜਦੋਂ '{0}' ਜਦੋਂ '{0}' ਜਦੋਂ '{0}' ਨੂੰ-ਡਿਮਾਂਡ ਬਣਾਉਣ ਲਈ ਵਰਤਿਆ ਜਾਂਦਾ ਹੈ ਤਾਂ ਵਰਤੀ ਜਾਂਦੀ ਫਾਈਲ ਐਕਸਟੈਂਸ਼ਨ ਵਰਤੀ ਜਾਂਦੀ ਹੈ.</value>
   </data>
+  <data name="RtfParaTagNameHint" xml:space="preserve">
+    <value>ਕੋਡ ਹਾਈਲਾਈਟਿੰਗ ਲਈ 'ਪ੍ਰੀ' ਟੈਗ ਦੀ ਵਰਤੋਂ ਕਰੋ ਨਹੀਂ ਤਾਂ ਇਸ ਨੂੰ ਆਰਟੀਐਫ ਨੂੰ ਆਮ ਅਮੀਰ ਟੈਕਸਟ ਮੰਨਿਆ ਜਾਵੇਗਾ.</value>
+  </data>
+  <data name="RtfParaTagNameLabel" xml:space="preserve">
+    <value>HTML ਪੈਰਾਗ੍ਰਾਫ ਟੈਗ</value>
+  </data>
 </root>

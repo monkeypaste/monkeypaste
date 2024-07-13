@@ -1,0 +1,65 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:local="clr-namespace:iosKeyboardTest"
+             mc:Ignorable="d"
+             d:DesignWidth="800"
+             d:DesignHeight="450"
+             x:DataType="local:KeyViewModel"
+             x:Class="iosKeyboardTest.KeyView">
+    <UserControl.Styles>
+
+        <!--  KEY PULL  -->
+
+        <!--<Style Selector="Border#ForegroundBorder:not(.popup-key)"
+               x:DataType="local:KeyViewModel">
+            <Setter Property="TranslateTransform.Y"
+                    Value="{Binding PullTranslateY}" />
+        </Style>-->
+    </UserControl.Styles>
+    <Grid Width="{Binding InnerWidth}"
+          Height="{Binding InnerHeight}"
+          HorizontalAlignment="Center"
+          VerticalAlignment="Center">
+        <!--  KEY BG  -->
+        <Border x:Name="KeyBgRect"
+                CornerRadius="{Binding CornerRadius}"
+                HorizontalAlignment="Stretch"
+                VerticalAlignment="Stretch" />
+
+        <!--  INNER GRID  -->
+
+        <Border x:Name="ForegroundBorder">
+            <!--<Border.RenderTransform>
+                <TranslateTransform Y="{Binding PullTranslateY}" />
+            </Border.RenderTransform>-->
+            <Grid>
+                <!--  SECONDARY CHAR  -->
+
+                <TextBlock x:Name="SecondaryKeyTextBlock"
+                           RenderTransformOrigin="0.5,0.5"
+                           Classes="pull-textblock"
+                           Opacity="{Binding SecondaryOpacity}"
+                           FontSize="{Binding SecondaryFontSize}"
+                           Text="{Binding SecondaryValue}">
+                    <TextBlock.RenderTransform>
+                        <TranslateTransform X="{Binding SecondaryTranslateOffsetX}" Y="{Binding SecondaryTranslateOffsetY}" />
+                    </TextBlock.RenderTransform>
+                </TextBlock>
+
+                <!--  PRIMARY CHAR  -->
+
+                <TextBlock x:Name="KeyTextBlock"
+                           Classes="pull-textblock"
+                           Opacity="{Binding PrimaryOpacity}"
+                           FontSize="{Binding PrimaryFontSize}"
+                           Text="{Binding PrimaryValue}">
+                    <TextBlock.RenderTransform>
+                        <TranslateTransform Y="{Binding PullTranslateY}" />
+                    </TextBlock.RenderTransform>
+                </TextBlock>
+            </Grid>
+        </Border>
+    </Grid>
+</UserControl>

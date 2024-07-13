@@ -2996,4 +2996,49 @@ Les raccourcis mondiaux peuvent désormais être activés dans le menu du platea
   <data name="DonateLabel" xml:space="preserve">
     <value>Faire un don</value>
   </data>
+  <data name="MobileCopiedNtfText" xml:space="preserve">
+    <value>Copié dans le presse-papier</value>
+  </data>
+  <data name="PinTraySidebarLabel" xml:space="preserve">
+    <value>Épinglé</value>
+  </data>
+  <data name="QueryTraySidebarLabel" xml:space="preserve">
+    <value>Requête</value>
+  </data>
+  <data name="PluginBrowserFormattedWindowTitle" xml:space="preserve">
+    <value>Navigateur de plugin - {0}</value>
+  </data>
+  <data name="PluginBrowserWindowTitle" xml:space="preserve">
+    <value>Navigateur de plugin</value>
+  </data>
+  <data name="ClipboardSetMessage" xml:space="preserve">
+    <value>Ensemble de presse-papiers</value>
+  </data>
+  <data name="AddNewActionLabel" xml:space="preserve">
+    <value>Ajouter un nouveau</value>
+  </data>
+  <data name="EditorPasteButtonLabelMobile" xml:space="preserve">
+    <value>Copie</value>
+  </data>
+  <data name="PrefSyntaxThemeHint" xml:space="preserve">
+    <value>Le thème utilisé pour les blocs de code détectés dans les clips de texte.</value>
+  </data>
+  <data name="PrefSyntaxThemeLabel" xml:space="preserve">
+    <value>Thème de syntaxe</value>
+  </data>
+  <data name="PrefCodeFontLabel" xml:space="preserve">
+    <value>Syntaxe</value>
+  </data>
+  <data name="CommonViewLabel" xml:space="preserve">
+    <value>Voir</value>
+  </data>
+  <data name="WrapTextMenuLabel" xml:space="preserve">
+    <value>Envelopper du texte</value>
+  </data>
+  <data name="ClipAssignShortcutLabel" xml:space="preserve">
+    <value>Attribuer un raccourci ...</value>
+  </data>
+  <data name="ClipUpdateShortcutLabel" xml:space="preserve">
+    <value>Mettre à jour le raccourci ...</value>
+  </data>
 </root>

@@ -2996,4 +2996,49 @@ Globale Kürzel können jetzt im Taskleistenmenü aktiviert werden.</value>
   <data name="DonateLabel" xml:space="preserve">
     <value>Spenden</value>
   </data>
+  <data name="MobileCopiedNtfText" xml:space="preserve">
+    <value>In die Zwischenablage kopiert</value>
+  </data>
+  <data name="PinTraySidebarLabel" xml:space="preserve">
+    <value>Angepinnt</value>
+  </data>
+  <data name="QueryTraySidebarLabel" xml:space="preserve">
+    <value>Abfrage</value>
+  </data>
+  <data name="PluginBrowserFormattedWindowTitle" xml:space="preserve">
+    <value>Plugin-Browser - {0}</value>
+  </data>
+  <data name="PluginBrowserWindowTitle" xml:space="preserve">
+    <value>Plugin-Browser</value>
+  </data>
+  <data name="ClipboardSetMessage" xml:space="preserve">
+    <value>Klemmbrett-Set</value>
+  </data>
+  <data name="AddNewActionLabel" xml:space="preserve">
+    <value>Neue hinzufügen</value>
+  </data>
+  <data name="EditorPasteButtonLabelMobile" xml:space="preserve">
+    <value>Kopieren</value>
+  </data>
+  <data name="PrefSyntaxThemeHint" xml:space="preserve">
+    <value>Das Design, das für in Textclips erkannte Codeblöcke verwendet wird.</value>
+  </data>
+  <data name="PrefSyntaxThemeLabel" xml:space="preserve">
+    <value>Syntax-Thema</value>
+  </data>
+  <data name="PrefCodeFontLabel" xml:space="preserve">
+    <value>Syntax</value>
+  </data>
+  <data name="CommonViewLabel" xml:space="preserve">
+    <value>Sicht</value>
+  </data>
+  <data name="WrapTextMenuLabel" xml:space="preserve">
+    <value>Zeilenumbruch</value>
+  </data>
+  <data name="ClipAssignShortcutLabel" xml:space="preserve">
+    <value>Verknüpfung zuweisen...</value>
+  </data>
+  <data name="ClipUpdateShortcutLabel" xml:space="preserve">
+    <value>Verknüpfung aktualisieren...</value>
+  </data>
 </root>

@@ -2996,4 +2996,49 @@ feedback@monkeypaste.com</value>
   <data name="DonateLabel" xml:space="preserve">
     <value>Кайрымдуулук</value>
   </data>
+  <data name="MobileCopiedNtfText" xml:space="preserve">
+    <value>Алмашуу буферине көчүрүлдү</value>
+  </data>
+  <data name="PinTraySidebarLabel" xml:space="preserve">
+    <value>Кадалды</value>
+  </data>
+  <data name="QueryTraySidebarLabel" xml:space="preserve">
+    <value>Суроо</value>
+  </data>
+  <data name="PluginBrowserFormattedWindowTitle" xml:space="preserve">
+    <value>Плагин браузери - {0}</value>
+  </data>
+  <data name="AddNewActionLabel" xml:space="preserve">
+    <value>Жаңы кошуу</value>
+  </data>
+  <data name="PluginBrowserWindowTitle" xml:space="preserve">
+    <value>Plugin Browser</value>
+  </data>
+  <data name="ClipboardSetMessage" xml:space="preserve">
+    <value>Алмашуу буферинин топтому</value>
+  </data>
+  <data name="EditorPasteButtonLabelMobile" xml:space="preserve">
+    <value>Көчүрүү</value>
+  </data>
+  <data name="PrefSyntaxThemeHint" xml:space="preserve">
+    <value>Тексттик клиптерде аныкталган код блокторун пайдалануу темасы.</value>
+  </data>
+  <data name="PrefSyntaxThemeLabel" xml:space="preserve">
+    <value>Синтаксистик тема</value>
+  </data>
+  <data name="PrefCodeFontLabel" xml:space="preserve">
+    <value>Синтаксис</value>
+  </data>
+  <data name="CommonViewLabel" xml:space="preserve">
+    <value>Көрүү</value>
+  </data>
+  <data name="WrapTextMenuLabel" xml:space="preserve">
+    <value>Текстти ороо</value>
+  </data>
+  <data name="ClipAssignShortcutLabel" xml:space="preserve">
+    <value>Жарлык үчүн ...</value>
+  </data>
+  <data name="ClipUpdateShortcutLabel" xml:space="preserve">
+    <value>Кыска жолду жаңыртыңыз ...</value>
+  </data>
 </root>

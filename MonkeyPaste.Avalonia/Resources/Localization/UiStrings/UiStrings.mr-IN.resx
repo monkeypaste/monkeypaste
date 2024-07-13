@@ -2996,4 +2996,49 @@
   <data name="DonateLabel" xml:space="preserve">
     <value>देणगी</value>
   </data>
+  <data name="MobileCopiedNtfText" xml:space="preserve">
+    <value>क्लिपबोर्डवर कॉपी केली</value>
+  </data>
+  <data name="PinTraySidebarLabel" xml:space="preserve">
+    <value>पिन केले</value>
+  </data>
+  <data name="QueryTraySidebarLabel" xml:space="preserve">
+    <value>क्वेरी</value>
+  </data>
+  <data name="PluginBrowserFormattedWindowTitle" xml:space="preserve">
+    <value>प्लगइन ब्राउझर - {0}</value>
+  </data>
+  <data name="ClipboardSetMessage" xml:space="preserve">
+    <value>क्लिपबोर्ड सेट</value>
+  </data>
+  <data name="AddNewActionLabel" xml:space="preserve">
+    <value>नवीन जोडा</value>
+  </data>
+  <data name="PluginBrowserWindowTitle" xml:space="preserve">
+    <value>प्लगइन ब्राउझर</value>
+  </data>
+  <data name="EditorPasteButtonLabelMobile" xml:space="preserve">
+    <value>कॉपी</value>
+  </data>
+  <data name="PrefSyntaxThemeHint" xml:space="preserve">
+    <value>मजकूर क्लिपमध्ये आढळलेल्या कोडच्या ब्लॉक्ससाठी वापरलेली थीम.</value>
+  </data>
+  <data name="PrefSyntaxThemeLabel" xml:space="preserve">
+    <value>वाक्यरचना थीम</value>
+  </data>
+  <data name="PrefCodeFontLabel" xml:space="preserve">
+    <value>मांडणी</value>
+  </data>
+  <data name="CommonViewLabel" xml:space="preserve">
+    <value>दृश्य</value>
+  </data>
+  <data name="WrapTextMenuLabel" xml:space="preserve">
+    <value>मजकूर लपेटणे</value>
+  </data>
+  <data name="ClipAssignShortcutLabel" xml:space="preserve">
+    <value>शॉर्टकट नियुक्त करा ...</value>
+  </data>
+  <data name="ClipUpdateShortcutLabel" xml:space="preserve">
+    <value>शॉर्टकट अद्यतनित करा ...</value>
+  </data>
 </root>

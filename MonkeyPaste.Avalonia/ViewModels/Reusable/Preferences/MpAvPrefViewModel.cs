@@ -50,6 +50,8 @@ namespace MonkeyPaste.Avalonia {
         #region Constants
 
         [JsonIgnore]
+        public const string DEF_SYNTAX_THEME = "monokai-sublime";
+        [JsonIgnore]
         public const string PREF_FILE_NAME = "mp.pref";
 
         [JsonIgnore]
@@ -62,13 +64,10 @@ namespace MonkeyPaste.Avalonia {
         public const string BASELINE_DEFAULT_READ_ONLY_FONT = "Nunito";
         public const string BASELINE_DEFAULT_READ_ONLY_FONT2 = "Tahoma";
         public const string BASELINE_DEFAULT_CONTENT_FONT = "Arial";
+        public const string BASELINE_DEFAULT_CODE_FONT = "Consolas";
 
         [JsonIgnore]
         public const bool ENCRYPT_DB = true;
-
-        #endregion
-
-        #region Constants
 
         public const double BASE_DEFAULT_FONT_SIZE = 12;
 
@@ -92,9 +91,15 @@ namespace MonkeyPaste.Avalonia {
 
 
         [JsonIgnore]
+        public static string DEFAULT_THEME_TYPE_NAME => MpThemeType.Dark.ToString();
+
+        [JsonIgnore]
+        public static string DEFAULT_THEME_HEX_COLOR => MpSystemColors.purple;
+
+        [JsonIgnore]
         public static string arg1 {
             get {
-#if LINUX
+#if LINUX || ANDROID
                 return "arg1arg1arg1arg1arg1arg1arg1arg1";
 #else
                 if (!PreferencesPath.IsFile()) {
@@ -106,7 +111,7 @@ namespace MonkeyPaste.Avalonia {
         }
         [JsonIgnore]
         public static string arg2 =>
-#if LINUX
+#if LINUX || ANDROID
             "arg2arg2arg2arg2arg2arg2arg2arg2";
 #else
             Instance == null ||
@@ -118,7 +123,7 @@ namespace MonkeyPaste.Avalonia {
         [JsonIgnore]
         public static string arg3 {
             get {
-#if LINUX
+#if LINUX || ANDROID
                 return "arg3arg3arg3arg3arg3arg3arg3arg3";
 #else
                 if (!PreferencesPathBackup.IsFile()) {
@@ -221,7 +226,7 @@ namespace MonkeyPaste.Avalonia {
         private bool _isWindowed = false;
         public bool IsWindowed {
             get {
-#if WINDOWED
+#if MOBILE_OR_WINDOWED
                 return true;
 #else                
                 return _isWindowed;
@@ -317,9 +322,12 @@ namespace MonkeyPaste.Avalonia {
         #region Preferences
 
         #region Look & Feel
+
+        public bool IsContentWrapEnabledByDefault { get; set; } = true;
+        public string SelectedSyntaxTheme { get; set; } = DEF_SYNTAX_THEME;
         public bool ShowContentTitles { get; set; } = true;
-        public string ThemeTypeName { get; set; } = MpThemeType.Dark.ToString();
-        public string ThemeColor { get; set; } = MpSystemColors.purple;
+        public string ThemeTypeName { get; set; } = DEFAULT_THEME_TYPE_NAME;
+        public string ThemeColor { get; set; } = DEFAULT_THEME_HEX_COLOR;
         public int NotificationSoundGroupIdx { get; set; } = (int)MpSoundGroupType.Minimal;
         public double NotificationSoundVolume { get; set; } = 0;
         public bool ShowInTaskbar { get; set; } = true;
@@ -334,13 +342,14 @@ namespace MonkeyPaste.Avalonia {
 
         public string DefaultReadOnlyFontFamily { get; set; } = BASELINE_DEFAULT_READ_ONLY_FONT;
         public string DefaultEditableFontFamily { get; set; } = BASELINE_DEFAULT_CONTENT_FONT;
+        public string DefaultCodeFontFamily { get; set; } = BASELINE_DEFAULT_CODE_FONT;
         public double DefaultFontSize { get; set; } = BASE_DEFAULT_FONT_SIZE;
 
         public bool HideCapWarnings { get; set; }
         public bool ShowHints { get; set; } = true;
         public bool ShowTooltips { get; set; } = true;
         public double GlobalBgOpacity { get; set; }
-#if DESKTOP
+#if MULTI_WINDOW
         = 0.7;
 #else
         = 1.0d;
@@ -487,9 +496,7 @@ namespace MonkeyPaste.Avalonia {
         #region Last Load Remembers
 
         public string MainWindowOrientationStr { get; set; }
-#if DESKTOP
-        = MpMainWindowOrientationType.Bottom.ToString();
-#elif BROWSER
+#if MULTI_WINDOW || BROWSER
         = MpMainWindowOrientationType.Bottom.ToString();
 #else
         = MpMainWindowOrientationType.Left.ToString();

@@ -6,7 +6,7 @@
     display: none;
 }
 
-#pasteToolbar:not(:hover) .append-toolbar-container:not(.expanded) {
+#editor.desktop #pasteToolbar:not(:hover) .append-toolbar-container:not(.expanded) {
     opacity: 0;
 }
 #pasteToolbar:hover .append-toolbar-container:not(.expanded) {

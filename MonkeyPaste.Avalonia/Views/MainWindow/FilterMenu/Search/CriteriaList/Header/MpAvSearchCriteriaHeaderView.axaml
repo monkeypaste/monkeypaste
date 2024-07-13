@@ -31,7 +31,7 @@
             <Button x:Name="RefreshSearchButton"
                     VerticalAlignment="Stretch"
                     HorizontalAlignment="Center"
-                    Classes="defaultButton squareByHeight"
+                    Classes="default-button squareByHeight"
                     IsEnabled="{Binding !IsQuerying, Source={x:Static local:MpAvClipTrayViewModel.Instance}}"
                     Command="{Binding RefreshSearchCommand}">
                 <ToolTip.Tip>
@@ -49,7 +49,7 @@
             <!--  DUPLICATE BUTTON  -->
 
             <Button x:Name="DuplicateAdvSearchButton"
-                    Classes="defaultButton squareByHeight"
+                    Classes="default-button squareByHeight"
                     IsVisible="{Binding IsSavedQuery}"
                     Command="{Binding DuplicateQueryCommand}">
 
@@ -64,7 +64,7 @@
             <!--  DELETE BUTTON  -->
 
             <Button x:Name="DeleteAdvSearchButton"
-                    Classes="defaultButton alterOnly squareByHeight"
+                    Classes="default-button alterOnly squareByHeight"
                     IsVisible="{Binding IsPendingQuery}"
                     Command="{Binding RejectPendingCriteriaItemsCommand}">
 
@@ -78,7 +78,7 @@
             <!--  POP OUT WINDOW BUTTON  -->
 
             <Button x:Name="ShowCriteriaWindowButton"
-                    Classes="defaultButton squareByHeight"
+                    Classes="default-button squareByHeight"
                     IsVisible="{Binding !IsCriteriaWindowOpen}"
                     Command="{Binding OpenCriteriaWindowCommand}">
                 <ToolTip.Tip>
@@ -91,7 +91,7 @@
             <!--  SAVE BUTTON  -->
 
             <Button x:Name="SaveAdvSearchButton"
-                    Classes="defaultButton alterOnly squareByHeight"
+                    Classes="default-button alterOnly squareByHeight"
                     Command="{Binding SaveQueryCommand}">
 
                 <Button.IsVisible>

@@ -7,6 +7,7 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
 using System.Threading.Tasks;
+using System.Windows.Controls;
 using System.Windows.Input;
 
 namespace MonkeyPaste.Avalonia {
@@ -946,12 +947,18 @@ namespace MonkeyPaste.Avalonia {
         #region Layout       
 
         public double CriteriaItemHeight =>
-            Parent == null ? 0 :
-                Parent.DefaultCriteriaRowHeight * (IsJoinPanelVisible ? 2 : 1) +
-                (Parent.CriteriaDropLineHeight * 2);
+            MpAvThemeViewModel.Instance.IsMobileOrWindowed ? 
+                IsExpanded ? double.NaN : Parent.DefaultCriteriaRowHeight :
+                Parent == null ? 0 :
+                    Parent.DefaultCriteriaRowHeight * (IsJoinPanelVisible ? 2 : 1) +
+                    (Parent.CriteriaDropLineHeight * 2);
         #endregion
 
         #region State
+
+        public bool IsUserExpanded { get; set; }
+        public bool IsExpanded => 
+            MpAvThemeViewModel.Instance.IsMultiWindow || IsUserExpanded;
 
         public bool HasMultiValues =>
             ValueOptionViewModels.Count() > 1;
@@ -1164,7 +1171,9 @@ namespace MonkeyPaste.Avalonia {
 
         public MpAvSearchCriteriaItemViewModel(MpAvSearchCriteriaItemCollectionViewModel parent) : base(parent) {
             PropertyChanged += MpAvSearchCriteriaItemViewModel_PropertyChanged;
+            Items.CollectionChanged += Items_CollectionChanged;
         }
+
 
         public async Task InitializeAsync(MpSearchCriteriaItem sci) {
             IsBusy = true;
@@ -1236,6 +1245,10 @@ namespace MonkeyPaste.Avalonia {
                 HasModelChanged = HasCriteriaStateChanged();
             }
 
+            if(HasModelChanged) {
+                ExpandCriteriaItemCommand.Execute("SYSTEM");
+            }
+
             if (ovm == null || ovm.IsValueOption) {
                 // whenever its changed requery on subsequent changes
                 SetModelToCurrent();
@@ -1258,6 +1271,16 @@ namespace MonkeyPaste.Avalonia {
 
         private void MpAvSearchCriteriaItemViewModel_PropertyChanged(object sender, System.ComponentModel.PropertyChangedEventArgs e) {
             switch (e.PropertyName) {
+                case nameof(IsSelected):
+                    if(IsSelected) {
+                        ExpandCriteriaItemCommand.Execute("SYSTEM"); 
+                    } else if(!IsUserExpanded) {
+                        UnexpandCriteriaItemCommand.Execute(null);
+                    }
+                    break;
+                case nameof(IsExpanded):
+                    OnPropertyChanged(nameof(CriteriaItemHeight));
+                    break;
                 case nameof(IgnoreHasModelChanged):
                     if (!IgnoreHasModelChanged && HasModelChanged) {
                         OnPropertyChanged(nameof(HasModelChanged));
@@ -1307,6 +1330,15 @@ namespace MonkeyPaste.Avalonia {
             }
         }
 
+        private void Items_CollectionChanged(object sender, System.Collections.Specialized.NotifyCollectionChangedEventArgs e) {
+            // auto expand when user adds options
+            if(IsBusy || IsExpanded) {
+                return;
+            }
+            if(Items.Count > 1) {
+                ExpandCriteriaItemCommand.Execute("SYSTEM");
+            }
+        }
         private bool HasCriteriaStateChanged() {
             var cur = GetCurrentItemState();
             if (SearchCriteriaItem == null) {
@@ -1428,7 +1460,27 @@ namespace MonkeyPaste.Avalonia {
                 }
                 Parent.RemoveSearchCriteriaItemCommand.Execute(this);
             });
-
+        
+        public ICommand ExpandCriteriaItemCommand => new MpCommand<object>(
+            (args) => {
+                IsUserExpanded = true;
+                OnPropertyChanged(nameof(IsExpanded));
+            }, (args) => {
+                return !IsExpanded;
+            });
+        public ICommand UnexpandCriteriaItemCommand => new MpCommand<object>(
+            (args) => {
+                IsUserExpanded = false;
+                OnPropertyChanged(nameof(IsExpanded));
+            });
+        public ICommand ToggleExpandCriteriaItemCommand => new MpCommand<object>(
+            (args) => {
+                if (IsExpanded) {
+                    UnexpandCriteriaItemCommand.Execute(null);
+                } else {
+                    ExpandCriteriaItemCommand.Execute(null);
+                }
+            });
         #endregion
     }
 }

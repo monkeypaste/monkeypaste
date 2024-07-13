@@ -1,6 +1,10 @@
 ﻿#editorToolbar {
     background-color: var(--editortoolbarbgcolor);
     border-color: var(--editortoolbarsepbgcolor);
+    flex-wrap: wrap;
+}
+#editorToolbar:not(.hidden) {    
+    display: flex !important;
 }
 
 #editorToolbar button:hover:not(.disabled) svg, #createTableToolbarButton:hover:not(.disabled) svg {
@@ -27,7 +31,7 @@
     transition: var(--toolbartransitionms) cubic-bezier(.47,1.64,.41,.8);
     transition-property: bottom;
     display: flex;
-    flex-wrap: nowrap;
+    flex-wrap: wrap;
     min-height: 40px;
     bottom: -40px;
     width: 100%;

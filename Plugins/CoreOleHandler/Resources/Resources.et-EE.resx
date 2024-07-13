@@ -222,4 +222,10 @@
   <data name="ToFileExtHint" xml:space="preserve">
     <value>Faili laiendit, mida kasutatakse siis, kui '{0}' kasutatakse tellitava faili loomiseks.</value>
   </data>
+  <data name="RtfParaTagNameHint" xml:space="preserve">
+    <value>Koodi esiletõstmiseks kasutage „Pre” silti, vastasel juhul käsitletakse RTF -i tavalise rikkaliku tekstina.</value>
+  </data>
+  <data name="RtfParaTagNameLabel" xml:space="preserve">
+    <value>Html lõikusilt</value>
+  </data>
 </root>

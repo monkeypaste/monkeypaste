@@ -3,12 +3,15 @@ using Avalonia.Controls;
 using Avalonia.Controls.ApplicationLifetimes;
 using Avalonia.Controls.Platform;
 using Avalonia.Diagnostics;
+using Avalonia.LogicalTree;
 using Avalonia.Platform;
 using Avalonia.Threading;
 using MonkeyPaste.Common;
+using MonkeyPaste.Common.Avalonia;
 using PropertyChanged;
 using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Threading.Tasks;
 
 namespace MonkeyPaste.Avalonia {
@@ -54,8 +57,10 @@ namespace MonkeyPaste.Avalonia {
             DataContext as MpIWindowViewModel;
 
         #region Overrides
-#if !WINDOWED
-        protected override Type StyleKeyOverride => typeof(Window); 
+#if MOBILE_OR_WINDOWED
+        protected override Type StyleKeyOverride => typeof(MpAvWindow);
+#else
+        //protected override Type StyleKeyOverride => typeof(Window); 
 #endif
         #endregion
 
@@ -105,11 +110,15 @@ namespace MonkeyPaste.Avalonia {
 
         public MpIPlatformScreenInfo ScreenInfo {
             get {
+#if WINDOWED
+                return Screens.Primary;
+#else
                 if (this.GetVisualAncestor<Window>() is not { } w ||
-                    this.Screens.ScreenFromWindow(w) is not Screen scr) {
+                            this.Screens.ScreenFromWindow(w) is not Screen scr) {
                     return this.Screens.Primary.ToScreenInfo();
                 }
-                return scr.ToScreenInfo();
+                return scr.ToScreenInfo(); 
+#endif
             }
         }
 
@@ -119,8 +128,7 @@ namespace MonkeyPaste.Avalonia {
         #endregion
 
         #region Constructors
-        public MpAvWindow() : this(null) { }
-        public MpAvWindow(MpAvWindow owner = default) : base(owner == null ? PlatformManager.CreateWindow() : owner.PlatformImpl) {
+        public MpAvWindow() {
             Init();
         }
 
@@ -158,7 +166,7 @@ namespace MonkeyPaste.Avalonia {
         }
 
         public override string ToString() {
-            return $"MpAvWindow = '{this.Title}'";
+            return $"MpAvWindow = '{(this.Title.IsNullOrWhiteSpace() && DataContext != null ? DataContext : this.Title)}'";
         }
 
         public void ShowDevTools() {
@@ -170,8 +178,14 @@ namespace MonkeyPaste.Avalonia {
         #endregion
 
         #region Protected Methods
-        protected override void OnClosing(WindowClosingEventArgs e) {
-            base.OnClosing(e);
+        protected
+#if MOBILE_OR_WINDOWED
+         override  
+#endif
+            void OnClosing(CancelEventArgs e) {
+#if MOBILE_OR_WINDOWED
+            base.OnClosing(e); 
+#endif
             if (e.Cancel || !this.Classes.Contains("fadeOut") || this.Classes.Contains("closing")) {
                 return;
             }
@@ -184,18 +198,17 @@ namespace MonkeyPaste.Avalonia {
                 this.Classes.Remove("closing");
             });
         }
+        protected override void OnDataContextChanged(EventArgs e) {
+            base.OnDataContextChanged(e);
+
+            Classes.Add(WindowType.ToString());
+        }
         #endregion
 
         #region Private Methods
         private void Init() {
-#if DEBUG && !WINDOWED
-            this.AttachDevTools(DefaultDevToolOptions);
-#endif
             Icon = MpAvIconSourceObjToBitmapConverter.Instance.Convert("AppIcon", typeof(MpAvWindowIcon), null, null) as MpAvWindowIcon;
-            if (Mp.Services != null &&
-                Mp.Services.ScreenInfoCollection == null) {
-                Mp.Services.ScreenInfoCollection = new MpAvDesktopScreenInfoCollection(this);
-            }
+            
             if (MpAvPrefViewModel.Instance.IsThemeDark) {
                 Classes.Add("dark");
             }
@@ -225,5 +238,14 @@ namespace MonkeyPaste.Avalonia {
 
         #region Commands
         #endregion
+    }
+
+
+    [DoNotNotify]
+    public abstract class MpAvWindow<TViewModel> : MpAvWindow where TViewModel : class {
+        public new TViewModel BindingContext {
+            get => GetValue(DataContextProperty) as TViewModel;
+            set => SetValue(DataContextProperty, value);
+        }
     }
 }

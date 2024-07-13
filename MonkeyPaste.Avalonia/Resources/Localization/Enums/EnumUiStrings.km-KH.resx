@@ -1186,4 +1186,16 @@
   <data name="MpShortcutType_ToggleGlobalHooks" xml:space="preserve">
     <value>បិទបើកការទំពក់សកល</value>
   </data>
+  <data name="MpNotificationType_ModalSettingsFrameMenu" xml:space="preserve">
+    <value>ម៉ឺនុយការកំណត់ម៉ូឌុល</value>
+  </data>
+  <data name="MpShortcutType_EnterKeyAction" xml:space="preserve">
+    <value>បញ្ចូលសកម្មភាពសំខាន់</value>
+  </data>
+  <data name="MpShortcutType_ToggleXamlHotReload" xml:space="preserve">
+    <value>បិទបើក XAML ក្តៅផ្ទុកឡើងវិញ</value>
+  </data>
+  <data name="MpShortcutType_ToggleContentWrap" xml:space="preserve">
+    <value>បិទ / បើកមាតិការមាតិកា</value>
+  </data>
 </root>

@@ -15,6 +15,9 @@ namespace MonkeyPaste.Avalonia {
         #region Interfaces
 
         #region MpAvIMenuItemViewModel Implementation
+
+        string MpAvIMenuItemViewModel.IconTintHexStr =>
+            null;
         string MpAvIMenuItemViewModel.IconBorderHexColor =>
             MpSystemColors.Transparent;
         public bool IsHovering { get; set; }
@@ -28,7 +31,7 @@ namespace MonkeyPaste.Avalonia {
             MpMenuItemType.Checkable;
         bool MpAvIMenuItemViewModel.StaysOpenOnClick =>
             true;
-        bool MpAvIMenuItemViewModel.IsVisible =>
+        bool MpAvIIsVisibleViewModel.IsVisible =>
             true;
         bool MpAvIMenuItemViewModel.IsThreeState =>
             false;

@@ -2996,4 +2996,49 @@ Globálne skratky je teraz možné povoliť v ponuke System Tray</value>
   <data name="DonateLabel" xml:space="preserve">
     <value>Darovať</value>
   </data>
+  <data name="MobileCopiedNtfText" xml:space="preserve">
+    <value>Skopírované do schránky</value>
+  </data>
+  <data name="PinTraySidebarLabel" xml:space="preserve">
+    <value>Pripnutý</value>
+  </data>
+  <data name="QueryTraySidebarLabel" xml:space="preserve">
+    <value>Dopyt</value>
+  </data>
+  <data name="PluginBrowserFormattedWindowTitle" xml:space="preserve">
+    <value>Prehliadač doplnkov - {0}</value>
+  </data>
+  <data name="PluginBrowserWindowTitle" xml:space="preserve">
+    <value>Prehliadač doplnkov</value>
+  </data>
+  <data name="AddNewActionLabel" xml:space="preserve">
+    <value>Pridať nové</value>
+  </data>
+  <data name="ClipboardSetMessage" xml:space="preserve">
+    <value>Súprava schránky</value>
+  </data>
+  <data name="EditorPasteButtonLabelMobile" xml:space="preserve">
+    <value>Kopírovať</value>
+  </data>
+  <data name="PrefSyntaxThemeHint" xml:space="preserve">
+    <value>Téma použitá pre bloky kódu zistených v textových klipoch.</value>
+  </data>
+  <data name="PrefSyntaxThemeLabel" xml:space="preserve">
+    <value>Téma syntaxe</value>
+  </data>
+  <data name="PrefCodeFontLabel" xml:space="preserve">
+    <value>Syntax</value>
+  </data>
+  <data name="CommonViewLabel" xml:space="preserve">
+    <value>vyhliadka</value>
+  </data>
+  <data name="WrapTextMenuLabel" xml:space="preserve">
+    <value>Obtekanie textu</value>
+  </data>
+  <data name="ClipAssignShortcutLabel" xml:space="preserve">
+    <value>Priraďte skratku ...</value>
+  </data>
+  <data name="ClipUpdateShortcutLabel" xml:space="preserve">
+    <value>Aktualizácia skratky ...</value>
+  </data>
 </root>

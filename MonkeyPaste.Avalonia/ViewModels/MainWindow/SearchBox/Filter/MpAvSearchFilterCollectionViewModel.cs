@@ -18,6 +18,9 @@ namespace MonkeyPaste.Avalonia {
         #endregion
 
         #region MpAvIMenuItemCollectionViewModel Implementation
+
+        string MpAvIMenuItemViewModel.IconTintHexStr =>
+            null;
         string MpAvIMenuItemViewModel.IconBorderHexColor =>
             MpSystemColors.Transparent;
         public bool IsHovering { get; set; }
@@ -29,7 +32,7 @@ namespace MonkeyPaste.Avalonia {
         bool MpAvIMenuItemViewModel.StaysOpenOnClick { get; }
         bool MpAvIMenuItemViewModel.HasLeadingSeparator { get; }
         bool MpAvIMenuItemViewModel.IsThreeState { get; }
-        bool MpAvIMenuItemViewModel.IsVisible { get; }
+        bool MpAvIIsVisibleViewModel.IsVisible { get; }
         public bool? IsChecked { get; set; } = false;
         MpMenuItemType MpAvIMenuItemViewModel.MenuItemType { get; }
         bool MpAvIMenuItemViewModel.IsSubMenuOpen {

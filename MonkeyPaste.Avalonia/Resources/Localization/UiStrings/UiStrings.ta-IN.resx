@@ -2996,4 +2996,49 @@ furedback@monkeypaste.com</value>
   <data name="DonateLabel" xml:space="preserve">
     <value>நன்கொடை</value>
   </data>
+  <data name="MobileCopiedNtfText" xml:space="preserve">
+    <value>கிளிப்போர்டுக்கு நகலெடுக்கப்பட்டது</value>
+  </data>
+  <data name="PinTraySidebarLabel" xml:space="preserve">
+    <value>பின்</value>
+  </data>
+  <data name="QueryTraySidebarLabel" xml:space="preserve">
+    <value>வினவல்</value>
+  </data>
+  <data name="ClipboardSetMessage" xml:space="preserve">
+    <value>கிளிப்போர்டு செட்</value>
+  </data>
+  <data name="AddNewActionLabel" xml:space="preserve">
+    <value>புதிதாக சேர்க்கவும்</value>
+  </data>
+  <data name="PluginBrowserFormattedWindowTitle" xml:space="preserve">
+    <value>செருகுநிரல் உலாவி - {0}</value>
+  </data>
+  <data name="PluginBrowserWindowTitle" xml:space="preserve">
+    <value>செருகுநிரல் உலாவி</value>
+  </data>
+  <data name="EditorPasteButtonLabelMobile" xml:space="preserve">
+    <value>நகலெடு</value>
+  </data>
+  <data name="PrefSyntaxThemeHint" xml:space="preserve">
+    <value>உரை கிளிப்களில் கண்டறியப்பட்ட குறியீட்டின் தொகுதிகளுக்கு பயன்படுத்தப்படும் தீம்.</value>
+  </data>
+  <data name="PrefSyntaxThemeLabel" xml:space="preserve">
+    <value>தொடரியல் தீம்</value>
+  </data>
+  <data name="PrefCodeFontLabel" xml:space="preserve">
+    <value>தொடரியல்</value>
+  </data>
+  <data name="CommonViewLabel" xml:space="preserve">
+    <value>பார்வை</value>
+  </data>
+  <data name="WrapTextMenuLabel" xml:space="preserve">
+    <value>உரையை மடக்கு</value>
+  </data>
+  <data name="ClipAssignShortcutLabel" xml:space="preserve">
+    <value>குறுக்குவழியை ஒதுக்குங்கள் ...</value>
+  </data>
+  <data name="ClipUpdateShortcutLabel" xml:space="preserve">
+    <value>குறுக்குவழியைப் புதுப்பிக்கவும் ...</value>
+  </data>
 </root>

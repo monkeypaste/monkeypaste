@@ -2996,4 +2996,49 @@ Globalne bližnjice je zdaj mogoče omogočiti v meniju System pladnja</value>
   <data name="DonateLabel" xml:space="preserve">
     <value>Donirajte</value>
   </data>
+  <data name="MobileCopiedNtfText" xml:space="preserve">
+    <value>Kopirano na odložišče</value>
+  </data>
+  <data name="PinTraySidebarLabel" xml:space="preserve">
+    <value>Pripet</value>
+  </data>
+  <data name="QueryTraySidebarLabel" xml:space="preserve">
+    <value>Poizvedba</value>
+  </data>
+  <data name="PluginBrowserFormattedWindowTitle" xml:space="preserve">
+    <value>Brskalnik vtičnikov – {0}</value>
+  </data>
+  <data name="PluginBrowserWindowTitle" xml:space="preserve">
+    <value>Brskalnik vtičnikov</value>
+  </data>
+  <data name="ClipboardSetMessage" xml:space="preserve">
+    <value>Set odložišča</value>
+  </data>
+  <data name="AddNewActionLabel" xml:space="preserve">
+    <value>Dodaj novo</value>
+  </data>
+  <data name="EditorPasteButtonLabelMobile" xml:space="preserve">
+    <value>Kopirati</value>
+  </data>
+  <data name="PrefSyntaxThemeHint" xml:space="preserve">
+    <value>Tema, ki se uporablja za bloke kode, odkrite v besedilnih posnetkih.</value>
+  </data>
+  <data name="PrefSyntaxThemeLabel" xml:space="preserve">
+    <value>Tema sintakse</value>
+  </data>
+  <data name="PrefCodeFontLabel" xml:space="preserve">
+    <value>Sintaksa</value>
+  </data>
+  <data name="CommonViewLabel" xml:space="preserve">
+    <value>Pogled</value>
+  </data>
+  <data name="WrapTextMenuLabel" xml:space="preserve">
+    <value>Zavijte besedilo</value>
+  </data>
+  <data name="ClipAssignShortcutLabel" xml:space="preserve">
+    <value>Dodeli bližnjico ...</value>
+  </data>
+  <data name="ClipUpdateShortcutLabel" xml:space="preserve">
+    <value>Posodobi bližnjica ...</value>
+  </data>
 </root>

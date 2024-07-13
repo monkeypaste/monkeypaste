@@ -6,7 +6,7 @@
 function initAlignEditorToolbarButton() {
     addClickOrKeyClickEventListener(getAlignEditorToolbarItemElement(), onAlignToolbarButtonClick);
 
-    getAlignEditorToolbarItemElement().innerHTML = getSvgHtml('align-left');
+    //getAlignEditorToolbarItemElement().innerHTML = getSvgHtml('align-left');
 }
 
 // #endregion Life Cycle

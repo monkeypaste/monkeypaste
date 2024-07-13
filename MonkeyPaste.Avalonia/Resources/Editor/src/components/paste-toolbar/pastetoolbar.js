@@ -15,6 +15,10 @@ function initPasteToolbar() {
 }
 
 function initPasteButton() {
+    if (globals.IsMobile) {
+        document.getElementById('pasteButtonText').setAttribute('ui-content-key', 'EditorPasteButtonLabelMobile');
+        localizeElement(document.getElementById('pasteButtonText'));
+    }
     addClickOrKeyClickEventListener(getPasteButtonElement(), onPasteButtonClickOrKeyDown);
     addClickOrKeyClickEventListener(getPasteButtonPopupExpanderElement(), onPasteButtonExpanderClickOrKeyDown);
 

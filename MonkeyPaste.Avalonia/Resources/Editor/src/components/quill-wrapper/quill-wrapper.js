@@ -7,8 +7,13 @@ function initQuill(editorId = '#editor', toolbarId = '#editorToolbar') {
 		debugger;
 	}
 	//hljs.configure({   // optionally configure hljs
-	//	languages: ['javascript', 'ruby', 'python', 'xml', 'html', 'xhtml']
+	//	languages: ['javascript', 'ruby', 'python', 'xml', 'html', 'xhtml'],
+	//	ignoreUnescapedHTML: true,
+	//	throwUnescapedHTML: false,
+	//	//cssSelector: 'div'
 	//});
+
+	//hljs.initHighlightingOnLoad();
 	Quill.debug('error');
 	let quillOptions = {
 		//debug: true,
@@ -23,11 +28,11 @@ function initQuill(editorId = '#editor', toolbarId = '#editorToolbar') {
 		formats: ['background'],
 		modules: {
 			toolbar: toolbarId,
-			//syntax: {
-			//	highlight: highlightCode,
-			//	interval: 100
-			//},
-			syntax: true
+			syntax: {
+				hljs,
+				// NOTE 1_000 is the default interval, but convert needs to be synchronous
+				interval: 0//globals.IsConverter ? 0 : 1_000
+			},
 		}
 	}
 
@@ -42,7 +47,6 @@ function initQuill(editorId = '#editor', toolbarId = '#editorToolbar') {
 	});
 
 	getEditorContainerElement().firstChild.setAttribute('id', 'quill-editor');
-	hljs.initHighlighting();
 
 	log('quill version: ' + Quill.version);
 	return quill_instance;
@@ -61,7 +65,7 @@ function getText(range, selectionOnly = false) {
 	//updateQuill();
 	range = range == null ? { index: 0, length: getDocLength() } : range;
 	let text = '';
-	if (globals.IsLoaded && selectionOnly) {
+	if (globals.IsEditorLoaded && selectionOnly) {
 		let encoded_text = getEncodedContentText(range);
 		text = getDecodedContentText(encoded_text);
 	} else {
@@ -82,7 +86,18 @@ function getRootHtml() {
 	return globals.quill.root.innerHTML;
 }
 
-function getHtml(range, encodeHtmlEntities = true, restoreContentColors = true, useInlineStyles = false, convertLineBreaks = true) {
+function getHtml(range = null, encodeHtmlEntities = true, restoreContentColors = true, useInlineStyles = false, convertLineBreaks = true) {
+	if (range == null) {
+		let root_html = getRootHtml();
+		let root_doc = globals.DomParser.parseFromString(root_html, 'text/html');
+		if (Array.from(root_doc.querySelectorAll('pre.ql-code-block-container')).length > 0) {
+			// remove language selector thing
+			root_doc.querySelectorAll('select.ql-ui').forEach(x => x.remove());
+		}
+		root_html = root_doc.documentElement.outerHTML;
+		return root_html;
+	}
+
 	if (globals.ContentItemType != 'Text' ||
 		(isTableInDocument() && isNullOrUndefined(range))) {
 		let root_html = getRootHtml();
@@ -217,6 +232,13 @@ function setHtmlInRange(range, htmlStr, source = 'api', decodeTemplates = false)
 }
 
 function setContents(delta, source = 'api') {
+	if (isString(delta)) {
+		if (isNullOrWhiteSpace(delta)) {
+			delta = new Quill.imports.delta();
+		} else {
+			delta = JSON.parse(delta);
+		}		
+	}
 	globals.quill.setContents(delta,source);
 }
 
@@ -227,7 +249,6 @@ function setContents(delta, source = 'api') {
 // #endregion State
 
 // #region Actions
-
 
 function quillFindBlot(elm, bubble = false) {
 	if (Quill === undefined) {

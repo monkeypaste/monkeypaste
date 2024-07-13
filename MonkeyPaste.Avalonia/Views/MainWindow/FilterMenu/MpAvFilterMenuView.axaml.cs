@@ -9,27 +9,6 @@ namespace MonkeyPaste.Avalonia {
 
         public MpAvFilterMenuView() {
             InitializeComponent();
-
-            var sort_view = this.FindControl<MpAvClipTileSortView>("SortView");
-            sort_view.GetObservable(InputElement.IsKeyboardFocusWithinProperty).Subscribe(value => OnFilterControlFocusWithinChanged(sort_view));
-            var search_view = this.FindControl<MpAvSearchBoxView>("SearchBoxView");
-            search_view.GetObservable(InputElement.IsKeyboardFocusWithinProperty).Subscribe(value => OnFilterControlFocusWithinChanged(search_view));
-
-        }
-
-        private void OnFilterControlFocusWithinChanged(Control filterControl) {
-            bool has_focus = filterControl.IsKeyboardFocusWithin;
-            if (has_focus) {
-                if (filterControl is MpAvSearchBoxView sbv &&
-                    sbv.DataContext is MpAvSearchBoxViewModel sbvm) {
-
-                }
-            } else {
-                if (filterControl is MpAvSearchBoxView sbv &&
-                    sbv.DataContext is MpAvSearchBoxViewModel sbvm) {
-
-                }
-            }
         }
     }
 }

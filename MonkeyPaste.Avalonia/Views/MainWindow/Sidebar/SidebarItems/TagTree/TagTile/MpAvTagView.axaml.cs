@@ -3,10 +3,12 @@ using Avalonia.Controls;
 using Avalonia.Input;
 using Avalonia.Interactivity;
 using Avalonia.Threading;
+using DryIoc.ImTools;
 using MonkeyPaste.Common;
 using MonkeyPaste.Common.Avalonia;
 using MonkeyPaste.Common.Plugin;
 using PropertyChanged;
+using System;
 using System.Linq;
 using System.Threading.Tasks;
 
@@ -19,7 +21,7 @@ namespace MonkeyPaste.Avalonia {
     }
 
     [DoNotNotify]
-    public partial class MpAvTagView : MpAvUserControl<MpAvTagTileViewModel> {
+    public partial class MpAvTagView : MpAvUserControl<MpAvTagTileViewModel>, MpAvIFocusHeaderMenuView {
         #region Private Variables
         #endregion
 
@@ -31,7 +33,6 @@ namespace MonkeyPaste.Avalonia {
             InitializeComponent();
             this.AttachedToVisualTree += MpAvTagView_AttachedToVisualTree;
             this.AddHandler(PointerPressedEvent, MpAvTagView_PointerPressed, RoutingStrategies.Tunnel);
-
         }
         #endregion
 
@@ -48,9 +49,9 @@ namespace MonkeyPaste.Avalonia {
         #region Private Methods
 
         private void MpAvTagView_PointerPressed(object sender, PointerPressedEventArgs e) {
-#if MOBILE
-            return;
-#else
+//#if MOBILE
+//            return;
+//#else
             if (!e.IsLeftPress(sender as Visual) ||
                 (BindingContext != null && !BindingContext.IsTagNameReadOnly)) {
                 return;
@@ -99,11 +100,14 @@ namespace MonkeyPaste.Avalonia {
                 },
                 MIN_DISTANCE: 20);
 
-#endif
+//#endif
         }
 
 
         private void MpAvTagView_AttachedToVisualTree(object sender, VisualTreeAttachmentEventArgs e) {
+            if(IsPinTrayTagView()) {
+                OuterTagPanel.Classes.Add("pinned");
+            }
             InitDnd();
         }
 

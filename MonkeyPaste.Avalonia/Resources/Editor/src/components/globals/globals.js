@@ -174,7 +174,7 @@
 	ContentHandle: null,
 	ContentItemType: 'Text',
 	ContentId: 0,
-	IsLoadingContent: false,
+	IsContentLoaded: false,
 	ContentLoadedEvent: null,
 
 	// #region TEXT
@@ -193,7 +193,7 @@
 	// #endregion
 
 	// #region CONVERTER
-
+	IsConverter: false,
 	IsConverterLoaded: false,
 	HtmlEntitiesLookup: [
 		[`&`, `&amp;`],
@@ -285,6 +285,8 @@
 	WebEnv: 'Web',
 	UknownEnv: 'Unknown',
 	EnvName: "",
+	IsMobile: false,
+	wwwroot: '',
 	// #endregion
 
 	// #region FORMAT PAIN
@@ -731,7 +733,7 @@
 	// #endregion
 
 	// #region MAIN
-	IsLoaded: false,
+	IsEditorLoaded: false,
 	IsReloading: false,
 	DomParser: new DOMParser(),
 	DomSerializer: new XMLSerializer(),
@@ -834,13 +836,93 @@
 	ShortcutKeysLookup: {},
 	// #endregion
 
+	// #region Syntax
+	DefaultSyntaxTheme: 'monokai-sublime',
+	SelectedSyntaxTheme: 'monokai-sublime',
+	SyntaxThemes: [
+		"a11y-dark",
+		"a11y-light",
+		"agate",
+		"an-old-hope",
+		"androidstudio",
+		"arduino-light",
+		"arta",
+		"ascetic",
+		"atom-one-dark-reasonable",
+		"atom-one-dark",
+		"atom-one-light",
+		"brown-paper",
+		"codepen-embed",
+		"color-brewer",
+		"dark",
+		"default",
+		"devibeans",
+		"docco",
+		"far",
+		"felipec",
+		"foundation",
+		"github-dark-dimmed",
+		"github-dark",
+		"github",
+		"gml",
+		"googlecode",
+		"gradient-dark",
+		"gradient-light",
+		"grayscale",
+		"hybrid",
+		"idea",
+		"intellij-light",
+		"ir-black",
+		"isbl-editor-dark",
+		"isbl-editor-light",
+		"kimbie-dark",
+		"kimbie-light",
+		"lightfair",
+		"lioshi",
+		"magula",
+		"monkey-shine",
+		"mono-blue",
+		"monokai-sublime",
+		"monokai",
+		"night-owl",
+		"nnfx-dark",
+		"nnfx-light",
+		"nord",
+		"obsidian",
+		"panda-syntax-dark",
+		"panda-syntax-light",
+		"paraiso-dark",
+		"paraiso-light",
+		"pojoaque",
+		"purebasic",
+		"qtcreator-dark",
+		"qtcreator-light",
+		"rainbow",
+		"routeros",
+		"school-book",
+		"shades-of-purple",
+		"srcery",
+		"stackoverflow-dark",
+		"stackoverflow-light",
+		"sunburst",
+		"tokyo-night-dark",
+		"tokyo-night-light",
+		"tomorrow-night-blue",
+		"tomorrow-night-bright",
+		"vs",
+		"vs2015",
+		"xcode",
+		"xt256",
+	],
+	// #endregion
+
 	// #region SVG 
 	SVG_CLASS_PREFIX: 'svg-key-',
 	SVG_NO_DEFAULT_CLASS: 'svg-no-defaults',
 	SVG_INNER_CLASS_ATTR: 'svg-classes',
 	SvgElements: {
 		'align-justify': `<svg width="24px"     height="24px"     viewBox="0 0 24 24"     xmlns="http://www.w3.org/2000/svg"     fill="none"     stroke="currentColor"     stroke-width="2"     stroke-linecap="round"     stroke-linejoin="round">	<line x1="21"	      y1="10"	      x2="3"	      y2="10"></line>	<line x1="21"	      y1="6"	      x2="3"	      y2="6"></line>	<line x1="21"	      y1="14"	      x2="3"	      y2="14"></line>	<line x1="21"	      y1="18"	      x2="3"	      y2="18"></line></svg>`,
-		'align-left': `<svg width="24px"     height="24px"     viewBox="0 0 24 24"     xmlns="http://www.w3.org/2000/svg"     enable-background="new 0 0 24 24">	<path d="M3,7h18c0.6,0,1-0.4,1-1s-0.4-1-1-1H3C2.4,5,2,5.4,2,6S2.4,7,3,7z M3,11h14c0.6,0,1-0.4,1-1s-0.4-1-1-1H3c-0.6,0-1,0.4-1,1S2.4,11,3,11z M21,13H3c-0.6,0-1,0.4-1,1s0.4,1,1,1h18c0.6,0,1-0.4,1-1S21.6,13,21,13z M17,17H3c-0.6,0-1,0.4-1,1s0.4,1,1,1h14c0.6,0,1-0.4,1-1S17.6,17,17,17z"/></svg>`,
+		'align-left': `<svg id="test" width="24px"     height="24px"     viewBox="0 0 24 24"     xmlns="http://www.w3.org/2000/svg"     enable-background="new 0 0 24 24">	<path d="M3,7h18c0.6,0,1-0.4,1-1s-0.4-1-1-1H3C2.4,5,2,5.4,2,6S2.4,7,3,7z M3,11h14c0.6,0,1-0.4,1-1s-0.4-1-1-1H3c-0.6,0-1,0.4-1,1S2.4,11,3,11z M21,13H3c-0.6,0-1,0.4-1,1s0.4,1,1,1h18c0.6,0,1-0.4,1-1S21.6,13,21,13z M17,17H3c-0.6,0-1,0.4-1,1s0.4,1,1,1h14c0.6,0,1-0.4,1-1S17.6,17,17,17z"/></svg>`,
 		'align-right': `<svg width="24px"     height="24px"     viewBox="0 0 24 24"     xmlns="http://www.w3.org/2000/svg"     enable-background="new 0 0 24 24">	<path d="M3,7h18c0.6,0,1-0.4,1-1s-0.4-1-1-1H3C2.4,5,2,5.4,2,6S2.4,7,3,7z M21,9H7c-0.6,0-1,0.4-1,1s0.4,1,1,1h14c0.6,0,1-0.4,1-1S21.6,9,21,9z M21,13H3c-0.6,0-1,0.4-1,1s0.4,1,1,1h18c0.6,0,1-0.4,1-1S21.6,13,21,13z M21,17H7c-0.6,0-1,0.4-1,1s0.4,1,1,1h14c0.6,0,1-0.4,1-1S21.6,17,21,17z"/></svg>`,
 		'align-center': `<svg width="24px"     height="24px"     viewBox="0 0 24 24"     xmlns="http://www.w3.org/2000/svg"     enable-background="new 0 0 24 24">	<path d="M7,9c-0.6,0-1,0.4-1,1s0.4,1,1,1h10c0.6,0,1-0.4,1-1s-0.4-1-1-1H7z M3,7h18c0.6,0,1-0.4,1-1s-0.4-1-1-1H3C2.4,5,2,5.4,2,6S2.4,7,3,7z M17,17H7c-0.6,0-1,0.4-1,1s0.4,1,1,1h10c0.6,0,1-0.4,1-1S17.6,17,17,17z M21,13H3c-0.6,0-1,0.4-1,1s0.4,1,1,1h18c0.6,0,1-0.4,1-1S21.6,13,21,13z"/></svg>`,
 		'append-outline': `<svg width="20px" height="20px" viewBox="0 0 20 20" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">    <g stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">        <g fill="#212121" fill-rule="nonzero">            <path d="M14,12 C15.0543909,12 15.9181678,12.81585 15.9945144,13.8507339 L16,14 L16,16 C16,17.0543909 15.18415,17.9181678 14.1492661,17.9945144 L14,18 L6,18 C4.94563773,18 4.08183483,17.18415 4.00548573,16.1492661 L4,16 L4,14 C4,12.9456091 4.81587733,12.0818322 5.85073759,12.0054856 L6,12 L14,12 Z M14,13 L6,13 C5.48716857,13 5.06449347,13.386027 5.0067278,13.8833761 L5,14 L5,16 C5,16.51285 5.38604429,16.9355092 5.88337975,16.9932725 L6,17 L14,17 C14.51285,17 14.9355092,16.613973 14.9932725,16.1166239 L15,16 L15,14 C15,13.48715 14.613973,13.0644908 14.1166239,13.0067275 L14,13 Z M17.5,9.5 C17.7761,9.5 18,9.72386 18,10 C18,10.2761 17.7761,10.5 17.5,10.5 L2.5,10.5 C2.22386,10.5 2,10.2761 2,10 C2,9.72386 2.22386,9.5 2.5,9.5 L17.5,9.5 Z M14,2 C15.1046,2 16,2.89543 16,4 L16,6 C16,7.10457 15.1046,8 14,8 L6,8 C4.89543,8 4,7.10457 4,6 L4,4 C4,2.89543 4.89543,2 6,2 L14,2 Z M14,3 L6,3 C5.44772,3 5,3.44772 5,4 L5,6 C5,6.55228 5.44772,7 6,7 L14,7 C14.5523,7 15,6.55228 15,6 L15,4 C15,3.44772 14.5523,3 14,3 Z"></path>        </g>    </g></svg>`,
@@ -889,7 +971,7 @@
 		'tag': `<svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><g stroke-width="0"></g><g stroke-linecap="round" stroke-linejoin="round"></g><g><path fill-rule="evenodd" clip-rule="evenodd" d="M2.678 11.422a2.5 2.5 0 0 0 0 3.536l6.364 6.364a2.5 2.5 0 0 0 3.536 0l7.69-7.69A2.5 2.5 0 0 0 21 11.864V4.5A1.5 1.5 0 0 0 19.5 3h-7.365a2.5 2.5 0 0 0-1.768.732l-7.69 7.69zM14.988 7C13.878 7 13 7.832 13 8.988c0 1.157.878 2.012 1.988 2.012C16.121 11 17 10.145 17 8.988 17 7.832 16.12 7 14.988 7z" fill="#000000"></path></g></svg>`,
 		'triangle-up': `<svg viewBox="0 0 512 512" fill="#000000"><g stroke-width="0"></g><g stroke-linecap="round" stroke-linejoin="round"></g><g><g stroke="none" stroke-width="1" fill="none" fill-rule="evenodd"><g fill="#000000" transform="translate(32.000000, 42.666667)"><path d="M246.312928,5.62892705 C252.927596,9.40873724 258.409564,14.8907053 262.189374,21.5053731 L444.667042,340.84129 C456.358134,361.300701 449.250007,387.363834 428.790595,399.054926 C422.34376,402.738832 415.04715,404.676552 407.622001,404.676552 L42.6666667,404.676552 C19.1025173,404.676552 7.10542736e-15,385.574034 7.10542736e-15,362.009885 C7.10542736e-15,354.584736 1.93772021,347.288125 5.62162594,340.84129 L188.099293,21.5053731 C199.790385,1.04596203 225.853517,-6.06216498 246.312928,5.62892705 Z" id="Combined-Shape"></path></g></g></g></svg>`,
 		'triangle-down': `<svg viewBox="0 0 512 512" fill="#000000" transform="matrix(1, 0, 0, -1, 0, 0)"><g stroke-width="0"></g><g stroke-linecap="round" stroke-linejoin="round"></g><g><g stroke="none" stroke-width="1" fill="none" fill-rule="evenodd"><g fill="#000000" transform="translate(32.000000, 42.666667)"><path d="M246.312928,5.62892705 C252.927596,9.40873724 258.409564,14.8907053 262.189374,21.5053731 L444.667042,340.84129 C456.358134,361.300701 449.250007,387.363834 428.790595,399.054926 C422.34376,402.738832 415.04715,404.676552 407.622001,404.676552 L42.6666667,404.676552 C19.1025173,404.676552 7.10542736e-15,385.574034 7.10542736e-15,362.009885 C7.10542736e-15,354.584736 1.93772021,347.288125 5.62162594,340.84129 L188.099293,21.5053731 C199.790385,1.04596203 225.853517,-6.06216498 246.312928,5.62892705 Z" id="Combined-Shape"></path></g></g></g></svg>`,
-		
+		'wrap': `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="#000000" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><g stroke-width="0"></g><g stroke-linecap="round" stroke-linejoin="round"></g><g><line class="ql-stroke" x1="3" y1="6" x2="21" y2="6"></line><path class="ql-stroke" d="M3 12h15a3 3 0 110 6h-4"></path><polyline class="ql-stroke" points="16 16 14 18 16 20"></polyline><line class="ql-stroke" x1="3" y1="18" x2="10" y2="18"></line></g></svg>`
 	},
 	// #endregion
 
@@ -918,7 +1000,7 @@
 	// #endregion
 
 	// #region TEMPLATES
-
+	
 	MIN_TEMPLATE_DRAG_DIST: 5,
 	ENCODED_TEMPLATE_OPEN_TOKEN: "{t{",
 	ENCODED_TEMPLATE_CLOSE_TOKEN: "}t}",
@@ -1040,6 +1122,7 @@
 
 	// #region THEME
 
+	IsThemeEnabled: true,
 	EditorTheme: 'light',
 	ThemeColorOverrideAttrb: null,
 	ThemeBgColorOverrideAttrb: null,

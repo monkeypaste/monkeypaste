@@ -59,15 +59,6 @@ namespace MonkeyPaste.Avalonia {
                 iconSourceObj: iconSourceObj);
         }
 
-        public async Task<MpNotificationDialogResultType> ShowLoaderNotificationAsync(MpIProgressLoaderViewModel loader) {
-            var result = await ShowNotificationAsync(
-                title: loader.Title,
-                notificationType: MpNotificationType.Loader,
-                maxShowTimeMs: -1,
-                loader: loader);
-            return result;
-        }
-
         public async Task<MpNotificationDialogResultType> ShowNotificationAsync(
             MpNotificationType notificationType = MpNotificationType.None,
             string title = "",
@@ -79,7 +70,7 @@ namespace MonkeyPaste.Avalonia {
             object anchor = null,
             ICommand fixCommand = null,
             object fixCommandArgs = null,
-            MpIProgressLoaderViewModel loader = null,
+            object loader = null,
             object owner = null,
             object otherArgs = null) {
             if (body == null) {
@@ -132,7 +123,7 @@ namespace MonkeyPaste.Avalonia {
                 OwnerObj = owner
             };
             var nvm = await CreateNotifcationViewModelAsync(nf);
-            if (nvm is MpAvPopUpNotificationViewModel uanvm) {
+            if (nvm is MpAvUserActionNotificationViewModel uanvm) {
                 string result = await uanvm.ShowInputResultNotificationAsync();
                 return result;
             }
@@ -161,7 +152,7 @@ namespace MonkeyPaste.Avalonia {
                 OwnerObj = owner
             };
             var nvm = await CreateNotifcationViewModelAsync(nf);
-            if (nvm is not MpAvPopUpNotificationViewModel uanvm) {
+            if (nvm is not MpAvUserActionNotificationViewModel uanvm) {
                 return default;
             }
             string result = await uanvm.ShowInputResultNotificationAsync();
@@ -210,7 +201,7 @@ namespace MonkeyPaste.Avalonia {
                 case MpNotificationLayoutType.ErrorWithOption:
                 case MpNotificationLayoutType.ErrorAndShutdown:
                 case MpNotificationLayoutType.ErrorWithFixAndDelete:
-                    nvmb = new MpAvPopUpNotificationViewModel();
+                    nvmb = new MpAvUserActionNotificationViewModel();
                     break;
                 default:
                     throw new Exception("Unhandled notification type: " + nf.NotificationType);

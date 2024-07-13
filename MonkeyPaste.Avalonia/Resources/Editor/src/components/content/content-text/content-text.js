@@ -6,8 +6,6 @@
 
 function loadTextContent(itemDataStr) {
 	globals.quill.enable(true);
-	//setRootHtml(itemDataStr)
-	//log('loading text content: ' + itemDataStr);
 
 	// HTML LOAD NOTES
 	// templates work
@@ -39,6 +37,7 @@ function loadTextContent(itemDataStr) {
 	} else {
 		getEditorContainerElement().classList.remove('table-only');
 	}
+	highlightSyntax();
 }
 
 // #endregion Life Cycle
@@ -46,6 +45,7 @@ function loadTextContent(itemDataStr) {
 // #region Getters
 
 function getTextContentData() {
+	forceSyntax();
 	let qhtml = '';
 	if (isContentATable()) {
 		// NOTE delta-to-html will loose tables. This probably means this will loose templates
@@ -261,7 +261,7 @@ function getRangeRects(range, isWindowOrigin = true, inflateToLineHeight = true,
 	range = cleanDocRange(range);
 
 	let range_rects = [];
-	if (!range) {
+	if (!range || range.index >= getDocLength()) {
 		return range_rects;
 	}
 	if (range.length == 0) {
@@ -393,7 +393,7 @@ function getDocIdxFromPoint(p, fallbackIdx) {
 }
 
 function getBlotAtDocIdx(docIdx, isSearching = false) {
-	if (!globals.quill) {
+	if (!globals.quill || docIdx < 0) {
 		return null;
 	}
 	let leaf = globals.quill.getLeaf(docIdx);

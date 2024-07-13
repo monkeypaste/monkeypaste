@@ -31,6 +31,11 @@
                     Value="Disabled" />
             <Setter Property="IsExpanded"
                     Value="{Binding IsExpanded, Mode=TwoWay}" />
+            <Setter Property="Width"
+                    Value="{Binding $parent[TreeView].Bounds.Width}" />
+            <Setter Property="local:MpAvClassHelperExtension.ClassesToAdd"
+                    Value="tag-cmds" />
+
         </Style>
         <Style Selector="TreeView#TagTreeView TreeViewItem:selected /template/ Border#PART_LayoutRoot">
             <Setter Property="Background"
@@ -68,108 +73,51 @@
                     Value="False" />
         </Style>
 
-        <!--  ADD TAG BUTTON  -->
-
-        <Style Selector="Button#AddTagButton Image">
-            <Setter Property="Source"
-                    Value="{Binding Source={StaticResource AddGreenImage}, Converter={x:Static local:MpAvStringHexToBitmapTintConverter.Instance}, ConverterParameter=ThemeCompliment5Color}" />
-        </Style>
-        <Style Selector="Button#AddTagButton:pointerover Image">
-            <Setter Property="Source"
-                    Value="{Binding Source={StaticResource AddGreenImage}, Converter={x:Static local:MpAvStringHexToBitmapTintConverter.Instance}, ConverterParameter=ThemeCompliment5LighterColor}" />
-        </Style>
-        <Style Selector="Button#AddTagButton:pressed Image">
-            <Setter Property="Source"
-                    Value="{Binding Source={StaticResource AddGreenImage}, Converter={x:Static local:MpAvStringHexToBitmapTintConverter.Instance}, ConverterParameter=ThemeCompliment5DarkColor}" />
-        </Style>
     </local:MpAvUserControl.Styles>
-    <Grid HorizontalAlignment="Stretch"
-          VerticalAlignment="Stretch"
-          Cursor="{Binding IsBusy, Converter={x:Static local:MpAvBoolToCursorConverter.Instance}, ConverterParameter=Wait|unset}">
-        <Grid.RowDefinitions>
-            <RowDefinition Height="Auto"
-                           MinHeight="30" />
-            <RowDefinition Height="*" />
-        </Grid.RowDefinitions>
-        <TreeView x:Name="TagTreeView"
-                  Grid.Row="1"
-                  local:MpAvHelpAnchorExtension.IsEnabled="True"
-                  local:MpAvHelpAnchorExtension.LinkType="Collections"
-                  Classes="tagTree"
-                  Classes.tagDrag="{Binding IsAnyDragging}"
-                  Margin="0"
-                  Padding="0,0,0,150"
-                  SelectionMode="Single"
-                  AutoScrollToSelectedItem="False"
-                  ItemsSource="{Binding RootItems}"
-                  BorderThickness="0"
-                  Background="Transparent"
-                  SelectedItem="{Binding SelectedItem, Mode=TwoWay}"
-                  HorizontalAlignment="Stretch"
-                  VerticalAlignment="Stretch"
-                  Width="{Binding $parent[Grid].Bounds.Width}">
-            <TreeView.ItemTemplate>
-                <TreeDataTemplate ItemsSource="{Binding SortedItems}">
-                    <Grid>
-                        <local:MpAvTagView x:Name="TagView" />
-                        <Border x:Name="SortDropBorder_top"
-                                IsVisible="{Binding !IsPinTrayDragOver, Source={x:Static local:MpAvTagTrayViewModel.Instance}}"
-                                Classes="dropLine top"
-                                Classes.invalid="{Binding !IsTagDragValid}"
-                                Classes.dragOver="{Binding IsTagDragOverTop}"
-                                Classes.isCopy="{Binding IsTagDragOverCopy}" />
-                        <Border x:Name="SortDropBorder_bottom"
-                                IsVisible="{Binding !IsPinTrayDragOver, Source={x:Static local:MpAvTagTrayViewModel.Instance}}"
-                                Classes="dropLine bottom"
-                                Classes.leaf="{Binding IsTagDragLeafChildDrop}"
-                                Classes.invalid="{Binding !IsTagDragValid}"
-                                Classes.dragOver="{Binding IsTagDragOverBottom}"
-                                Classes.isCopy="{Binding IsTagDragOverCopy}">
-                            <Border.Transitions>
-                                <Transitions>
-                                    <TransformOperationsTransition Property="RenderTransform"
-                                                                   Duration="0:0:0.1" />
-                                </Transitions>
-                            </Border.Transitions>
-                        </Border>
-                    </Grid>
-                </TreeDataTemplate>
-            </TreeView.ItemTemplate>
-        </TreeView>
-        <Button x:Name="AddTagButton"
-                Grid.Row="0"
-                Classes="noBg noHoverBg outlineOver"
-                IsVisible="{Binding ShowAddTagButton}"
-                HorizontalAlignment="Right"
-                VerticalAlignment="Top"
-                CornerRadius="7"
-                Width="30"
-                Height="30"
-                Margin="0,0,10,0"
-                Command="{Binding SelectedItem.AddNewChildTagCommand}"
-                CommandParameter="{Binding $self}">
-            <ToolTip.Tip>
-                <local:MpAvToolTipView>
-                    <local:MpAvToolTipView.ToolTipText>
-                        <MultiBinding Converter="{x:Static local:MpAvMultiStringAppendConverter.Instance}">
-                            <Binding>
-                                <Binding.Source>
-                                    <sys:String>Add Collection to '</sys:String>
-                                </Binding.Source>
-                            </Binding>
-                            <Binding Path="SelectedItem.TagName"
-                                     Source="{x:Static local:MpAvTagTrayViewModel.Instance}" />
-                            <Binding>
-                                <Binding.Source>
-                                    <sys:String>'</sys:String>
-                                </Binding.Source>
-                            </Binding>
-                        </MultiBinding>
-                    </local:MpAvToolTipView.ToolTipText>
-                </local:MpAvToolTipView>
-            </ToolTip.Tip>
-            <!--<PathIcon />-->
-            <Image Margin="5" />
-        </Button>
-    </Grid>
+    <TreeView x:Name="TagTreeView"
+              Classes.mobile="{Binding IsMobileOrWindowed, Source={x:Static local:MpAvThemeViewModel.Instance}}"
+              Cursor="{Binding IsBusy, Converter={x:Static local:MpAvBoolToCursorConverter.Instance}, ConverterParameter=Wait|unset}"
+              local:MpAvHelpAnchorExtension.IsEnabled="True"
+              local:MpAvHelpAnchorExtension.LinkType="Collections"
+              Classes="tagTree"
+              Classes.tagDrag="{Binding IsAnyDragging}"
+              Margin="0,15,0,0"
+              Padding="0,0,0,150"
+              SelectionMode="Single"
+              AutoScrollToSelectedItem="False"
+              ItemsSource="{Binding RootItems}"
+              BorderThickness="0"
+              Background="Transparent"
+              SelectedItem="{Binding SelectedItem, Mode=TwoWay}"
+              HorizontalAlignment="Stretch"
+              VerticalAlignment="Stretch">
+        <TreeView.ItemTemplate>
+            <TreeDataTemplate ItemsSource="{Binding SortedItems}">
+                <Grid>
+                    <local:MpAvTagView x:Name="TagView" />
+                    <Border x:Name="SortDropBorder_top"
+                            IsVisible="{Binding !IsPinTrayDragOver, Source={x:Static local:MpAvTagTrayViewModel.Instance}}"
+                            Classes="dropLine top"
+                            Classes.invalid="{Binding !IsTagDragValid}"
+                            Classes.dragOver="{Binding IsTagDragOverTop}"
+                            Classes.isCopy="{Binding IsTagDragOverCopy}" />
+                    <Border x:Name="SortDropBorder_bottom"
+                            IsVisible="{Binding !IsPinTrayDragOver, Source={x:Static local:MpAvTagTrayViewModel.Instance}}"
+                            Classes="dropLine bottom"
+                            Classes.leaf="{Binding IsTagDragLeafChildDrop}"
+                            Classes.invalid="{Binding !IsTagDragValid}"
+                            Classes.dragOver="{Binding IsTagDragOverBottom}"
+                            Classes.isCopy="{Binding IsTagDragOverCopy}">
+                        <Border.Transitions>
+                            <Transitions>
+                                <TransformOperationsTransition Property="RenderTransform"
+                                                               Duration="0:0:0.1" />
+                            </Transitions>
+                        </Border.Transitions>
+                    </Border>
+                </Grid>
+            </TreeDataTemplate>
+        </TreeView.ItemTemplate>
+    </TreeView>
+
 </local:MpAvUserControl>

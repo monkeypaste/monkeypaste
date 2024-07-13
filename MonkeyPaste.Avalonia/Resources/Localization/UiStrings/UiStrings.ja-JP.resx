@@ -2996,4 +2996,49 @@ feedback@monkeypaste.com</value>
   <data name="DonateLabel" xml:space="preserve">
     <value>寄付する</value>
   </data>
+  <data name="MobileCopiedNtfText" xml:space="preserve">
+    <value>クリップボードにコピーされました</value>
+  </data>
+  <data name="PinTraySidebarLabel" xml:space="preserve">
+    <value>ピン留め</value>
+  </data>
+  <data name="QueryTraySidebarLabel" xml:space="preserve">
+    <value>クエリ</value>
+  </data>
+  <data name="PluginBrowserFormattedWindowTitle" xml:space="preserve">
+    <value>プラグインブラウザ -  {0}</value>
+  </data>
+  <data name="PluginBrowserWindowTitle" xml:space="preserve">
+    <value>プラグインブラウザ</value>
+  </data>
+  <data name="AddNewActionLabel" xml:space="preserve">
+    <value>新しく追加する</value>
+  </data>
+  <data name="ClipboardSetMessage" xml:space="preserve">
+    <value>クリップボードセット</value>
+  </data>
+  <data name="EditorPasteButtonLabelMobile" xml:space="preserve">
+    <value>コピー</value>
+  </data>
+  <data name="PrefSyntaxThemeHint" xml:space="preserve">
+    <value>テキストクリップで検出されたコードブロックに使用されるテーマ。</value>
+  </data>
+  <data name="PrefSyntaxThemeLabel" xml:space="preserve">
+    <value>構文テーマ</value>
+  </data>
+  <data name="PrefCodeFontLabel" xml:space="preserve">
+    <value>構文</value>
+  </data>
+  <data name="CommonViewLabel" xml:space="preserve">
+    <value>ビュー</value>
+  </data>
+  <data name="WrapTextMenuLabel" xml:space="preserve">
+    <value>テキストを折り返す</value>
+  </data>
+  <data name="ClipAssignShortcutLabel" xml:space="preserve">
+    <value>ショートカットを割り当てる...</value>
+  </data>
+  <data name="ClipUpdateShortcutLabel" xml:space="preserve">
+    <value>ショートカットを更新...</value>
+  </data>
 </root>

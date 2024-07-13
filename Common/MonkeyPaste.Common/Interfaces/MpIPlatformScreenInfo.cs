@@ -6,7 +6,7 @@ namespace MonkeyPaste.Common {
     public interface MpIPlatformScreenInfo {
         MpRect Bounds { get; set; }
 
-        MpRect WorkArea { get; set; }
+        MpRect WorkingArea { get; set; }
         bool IsPrimary { get; set; }
 
         double Scaling { get; set; } // PixelDensity == PixelsPerDip
@@ -17,6 +17,7 @@ namespace MonkeyPaste.Common {
 
     public interface MpIPlatformScreenInfoCollection {
         ObservableCollection<MpIPlatformScreenInfo> Screens { get; }
+        IEnumerable<MpIPlatformScreenInfo> All { get; }
         MpIPlatformScreenInfo Primary { get; }
         bool Refresh();
     }

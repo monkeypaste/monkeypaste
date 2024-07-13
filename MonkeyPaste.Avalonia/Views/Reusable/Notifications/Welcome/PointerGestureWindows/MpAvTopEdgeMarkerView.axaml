@@ -5,6 +5,7 @@
                        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
                        xmlns:local="using:MonkeyPaste.Avalonia"
                        x:TypeArguments="local:MpAvPointerGestureWindowViewModel"
+                       x:DataType="local:MpAvPointerGestureWindowViewModel"
                        x:Class="MonkeyPaste.Avalonia.MpAvTopEdgeMarkerView"
                        mc:Ignorable="d"
                        d:DesignWidth="400"

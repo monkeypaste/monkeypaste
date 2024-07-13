@@ -2996,4 +2996,49 @@ Comenzile rapide globale pot fi acum activate în meniul tăvii de sistem</value
   <data name="DonateLabel" xml:space="preserve">
     <value>Donează</value>
   </data>
+  <data name="MobileCopiedNtfText" xml:space="preserve">
+    <value>Copiat în clipboard</value>
+  </data>
+  <data name="PinTraySidebarLabel" xml:space="preserve">
+    <value>Fixat</value>
+  </data>
+  <data name="QueryTraySidebarLabel" xml:space="preserve">
+    <value>Interogare</value>
+  </data>
+  <data name="PluginBrowserFormattedWindowTitle" xml:space="preserve">
+    <value>Browser plugin - {0}</value>
+  </data>
+  <data name="AddNewActionLabel" xml:space="preserve">
+    <value>Adăuga nou</value>
+  </data>
+  <data name="PluginBrowserWindowTitle" xml:space="preserve">
+    <value>Plugin Browser</value>
+  </data>
+  <data name="ClipboardSetMessage" xml:space="preserve">
+    <value>Set Clipboard</value>
+  </data>
+  <data name="EditorPasteButtonLabelMobile" xml:space="preserve">
+    <value>Copie</value>
+  </data>
+  <data name="PrefSyntaxThemeHint" xml:space="preserve">
+    <value>Tema folosită pentru blocurile de cod detectate în clipuri de text.</value>
+  </data>
+  <data name="PrefSyntaxThemeLabel" xml:space="preserve">
+    <value>Tema sintaxei</value>
+  </data>
+  <data name="PrefCodeFontLabel" xml:space="preserve">
+    <value>Sintaxă</value>
+  </data>
+  <data name="CommonViewLabel" xml:space="preserve">
+    <value>Vedere</value>
+  </data>
+  <data name="WrapTextMenuLabel" xml:space="preserve">
+    <value>Încadra textul</value>
+  </data>
+  <data name="ClipAssignShortcutLabel" xml:space="preserve">
+    <value>Alocați scurtătură ...</value>
+  </data>
+  <data name="ClipUpdateShortcutLabel" xml:space="preserve">
+    <value>Actualizați comanda rapidă ...</value>
+  </data>
 </root>

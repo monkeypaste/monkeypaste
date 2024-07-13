@@ -328,9 +328,9 @@ namespace MonkeyPaste.Avalonia {
                     return IconBase64Str;
                 }
                 if (!string.IsNullOrWhiteSpace(IconResourceKey)) {
-                    if (IconHexStr.IsStringHexOrNamedColor()) {
-                        return new object[] { IconResourceKey, IconHexStr };
-                    }
+                    //if (IconHexStr.IsStringHexOrNamedColor()) {
+                    //    return new object[] { IconResourceKey, IconHexStr };
+                    //}
                     return IconResourceKey;
                 }
                 if (IconHexStr.IsStringHexOrNamedColor()) {

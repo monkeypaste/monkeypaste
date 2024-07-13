@@ -1,0 +1,50 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+ <PropertyGroup>
+     <TargetFrameworks>net8.0-ios</TargetFrameworks>
+     <OutputType>Library</OutputType>
+     <Nullable>disable</Nullable>
+     <ApplicationId>com.iosKeyboardTest.iOS.KeyboardExt</ApplicationId>
+     <ApplicationDisplayVersion>1.0</ApplicationDisplayVersion>
+     <ApplicationVersion>1</ApplicationVersion>
+     <SupportedOSPlatformVersion>13.0</SupportedOSPlatformVersion>
+   
+     <!--<RuntimeIdentifiers>ios-arm64</RuntimeIdentifiers>-->
+   <!--<RuntimeIdentifiers>iossimulator-x64</RuntimeIdentifiers>-->
+    <!--<UseMaui>true</UseMaui>-->
+    <!--<DeviceSpecificBuild>false</DeviceSpecificBuild>-->
+   </PropertyGroup>
+
+   <PropertyGroup>
+     <IsAppExtension>true</IsAppExtension>
+     <IsWatchExtension>false</IsWatchExtension>
+     <CodesignKey>Apple Development: Created via API (79M7T3S5XK)</CodesignKey>
+     <CodesignProvision>VS: com.iosKeyboardTest.iOS.KeyboardExt Development</CodesignProvision>
+   </PropertyGroup>
+
+   <PropertyGroup Condition="'$(TargetFramework)'=='net8.0-ios'">
+     <CodesignKey>Apple Development: Created via API (79M7T3S5XK)</CodesignKey>
+     <CodesignProvision>VS: com.iosKeyboardTest.iOS.KeyboardExt Development</CodesignProvision>
+   </PropertyGroup>
+
+   <ItemGroup>
+     <Compile Remove="Main.cs" />
+   </ItemGroup>
+
+   <ItemGroup>
+     <None Remove="banner_full.png" />
+   </ItemGroup>
+  <ItemGroup>
+    <PackageReference Include="Avalonia.iOS" Version="$(AvaloniaVersion)" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\iosKeyboardTest\iosKeyboardTest.csproj" />
+  </ItemGroup>
+  <ItemGroup>
+    <UpToDateCheckInput Remove="App.axaml" />
+  </ItemGroup>
+  <ItemGroup>
+    <AvaloniaResource Include="banner_full.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </AvaloniaResource>
+  </ItemGroup>
+</Project>

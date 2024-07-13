@@ -2996,4 +2996,49 @@ monkeypaste ໃນອຸປະກອນ
   <data name="DonateLabel" xml:space="preserve">
     <value>ບໍ​ລິ​ຈາກ</value>
   </data>
+  <data name="MobileCopiedNtfText" xml:space="preserve">
+    <value>ຄັດລອກໄປທີ່ Clipboard</value>
+  </data>
+  <data name="PinTraySidebarLabel" xml:space="preserve">
+    <value>pinned</value>
+  </data>
+  <data name="QueryTraySidebarLabel" xml:space="preserve">
+    <value>ການສອບຖາມ</value>
+  </data>
+  <data name="PluginBrowserWindowTitle" xml:space="preserve">
+    <value>ຕົວທ່ອງເວັບຂອງ Plugin</value>
+  </data>
+  <data name="ClipboardSetMessage" xml:space="preserve">
+    <value>ຊຸດ clipboard</value>
+  </data>
+  <data name="PluginBrowserFormattedWindowTitle" xml:space="preserve">
+    <value>Plugin Browser - {0}</value>
+  </data>
+  <data name="AddNewActionLabel" xml:space="preserve">
+    <value>ເພີ່ມໃໝ່</value>
+  </data>
+  <data name="EditorPasteButtonLabelMobile" xml:space="preserve">
+    <value>ສໍາເນົາ</value>
+  </data>
+  <data name="PrefSyntaxThemeHint" xml:space="preserve">
+    <value>ຫົວຂໍ້ທີ່ໃຊ້ສໍາລັບລະຫັດຂອງລະຫັດທີ່ຖືກກວດພົບໃນຄລິບຂໍ້ຄວາມ.</value>
+  </data>
+  <data name="PrefSyntaxThemeLabel" xml:space="preserve">
+    <value>ຫົວຂໍ້ syntax</value>
+  </data>
+  <data name="PrefCodeFontLabel" xml:space="preserve">
+    <value>ການລອບຄົ້ນວົງຈອນ</value>
+  </data>
+  <data name="CommonViewLabel" xml:space="preserve">
+    <value>ທັດສະນະ</value>
+  </data>
+  <data name="WrapTextMenuLabel" xml:space="preserve">
+    <value>ຫໍ່ຕົວຫນັງສື</value>
+  </data>
+  <data name="ClipAssignShortcutLabel" xml:space="preserve">
+    <value>ກໍານົດທາງລັດ ...</value>
+  </data>
+  <data name="ClipUpdateShortcutLabel" xml:space="preserve">
+    <value>ປັບປຸງທາງລັດ ...</value>
+  </data>
 </root>

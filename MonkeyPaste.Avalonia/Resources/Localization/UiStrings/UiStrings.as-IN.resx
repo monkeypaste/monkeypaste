@@ -2996,4 +2996,49 @@
   <data name="DonateLabel" xml:space="preserve">
     <value>দান কৰা</value>
   </data>
+  <data name="MobileCopiedNtfText" xml:space="preserve">
+    <value>ক্লিপবোৰ্ডলৈ কপি কৰা হৈছে</value>
+  </data>
+  <data name="PinTraySidebarLabel" xml:space="preserve">
+    <value>পিন কৰা হৈছে</value>
+  </data>
+  <data name="QueryTraySidebarLabel" xml:space="preserve">
+    <value>প্ৰশ্ন</value>
+  </data>
+  <data name="PluginBrowserFormattedWindowTitle" xml:space="preserve">
+    <value>প্লাগইন ব্ৰাউজাৰ - {0}</value>
+  </data>
+  <data name="PluginBrowserWindowTitle" xml:space="preserve">
+    <value>প্লাগিন ব্ৰাউজাৰ</value>
+  </data>
+  <data name="ClipboardSetMessage" xml:space="preserve">
+    <value>ক্লিপবোৰ্ড ছেট</value>
+  </data>
+  <data name="AddNewActionLabel" xml:space="preserve">
+    <value>নতুন যোগ কৰক</value>
+  </data>
+  <data name="EditorPasteButtonLabelMobile" xml:space="preserve">
+    <value>কপি কৰক</value>
+  </data>
+  <data name="PrefSyntaxThemeHint" xml:space="preserve">
+    <value>টেক্সট ক্লিপত ধৰা পৰা ক'ডৰ ব্লকৰ বাবে ব্যৱহৃত থিম।</value>
+  </data>
+  <data name="PrefSyntaxThemeLabel" xml:space="preserve">
+    <value>বাক্য গঠন থিম</value>
+  </data>
+  <data name="PrefCodeFontLabel" xml:space="preserve">
+    <value>বাক্য গঠন</value>
+  </data>
+  <data name="CommonViewLabel" xml:space="preserve">
+    <value>দৰ্শন</value>
+  </data>
+  <data name="WrapTextMenuLabel" xml:space="preserve">
+    <value>টেক্সট ৰেপ কৰক</value>
+  </data>
+  <data name="ClipAssignShortcutLabel" xml:space="preserve">
+    <value>চৰ্টকাট নিযুক্ত কৰক...</value>
+  </data>
+  <data name="ClipUpdateShortcutLabel" xml:space="preserve">
+    <value>চৰ্টকাট আপডেট কৰক...</value>
+  </data>
 </root>

@@ -2,7 +2,10 @@
 using MonkeyPaste.Common;
 using MonkeyPaste.Common.Avalonia;
 using MonkeyPaste.Common.Plugin;
+using System;
+using System.Collections.Generic;
 using System.Diagnostics;
+using System.Linq;
 using TheArtOfDev.HtmlRenderer.Avalonia;
 
 namespace CoreOleHandler {
@@ -61,8 +64,11 @@ namespace CoreOleHandler {
                                 break;
                             case CoreOleParamType.RICHTEXTFORMAT_R_TOHTML: {
                                     if (!all_formats.Contains(MpPortableDataFormats.INTERNAL_HTML_TO_RTF_FORMAT) &&
-                                        data is string rtf &&
-                                        rtf.RtfToHtml() is { } html) {
+                                        data is string rtf) {
+                                        string par_tag_name = OperatingSystem.IsWindows() ?
+                                            req.GetParamValue(CoreOleParamType.RICHTEXTFORMAT_R_HTMLPARTAGNAME.ToString()) :
+                                            "p";
+                                        string html = rtf.RtfToHtml(par_tag_name);
                                         convData = new() {
                                             { MpPortableDataFormats.Html, html },
                                             { MpPortableDataFormats.INTERNAL_RTF_TO_HTML_FORMAT, true } };

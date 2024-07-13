@@ -34,6 +34,7 @@ var UiStrings = {
 	EditorNextTemplateLabel: `القالب التالي`,
 	EditorPasteButtonAppendBeginLabel: `ألحق...`,
 	EditorPasteButtonLabel: `معجون`,
+	EditorPasteButtonLabelMobile: `ينسخ`,
 	EditorPasteTemplateWatermark: `أدخل نص لصق ...`,
 	EditorPrevTemplateLabel: `القالب السابق`,
 	EditorRegExLabel: ` تعبير عادي`,

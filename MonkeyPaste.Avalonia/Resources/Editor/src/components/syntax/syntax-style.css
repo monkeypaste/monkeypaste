@@ -1,0 +1,35 @@
+pre {
+    /* prevent default 'pre' white-space val */
+    white-space: inherit !important;
+}
+code.ql-code-block {
+    display: block;
+}
+
+.ql-code-block-container .ql-ui {
+    /* hide language picker */
+    display: none;
+}
+.ql-code-block-container:hover .ql-ui {
+    /* hide language picker */
+    display: unset;
+}
+
+.ql-snow .ql-editor code {
+    background-color: unset;
+    padding: unset;
+}
+.ql-snow .ql-editor .ql-code-block-container {
+    background-color: var(--codebg);
+    color: var(--codefg);
+}
+
+#editor.unwrap pre.ql-code-block-container {
+    width: fit-content;
+    min-width: 100%;
+}
+
+div.ql-code-block, code.ql-code-block, span.ql-code-block {
+    font-family: var(--syntaxFontFamily, ui-monospace, SFMono-Regular, SF Mono, Menlo, Consolas, Liberation Mono, monospace) !important;
+    /*font-family: var(--syntaxFontFamily) !important;*/
+}

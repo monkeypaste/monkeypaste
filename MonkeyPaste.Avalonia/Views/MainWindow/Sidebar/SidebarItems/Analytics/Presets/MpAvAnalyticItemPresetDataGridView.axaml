@@ -146,7 +146,7 @@
                             <DataTemplate DataType="local:MpAvAnalyticItemPresetViewModel">
                                 <Button x:Name="PresetIcon"
                                         IsHitTestVisible="{Binding !IsGeneratedDefaultPreset}"
-                                        Classes="defaultButton noBg noHoverBg outlineOver square"
+                                        Classes="default-button no-bg no-hover-bg outlineOver square"
                                         Command="{Binding ChangeIconCommand, Source={x:Static local:MpAvIconCollectionViewModel.Instance}}"
                                         CommandParameter="{Binding $self}">
                                     <Image Source="{Binding IconId, Converter={x:Static local:MpAvIconSourceObjToBitmapConverter.Instance}}" />
@@ -203,7 +203,7 @@
                         <DataGridTemplateColumn.CellTemplate>
                             <DataTemplate DataType="local:MpAvAnalyticItemPresetViewModel">
                                 <ToggleButton x:Name="EditToggleButton"
-                                              Classes="defaultButton noBg noHoverBg outlineOver square"
+                                              Classes="default-button no-bg no-hover-bg outlineOver square"
                                               Command="{Binding ToggleIsLabelReadOnlyCommand}"
                                               IsChecked="{Binding !IsLabelReadOnly, Mode=OneWay}">
 
@@ -222,7 +222,7 @@
                         <DataGridTemplateColumn.CellTemplate>
                             <DataTemplate DataType="local:MpAvAnalyticItemPresetViewModel">
                                 <ToggleButton x:Name="QuickActionToggleButton"
-                                              Classes="defaultButton noBg noHoverBg outlineOver square"
+                                              Classes="default-button no-bg no-hover-bg outlineOver square"
                                               Command="{Binding ToggleIsQuickActionCommand}"
                                               IsChecked="{Binding IsQuickAction, Mode=OneWay}">
 
@@ -275,11 +275,12 @@
 
                     <!--  HOTKEY COLUMN  -->
                     <DataGridTemplateColumn Width="40"
+                                            IsVisible="{Binding IsDesktop, Source={x:Static local:MpAvThemeViewModel.Instance}}"
                                             Header="Shortcut">
                         <DataGridTemplateColumn.CellTemplate>
                             <DataTemplate DataType="local:MpAvAnalyticItemPresetViewModel">
                                 <Button x:Name="HotkeyButton"
-                                        Classes="defaultButton noBg noHoverBg outlineOver square"
+                                        Classes="default-button no-bg no-hover-bg outlineOver square"
                                         Classes.assigned="{Binding KeyString, Converter={x:Static local:MpAvIsNotNullZeroOrEmptyToBoolConverter.Instance}}"
                                         local:MpAvPointerCommandExtension.IsEnabled="True"
                                         Command="{Binding ShowAssignShortcutDialogCommand, Source={x:Static local:MpAvShortcutCollectionViewModel.Instance}}"
@@ -300,7 +301,7 @@
                         <DataGridTemplateColumn.CellTemplate>
                             <DataTemplate DataType="local:MpAvAnalyticItemPresetViewModel">
                                 <Button x:Name="ExecutePresetButton"
-                                        Classes="defaultButton noBg noHoverBg outlineOver square"
+                                        Classes="default-button no-bg no-hover-bg outlineOver square"
                                         Classes.canexecute="{Binding CanDataGridPresetExecute}"
                                         local:MpAvShowDisabledTooltipExtension.ShowOnDisabled="True"
                                         Command="{Binding ExecutePresetAnalysisOnSelectedContentCommand}">
@@ -326,7 +327,7 @@
                         <DataGridTemplateColumn.CellTemplate>
                             <DataTemplate DataType="local:MpAvAnalyticItemPresetViewModel">
                                 <Button x:Name="DuplicateButton"
-                                        Classes="defaultButton noBg noHoverBg outlineOver square"
+                                        Classes="default-button no-bg no-hover-bg outlineOver square"
                                         Command="{Binding DuplicateThisPresetCommand}">
                                     <ToolTip.Tip>
                                         <local:MpAvToolTipView ToolTipText="{Binding Source={x:Static local:R.U}, Path=CurrentUiStrings.CommonDuplicateLabel}" />
@@ -347,7 +348,7 @@
                             <DataTemplate DataType="local:MpAvAnalyticItemPresetViewModel">
                                 <!--  NOTE cmd parameter set to req format in trans style, null in sidebar  -->
                                 <Button x:Name="ResetOrDeleteButton"
-                                        Classes="defaultButton noBg noHoverBg outlineOver square"
+                                        Classes="default-button no-bg no-hover-bg outlineOver square"
                                         IsEnabled="{Binding !IsExecuting}"
                                         Command="{Binding ResetOrDeleteThisPresetCommand}">
                                     <Classes.canDelete>
@@ -373,7 +374,7 @@
 
             <!--  ADD PRESET BUTTON  -->
             <Button Grid.Row="1"
-                    Classes="defaultButton iconTextButton"
+                    Classes="default-button iconTextButton"
                     Margin="0,15,0,0"
                     HorizontalAlignment="Right"
                     Command="{Binding CreateNewPresetCommand}">

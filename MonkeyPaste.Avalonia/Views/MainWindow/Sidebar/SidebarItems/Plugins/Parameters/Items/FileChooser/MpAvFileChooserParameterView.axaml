@@ -29,7 +29,7 @@
         </ToolTip.Tip>
         <Button MaxWidth="150"
                 MinWidth="100"
-                Classes="param defaultButton iconTextButton"
+                Classes="param default-button iconTextButton"
                 Classes.empty="{Binding CurrentValue, ConverterParameter=flip, Converter={x:Static local:MpAvIsNotNullZeroOrEmptyToBoolConverter.Instance}}"
                 HorizontalAlignment="Center"
                 HorizontalContentAlignment="Center"

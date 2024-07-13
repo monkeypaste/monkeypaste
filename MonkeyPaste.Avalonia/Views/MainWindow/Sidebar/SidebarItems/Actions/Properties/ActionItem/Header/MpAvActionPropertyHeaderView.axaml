@@ -1,18 +1,17 @@
-﻿<local:MpAvUserControl
-    x:Class="MonkeyPaste.Avalonia.MpAvActionPropertyHeaderView"
-    xmlns="https://github.com/avaloniaui"
-    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
-    xmlns:local="using:MonkeyPaste.Avalonia"
-    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-    xmlns:pcl="clr-namespace:MonkeyPaste;assembly=MonkeyPaste"
-    xmlns:sys="clr-namespace:System;assembly=mscorlib"
-    d:DesignHeight="450"
-    d:DesignWidth="800"
-    x:CompileBindings="True"
-    x:DataType="local:MpAvActionViewModelBase"
-    x:TypeArguments="local:MpAvActionViewModelBase"
-    mc:Ignorable="d">
+﻿<local:MpAvUserControl x:Class="MonkeyPaste.Avalonia.MpAvActionPropertyHeaderView"
+                       xmlns="https://github.com/avaloniaui"
+                       xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                       xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+                       xmlns:local="using:MonkeyPaste.Avalonia"
+                       xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+                       xmlns:pcl="clr-namespace:MonkeyPaste;assembly=MonkeyPaste"
+                       xmlns:sys="clr-namespace:System;assembly=mscorlib"
+                       d:DesignHeight="450"
+                       d:DesignWidth="800"
+                       x:CompileBindings="True"
+                       x:DataType="local:MpAvActionViewModelBase"
+                       x:TypeArguments="local:MpAvActionViewModelBase"
+                       mc:Ignorable="d">
     <Grid ColumnDefinitions="Auto,Auto,*,Auto">
         <Grid.Resources>
             <sys:Double x:Key="IconSize">
@@ -20,21 +19,33 @@
             </sys:Double>
         </Grid.Resources>
         <Grid.Styles>
-            <Style x:DataType="local:MpAvTriggerActionViewModelBase" Selector="ContentControl ToggleButton#ToggleEnableButton[IsEnabled=true] /template/ ContentPresenter">
-                <Setter Property="BorderBrush" Value="{DynamicResource DefaultIconButtonBrush}" />
-                <Setter Property="BorderThickness" Value="1" />
-                <Setter Property="Background" Value="{Binding CurEnableOrDisableHexColor, Converter={x:Static local:MpAvStringHexToBrushConverter.Instance}}" />
+          <!-- STATUS ICON -->
+            <Style x:DataType="local:MpAvTriggerActionViewModelBase"
+                   Selector="ContentControl ToggleButton#ToggleEnableButton[IsEnabled=true] /template/ ContentPresenter">
+                <Setter Property="BorderBrush"
+                        Value="{DynamicResource DefaultIconButtonBrush}" />
+                <Setter Property="BorderThickness"
+                        Value="1" />
+                <Setter Property="Background"
+                        Value="{Binding CurEnableOrDisableHexColor, Converter={x:Static local:MpAvStringHexToBrushConverter.Instance}}" />
             </Style>
-            <Style x:DataType="local:MpAvTriggerActionViewModelBase" Selector="ContentControl ToggleButton#ToggleEnableButton[IsEnabled=true]:pointerover /template/ ContentPresenter">
-                <Setter Property="BorderBrush" Value="{DynamicResource HoverDefaultBorderBrush}" />
+            <Style x:DataType="local:MpAvTriggerActionViewModelBase"
+                   Selector="ContentControl ToggleButton#ToggleEnableButton[IsEnabled=true]:pointerover /template/ ContentPresenter">
+                <Setter Property="BorderBrush"
+                        Value="{DynamicResource HoverDefaultBorderBrush}" />
             </Style>
-            <Style x:DataType="local:MpAvTriggerActionViewModelBase" Selector="ContentControl ToggleButton#ToggleEnableButton">
-                <Setter Property="BorderBrush" Value="{DynamicResource DefaultIconButtonBrush}" />
+            <Style x:DataType="local:MpAvTriggerActionViewModelBase"
+                   Selector="ContentControl ToggleButton#ToggleEnableButton">
+                <Setter Property="BorderBrush"
+                        Value="{DynamicResource DefaultIconButtonBrush}" />
             </Style>
-            <Style x:DataType="local:MpAvTriggerActionViewModelBase" Selector="ContentControl ToggleButton#ToggleEnableButton[IsEnabled=true]">
-                <Setter Property="BorderBrush" Value="Transparent" />
+            <Style x:DataType="local:MpAvTriggerActionViewModelBase"
+                   Selector="ContentControl ToggleButton#ToggleEnableButton[IsEnabled=true]">
+                <Setter Property="BorderBrush"
+                        Value="Transparent" />
             </Style>
-            <Style x:DataType="local:MpAvTriggerActionViewModelBase" Selector="ContentControl ToggleButton#ToggleEnableButton[IsEnabled=true] Image">
+            <Style x:DataType="local:MpAvTriggerActionViewModelBase"
+                   Selector="ContentControl ToggleButton#ToggleEnableButton[IsEnabled=true] Image">
                 <Setter Property="Source">
                     <MultiBinding Converter="{x:Static local:MpAvMultiObjToContrastTintedBitmapConverter.Instance}">
                         <Binding Path="CurEnableOrDisableHexColor" />
@@ -42,82 +53,85 @@
                     </MultiBinding>
                 </Setter>
             </Style>
-            <Style x:DataType="local:MpAvTriggerActionViewModelBase" Selector="ContentControl ToggleButton#ToggleEnableButton[IsEnabled=false] Image">
-                <Setter Property="Source" Value="{Binding IconResourceObj, Converter={x:Static local:MpAvIconSourceObjToBitmapConverter.Instance}}" />
+            <Style x:DataType="local:MpAvTriggerActionViewModelBase"
+                   Selector="ContentControl ToggleButton#ToggleEnableButton[IsEnabled=false] Image">
+                <Setter Property="Source"
+                        Value="{Binding IconResourceObj, Converter={x:Static local:MpAvIconSourceObjToBitmapConverter.Instance}}" />
             </Style>
-            <Style x:DataType="local:MpAvTriggerActionViewModelBase" Selector="ContentControl ToggleButton#ToggleEnableButton:pointerover">
-                <Setter Property="BorderBrush" Value="{DynamicResource HoverDefaultBorderBrush}" />
+            <Style x:DataType="local:MpAvTriggerActionViewModelBase"
+                   Selector="ContentControl ToggleButton#ToggleEnableButton:pointerover">
+                <Setter Property="BorderBrush"
+                        Value="{DynamicResource HoverDefaultBorderBrush}" />
             </Style>
         </Grid.Styles>
         <!--  OPTIONS POPUP  -->
-        <local:MpAvOptionsButton
-            Grid.Column="0"
-            Width="15"
-            Height="25"
-            Margin="3,0,10,0"
-            HorizontalAlignment="Left"
-            VerticalAlignment="Center"
-            Command="{Binding ShowAddChildContextMenuCommand}"
-            CommandParameter="{Binding $self}" />
+        <local:MpAvOptionsButton Grid.Column="0"
+                                 Width="15"
+                                 Height="25"
+                                 Margin="3,0,10,0"
+                                 HorizontalAlignment="Left"
+                                 VerticalAlignment="Center"
+                                 IsVisible="{Binding !IsMobileOrWindowed, Source={x:Static local:MpAvThemeViewModel.Instance}}"
+                                 Command="{Binding ShowContextMenuCommand}"
+                                 CommandParameter="{Binding $self}" />
         <!--  ENABLE/DISABLE BUTTON  -->
-        <ContentControl
-            x:Name="ActionPropertyIconContentControl"
-            Grid.Column="1"
-            HorizontalAlignment="Stretch"
-            VerticalAlignment="Stretch"
-            Content="{Binding}"
-            Cursor="Arrow">
+        <ContentControl x:Name="ActionPropertyIconContentControl"
+                        Grid.Column="1"
+                        HorizontalAlignment="Stretch"
+                        VerticalAlignment="Stretch"
+                        Content="{Binding}"
+                        Cursor="Arrow">
             <ToolTip.Tip>
-                <local:MpAvToolTipView Classes="error" ToolTipText="{Binding ValidationText}" />
+                <local:MpAvToolTipView Classes="error"
+                                       ToolTipText="{Binding ValidationText}" />
             </ToolTip.Tip>
             <ContentControl.DataTemplates>
                 <local:MpAvActionPropertyIconTemplateSelector>
-                    <DataTemplate x:Key="TriggerTemplate" x:DataType="local:MpAvTriggerActionViewModelBase">
-                        <ToggleButton
-                            x:Name="ToggleEnableButton"
-                            Grid.Column="1"
-                            Width="{StaticResource IconSize}"
-                            Height="{StaticResource IconSize}"
-                            Margin="3,5"
-                            Padding="3"
-                            HorizontalAlignment="Left"
-                            VerticalAlignment="Center"
-                            HorizontalContentAlignment="Stretch"
-                            VerticalContentAlignment="Stretch"
-                            Background="Transparent"
-                            BorderThickness="0"
-                            CornerRadius="12.5"
-                            IsEnabled="{Binding IsAllValid}"
-                            IsHitTestVisible="False">
+                    <DataTemplate x:Key="TriggerTemplate"
+                                  x:DataType="local:MpAvTriggerActionViewModelBase">
+                        <ToggleButton x:Name="ToggleEnableButton"
+                                      Grid.Column="1"
+                                      Width="{StaticResource IconSize}"
+                                      Height="{StaticResource IconSize}"
+                                      Margin="3,5"
+                                      Padding="3"
+                                      HorizontalAlignment="Left"
+                                      VerticalAlignment="Center"
+                                      HorizontalContentAlignment="Stretch"
+                                      VerticalContentAlignment="Stretch"
+                                      Background="Transparent"
+                                      BorderThickness="0"
+                                      CornerRadius="12.5"
+                                      IsEnabled="{Binding IsAllValid}"
+                                      IsHitTestVisible="False">
                             <ToolTip.Tip>
                                 <local:MpAvToolTipView ToolTipText="{Binding ToggleEnableOrDisableLabel}" />
                             </ToolTip.Tip>
-                            <Image
-                                Margin="3"
-                                HorizontalAlignment="Stretch"
-                                VerticalAlignment="Stretch"
-                                Stretch="Uniform">
+                            <Image Margin="3"
+                                   HorizontalAlignment="Stretch"
+                                   VerticalAlignment="Stretch"
+                                   Stretch="Uniform">
                                 <Image.Source />
                             </Image>
                         </ToggleButton>
                     </DataTemplate>
-                    <DataTemplate x:Key="ActionTemplate" x:DataType="local:MpAvActionViewModelBase">
-                        <Image
-                            Width="{StaticResource IconSize}"
-                            Height="{StaticResource IconSize}"
-                            HorizontalAlignment="Stretch"
-                            VerticalAlignment="Stretch"
-                            Source="{Binding IconResourceObj, Converter={x:Static local:MpAvIconSourceObjToBitmapConverter.Instance}}"
-                            Stretch="Uniform" />
+                    <DataTemplate x:Key="ActionTemplate"
+                                  x:DataType="local:MpAvActionViewModelBase">
+                        <Image Width="{StaticResource IconSize}"
+                               Height="{StaticResource IconSize}"
+                               HorizontalAlignment="Stretch"
+                               VerticalAlignment="Stretch"
+                               Source="{Binding IconResourceObj, Converter={x:Static local:MpAvIconSourceObjToBitmapConverter.Instance}}"
+                               Stretch="Uniform" />
                     </DataTemplate>
-                    <DataTemplate x:Key="ErrorTemplate" x:DataType="local:MpAvActionViewModelBase">
-                        <Image
-                            Width="{StaticResource IconSize}"
-                            Height="{StaticResource IconSize}"
-                            HorizontalAlignment="Stretch"
-                            VerticalAlignment="Stretch"
-                            Source="{Binding Source={StaticResource WarningImage}, Converter={x:Static local:MpAvIconSourceObjToBitmapConverter.Instance}}"
-                            Stretch="Uniform" />
+                    <DataTemplate x:Key="ErrorTemplate"
+                                  x:DataType="local:MpAvActionViewModelBase">
+                        <Image Width="{StaticResource IconSize}"
+                               Height="{StaticResource IconSize}"
+                               HorizontalAlignment="Stretch"
+                               VerticalAlignment="Stretch"
+                               Source="{Binding Source={StaticResource WarningImage}, Converter={x:Static local:MpAvIconSourceObjToBitmapConverter.Instance}}"
+                               Stretch="Uniform" />
                     </DataTemplate>
                 </local:MpAvActionPropertyIconTemplateSelector>
 
@@ -126,34 +140,32 @@
 
         <!--  ACTION LABEL  -->
 
-        <Grid
-            Grid.Column="2"
-            HorizontalAlignment="Stretch"
-            VerticalAlignment="Stretch"
-            ClipToBounds="True">
+        <Grid Grid.Column="2"
+              HorizontalAlignment="Stretch"
+              VerticalAlignment="Stretch"
+              ClipToBounds="True">
             <!--  NOTE putting marquee properties into a style doesn't set them, i think cause its from textbox or something  -->
-            <local:MpAvMarqueeTextBox
-                x:Name="ActionLabelTextBox"
-                MinHeight="30"
-                MaxWidth="200"
-                Margin="5,7,15,5"
-                Padding="3"
-                HorizontalAlignment="Stretch"
-                VerticalAlignment="Center"
-                HorizontalContentAlignment="Left"
-                VerticalContentAlignment="Center"
-                local:MpAvIsFocusedExtension.IsEnabled="True"
-                EditOnFocus="{Binding !IsDefaultAction}"
-                FontSize="18"
-                FontWeight="SemiBold"
-                Text="{Binding Label, Mode=TwoWay}" />
+            <local:MpAvMarqueeTextBox x:Name="ActionLabelTextBox"
+                                      MinHeight="30"
+                                      MinWidth="300"
+                                      
+                                      Margin="15,7,15,5"
+                                      Padding="3"
+                                      HorizontalAlignment="Left"
+                                      VerticalAlignment="Center"
+                                      HorizontalContentAlignment="Left"
+                                      VerticalContentAlignment="Center"
+                                      local:MpAvIsFocusedExtension.IsEnabled="True"
+                                      EditOnFocus="{Binding !IsDefaultAction}"
+                                      FontSize="18"
+                                      FontWeight="SemiBold"
+                                      Text="{Binding Label, Mode=TwoWay}" />
         </Grid>
         <!--  ACTION HINT  -->
 
-        <local:MpAvToolTipHintView
-            Grid.Column="3"
-            HorizontalAlignment="Right"
-            VerticalAlignment="Center"
-            ToolTipText="{Binding ActionHintText}" />
+        <local:MpAvToolTipHintView Grid.Column="3"
+                                   HorizontalAlignment="Right"
+                                   VerticalAlignment="Center"
+                                   ToolTipText="{Binding ActionHintText}" />
     </Grid>
 </local:MpAvUserControl>

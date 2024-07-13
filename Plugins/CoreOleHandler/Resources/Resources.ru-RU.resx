@@ -222,4 +222,10 @@
   <data name="ToFileExtHint" xml:space="preserve">
     <value>Расширение файла, используемое, когда '{0}' используется для создания файла по требованию.</value>
   </data>
+  <data name="RtfParaTagNameHint" xml:space="preserve">
+    <value>Для выделения кода используйте тег «pre», иначе RTF будет рассматриваться как обычный богатый текст.</value>
+  </data>
+  <data name="RtfParaTagNameLabel" xml:space="preserve">
+    <value>HTML -абзац тег</value>
+  </data>
 </root>

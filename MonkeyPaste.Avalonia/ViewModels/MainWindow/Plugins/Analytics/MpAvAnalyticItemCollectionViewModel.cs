@@ -104,25 +104,31 @@ namespace MonkeyPaste.Avalonia {
         public double DefaultSidebarWidth {
             get {
                 if (MpAvMainWindowViewModel.Instance.IsVerticalOrientation) {
-                    return MpAvMainWindowViewModel.Instance.MainWindowWidth;
+                    return MpAvMainView.Instance.MainWindowTrayGrid.Bounds.Width;
                 }
-                double w = DefaultSelectorColumnVarDimLength;
+                double def_w = DefaultSelectorColumnVarDimLength;
                 if (SelectedPresetViewModel != null) {
-                    w += DefaultParameterColumnVarDimLength;
+                    def_w += DefaultParameterColumnVarDimLength;
                 }
-                return w;
+                if(MpAvThemeViewModel.Instance.IsMobileOrWindowed) {
+                    def_w = Math.Min(def_w, Mp.Services.ScreenInfoCollection.Primary.WorkingArea.Width / 2);
+                }
+                return def_w;
             }
         }
         public double DefaultSidebarHeight {
             get {
                 if (MpAvMainWindowViewModel.Instance.IsHorizontalOrientation) {
-                    return MpAvClipTrayViewModel.Instance.ObservedQueryTrayScreenHeight;
+                    return MpAvMainView.Instance.MainWindowTrayGrid.Bounds.Height;
                 }
-                double h = DefaultSelectorColumnVarDimLength;
+                double def_h = DefaultSelectorColumnVarDimLength;
+                if (MpAvThemeViewModel.Instance.IsMobileOrWindowed) {
+                    def_h = Math.Min(def_h, Mp.Services.ScreenInfoCollection.Primary.WorkingArea.Height / 3);
+                }
                 //if (SelectedPresetViewModel != null) {
                 //    h += _defaultParameterColumnVarDimLength;
                 //}
-                return h;
+                return def_h;
             }
         }
         public double SidebarWidth { get; set; } = 0;
@@ -449,8 +455,8 @@ namespace MonkeyPaste.Avalonia {
 
         #region Commands
 
-        public ICommand ApplyCoreAnnotatorCommand => new MpCommand<object>(
-            (args) => {
+        public MpIAsyncCommand<object> ApplyCoreAnnotatorCommand => new MpAsyncCommand<object>(
+            async (args) => {
                 var ctvm = args as MpAvClipTileViewModel;
                 if (ctvm == null) {
                     return;
@@ -462,7 +468,7 @@ namespace MonkeyPaste.Avalonia {
                 if (core_aipvm == null) {
                     return;
                 }
-                core_aipvm.Parent.PerformAnalysisCommand.Execute(new object[] { core_aipvm, ctvm.CopyItem });
+                await core_aipvm.Parent.PerformAnalysisCommand.ExecuteAsync(new object[] { core_aipvm, ctvm.CopyItem });
             });
 
         #endregion

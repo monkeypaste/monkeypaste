@@ -2996,4 +2996,49 @@ Globaalsed otseteed saab nüüd süsteemialuse menüüs lubada</value>
   <data name="DonateLabel" xml:space="preserve">
     <value>Annetama</value>
   </data>
+  <data name="MobileCopiedNtfText" xml:space="preserve">
+    <value>Kopeeritud lõikelauale</value>
+  </data>
+  <data name="PinTraySidebarLabel" xml:space="preserve">
+    <value>Kinnitatud</value>
+  </data>
+  <data name="QueryTraySidebarLabel" xml:space="preserve">
+    <value>Päring</value>
+  </data>
+  <data name="PluginBrowserFormattedWindowTitle" xml:space="preserve">
+    <value>Pistikprogrammi brauser - {0}</value>
+  </data>
+  <data name="PluginBrowserWindowTitle" xml:space="preserve">
+    <value>Pistikprogrammide brauser</value>
+  </data>
+  <data name="ClipboardSetMessage" xml:space="preserve">
+    <value>Lõikelauakomplekt</value>
+  </data>
+  <data name="AddNewActionLabel" xml:space="preserve">
+    <value>Lisage uus</value>
+  </data>
+  <data name="EditorPasteButtonLabelMobile" xml:space="preserve">
+    <value>Koopia</value>
+  </data>
+  <data name="PrefSyntaxThemeHint" xml:space="preserve">
+    <value>Tekstiklippides tuvastatud koodiplokkide jaoks kasutatav teema.</value>
+  </data>
+  <data name="PrefSyntaxThemeLabel" xml:space="preserve">
+    <value>Süntaksiteema</value>
+  </data>
+  <data name="PrefCodeFontLabel" xml:space="preserve">
+    <value>Süntaks</value>
+  </data>
+  <data name="CommonViewLabel" xml:space="preserve">
+    <value>Vaade</value>
+  </data>
+  <data name="WrapTextMenuLabel" xml:space="preserve">
+    <value>Mähisekst</value>
+  </data>
+  <data name="ClipAssignShortcutLabel" xml:space="preserve">
+    <value>Määrake otsetee ...</value>
+  </data>
+  <data name="ClipUpdateShortcutLabel" xml:space="preserve">
+    <value>Värskendage otsetee ...</value>
+  </data>
 </root>

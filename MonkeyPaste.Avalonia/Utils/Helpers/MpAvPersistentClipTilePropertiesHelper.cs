@@ -13,8 +13,8 @@ namespace MonkeyPaste.Avalonia {
         public bool IsSubSelectable { get; set; }
         public bool IsTitleReadOnly { get; set; } = true;
         public bool IsContentReadOnly { get; set; } = true;
-        public bool IsTransactionPaneOpen { get; set; }
         public string SelectedTransNodeGuid { get; set; }
+        public bool IsTransactionPaneOpen { get; set; }
 
         public double? UniqueWidth { get; set; }
         public double? UniqueHeight { get; set; }

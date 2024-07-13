@@ -10,17 +10,14 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
 using System.Threading.Tasks;
+using System.ComponentModel;
+
 
 #if WINDOWS
 using MonkeyPaste.Common.Wpf;
 #endif
 
 namespace MonkeyPaste.Avalonia {
-
-    public interface MpIWindowStateViewModel : MpIWindowViewModel {
-        WindowState WindowState { get; set; }
-    }
-
     public static class MpAvWindowManager {
         #region Private Variables
         private static Dictionary<MpAvWindow, IEnumerable<IDisposable>> _dispLookup = new Dictionary<MpAvWindow, IEnumerable<IDisposable>>();
@@ -30,8 +27,13 @@ namespace MonkeyPaste.Avalonia {
 
         #region Properties
         public static List<MpAvWindow> OpeningWindows { get; set; } = [];
-        public static Screens Screens =>
+#if WINDOWED
+        public static MpIPlatformScreenInfoCollection Screens =>
             AllWindows.Any() ? AllWindows.FirstOrDefault().Screens : null;
+#else
+        public static Screens Screens =>
+            AllWindows.Any() ? AllWindows.FirstOrDefault().Screens : null; 
+#endif
         public static ObservableCollection<MpAvWindow> AllWindows { get; private set; } = new ObservableCollection<MpAvWindow>();
         public static IReadOnlyList<MpAvWindow> TopmostWindowsByZOrder =>
 #if MAC
@@ -55,11 +57,7 @@ namespace MonkeyPaste.Avalonia {
             AllWindows.FirstOrDefault(x => x is MpAvMainWindow);
 
         public static MpAvWindow ActiveWindow =>
-#if LINUX
-        AllWindows.FirstOrDefault(x => x.IsActive);
-#else
-        AllWindows.FirstOrDefault(x => x.IsActive); 
-#endif
+            AllWindows.FirstOrDefault(x => x.IsActive);
         public static MpAvWindow LastActiveWindow =>
             AllWindows.OrderByDescending(x => x.LastActiveDateTime).FirstOrDefault();
 
@@ -178,8 +176,12 @@ namespace MonkeyPaste.Avalonia {
         }
 
         public static string ToWindowTitleText(this string title) {
+#if MOBILE_OR_WINDOWED
+            return title;
+#else
             string prefix = string.IsNullOrEmpty(title) ? string.Empty : $"{title} - ";
             return $"{prefix}{Mp.Services.ThisAppInfo.ThisAppProductName}";
+#endif
         }
 
         public static Visual GetTopLevel(this Visual visual, bool logical = false) {
@@ -196,7 +198,7 @@ namespace MonkeyPaste.Avalonia {
             return actual_tl;
         }
 
-        #endregion
+#endregion
 
         #region Private Methods
 
@@ -284,7 +286,7 @@ namespace MonkeyPaste.Avalonia {
             }
         }
 
-        private static void Window_Closing(object sender, WindowClosingEventArgs e) {
+        private static void Window_Closing(object sender, CancelEventArgs e) {
             if (sender is not MpAvWindow w) {
                 return;
             }
@@ -369,7 +371,7 @@ namespace MonkeyPaste.Avalonia {
             IDisposable dsp3 = Control.IsVisibleProperty.Changed.AddClassHandler<MpAvWindow>((x, y) => IsVisibleChangedHandler(x, y as AvaloniaPropertyChangedEventArgs<bool>));
             IDisposable dsp4 = MpAvWindow.WindowStateProperty.Changed.AddClassHandler<MpAvWindow>((x, y) => WindowStateChangedHandler(x, y as AvaloniaPropertyChangedEventArgs<bool>));
             if (_dispLookup.ContainsKey(nw)) {
-                MpDebug.Break("Error, window shouldn't already exist here");
+                MpDebug.Break("Error, window shouldn't already exist here", silent: true);
             } else {
                 _dispLookup.Add(nw, new[] { dsp1, dsp2, dsp3, dsp4 });
             }
@@ -449,7 +451,6 @@ namespace MonkeyPaste.Avalonia {
                 Dispatcher.UIThread.Post(UpdateTopmost);
                 return;
             }
-
 #if WINDOWS
             nint last_handle = WinApi.HWND_TOPMOST;
             for (int i = 0; i < TopmostWindowsByZOrder.Count; i++) {

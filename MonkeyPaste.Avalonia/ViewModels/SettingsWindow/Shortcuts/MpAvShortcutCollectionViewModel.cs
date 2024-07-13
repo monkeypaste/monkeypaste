@@ -25,7 +25,18 @@ namespace MonkeyPaste.Avalonia {
         MpIShortcutGestureLocator,
         MpIDndUserCancelNotifier {
 
+        #region Private Variables
+
+        private SimpleGlobalHook _hook;
+
+        private MpAvKeyGestureHelper<KeyCode> _keyboardGestureHelper = new MpAvKeyGestureHelper<KeyCode>();
+        private MpAvShortcutViewModel _exact_match;
+
+        #endregion
+
         #region Constants
+
+        public const double MIN_GLOBAL_DRAG_DIST = 20;
 
         #endregion
 
@@ -44,31 +55,16 @@ namespace MonkeyPaste.Avalonia {
 #if DESKTOP 
             true;
 #else
-            true;
+            false;
 #endif
 
         static bool ALLOW_GLOBAL_KEYBOARD_INPUT =
 #if DESKTOP 
             true;
 #else
-            true;
+            false;
 #endif
         static bool ALLOW_GLOBAL_INPUT = ALLOW_GLOBAL_KEYBOARD_INPUT || ALLOW_GLOBAL_MOUSE_INPUT;
-
-        public const double MIN_GLOBAL_DRAG_DIST = 20;
-
-        #endregion
-
-        #region Private Variables
-
-        private SimpleGlobalHook _hook;
-
-        private MpAvKeyGestureHelper<KeyCode> _keyboardGestureHelper = new MpAvKeyGestureHelper<KeyCode>();
-        private MpAvShortcutViewModel _exact_match;
-
-        #endregion
-
-        #region Statics
 
         private static MpAvShortcutCollectionViewModel _instance;
         public static MpAvShortcutCollectionViewModel Instance => _instance ?? (_instance = new MpAvShortcutCollectionViewModel());
@@ -109,9 +105,9 @@ namespace MonkeyPaste.Avalonia {
             return null;
         }
 
-        string MpIShortcutGestureLocator.LocateByCommand(MpIShortcutCommandViewModel scvm) =>
+        string MpIShortcutGestureLocator.LocateByCommand(object scvm) =>
 
-            GetViewModelCommandShortcutKeyString(scvm);
+            GetViewModelCommandShortcutKeyString(scvm as MpIShortcutCommandViewModel);
 
         object MpIShortcutGestureLocator.LocateSourceByType(MpShortcutType sct) {
             if (Items.FirstOrDefault(x => x.ShortcutType == sct) is MpAvShortcutViewModel scvm) {
@@ -410,7 +406,7 @@ namespace MonkeyPaste.Avalonia {
                         },
                         {
                             MpShortcutType.ManuallyAddFromClipboard,
-                            MpAvClipTrayViewModel.Instance.AddItemWhileIgnoringClipboardCommand
+                            MpAvClipTrayViewModel.Instance.AddClipboardAsItemCommand
                         },
                         {
                             MpShortcutType.ZoomInOnSelection,
@@ -444,12 +440,25 @@ namespace MonkeyPaste.Avalonia {
                             MpShortcutType.ClearPinTray,
                             MpAvClipTrayViewModel.Instance.UnpinAllCommand
                         },
-#if DEBUG
-		                {
+                        {
+                            MpShortcutType.EnterKeyAction,
+                            MpAvApplicationCommand.Instance.EnterKeyCommand
+                        },
+                        {
                             MpShortcutType.ToggleGlobalHooks,
                             ToggleGlobalHooksCommand
                         },  
+                        {
+                            MpShortcutType.ToggleContentWrap,
+                            MpAvClipTrayViewModel.Instance.ToggleSelectedClipWrapFromShortcutCommand
+                        },  
+#if DEBUG
+		                {
+                            MpShortcutType.ToggleXamlHotReload,
+                            App.Instance.ToggleXamlHotReloadCommand
+                        },  
 #endif
+
                     };
                 }
                 return _appCommandLookup;
@@ -890,7 +899,7 @@ namespace MonkeyPaste.Avalonia {
                 .Distinct()
                 .Difference(Enum.GetNames(typeof(MpShortcutType)))
                 .SelectMany(x => MpAvDefaultDataCreator.DefaultShortcutDefinitions.Where(y => y[2] == x))
-                .Select(x => MpAvDefaultDataCreator.CreateDefaultShortcutAsync(x)));
+                .Select(x => MpAvDefaultDataCreator.CreateDefaultShortcutAsync(x,true)));
 
             new_shortcuts.ForEach(x => MpConsole.WriteLine($"New shortcut added: {x}"));
             scl.AddRange(new_shortcuts);
@@ -1284,7 +1293,7 @@ namespace MonkeyPaste.Avalonia {
             if (match_to_execute.RoutingType == MpRoutingType.Pre) {
                 Mp.Services.KeyStrokeSimulator.SimulateKeyStrokeSequence(new[] { new[] { e.Data.KeyCode }.ToList() }.ToList());
             }
-            Dispatcher.UIThread.Invoke(() => {
+            Dispatcher.UIThread.Post(() => {
                 match_to_execute.PerformShortcutCommand.Execute(null);
             });
             if (match_to_execute.RoutingType == MpRoutingType.Post) {

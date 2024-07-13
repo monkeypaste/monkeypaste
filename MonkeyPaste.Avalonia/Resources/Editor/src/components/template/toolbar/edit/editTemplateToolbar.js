@@ -158,13 +158,25 @@ function deleteFocusTemplate() {
         return;
     }
 
+    if (globals.IsMobile) {
+        let is_confirmed = confirm(strFormat(UiStrings['EditorDeleteAllTemplatesNtfText'], ft.templateName));
+        if (is_confirmed) {
+            removeTemplatesByGuid(ftguid);
+
+            // NOTE may need to force (notify) content write to db here so MasterTemplateCollection doesn't pick this item up
+            onUserDeletedTemplate_ntf(ftguid);
+
+            hideEditTemplateToolbar(false, true);
+        }
+        return;
+    }
     getMessageBoxResultAsync_get(
         UiStrings['EditorConfirmNtfTitle'],
         strFormat(UiStrings['EditorDeleteAllTemplatesNtfText'],ft.templateName),
         'okcancel',
         'WarningImage')
         .then(result => {
-            if (isNullOrUndefined(result) || result == false || result == 'false') {
+            if (isNullOrUndefined(result) || result == false || result.toLowerCase() == 'false') {
                 log('delete canceled');
                 return;
             }

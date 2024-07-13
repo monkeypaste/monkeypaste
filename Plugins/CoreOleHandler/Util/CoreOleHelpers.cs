@@ -1,5 +1,7 @@
 ﻿using MonkeyPaste.Common;
 using MonkeyPaste.Common.Plugin;
+using System;
+using System.Collections.Generic;
 
 namespace CoreOleHandler {
     public static class CoreOleHelpers {

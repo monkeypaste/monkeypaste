@@ -44,6 +44,13 @@
                     Value="False" />
         </Style>
 
+        <!--  TAG POINTER CMDS  -->
+
+        <Style Selector="Grid#TagViewContainerGrid">
+            <Setter Property="local:MpAvClassHelperExtension.ClassesToAdd"
+                    Value="tag-cmds" />
+        </Style>
+
     </local:MpAvUserControl.Styles>
 
     <Grid x:Name="TagTrayContainerGrid"
@@ -60,7 +67,7 @@
         </Grid.ColumnDefinitions>
 
         <RepeatButton x:Name="TagTrayNavLeftButton"
-                      Classes="noBg noHoverBg"
+                      Classes="no-bg no-hover-bg"
                       HorizontalAlignment="Left"
                       Grid.Column="0"
                       Margin="5"
@@ -72,7 +79,7 @@
                  Grid.Column="1"
                  ClipToBounds="True"
                  MaxWidth="{Binding MaxTagTrayScreenWidth, Source={x:Static local:MpAvFilterMenuViewModel.Instance}}"
-                 Classes="tagTray"
+                 Classes="tagTray focus-item-vm"
                  Classes.trayDrag="{Binding !IsPinTrayDragOver}"
                  Background="Transparent"
                  AutoScrollToSelectedItem="False"

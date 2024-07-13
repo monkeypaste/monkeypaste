@@ -2996,4 +2996,49 @@ Globale genveje kan nu aktiveres i systembakkemenuen</value>
   <data name="DonateLabel" xml:space="preserve">
     <value>Doner</value>
   </data>
+  <data name="MobileCopiedNtfText" xml:space="preserve">
+    <value>Kopieret til udklipsholder</value>
+  </data>
+  <data name="PinTraySidebarLabel" xml:space="preserve">
+    <value>Fastgjort</value>
+  </data>
+  <data name="QueryTraySidebarLabel" xml:space="preserve">
+    <value>Forespørgsel</value>
+  </data>
+  <data name="PluginBrowserFormattedWindowTitle" xml:space="preserve">
+    <value>Plugin-browser - {0}</value>
+  </data>
+  <data name="PluginBrowserWindowTitle" xml:space="preserve">
+    <value>Plugin browser</value>
+  </data>
+  <data name="ClipboardSetMessage" xml:space="preserve">
+    <value>Udklipsholder sæt</value>
+  </data>
+  <data name="AddNewActionLabel" xml:space="preserve">
+    <value>Tilføj ny</value>
+  </data>
+  <data name="EditorPasteButtonLabelMobile" xml:space="preserve">
+    <value>Kopi</value>
+  </data>
+  <data name="PrefSyntaxThemeHint" xml:space="preserve">
+    <value>Temaet, der bruges til kodeblokke, der registreres i tekstklip.</value>
+  </data>
+  <data name="PrefSyntaxThemeLabel" xml:space="preserve">
+    <value>Syntakstema</value>
+  </data>
+  <data name="PrefCodeFontLabel" xml:space="preserve">
+    <value>Syntaks</value>
+  </data>
+  <data name="CommonViewLabel" xml:space="preserve">
+    <value>Udsigt</value>
+  </data>
+  <data name="WrapTextMenuLabel" xml:space="preserve">
+    <value>Ombryd tekst</value>
+  </data>
+  <data name="ClipAssignShortcutLabel" xml:space="preserve">
+    <value>Tildel genvej...</value>
+  </data>
+  <data name="ClipUpdateShortcutLabel" xml:space="preserve">
+    <value>Opdater genvej...</value>
+  </data>
 </root>

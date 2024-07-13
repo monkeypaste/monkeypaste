@@ -42,6 +42,7 @@ namespace MonkeyPaste.Avalonia {
             OnDragStarted(new VectorEventArgs());
             OnDragDelta(new VectorEventArgs() { Vector = delta });
             OnDragCompleted(new VectorEventArgs());
+            (Parent as Control).InvalidateMeasure();
         }
         #endregion
 

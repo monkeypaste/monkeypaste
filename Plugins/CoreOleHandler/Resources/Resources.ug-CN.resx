@@ -222,4 +222,10 @@
   <data name="ToFileExtHint" xml:space="preserve">
     <value>'{0}' ئېھتىياج بىلەن ھۆججەت قۇرغاندا ئىشلىتىلگەن ھۆججەت كېڭەيتىلگەنلىكى.</value>
   </data>
+  <data name="RtfParaTagNameHint" xml:space="preserve">
+    <value>كودنى گەۋدىلەندۈرۈش ئۈچۈن «ئالدىن» بەلگىسىنى ئىشلىتىپ RTF نى نورمال مول تېكىست دەپ قارايدۇ.</value>
+  </data>
+  <data name="RtfParaTagNameLabel" xml:space="preserve">
+    <value>HTML بىر ئابزاس بەلگىسى</value>
+  </data>
 </root>

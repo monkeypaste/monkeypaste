@@ -2996,4 +2996,49 @@
   <data name="DonateLabel" xml:space="preserve">
     <value>દાન કરવું</value>
   </data>
+  <data name="MobileCopiedNtfText" xml:space="preserve">
+    <value>ક્લિપબોર્ડ પર ક ied પિ કરેલી</value>
+  </data>
+  <data name="PinTraySidebarLabel" xml:space="preserve">
+    <value>ઉઘાડું</value>
+  </data>
+  <data name="QueryTraySidebarLabel" xml:space="preserve">
+    <value>પ્રશંસાપૂર્વક</value>
+  </data>
+  <data name="PluginBrowserFormattedWindowTitle" xml:space="preserve">
+    <value>પ્લગઇન બ્રાઉઝર - {0}</value>
+  </data>
+  <data name="PluginBrowserWindowTitle" xml:space="preserve">
+    <value>ભુરો</value>
+  </data>
+  <data name="ClipboardSetMessage" xml:space="preserve">
+    <value>બારીકબળાનો સમૂહ</value>
+  </data>
+  <data name="AddNewActionLabel" xml:space="preserve">
+    <value>નવો ઉમેરો</value>
+  </data>
+  <data name="EditorPasteButtonLabelMobile" xml:space="preserve">
+    <value>નકલ</value>
+  </data>
+  <data name="PrefSyntaxThemeHint" xml:space="preserve">
+    <value>ટેક્સ્ટ ક્લિપ્સમાં શોધાયેલ કોડના બ્લોક્સ માટે વપરાયેલી થીમ.</value>
+  </data>
+  <data name="PrefSyntaxThemeLabel" xml:space="preserve">
+    <value>વાક્યબંધી થીમ</value>
+  </data>
+  <data name="PrefCodeFontLabel" xml:space="preserve">
+    <value>સાંકળનો વિસ્તાર</value>
+  </data>
+  <data name="CommonViewLabel" xml:space="preserve">
+    <value>દૃશ્ય</value>
+  </data>
+  <data name="WrapTextMenuLabel" xml:space="preserve">
+    <value>લખાણ લપેટી</value>
+  </data>
+  <data name="ClipAssignShortcutLabel" xml:space="preserve">
+    <value>શોર્ટકટ સોંપો ...</value>
+  </data>
+  <data name="ClipUpdateShortcutLabel" xml:space="preserve">
+    <value>શોર્ટકટ અપડેટ કરો ...</value>
+  </data>
 </root>

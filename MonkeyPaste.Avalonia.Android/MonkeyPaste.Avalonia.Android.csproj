@@ -12,23 +12,52 @@
     <TargetFrameworkVersion>34</TargetFrameworkVersion>
     <!--<AllowUnsafeBlocks>True</AllowUnsafeBlocks>
     <ErrorReport>send</ErrorReport>-->
+    <UseAot>true</UseAot>
+  </PropertyGroup>
+
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU' And '$(UseAot)' == 'True'">
+    <RunAOTCompilation>true</RunAOTCompilation>
+    <AndroidEnableProfiledAot>false</AndroidEnableProfiledAot>
+    <EnableLLVM>true</EnableLLVM>
+  </PropertyGroup>
+  
+    <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU' And '$(UseAot)' == 'False'">
+    <RunAOTCompilation>false</RunAOTCompilation>
+    <AndroidEnableProfiledAot>false</AndroidEnableProfiledAot>
+    <EnableLLVM>false</EnableLLVM>
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
-    <RunAOTCompilation>True</RunAOTCompilation>
-    <EmbedAssembliesIntoApk>True</EmbedAssembliesIntoApk>
+    <Debugger>Xamarin</Debugger>
     <DebugSymbols>True</DebugSymbols>
-    <DebugType>embedded</DebugType>
-    <Optimize>True</Optimize>
+    <AndroidEnableMultiDex>True</AndroidEnableMultiDex>
   </PropertyGroup>
 
-  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
-    <DebugType>none</DebugType>
-  </PropertyGroup>
   <ItemGroup>
-    <Compile Remove="MpCopyClipboardNotificationActivity.cs" />
-    <Compile Remove="SplashActivity.cs" />
+    <AndroidJavaSource Remove="Controls\WebView\**" />
+    <AndroidJavaSource Remove="Resources\xml\**" />
+    <AndroidLibrary Remove="Controls\WebView\**" />
+    <AndroidLibrary Remove="Resources\xml\**" />
+    <AndroidNativeLibrary Remove="Controls\WebView\**" />
+    <AndroidNativeLibrary Remove="Resources\xml\**" />
+    <AndroidResource Remove="Resources\xml\**" />
+    <AvaloniaXaml Remove="Controls\WebView\**" />
+    <AvaloniaXaml Remove="Resources\xml\**" />
+    <Compile Remove="Controls\WebView\**" />
+    <Compile Remove="Resources\xml\**" />
+    <Content Remove="Resources\xml\**" />
+    <EmbeddedResource Remove="Controls\WebView\**" />
+    <EmbeddedResource Remove="Resources\xml\**" />
+    <JavaSourceJar Remove="Controls\WebView\**" />
+    <JavaSourceJar Remove="Resources\xml\**" />
+    <None Remove="Controls\WebView\**" />
+    <None Remove="Resources\xml\**" />
+    <ProguardConfiguration Remove="Controls\WebView\**" />
+    <ProguardConfiguration Remove="Resources\xml\**" />
+    <TransformFile Remove="Controls\WebView\**" />
+    <TransformFile Remove="Resources\xml\**" />
   </ItemGroup>
+  
   <ItemGroup>
     <None Remove="Resources\values\net_sec_conf.xml" />
   </ItemGroup>
@@ -40,24 +69,19 @@
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="WebView.Avalonia" Version="11.0.0.6" />
+    <PackageReference Include="WebView.Avalonia" Version="$(SugarWvVersion)" />
     <PackageReference Include="WebView.Avalonia.Android" Version="$(SugarWvVersion)" />
-    <PackageReference Include="Xamarin.AndroidX.Core.SplashScreen" Version="1.0.1.6" />
     <PackageReference Include="Avalonia.Android" Version="$(AvaloniaVersion)" />
     <PackageReference Include="SkiaSharp.Views" Version="2.88.8" />
     <PackageReference Include="System.ComponentModel.Annotations" Version="5.0.0" />
     <PackageReference Include="System.Reactive" Version="6.0.0" />
     <PackageReference Include="Xamarin.Essentials" Version="1.8.1" />
-    <PackageReference Include="Xamarin.Google.Android.Material" Version="1.10.0.3" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <None Include="MpCopyClipboardNotificationActivity.cs" />
   </ItemGroup>
 
   <ItemGroup>
     <Folder Include="Assets\" />
     <Folder Include="Assets\dat\" />
+    <Folder Include="Controls\" />
   </ItemGroup>
 
   <ItemGroup>
@@ -66,12 +90,12 @@
 
   <Target Name="PostBuild" AfterTargets="PostBuildEvent" Condition="$(BuildOs) == 'ANDROID'">
 
-    <ZipDirectory Overwrite="true" ContinueOnError="true" SourceDirectory="$(EditorSourceDir)" DestinationFile="$(TargetDatDir)\editor.zip" />
-    <ZipDirectory Overwrite="true" ContinueOnError="true" SourceDirectory="$(TermsDir)" DestinationFile="$(TargetDatDir)\terms.zip" />
-    <ZipDirectory Overwrite="true" ContinueOnError="true" SourceDirectory="$(EnumsDir)" DestinationFile="$(TargetDatDir)\enums.zip" />
-    <ZipDirectory Overwrite="true" ContinueOnError="true" SourceDirectory="$(UiStringsDir)" DestinationFile="$(TargetDatDir)\uistrings.zip" />
+    <ZipDirectory Overwrite="false" ContinueOnError="true" SourceDirectory="$(EditorSourceDir)" DestinationFile="$(TargetDatDir)\editor.zip" />
+    <ZipDirectory Overwrite="false" ContinueOnError="true" SourceDirectory="$(TermsDir)" DestinationFile="$(TargetDatDir)\terms.zip" />
+    <ZipDirectory Overwrite="false" ContinueOnError="true" SourceDirectory="$(EnumsDir)" DestinationFile="$(TargetDatDir)\enums.zip" />
+    <ZipDirectory Overwrite="false" ContinueOnError="true" SourceDirectory="$(UiStringsDir)" DestinationFile="$(TargetDatDir)\uistrings.zip" />
 
-    <!--<ZipDirectory Overwrite="true"
+    <!--<ZipDirectory Overwrite="false"
                   ContinueOnError="true"
                   SourceDirectory="$(SoundsSourceDir)"
                   DestinationFile="$(TargetDatDir)\sounds.zip" />-->

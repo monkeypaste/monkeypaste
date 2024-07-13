@@ -335,7 +335,7 @@ function updateAppendModeStateFromHost(req, fromHost = false) {
 }
 
 function scrollToAppendIdx() {
-	if (globals.IsLoadingContent) {
+	if (!globals.IsContentLoaded) {
 		log('Warning! content not loaded, will wait till done to scroll to append idx');
 		getEditorContainerElement().addEventListener('onContentLoaded', scrollToAppendIdx);
 		return;

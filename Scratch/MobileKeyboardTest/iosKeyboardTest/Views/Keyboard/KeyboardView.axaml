@@ -1,0 +1,65 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:local="clr-namespace:iosKeyboardTest"
+             Background="Red"
+             mc:Ignorable="d"
+             d:DesignWidth="800"
+             d:DesignHeight="450"
+             ClipToBounds="False"
+             x:DataType="local:KeyboardViewModel"
+             x:Class="iosKeyboardTest.KeyboardView">
+    <UserControl.Resources>
+        <SolidColorBrush x:Key="CursorControlBgBrush" Opacity="0.7" Color="Black" />
+        <SolidColorBrush x:Key="CursorControlFgBrush">White</SolidColorBrush>
+    </UserControl.Resources>
+    <Grid RowDefinitions="Auto,*,Auto"
+          Width="{Binding TotalWidth}"
+          Height="{Binding TotalHeight}">
+        <!--  MENU STRIP  -->
+        <local:KeyboardMenuStripView Background="Purple"
+                                     Height="{Binding MenuHeight}" />
+        <!--  KEYBOARD  -->
+        <local:KeyboardGridView x:Name="KeyboardGridView"
+                                Grid.Row="1"
+                                Width="{Binding KeyboardWidth}"
+                                Height="{Binding KeyboardHeight}" />
+
+        <!--  NEXT KEYBOARD  -->
+        <StackPanel Grid.Row="2"
+                    Spacing="10"
+                    Orientation="Horizontal"
+                    IsVisible="{Binding NeedsNextKeyboardButton}">
+            <Button x:Name="NextKeyboardButton"
+                    Command="{Binding NextKeyboardCommand}">
+                <TextBlock Foreground="{DynamicResource CursorControlFgBrush}"
+                           FontSize="24"
+                           Text="⌨" />
+            </Button>
+
+            <Button x:Name="Test1Button"
+                    Command="{Binding Test1Command}"
+                    CommandParameter="{Binding $self}">
+                <TextBlock Foreground="{DynamicResource CursorControlFgBrush}"
+                           FontSize="24"
+                           Text="Test1" />
+            </Button>
+            <TextBlock x:Name="StatusText"
+                       Foreground="Black"
+                       FontSize="16"
+                       Text="{Binding ErrorText}" />
+        </StackPanel>
+        <!--  CURSOR CONTROL OVERLAY  -->
+        <Grid Grid.RowSpan="2"
+              Background="{DynamicResource CursorControlBgBrush}"
+              IsHitTestVisible="False"
+              IsVisible="{Binding IsCursorControlEnabled}">
+            <TextBlock HorizontalAlignment="Center"
+                       VerticalAlignment="Center"
+                       TextAlignment="Center"
+                       Foreground="{DynamicResource CursorControlFgBrush}"
+                       Text="Cursor Control" />
+        </Grid>
+    </Grid>
+</UserControl>

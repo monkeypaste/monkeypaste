@@ -1,8 +1,10 @@
 ﻿using Avalonia;
 using Avalonia.Controls;
 using Avalonia.Data;
+using Avalonia.Media;
 using Avalonia.Threading;
 using MonkeyPaste.Common;
+using MonkeyPaste.Common.Avalonia;
 using MonkeyPaste.Common.Plugin;
 using System;
 using System.Collections.Generic;
@@ -16,7 +18,8 @@ namespace MonkeyPaste.Avalonia {
         MpAvViewModelBase,
         MpIWantsTopmostWindowViewModel,
         MpICloseWindowViewModel,
-        MpIExpandableViewModel {
+        MpIExpandableViewModel,
+        MpAvIHeaderMenuViewModel {
 
         #region Private Variable
         //private Window _criteriaWindow;
@@ -36,6 +39,27 @@ namespace MonkeyPaste.Avalonia {
         #endregion
 
         #region Interfaces
+        #region MpAvIHeaderMenuViewModel Implementation
+
+        MpAvHeaderBackButtonType MpAvIHeaderMenuViewModel.BackButtonType =>
+            MpAvHeaderBackButtonType.Arrow;
+        IBrush MpAvIHeaderMenuViewModel.HeaderBackground =>
+            Mp.Services.PlatformResource.GetResource<IBrush>(MpThemeResourceKey.ThemeDarkColor);
+        string MpAvIHeaderMenuViewModel.HeaderTitle =>
+            null;
+        IEnumerable<MpAvIMenuItemViewModel> MpAvIHeaderMenuViewModel.HeaderMenuItems =>
+            [
+                //new MpAvMenuItemViewModel() {
+                //    IconSourceObj = "SearchImage",
+                //    Command = ToggleExpandFilterCommand
+                //}
+            ];
+        ICommand MpAvIHeaderMenuViewModel.BackCommand =>
+            null;
+        object MpAvIHeaderMenuViewModel.BackCommandParameter =>
+            null;
+
+        #endregion
 
         #region MpIWindowViewModel Implementation
         public MpWindowType WindowType =>
@@ -64,6 +88,7 @@ namespace MonkeyPaste.Avalonia {
 
         public ObservableCollection<MpAvSearchCriteriaItemViewModel> Items { get; set; } = new ObservableCollection<MpAvSearchCriteriaItemViewModel>();
 
+
         public IEnumerable<MpAvSearchCriteriaItemViewModel> SortedItems =>
             Items.OrderBy(x => x.SortOrderIdx).ToList();
 
@@ -78,6 +103,16 @@ namespace MonkeyPaste.Avalonia {
 
         #region State
 
+        public bool IsVerticalOrientation {
+            get {
+                if(MpAvThemeViewModel.Instance.IsMultiWindow) {
+                    return !IsCriteriaWindowOpen && MpAvMainWindowViewModel.Instance.IsVerticalOrientation;
+                }
+                return true;
+            }
+        }
+        
+        
         public string DisabledInputTooltip =>
             CanAlter ? string.Empty : UiStrings.CommonReadOnlyElmDisabledToolTip;
         public bool IsAnyDragging =>
@@ -295,6 +330,7 @@ namespace MonkeyPaste.Avalonia {
         }
         private void ReceivedGlobalMessage(MpMessageType msg) {
             switch (msg) {
+                case MpMessageType.MainWindowOrientationChangeEnd:
                 case MpMessageType.TagSelectionChanged:
                     RefreshProperties();
                     break;
@@ -304,6 +340,7 @@ namespace MonkeyPaste.Avalonia {
             switch (e.PropertyName) {
                 case nameof(SelectedItem):
                     Items.ForEach(x => x.OnPropertyChanged(nameof(x.IsSelected)));
+                    Items.ForEach(x => x.OnPropertyChanged(nameof(x.IsExpanded)));
                     break;
                 case nameof(IgnoreHasModelChanged):
                     Items.ForEach(x => x.IgnoreHasModelChanged = IgnoreHasModelChanged);
@@ -358,6 +395,7 @@ namespace MonkeyPaste.Avalonia {
             OnPropertyChanged(nameof(SelectedItem));
             OnPropertyChanged(nameof(IsCriteriaWindowOpen));
             OnPropertyChanged(nameof(IsPendingQuery));
+            OnPropertyChanged(nameof(IsVerticalOrientation));
         }
 
         private Tuple<int, int>[] GetCurrentSearchItemSaveCheckState() {
@@ -383,6 +421,10 @@ namespace MonkeyPaste.Avalonia {
 
                 //MpAvResizeExtension.ResizeByDelta(MpAvSearchCriteriaListBoxView.Instance, 0, delta_open_height, false);
                 Items.ForEach(x => x.Items.ForEach(y => y.OnPropertyChanged(nameof(y.SelectedItemIdx))));
+
+                //if(MpAvThemeViewModel.Instance.IsMobileOrWindowed) {
+                //    OpenCriteriaWindowCommand.Execute(null);
+                //}
             } else {
                 if (IsPendingQuery && IsAllCriteriaEmpty && !IsCriteriaWindowOpen) {
                     // discard pending if nothing changed

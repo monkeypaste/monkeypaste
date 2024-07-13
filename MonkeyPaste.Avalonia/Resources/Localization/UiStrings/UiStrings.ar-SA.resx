@@ -2996,4 +2996,49 @@ feedback@monkeypaste.com</value>
   <data name="DonateLabel" xml:space="preserve">
     <value>يتبرع</value>
   </data>
+  <data name="MobileCopiedNtfText" xml:space="preserve">
+    <value>نسخ إلى الحافظة</value>
+  </data>
+  <data name="PinTraySidebarLabel" xml:space="preserve">
+    <value>مثبت</value>
+  </data>
+  <data name="QueryTraySidebarLabel" xml:space="preserve">
+    <value>استفسار</value>
+  </data>
+  <data name="PluginBrowserFormattedWindowTitle" xml:space="preserve">
+    <value>متصفح المكونات الإضافية - {0}</value>
+  </data>
+  <data name="PluginBrowserWindowTitle" xml:space="preserve">
+    <value>متصفح البرنامج المساعد</value>
+  </data>
+  <data name="ClipboardSetMessage" xml:space="preserve">
+    <value>مجموعة الحافظة</value>
+  </data>
+  <data name="AddNewActionLabel" xml:space="preserve">
+    <value>اضف جديد</value>
+  </data>
+  <data name="EditorPasteButtonLabelMobile" xml:space="preserve">
+    <value>ينسخ</value>
+  </data>
+  <data name="PrefSyntaxThemeHint" xml:space="preserve">
+    <value>السمة المستخدمة لكتل التعليمات البرمجية المكتشفة في المقاطع النصية.</value>
+  </data>
+  <data name="PrefSyntaxThemeLabel" xml:space="preserve">
+    <value>موضوع بناء الجملة</value>
+  </data>
+  <data name="PrefCodeFontLabel" xml:space="preserve">
+    <value>بناء الجملة</value>
+  </data>
+  <data name="CommonViewLabel" xml:space="preserve">
+    <value>منظر</value>
+  </data>
+  <data name="WrapTextMenuLabel" xml:space="preserve">
+    <value>دوران النص</value>
+  </data>
+  <data name="ClipAssignShortcutLabel" xml:space="preserve">
+    <value>تعيين اختصار...</value>
+  </data>
+  <data name="ClipUpdateShortcutLabel" xml:space="preserve">
+    <value>تحديث الاختصار...</value>
+  </data>
 </root>

@@ -2996,4 +2996,49 @@ Globalni prečaci sada mogu biti omogućeni u izborniku Sistemske ladice</value>
   <data name="DonateLabel" xml:space="preserve">
     <value>Donirati</value>
   </data>
+  <data name="MobileCopiedNtfText" xml:space="preserve">
+    <value>Kopiran u međuspremnik</value>
+  </data>
+  <data name="PinTraySidebarLabel" xml:space="preserve">
+    <value>Prikvačen</value>
+  </data>
+  <data name="QueryTraySidebarLabel" xml:space="preserve">
+    <value>Upit</value>
+  </data>
+  <data name="PluginBrowserFormattedWindowTitle" xml:space="preserve">
+    <value>Preglednik dodatka - {0}</value>
+  </data>
+  <data name="PluginBrowserWindowTitle" xml:space="preserve">
+    <value>Dodatak</value>
+  </data>
+  <data name="ClipboardSetMessage" xml:space="preserve">
+    <value>Set za raspršivanje</value>
+  </data>
+  <data name="AddNewActionLabel" xml:space="preserve">
+    <value>Dodaj novi</value>
+  </data>
+  <data name="EditorPasteButtonLabelMobile" xml:space="preserve">
+    <value>Kopirati</value>
+  </data>
+  <data name="PrefSyntaxThemeHint" xml:space="preserve">
+    <value>Tema koja se koristi za blokove koda otkrivenih u tekstualnim isječcima.</value>
+  </data>
+  <data name="PrefSyntaxThemeLabel" xml:space="preserve">
+    <value>Tema sintakse</value>
+  </data>
+  <data name="PrefCodeFontLabel" xml:space="preserve">
+    <value>Sintaksa</value>
+  </data>
+  <data name="CommonViewLabel" xml:space="preserve">
+    <value>Pogled</value>
+  </data>
+  <data name="WrapTextMenuLabel" xml:space="preserve">
+    <value>Zamotati tekst</value>
+  </data>
+  <data name="ClipAssignShortcutLabel" xml:space="preserve">
+    <value>Dodijelite prečac ...</value>
+  </data>
+  <data name="ClipUpdateShortcutLabel" xml:space="preserve">
+    <value>Ažuriranje prečaca ...</value>
+  </data>
 </root>

@@ -24,7 +24,7 @@
             <!--  MUST MATCH VM VALUE  -->
             5
         </sys:Double>
-        <sys:Double x:Key="CriteriaOptionMinWidth">150</sys:Double>
+        <sys:Double x:Key="CriteriaOptionMinWidth">165</sys:Double>
     </local:MpAvUserControl.Resources>
     <local:MpAvUserControl.Styles>
 
@@ -91,6 +91,15 @@
                     Value="{Binding CriteriaItemHeight, FallbackValue=0, TargetNullValue=0}" />
         </Style>
 
+        <Style Selector="ListBox.criteriaList > ListBoxItem:nth-child(odd)">
+            <Setter Property="Background"
+                    Value="{DynamicResource SearchCriteriaRowBgBrush1}" />
+        </Style>
+        <Style Selector="ListBox.criteriaList > ListBoxItem:nth-child(even)">
+            <Setter Property="Background"
+                    Value="{DynamicResource SearchCriteriaRowBgBrush2}" />
+        </Style>
+
         <Style Selector="ListBox.criteriaList > ListBoxItem:nth-child(odd) /template/ ContentPresenter">
             <Setter Property="Background"
                     Value="{DynamicResource SearchCriteriaRowBgBrush1}" />
@@ -102,12 +111,12 @@
 
         <!--  CRITERIA ROW OPTIONS  -->
 
-        <Style Selector="ListBox.criteriaList > ListBoxItem Grid#CriteriaItemContainerGrid Grid#CriteriaRowButtonsContainer">
+        <Style Selector="ListBox.criteriaList:not(.mobile) > ListBoxItem Grid#CriteriaItemContainerGrid Grid#CriteriaRowButtonsContainer">
             <Setter Property="Opacity"
                     Value="0" />
         </Style>
 
-        <Style Selector="ListBox.criteriaList > ListBoxItem:pointerover Grid#CriteriaItemContainerGrid Grid#CriteriaRowButtonsContainer">
+        <Style Selector="ListBox.criteriaList > ListBoxItem:pointerover Grid#CriteriaItemContainerGrid Grid#CriteriaRowButtonsContainer, ListBox.criteriaList > ListBoxItem:selected Grid#CriteriaItemContainerGrid Grid#CriteriaRowButtonsContainer">
             <Setter Property="Opacity"
                     Value="1" />
         </Style>
@@ -229,6 +238,7 @@
                Background="{DynamicResource SearchCriteriaBgBrush}"
                local:MpAvHelpAnchorExtension.IsEnabled="True"
                local:MpAvHelpAnchorExtension.LinkType="Filters"
+               Classes.mobile="{Binding IsMobileOrWindowed, Source={x:Static local:MpAvThemeViewModel.Instance}}"
                Classes.drag="{Binding IsAnyDragging}"
                Classes.alterable="{Binding CanAlter}">
         <local:MpAvSearchCriteriaHeaderView DockPanel.Dock="Top"
@@ -240,6 +250,7 @@
         <ListBox x:Name="SearchCriteriaListBox"
                  Grid.Row="1"
                  Classes="criteriaList"
+                 Classes.mobile="{Binding IsMobileOrWindowed, Source={x:Static local:MpAvThemeViewModel.Instance}}"
                  Classes.windowed="{Binding IsCriteriaWindowOpen}"
                  Background="{DynamicResource SearchCriteriaBgBrush}"
                  BorderThickness="1"

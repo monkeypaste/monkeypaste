@@ -1,13 +1,16 @@
-﻿using Avalonia.Threading;
+﻿using Avalonia.Controls;
+using Avalonia.Threading;
 using MonkeyPaste.Common;
 using System;
 using System.Threading.Tasks;
+using System.Windows.Media;
 
 namespace MonkeyPaste.Avalonia {
     public static class MpAnimationExtensions {
         public static void AnimateSize(
             this MpIBoundSizeViewModel bsvm,
             MpSize new_size,
+            Control control = null,
             Func<bool> onComplete = null,
             Func<MpSizeChangeEventArgs, bool> onTick = null,
             double ntfAnimThresholdDelta = 10.0d) {
@@ -63,6 +66,10 @@ namespace MonkeyPaste.Avalonia {
                     MpAnimationHelpers.Spring(ref ch, ref vy, nh, delay_ms / 1000.0d, zeta, omega);
                     bsvm.ContainerBoundWidth = cw;
                     bsvm.ContainerBoundHeight = ch;
+                    if (control != null) {
+                        control.Width = cw;
+                        control.Height = ch;
+                    }
                     onTick?.Invoke(new MpSizeChangeEventArgs(new MpSize(lw, lh), new MpSize(cw, ch)));
 
                     await Task.Delay(delay_ms);
@@ -76,6 +83,10 @@ namespace MonkeyPaste.Avalonia {
                 lh = bsvm.ContainerBoundHeight;
                 bsvm.ContainerBoundWidth = nw;
                 bsvm.ContainerBoundHeight = nh;
+                if (control != null) {
+                    control.Width = nw;
+                    control.Height = nh;
+                }
 
                 onTick?.Invoke(new MpSizeChangeEventArgs(new MpSize(lw, lh), new MpSize(cw, ch)));
                 onComplete?.Invoke();
@@ -84,6 +95,55 @@ namespace MonkeyPaste.Avalonia {
                     asvm_end.IsAnimating = false;
                 }
             });
+        }
+
+        public static double FpsToTimeStep(this double fps) {
+            return 1000d / fps / 1000d;
+        }
+        public static TimeSpan FpsToDelayTime(this double fps) {
+            return TimeSpan.FromMilliseconds(1000d / fps);
+        }
+
+        public static async Task AnimatePointAsync(this MpPoint start, MpPoint end, double tts, double fps, Action<MpPoint> tick, bool tickWithVelocity = false) {
+            double dt = 0;
+            double time_step = fps.FpsToTimeStep();
+            var delay_ms = fps.FpsToDelayTime();
+
+            var d = end - start;
+            var v = (d / tts) * time_step;
+            MpPoint cur = start;
+            while (true) {
+                tick?.Invoke(tickWithVelocity ? v : cur);
+                cur += v;
+                await Task.Delay(delay_ms);
+                dt += time_step;
+                if (dt >= tts) {
+                    // animation complete, ensure it uses end props      
+                    tick?.Invoke(end);
+                    break;
+                }
+            }
+        }
+        
+        public static async Task AnimateDoubleAsync(this double start, double end, double tts, double fps, Action<double> tick, bool tickWithVelocity = false) {
+            double dt = 0;
+            double time_step = fps.FpsToTimeStep();
+            var delay_ms = fps.FpsToDelayTime();
+
+            var d = end - start;
+            var v = (d / tts) * time_step;
+            double cur = start;
+            while (true) {
+                tick?.Invoke(tickWithVelocity ? v : cur);
+                cur += v;
+                await Task.Delay(delay_ms);
+                dt += time_step;
+                if (dt >= tts) {
+                    // animation complete, ensure it uses end props      
+                    tick?.Invoke(end);
+                    break;
+                }
+            }
         }
     }
 }

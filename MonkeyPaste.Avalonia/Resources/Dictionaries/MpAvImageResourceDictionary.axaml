@@ -1,6 +1,19 @@
 <ResourceDictionary xmlns="https://github.com/avaloniaui"
                     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
                     xmlns:sys="clr-namespace:System;assembly=mscorlib">
+    <sys:String x:Key="RotateImage">avares://MonkeyPaste.Avalonia/Assets/Images/rotate.png</sys:String>
+    <sys:String x:Key="GridImage">avares://MonkeyPaste.Avalonia/Assets/Images/grid.png</sys:String>
+    <sys:String x:Key="WrapImage">avares://MonkeyPaste.Avalonia/Assets/Images/wrap.png</sys:String>
+    <sys:String x:Key="PinnedImage">avares://MonkeyPaste.Avalonia/Assets/Images/pinned.png</sys:String>
+    <sys:String x:Key="DownImage">avares://MonkeyPaste.Avalonia/Assets/Images/down.png</sys:String>
+    <sys:String x:Key="LeftImage">avares://MonkeyPaste.Avalonia/Assets/Images/left.png</sys:String>
+    <sys:String x:Key="UpImage">avares://MonkeyPaste.Avalonia/Assets/Images/up.png</sys:String>
+    <sys:String x:Key="RightImage">avares://MonkeyPaste.Avalonia/Assets/Images/right.png</sys:String>
+    <sys:String x:Key="BitmapImage">avares://MonkeyPaste.Avalonia/Assets/Images/bitmap.png</sys:String>
+    <sys:String x:Key="HtmlImage">avares://MonkeyPaste.Avalonia/Assets/Images/html.png</sys:String>
+    <sys:String x:Key="CsvImage">avares://MonkeyPaste.Avalonia/Assets/Images/csv.png</sys:String>
+    <sys:String x:Key="RtfImage">avares://MonkeyPaste.Avalonia/Assets/Images/rtf.png</sys:String>
+    <sys:String x:Key="BurgerImage">avares://MonkeyPaste.Avalonia/Assets/Images/burger.png</sys:String>
     <sys:String x:Key="SyncImage">avares://MonkeyPaste.Avalonia/Assets/Images/sync.png</sys:String>
     <sys:String x:Key="StackImage">avares://MonkeyPaste.Avalonia/Assets/Images/stack.png</sys:String>
     <sys:String x:Key="BugImage">avares://MonkeyPaste.Avalonia/Assets/Images/bug.png</sys:String>
@@ -89,6 +102,8 @@
     <sys:String x:Key="ClearGridImage">avares://MonkeyPaste.Avalonia/Assets/Images/cleargrid.png</sys:String>
     <sys:String x:Key="EdgeArrowUpImage">avares://MonkeyPaste.Avalonia/Assets/Images/edgearrowup.png</sys:String>
     <sys:String x:Key="EdgeArrowDownImage">avares://MonkeyPaste.Avalonia/Assets/Images/edgearrowdown.png</sys:String>
+    <sys:String x:Key="EdgeArrowRightImage">avares://MonkeyPaste.Avalonia/Assets/Images/edgearrowright.png</sys:String>
+    <sys:String x:Key="EdgeArrowLeftImage">avares://MonkeyPaste.Avalonia/Assets/Images/edgearrowleft.png</sys:String>
     <sys:String x:Key="BinocularsImage">avares://MonkeyPaste.Avalonia/Assets/Images/binoculars.png</sys:String>
     <sys:String x:Key="BinocularsTiltedImage">avares://MonkeyPaste.Avalonia/Assets/Images/binocularstilted.png</sys:String>
     <sys:String x:Key="MouseNoneClickImage">avares://MonkeyPaste.Avalonia/Assets/Images/mousenoneclick.png</sys:String>
@@ -176,7 +191,6 @@
     <sys:String x:Key="BurlapTextureImage">avares://MonkeyPaste.Avalonia/Assets/Images/burlap.png</sys:String>
     <sys:String x:Key="ColorsImage">avares://MonkeyPaste.Avalonia/Assets/Images/colors.png</sys:String>
     <sys:String x:Key="CogColorImage">avares://MonkeyPaste.Avalonia/Assets/Images/cogcolor.png</sys:String>
-
     <!--  FLAGS PREFIX  -->
 
     <sys:String x:Key="FlagsBase">avares://MonkeyPaste.Avalonia/Assets/Images/Flags</sys:String>

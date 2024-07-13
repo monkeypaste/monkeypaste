@@ -34,6 +34,7 @@ var UiStrings = {
 	EditorNextTemplateLabel: `Siguiente plantilla`,
 	EditorPasteButtonAppendBeginLabel: `Adjuntar...`,
 	EditorPasteButtonLabel: `Pegar`,
+	EditorPasteButtonLabelMobile: `Copiar`,
 	EditorPasteTemplateWatermark: `Ingrese el texto de pegar ...`,
 	EditorPrevTemplateLabel: `Plantilla anterior`,
 	EditorRegExLabel: ` Expresión regular`,

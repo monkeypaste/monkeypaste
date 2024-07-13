@@ -222,4 +222,10 @@
   <data name="ToFileExtHint" xml:space="preserve">
     <value>தேவைக்கேற்ப ஒரு கோப்பை உருவாக்க '{0}' பயன்படுத்தப்படும்போது பயன்படுத்தப்படும் கோப்பு நீட்டிப்பு.</value>
   </data>
+  <data name="RtfParaTagNameHint" xml:space="preserve">
+    <value>குறியீடு சிறப்பம்சத்திற்கு 'முன்' குறிச்சொல்லைப் பயன்படுத்தவும், இல்லையெனில் RTF சாதாரண பணக்கார உரையாக கருதப்படும்.</value>
+  </data>
+  <data name="RtfParaTagNameLabel" xml:space="preserve">
+    <value>HTML பத்தி குறிச்சொல்</value>
+  </data>
 </root>

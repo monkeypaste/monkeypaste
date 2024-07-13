@@ -222,4 +222,10 @@
   <data name="ToFileExtHint" xml:space="preserve">
     <value>Наставката на датотеката се користи кога '{0}' се користи за создавање датотека по барање.</value>
   </data>
+  <data name="RtfParaTagNameHint" xml:space="preserve">
+    <value>За истакнување на код, користете ја ознаката „пред“ инаку RTF ќе се третира како нормален богат текст.</value>
+  </data>
+  <data name="RtfParaTagNameLabel" xml:space="preserve">
+    <value>HTML ознака за пасуси</value>
+  </data>
 </root>

@@ -18,6 +18,21 @@ namespace MonkeyPaste.Common {
             HtmlDocument doc = new HtmlDocument();
             doc.LoadHtml(html);
 
+            var pre_nodes = doc.DocumentNode.SafeSelectNodes("//pre");
+            if(pre_nodes.Any()) {
+                // for pre nodes, strip any internal <br> and add line break to end of div
+                var pre_divs = pre_nodes.SelectMany(x => x.SafeSelectNodes("//div")).Where(x=>x.HasClass("ql-code-block"));
+                pre_divs.SelectMany(x => x.SafeSelectNodes("//br")).ForEach(x => x.Remove());
+                foreach(var pre_div in pre_divs) {
+                    pre_div.InsertAfter(doc.CreateTextNode(envNewLine), pre_div.LastChild);
+                }
+                
+                var pre_codes = pre_nodes.SelectMany(x => x.SafeSelectNodes("//code")).Where(x=>x.HasClass("ql-code-block"));
+                pre_codes.SelectMany(x => x.SafeSelectNodes("//br")).ForEach(x => x.Remove());
+                foreach(var pre_code in pre_codes) {
+                    pre_code.InsertAfter(doc.CreateTextNode(envNewLine), pre_code.LastChild);
+                }
+            }
             var break_nodes = doc.DocumentNode.SafeSelectNodes("//br");
             foreach (HtmlNode node in break_nodes) {
                 node.ParentNode.ReplaceChild(doc.CreateTextNode(envNewLine), node);

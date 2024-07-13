@@ -20,8 +20,10 @@
 
         <sys:String x:Key="DefaultEditableFontFamily">Arial</sys:String>
         <sys:String x:Key="DefaultReadOnlyFontFamily">Segoe UI</sys:String>
+        <FontFamily x:Key="DefaultEditableFontFamilyFont">Arial</FontFamily>
+        <FontFamily x:Key="DefaultReadOnlyFontFamilyFont">Segoe UI</FontFamily>
 
-        <SolidColorBrush x:Key="HitTestableTransparent" Color="Black" Opacity="0.01" />
+        <SolidColorBrush x:Key="HitTestableTransparent">#03000000</SolidColorBrush>
 
         <SolidColorBrush x:Key="EnabledHighlightBrush">Lime</SolidColorBrush>
         <SolidColorBrush x:Key="DisabledHighlightBrush">Red</SolidColorBrush>
@@ -92,6 +94,8 @@
         <SolidColorBrush x:Key="ThemeWhiteBrush" Color="{DynamicResource ThemeWhiteColor}" />
 
         <SolidColorBrush x:Key="ThemeBrush" Color="{DynamicResource ThemeColor}" />
+        <SolidColorBrush x:Key="ThemeLightBrush" Color="{DynamicResource ThemeLightColor}" />
+        <SolidColorBrush x:Key="ThemeDarkBrush" Color="{DynamicResource ThemeDarkColor}" />
 
         <SolidColorBrush x:Key="ThemeInteractiveBrush" Color="{DynamicResource ThemeInteractiveColor}" />
         <SolidColorBrush x:Key="ThemeInteractiveBgBrush" Color="{DynamicResource ThemeInteractiveBgColor}" />
@@ -249,16 +253,13 @@
         <SolidColorBrush x:Key="ContentLinkColor_dark" Color="Cyan" />
         <SolidColorBrush x:Key="ContentLinkHoverColor_dark" Color="Salmon" />
 
-        <SolidColorBrush x:Key="MainWindowBgBrush" Color="{DynamicResource ThemeColor}" Opacity="{DynamicResource GlobalBgOpacity}" />
+        <SolidColorBrush x:Key="MainWindowBgBrush" Color="{DynamicResource ThemeHiColor}" Opacity="{DynamicResource GlobalBgOpacity}" />
 
         <!--  GRID SPLITTERS  -->
 
         <SolidColorBrush x:Key="DefaultGridSplitterBrush" Color="{DynamicResource ThemeAccent5Color}" Opacity="{DynamicResource GlobalInteractiveOpacity}" />
-
         <SolidColorBrush x:Key="SidebarGridSplitterBrush" Color="{DynamicResource ThemeAccent5BgColor}" Opacity="{DynamicResource GlobalInteractiveOpacity}" />
-
         <SolidColorBrush x:Key="ClipTrayGridSplitterBrush" Color="{DynamicResource ThemeCompliment2DarkColor}" Opacity="{DynamicResource GlobalInteractiveOpacity}" />
-
         <SolidColorBrush x:Key="HoverDefaultGridSplitterBgBrush" Color="{DynamicResource ThemeAccent1Color}" Opacity="{DynamicResource GlobalInteractiveOpacity}" />
         <!--  SIDEBAR BUTTONS  -->
         <SolidColorBrush x:Key="SidebarButtonsBgBrush" Color="{DynamicResource ThemeGrayAccent3Color}" Opacity="{DynamicResource GlobalBgOpacity}" />
@@ -293,13 +294,12 @@
         <SolidColorBrush x:Key="HoverSelectedBorderBrush" Color="{DynamicResource ThemeAccent3Color}" Opacity="{DynamicResource GlobalInteractiveOpacity}" />
         <SolidColorBrush x:Key="SelectedBorderBrush" Color="{DynamicResource ThemeAccent2Color}" Opacity="{DynamicResource GlobalInteractiveOpacity}" />
 
-
-
         <!--  TITLE MENU  -->
         <SolidColorBrush x:Key="TitleMenuActiveBgBrush" Color="{DynamicResource ThemeAccent1BgColor}" Opacity="{DynamicResource GlobalBgOpacity}" />
         <SolidColorBrush x:Key="TitleMenuInactiveBgBrush" Color="{DynamicResource ThemeGrayAccent3Color}" Opacity="{DynamicResource GlobalBgOpacity}" />
 
         <!--  FILTER MENU  -->
+        <SolidColorBrush x:Key="FilterMenuBgBrush" Color="{DynamicResource ThemeColor}" Opacity="{DynamicResource GlobalBgOpacity}" />
 
         <!--  ADV SEARCH  -->
         <SolidColorBrush x:Key="SearchCriteriaBgBrush" Color="{DynamicResource ThemeCompliment5Color}" Opacity="{DynamicResource GlobalInteractiveOpacity}" />
@@ -309,8 +309,6 @@
 
         <!--  SIDE BAR  -->
 
-        <SolidColorBrush x:Key="SidebarButtonGroupBgBrush" Color="{DynamicResource ThemeColor}" Opacity="{DynamicResource GlobalBgOpacity}" />
-
         <!--  PARAMETERS  -->
 
         <SolidColorBrush x:Key="PluginParameterItemBgBrush1" Color="{DynamicResource ThemeCompliment2Color}" Opacity="{DynamicResource GlobalInteractiveBgOpacity}" />
@@ -318,21 +316,22 @@
         <SolidColorBrush x:Key="PluginParameterItemBgBrush2" Color="{DynamicResource ThemeCompliment2Color}" Opacity="{DynamicResource GlobalInteractiveBgOpacity}" />
 
         <SolidColorBrush x:Key="PluginParameterItemHoverBgBrush" Color="{DynamicResource ThemeCompliment2DarkColor}" Opacity="{DynamicResource GlobalInteractiveBgOpacity}" />
-        <!--  TAG TREE  -->
-        <SolidColorBrush x:Key="TagTreeBgBrush" Color="{DynamicResource ThemeColor}" Opacity="{DynamicResource GlobalBgOpacity}" />
+
+        <!--  SIDEBAR BGS  -->
+        <SolidColorBrush x:Key="TagTreeBgBrush" Color="{DynamicResource ThemeAccent5Color}" Opacity="{DynamicResource GlobalBgOpacity}" />
 
         <!--  CLIPBOARD SIDEBAR  -->
 
-        <SolidColorBrush x:Key="ClipboardSidebarBgBrush" Color="{DynamicResource ThemeColor}" Opacity="{DynamicResource GlobalBgOpacity}" />
+        <SolidColorBrush x:Key="ClipboardSidebarBgBrush" Color="{DynamicResource ThemeAccent4Color}" Opacity="{DynamicResource GlobalBgOpacity}" />
 
         <!--  ANALYZER SIDEBAR  -->
 
-        <SolidColorBrush x:Key="AnalyzerSidebarBgBrush" Color="{DynamicResource ThemeColor}" Opacity="{DynamicResource GlobalBgOpacity}" />
+        <SolidColorBrush x:Key="AnalyzerSidebarBgBrush" Color="{DynamicResource ThemeAccent3Color}" Opacity="{DynamicResource GlobalBgOpacity}" />
 
         <!--  ACTION SIDEBAR  -->
 
-        <SolidColorBrush x:Key="ActionPropertyListBgBrush" Color="{DynamicResource ThemeColor}" Opacity="{DynamicResource GlobalBgOpacity}" />
-        <SolidColorBrush x:Key="ActionDesignerBgBrush" Color="{DynamicResource ThemeGrayAccent1Color}" Opacity="{DynamicResource GlobalBgOpacity}" />
+        <SolidColorBrush x:Key="ActionBgBrush" Color="{DynamicResource ThemeHi4Color}" Opacity="{DynamicResource GlobalBgOpacity}" />
+        <SolidColorBrush x:Key="ActionDesignerBgBrush" Color="{DynamicResource ThemeLo5Color}" Opacity="{DynamicResource GlobalBgOpacity}" />
 
         <!--  TAG TILE  -->
         <!--  BG  -->
@@ -351,11 +350,10 @@
         <SolidColorBrush x:Key="ContentTrayDragOverBgBrush" Color="{DynamicResource ThemeCompliment1DarkColor}" Opacity="{DynamicResource GlobalBgOpacity}" />
         <!--  CLIP TRAY  -->
 
-        <SolidColorBrush x:Key="ClipTrayBgColor" Color="{DynamicResource ThemeColor}" Opacity="{DynamicResource GlobalBgOpacity}" />
+        <SolidColorBrush x:Key="QueryTrayBgBrush" Color="{DynamicResource ThemeColor}" Opacity="{DynamicResource GlobalBgOpacity}" />
 
         <!--  PIN TRAY  -->
         <SolidColorBrush x:Key="PinTrayBgBrush" Color="{DynamicResource ThemeCompliment1Color}" Opacity="{DynamicResource GlobalBgOpacity}" />
-        <SolidColorBrush x:Key="PinTrayShadowBrush" Color="{DynamicResource ThemeCompliment1DarkColor}" Opacity="{DynamicResource GlobalBgOpacity}" />
 
 
         <!--  CLIP TILE  -->
@@ -371,7 +369,7 @@
 
         <!--  BORDER  -->
         <!--  SETTINGS WINDOW  -->
-        <SolidColorBrush x:Key="SettingsWindowBgBrush" Color="{DynamicResource ThemeColor}" />
+        <SolidColorBrush x:Key="SettingsWindowBgBrush" Color="{DynamicResource ThemeHiColor}" />
 
         <!--  TOGGLE SWITCH  -->
 
@@ -389,6 +387,20 @@
         <SolidColorBrush x:Key="ToggleSwitchKnobFillOnPointerOver" Color="White" Opacity="1" />
 
         <!--  EFFECTS  -->
+
+        <DropShadowEffect x:Key="ThemeBlackDropShadow"
+                          OffsetX="2"
+                          OffsetY="2"
+                          Color="{DynamicResource ThemeBlackColor}"
+                          BlurRadius="1"
+                          Opacity="0.8" />
+        <DropShadowEffect x:Key="ThemeWhiteDropShadow"
+                          OffsetX="2"
+                          OffsetY="2"
+                          Color="{DynamicResource ThemeWhiteColor}"
+                          BlurRadius="1"
+                          Opacity="0.8" />
+
         <DropShadowEffect x:Key="EmptyDropShadow"
                           OffsetX="0"
                           OffsetY="0"
@@ -396,12 +408,6 @@
                           BlurRadius="0"
                           Opacity="0.0" />
 
-        <DropShadowEffect x:Key="ThemeBlackDropShadow"
-                          OffsetX="1"
-                          OffsetY="1"
-                          Color="{DynamicResource ThemeBlackColor}"
-                          BlurRadius="3"
-                          Opacity="0.8" />
 
         <DropShadowEffect x:Key="ThemeDropShadow"
                           OffsetX="1"

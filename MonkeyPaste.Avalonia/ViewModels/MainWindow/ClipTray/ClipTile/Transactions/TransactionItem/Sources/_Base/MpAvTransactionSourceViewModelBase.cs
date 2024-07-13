@@ -66,19 +66,21 @@ namespace MonkeyPaste.Avalonia {
                     Tooltip = MpAvDateTimeToStringConverter.Instance.Convert(SourcedDateTimeUtc, null, null, null),
 
                 };
-                var sub_mivml = new List<MpAvMenuItemViewModel>() {
-                // BROWSE TO OPTION
+                var sub_mivml = new List<MpAvMenuItemViewModel>();
+
+                if(CanNavigateToSource) {
+                    sub_mivml.Add(
                         new MpAvMenuItemViewModel() {
                             HasLeadingSeparator = true,
-                            Header = string.Format(UiStrings.ClipTileSourceBrowseToLabel,SourceLabel),
-                            IconResourceKey = IsExternalSource ? SourceUri.StartsWith("http") ? "WebImage":"FolderImage" : "OpenImage",
+                            Header = string.Format(UiStrings.ClipTileSourceBrowseToLabel, SourceLabel),
+                            IconResourceKey = IsExternalSource ? SourceUri.StartsWith("http") ? "WebImage" : "FolderImage" : "OpenImage",
                             AltNavIdx = 5,
                             Command = MpAvUriNavigator.Instance.NavigateToSourceRefCommand,
                             CommandParameter = SourceRef
-                        }
-                    };
+                        });
+                }
 
-                if (IsExternalSource) {
+                if (IsExternalSource && CanRejectSource) {
                     // REJECT SOURCE
                     sub_mivml.Add(
                         new MpAvMenuItemViewModel() {
@@ -165,6 +167,18 @@ namespace MonkeyPaste.Avalonia {
 
         public bool IsExternalSource =>
             Mp.Services.SourceRefTools.IsExternalSource(SourceRef);
+
+        bool CanRejectSource =>
+            SourceRef is MpUrl ?
+                MpAvUrlCollectionViewModel.Instance.CanRejectUrls :
+                SourceRef is MpApp ?
+                    MpAvAppCollectionViewModel.Instance.CanRejectApps :
+                    true;
+
+        public bool CanNavigateToSource =>
+            SourceRef is MpApp ?
+                MpAvAppCollectionViewModel.Instance.CanNavigateToApp :
+                true;
 
         #endregion
 

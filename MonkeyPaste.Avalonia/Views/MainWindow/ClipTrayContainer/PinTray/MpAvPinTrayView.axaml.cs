@@ -4,6 +4,7 @@ using Avalonia.Input;
 using Avalonia.Interactivity;
 using Avalonia.Layout;
 using Avalonia.Threading;
+using Avalonia.VisualTree;
 using MonkeyPaste.Common;
 using MonkeyPaste.Common.Avalonia;
 using MonkeyPaste.Common.Plugin;
@@ -28,17 +29,22 @@ namespace MonkeyPaste.Avalonia {
         public MpAvPinTrayView() {
             if (Instance != null) {
                 // ensure singleton
-                MpDebug.Break();
-                return;
+                //MpDebug.Break();
+                //return;
             }
             Instance = this;
 
             InitializeComponent();
             MpMessenger.RegisterGlobal(ReceivedGlobalMessage);
-
+            //if (MpAvThemeViewModel.Instance.IsMobileOrWindowed) {
+            //    // BUG can't set selectionMode in styles...
+            //    this.PinTrayListBox.SelectionMode = SelectionMode.Toggle;
+            //}
             var ptrlb = this.FindControl<ListBox>("PinTrayListBox");
             ptrlb.AddHandler(KeyDownEvent, PinTrayListBox_KeyDown, RoutingStrategies.Tunnel);
         }
+
+
         protected override void OnLoaded(RoutedEventArgs e) {
             base.OnLoaded(e);
             InitDnd();
@@ -70,6 +76,22 @@ namespace MonkeyPaste.Avalonia {
                         ptrlb.Padding = new Thickness(10, 10, 10, 10);
                     }
                     break;
+            }
+        }
+
+        protected override void OnPointerReleased(PointerReleasedEventArgs e) {
+            base.OnPointerReleased(e);
+            if(MpAvMainView.Instance.MainWindowContainerGrid.GetVisualDescendant<MpAvPlainHtmlConverterWebView>() is { } cwv) {
+                foreach(var c in MpAvMainView.Instance.MainWindowContainerGrid.Children) {
+                    if(c == cwv) {
+                        c.IsVisible = true;
+                        c.Width = MpAvMainView.Instance.Width;
+                        c.Height = MpAvMainView.Instance.Height;
+                        continue;
+                    }
+                    c.IsVisible = false;
+                }
+
             }
         }
 

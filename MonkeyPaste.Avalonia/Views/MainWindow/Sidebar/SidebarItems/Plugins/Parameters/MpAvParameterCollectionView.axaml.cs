@@ -1,4 +1,5 @@
 using Avalonia;
+using System.Collections.ObjectModel;
 
 namespace MonkeyPaste.Avalonia {
     public partial class MpAvParameterCollectionView : MpAvUserControl<MpAvIParameterCollectionViewModel> {
@@ -15,9 +16,24 @@ namespace MonkeyPaste.Avalonia {
                 defaultValue: false);
 
         #endregion 
+        public ObservableCollection<MpAvPluginParameterItemView> ParamViews { get; set; } = [];
 
         public MpAvParameterCollectionView() {
             InitializeComponent();
+        }
+
+        public void ParameterItemView_Loaded(object sender, global::Avalonia.Interactivity.RoutedEventArgs e) {
+            if(sender is not MpAvPluginParameterItemView piv ||
+                ParamViews.Contains(piv)) {
+                return;
+            }
+            ParamViews.Add(piv);
+        }
+        public void ParameterItemView_Unloaded(object sender, global::Avalonia.Interactivity.RoutedEventArgs e) {
+            if(sender is not MpAvPluginParameterItemView piv) {
+                return;
+            }
+            ParamViews.Remove(piv);
         }
     }
 }

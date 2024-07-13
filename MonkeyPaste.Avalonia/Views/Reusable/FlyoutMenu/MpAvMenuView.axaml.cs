@@ -13,6 +13,12 @@ using System;
 namespace MonkeyPaste.Avalonia {
     [DoNotNotify]
     public partial class MpAvMenuView : ContextMenu {
+        const bool DEFAULT_SHOW_BY_POINTER =
+#if MULTI_WINDOW
+            true;
+#else
+            false;
+#endif
         static bool _IsDevToolsOpen = false;
         static ContextMenu _cm;
 
@@ -32,26 +38,32 @@ namespace MonkeyPaste.Avalonia {
             }
             _cm = null;
         }
+
         public static MpAvMenuView ShowMenu(
             Control target,
             MpAvIMenuItemViewModel dc,
-            bool showByPointer =
-#if DESKTOP
-            true,
-#else
-            false,
-#endif
+            bool showByPointer = DEFAULT_SHOW_BY_POINTER,
             PlacementMode placementMode = PlacementMode.Pointer,
             PopupAnchor popupAnchor = PopupAnchor.TopLeft,
             MpPoint offset = null) {
-            if (target == null || !target.IsAttachedToVisualTree()) {
+            if (target == null) {
                 return null;
+            }
+            if(!target.IsAttachedToVisualTree()) {
+                while(target != null) {
+                    target = target.Parent as Control;
+                    if(target != null && target.IsAttachedToVisualTree()) {
+                        break;
+                    }
+                }
+                if(target == null) {
+                    return null;
+                }
             }
 
             if (showByPointer) {
                 placementMode = PlacementMode.TopEdgeAlignedLeft;
                 popupAnchor = PopupAnchor.TopLeft;
-
                 offset = MpPoint.Zero;
 
                 if (!MpAvShortcutCollectionViewModel.Instance.IsGlobalHooksPaused &&
@@ -68,10 +80,39 @@ namespace MonkeyPaste.Avalonia {
                 HorizontalOffset = offset == null ? 0 : offset.X,
                 VerticalOffset = offset == null ? 0 : offset.Y,
             };
-            _cm = target.ContextMenu;
-            target.ContextMenu.Open();
+
+            void OnContextMenuOpened(object sender, EventArgs e) {
+                if(sender is not ContextMenu cm) {
+                    return;
+                }
+                _cm = cm;
+                if (MpAvThemeViewModel.Instance.IsMobileOrWindowed) {
+                    UpdateMobileHandlers(true);
+                }
+            }
+            void OnContextMenuClosed(object sender, EventArgs e) {
+                if(sender is not ContextMenu cm) {
+                    return;
+                }
+                cm.Opened -= OnContextMenuOpened;
+                cm.Closed -= OnContextMenuClosed;
+                if (MpAvThemeViewModel.Instance.IsMobileOrWindowed) {
+                    UpdateMobileHandlers(false);
+                }
+                if (cm == _cm) {
+                    _cm = null;
+                }                
+            }
+            target.ContextMenu.Opened += OnContextMenuOpened;
+            target.ContextMenu.Closed += OnContextMenuClosed;
+
+            
+
+            target.ContextMenu.Open(target);
+
             return target.ContextMenu as MpAvMenuView;
         }
+
         public MpAvMenuView() : base() {
             InitializeComponent();
 
@@ -118,6 +159,27 @@ namespace MonkeyPaste.Avalonia {
                 tl.AttachDevTools(MpAvWindow.DefaultDevToolOptions);
             }
 #endif
+        }
+
+        private static void UpdateMobileHandlers(bool do_attach) {
+            void OnPointerPressed(object sender, PointerPressedEventArgs e) {
+                e.Handled = true;
+            }
+            void OnPointerReleased(object sender, PointerReleasedEventArgs e) {
+
+            }
+
+            if(do_attach) {
+                _cm.AddHandler(Control.PointerPressedEvent, OnPointerPressed, RoutingStrategies.Tunnel);
+                _cm.AddHandler(Control.PointerReleasedEvent, OnPointerReleased, RoutingStrategies.Tunnel);
+                //MpAvWindowManager.AllWindows.ForEach(x => x.AddHandler(Control.PointerPressedEvent, OnPointerPressed, RoutingStrategies.Tunnel));
+                //MpAvWindowManager.AllWindows.ForEach(x => x.AddHandler(Control.PointerReleasedEvent, OnPointerReleased, RoutingStrategies.Tunnel));
+            } else {
+                _cm.RemoveHandler(Control.PointerPressedEvent, OnPointerPressed);
+                _cm.RemoveHandler(Control.PointerReleasedEvent, OnPointerReleased);
+                //MpAvWindowManager.AllWindows.ForEach(x => x.RemoveHandler(Control.PointerPressedEvent, OnPointerPressed));
+                //MpAvWindowManager.AllWindows.ForEach(x => x.RemoveHandler(Control.PointerReleasedEvent, OnPointerReleased));
+            }
         }
     }
 }

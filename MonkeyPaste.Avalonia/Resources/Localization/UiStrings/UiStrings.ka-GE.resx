@@ -2996,4 +2996,49 @@ Monkeypaste მოწყობილობაზე
   <data name="DonateLabel" xml:space="preserve">
     <value>ჩუქება</value>
   </data>
+  <data name="MobileCopiedNtfText" xml:space="preserve">
+    <value>გადაწერილი ბუფერული</value>
+  </data>
+  <data name="PinTraySidebarLabel" xml:space="preserve">
+    <value>დაინიშნა</value>
+  </data>
+  <data name="QueryTraySidebarLabel" xml:space="preserve">
+    <value>გამოკითხვა</value>
+  </data>
+  <data name="PluginBrowserFormattedWindowTitle" xml:space="preserve">
+    <value>მოდული ბრაუზერი - {0}</value>
+  </data>
+  <data name="PluginBrowserWindowTitle" xml:space="preserve">
+    <value>მოდული ბრაუზერი</value>
+  </data>
+  <data name="ClipboardSetMessage" xml:space="preserve">
+    <value>ბუფერული ნაკრები</value>
+  </data>
+  <data name="AddNewActionLabel" xml:space="preserve">
+    <value>Ახლის დამატება</value>
+  </data>
+  <data name="EditorPasteButtonLabelMobile" xml:space="preserve">
+    <value>ასლი</value>
+  </data>
+  <data name="PrefSyntaxThemeHint" xml:space="preserve">
+    <value>თემა, რომელიც გამოიყენება ტექსტური კლიპებში გამოვლენილი კოდის ბლოკებისთვის.</value>
+  </data>
+  <data name="PrefSyntaxThemeLabel" xml:space="preserve">
+    <value>სინტაქსის თემა</value>
+  </data>
+  <data name="PrefCodeFontLabel" xml:space="preserve">
+    <value>Სინტაქსი</value>
+  </data>
+  <data name="CommonViewLabel" xml:space="preserve">
+    <value>ხედი</value>
+  </data>
+  <data name="WrapTextMenuLabel" xml:space="preserve">
+    <value>შეფუთვის ტექსტი</value>
+  </data>
+  <data name="ClipAssignShortcutLabel" xml:space="preserve">
+    <value>დაავალეთ მალსახმობი ...</value>
+  </data>
+  <data name="ClipUpdateShortcutLabel" xml:space="preserve">
+    <value>განაახლეთ მალსახმობი ...</value>
+  </data>
 </root>

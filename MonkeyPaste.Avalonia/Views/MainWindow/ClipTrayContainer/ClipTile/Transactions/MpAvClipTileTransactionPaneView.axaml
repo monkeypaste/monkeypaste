@@ -1,0 +1,290 @@
+<local:MpAvUserControl xmlns="https://github.com/avaloniaui"
+                       xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                       xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+                       xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+                       xmlns:sys="clr-namespace:System;assembly=mscorlib"
+                       xmlns:local="using:MonkeyPaste.Avalonia"
+                       xmlns:pcl="using:MonkeyPaste"
+                       x:DataType="local:MpAvClipTileTransactionCollectionViewModel"
+                       x:TypeArguments="local:MpAvClipTileTransactionCollectionViewModel"
+                       x:CompileBindings="True"
+                       mc:Ignorable="d"
+                       d:DesignWidth="800"
+                       d:DesignHeight="450"
+                       x:Class="MonkeyPaste.Avalonia.MpAvClipTileTransactionPaneView">
+    <local:MpAvUserControl.Resources>
+        <sys:Double x:Key="TabItemMinHeight">20</sys:Double>
+        <sys:Double x:Key="TabItemHeaderFontSize">16</sys:Double>
+
+        <!--  TREE VIEW (FLIPPED FROM THEME)  -->
+
+        <SolidColorBrush x:Key="ExpanderHeaderForeground" Color="{DynamicResource ThemeInteractiveColor}" Opacity="{DynamicResource GlobalInteractiveOpacity}" />
+
+        <SolidColorBrush x:Key="ExpanderHeaderBorderBrush" Color="{DynamicResource ThemeInteractiveColor}" Opacity="{DynamicResource GlobalInteractiveOpacity}" />
+
+    </local:MpAvUserControl.Resources>
+    <local:MpAvUserControl.Styles>
+        <!--  TREES  -->
+        <Style Selector="TreeViewItem /template/ Panel#PART_ExpandCollapseChevronContainer">
+            <!--<Setter Property="Margin"
+                        Value="0" />-->
+        </Style>
+        <Style Selector="TreeViewItem:empty /template/ Panel#PART_ExpandCollapseChevronContainer">
+            <!--<Setter Property="IsVisible"
+                        Value="False" />-->
+        </Style>
+        <Style Selector="TreeViewItem"
+               x:DataType="local:MpAvITransactionNodeViewModel">
+            <Setter Property="BorderThickness"
+                    Value="0" />
+            <Setter Property="BorderBrush"
+                    Value="{DynamicResource ThemeInteractiveColor}" />
+            <Setter Property="CornerRadius"
+                    Value="3" />
+            <Setter Property="Padding"
+                    Value="3,1" />
+            <Setter Property="HorizontalAlignment"
+                    Value="Stretch" />
+            <Setter Property="IsExpanded"
+                    Value="{Binding IsExpanded, Mode=TwoWay}" />
+        </Style>
+
+        <!--  LISTBOXES  -->
+
+        <Style Selector="ListBox#TransactionListBox > ListBoxItem">
+            <!--<Setter Property="BorderBrush"
+                    Value="{DynamicResource ThemeInteractiveColor}" />-->
+            <Setter Property="BorderThickness"
+                    Value="1,0.5,1,0.5" />
+        </Style>
+
+        <!--  CLOSE PANEL BUTTON  -->
+
+        <Style Selector="Button#CloseTransactionsButton Image">
+            <Setter Property="Source"
+                    Value="{Binding ., Source={StaticResource DescendingImage}, Converter={x:Static local:MpAvStringHexToBitmapTintConverter.Instance}, ConverterParameter=ThemeInteractiveColor_norand}" />
+        </Style>
+
+        <Style Selector="Button#CloseTransactionsButton:pointerover Image">
+            <Setter Property="Source"
+                    Value="{Binding ., Source={StaticResource DescendingImage}, Converter={x:Static local:MpAvStringHexToBitmapTintConverter.Instance}, ConverterParameter=ThemeAccent1Color}" />
+        </Style>
+
+        <!--  TAB ITEMS  -->
+        <Style Selector=":is(Control).tabItem">
+            <Setter Property="Margin"
+                    Value="0,10,0,10" />
+        </Style>
+
+
+    </local:MpAvUserControl.Styles>
+    <Grid x:Name="TransactionContainerGrid"
+          Margin="10,1"
+          HorizontalAlignment="Stretch">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto" />
+            <RowDefinition MinHeight="50" />
+            <RowDefinition Height="*" />
+        </Grid.RowDefinitions>
+        <!--  BACK BUTTON PANEL  -->
+        <DockPanel Grid.Row="0"
+                   Margin="0,10,0,10"
+                   LastChildFill="True"
+                   HorizontalAlignment="Stretch"
+                   VerticalAlignment="Center">
+            <Button x:Name="CloseTransactionsButton"
+                    DockPanel.Dock="Left"
+                    Classes="no-bg no-hover-bg"
+                    VerticalAlignment="Stretch"
+                    Command="{Binding ToggleTransactionPaneOpenCommand}">
+                <Image VerticalAlignment="Stretch"
+                       Margin="5,2"
+                       Width="20"
+                       Height="20">
+                    <Image.RenderTransform>
+                        <RotateTransform Angle="90" />
+                    </Image.RenderTransform>
+                </Image>
+            </Button>
+
+            <ToggleButton x:Name="PlainTextToggleButton"
+                          DataContext="{Binding SelectedTransaction}"
+                          IsVisible="{Binding ., Converter={x:Static local:MpAvIsNotNullZeroOrEmptyToBoolConverter.Instance}}"
+                          DockPanel.Dock="Right"
+                          Classes="no-bg no-hover-bg outline outlineOver"
+                          Command="{Binding TogglePlainTextCommand}"
+                          CommandParameter="{Binding $self}"
+                          IsChecked="{Binding IsPlainTextView, Mode=OneWay}">
+                <ToolTip.Tip>
+                    <local:MpAvToolTipView ToolTipText="{Binding Source={x:Static local:R.U}, Path=CurrentUiStrings.ClipTileTransactionTogglePlainTextLabel}" />
+                </ToolTip.Tip>
+                <Image Width="20"
+                       Height="20"
+                       Source="{Binding Source={StaticResource TextFormatImage}, Converter={x:Static local:MpAvIconSourceObjToBitmapConverter.Instance}}" />
+            </ToggleButton>
+            <TextBlock Text="{Binding Source={x:Static local:R.U}, Path=CurrentUiStrings.ClipTileTransactionAnnotationTitle}"
+                       Foreground="{DynamicResource ThemeInteractiveColor}"
+                       Margin="5,0,0,0"
+                       FontSize="20"
+                       FontWeight="Medium"
+                       VerticalAlignment="Center" />
+        </DockPanel>
+
+        <!--  TRANSACTION LISTBOX  -->
+
+        <ListBox x:Name="TransactionListBox"
+                 Grid.Row="1"
+                 BorderBrush="{DynamicResource ThemeInteractiveColor}"
+                 BorderThickness="1"
+                 ItemsSource="{Binding VisibleTransactions}"
+                 SelectionMode="Single"
+                 SelectedItem="{Binding SelectedTransaction, Mode=TwoWay}"
+                 HorizontalAlignment="Stretch"
+                 VerticalAlignment="Stretch">
+            <ListBox.ItemTemplate>
+                <DataTemplate x:DataType="local:MpAvTransactionItemViewModel">
+                    <DockPanel x:Name="TransactionContainerDockPanel"
+                               Classes.over="{Binding IsHovering}"
+                               local:MpAvIsHoveringExtension.IsEnabled="True"
+                               local:MpAvIsHoveringExtension.IsHovering="{Binding IsHovering}">
+                        <Grid DockPanel.Dock="Left"
+                              ColumnDefinitions="15,*,Auto">
+
+                            <Image Grid.Column="0"
+                                   Width="20"
+                                   Classes="square"
+                                   Source="{Binding IconSourceObj, Converter={x:Static local:MpAvIconSourceObjToBitmapConverter.Instance}}" />
+                            <StackPanel Grid.Column="1"
+                                        Orientation="Vertical"
+                                        Margin="12,0,5,0">
+                                <TextBlock Foreground="{DynamicResource ThemeInteractiveBgColor}"
+                                           FontSize="14"
+                                           VerticalAlignment="Center"
+                                           HorizontalAlignment="Left"
+                                           TextAlignment="Left"
+                                           Text="{Binding LabelText}" />
+                                <TextBlock Foreground="{DynamicResource ThemeGrayAccent3Color}"
+                                           FontSize="12"
+                                           VerticalAlignment="Top"
+                                           HorizontalAlignment="Left"
+                                           TextAlignment="Left"
+                                           Text="{Binding TransactionDateTime, Converter={x:Static local:MpAvDateTimeToStringConverter.Instance}, ConverterParameter=dateandtime}" />
+                            </StackPanel>
+                            <Button x:Name="DeleteTransButton"
+                                    Width="20"
+                                    Grid.Column="2"
+                                    Classes="no-bg no-hover-bg outlineOver squareByWidth"
+                                    Command="{Binding DeleteThisTransactionCommand}"
+                                    IsVisible="{Binding $parent[ListBoxItem].IsPointerOver}">
+                                <ToolTip.Tip>
+                                    <local:MpAvToolTipView ToolTipText="{Binding Source={x:Static local:R.U}, Path=CurrentUiStrings.CommonDeleteLabel}" />
+                                </ToolTip.Tip>
+                                <Image Source="{Binding Source={StaticResource DeleteImage}, Converter={x:Static local:MpAvIconSourceObjToBitmapConverter.Instance}}" />
+                            </Button>
+
+
+                        </Grid>
+                    </DockPanel>
+                </DataTemplate>
+            </ListBox.ItemTemplate>
+        </ListBox>
+
+        <!--  TRANSACTIONS/SELECTEDSPLITTER  -->
+        <GridSplitter x:Name="SelectorTransactionSplitter"
+                      Grid.Row="1"
+                      IsVisible="{Binding SelectedTransaction, Converter={x:Static local:MpAvIsNotNullZeroOrEmptyToBoolConverter.Instance}}"
+                      Classes.desktop="{Binding IsDesktop, Source={x:Static local:MpAvThemeViewModel.Instance}}"
+                      HorizontalAlignment="Stretch"
+                      VerticalAlignment="Bottom"
+                      ResizeDirection="Rows"
+                      Margin="0,0,0,0"
+                      Background="{DynamicResource ThemeInteractiveColor}"
+                      Height="1"
+                      Classes="horizontal" />
+
+        <!--  SELECTED TRANSACTION CONTAINER  -->
+        <Border x:Name="SelectedTransactionOuterBorder"
+                Grid.Row="2"
+                IsVisible="{Binding SelectedTransaction, Converter={x:Static local:MpAvIsNotNullZeroOrEmptyToBoolConverter.Instance}}">
+            <Grid x:Name="SelectedTransactionContainer"
+                  Grid.Row="2"
+                  DataContext="{Binding SelectedTransaction}">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="*" />
+                    <RowDefinition Height="Auto" />
+                </Grid.RowDefinitions>
+                <!--  PLAIN TEXT VIEW  -->
+                <TextBox Grid.Row="0"
+                         Grid.RowSpan="2"
+                         IsReadOnly="True"
+                         IsVisible="{Binding IsPlainTextView}"
+                         Padding="5"
+                         TextWrapping="Wrap"
+                         Text="{Binding PlainText}" />
+
+                <!--  SELECTED TRANSACTION TABS  -->
+                <TabControl x:Name="TransTabControl"
+                            Grid.Row="0"
+                            Margin="0,10,0,10"
+                            BorderThickness="1"
+                            BorderBrush="{DynamicResource ThemeInteractiveColor}"
+                            IsVisible="{Binding !IsPlainTextView}"
+                            SelectedIndex="{Binding SelectedTabIndex, Mode=TwoWay}"
+                            HorizontalAlignment="Stretch"
+                            VerticalAlignment="Top">
+
+                    <!--  SOURCE TAB  -->
+
+                    <TabItem x:Name="SourceTabItem"
+                             Header="{Binding Source={x:Static local:R.U}, Path=CurrentUiStrings.ClipTileTransSourcesTabHeader}"
+                             IsVisible="{Binding Sources, Converter={x:Static local:MpAvIsNotNullZeroOrEmptyToBoolConverter.Instance}}">
+                        <local:MpAvTransactionSourcesView Classes="tabItem" />
+                    </TabItem>
+
+                    <!--  INPUT TAB  -->
+
+                    <TabItem Header="{Binding Source={x:Static local:R.U}, Path=CurrentUiStrings.ClipTileTransInputTabHeader}"
+                             x:DataType="local:MpAvTransactionItemViewModel"
+                             IsVisible="{Binding Request, Converter={x:Static local:MpAvIsNotNullZeroOrEmptyToBoolConverter.Instance}}">
+                        <local:MpAvTransactionItemView Classes="tabItem"
+                                                       DataContext="{Binding Request}" />
+                    </TabItem>
+
+                    <!--  OUTPUT TAB  -->
+
+                    <TabItem Header="{Binding Source={x:Static local:R.U}, Path=CurrentUiStrings.ClipTileTransOutputTabHeader}"
+                             IsVisible="{Binding Response, Converter={x:Static local:MpAvIsNotNullZeroOrEmptyToBoolConverter.Instance}}">
+                        <local:MpAvTransactionItemView Classes="tabItem"
+                                                       DataContext="{Binding Response}" />
+                    </TabItem>
+                </TabControl>
+
+                <!--  FOCUS DETAIL  -->
+                <Border x:Name="FocusDetailOuterBorder"
+                        Grid.Row="1"
+                        Margin="5"
+                        Padding="3"
+                        IsVisible="{Binding !IsPlainTextView}"
+                        HorizontalAlignment="Stretch"
+                        VerticalAlignment="Top">
+                    <local:MpAvTransactionNodeDetailView Grid.Row="1"
+                                                         DataContext="{Binding FocusNode}" />
+                </Border>
+
+                <!--  SELECTED/DETAIL SPLITTER  -->
+                <GridSplitter x:Name="TransactionDetailSplitter"
+                              Grid.Row="1"
+                              Height="1"
+                              IsVisible="{Binding !IsPlainTextView}"
+                              Classes.desktop="{Binding IsDesktop, Source={x:Static local:MpAvThemeViewModel.Instance}}"
+                              HorizontalAlignment="Stretch"
+                              VerticalAlignment="Top"
+                              ResizeDirection="Rows"
+                              Classes="horizontal level1" />
+
+            </Grid>
+        </Border>
+
+
+    </Grid>
+</local:MpAvUserControl>

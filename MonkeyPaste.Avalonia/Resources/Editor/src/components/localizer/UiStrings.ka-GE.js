@@ -34,6 +34,7 @@ var UiStrings = {
 	EditorNextTemplateLabel: `შემდეგი შაბლონი`,
 	EditorPasteButtonAppendBeginLabel: `დანართი ...`,
 	EditorPasteButtonLabel: `პასი`,
+	EditorPasteButtonLabelMobile: `ასლი`,
 	EditorPasteTemplateWatermark: `შეიყვანეთ პასტის ტექსტი ...`,
 	EditorPrevTemplateLabel: `წინა შაბლონი`,
 	EditorRegExLabel: ` რეგულარული გამოხატულება`,

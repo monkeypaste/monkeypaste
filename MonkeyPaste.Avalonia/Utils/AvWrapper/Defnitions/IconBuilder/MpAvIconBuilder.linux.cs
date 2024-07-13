@@ -12,10 +12,10 @@ using System.Linq;
 namespace MonkeyPaste.Avalonia {
     public partial class MpAvIconBuilder {
         const int ICON_SIZE = 256;
-        public string GetPathIconBase64(string path, nint handle, MpIconSize iconSize = MpIconSize.ExtraLargeIcon128) {
+        public string GetPathIconBase64(string path, nint handle, MpIconSize iconSize) {
             return GetIcon_internal(path, iconSize, true);
         }
-        public string GetPathIconBase64(string path, MpIconSize iconSize = MpIconSize.ExtraLargeIcon128) {
+        public string GetPathIconBase64(string path, MpIconSize iconSize) {
             return GetIcon_internal(path, iconSize, false);
         }
 

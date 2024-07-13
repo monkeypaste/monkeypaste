@@ -19,7 +19,7 @@
             <Setter Property="Padding"
                     Value="10,5,15,5" />
         </Style>
-      
+
         <Style Selector="MenuItem.hasGesture">
             <Setter Property="Padding"
                     Value="10,5,5,5" />
@@ -68,12 +68,14 @@
 
         <!--  ICON  -->
 
-        <Style Selector="MenuItem Image"
+        <Style Selector="MenuItem local|MpAvTintedImage"
                x:DataType="local:MpAvIMenuItemViewModel">
             <Setter Property="IsVisible"
                     Value="{Binding IconSourceObj, Converter={x:Static local:MpAvIsNotNullZeroOrEmptyToBoolConverter.Instance}}" />
             <Setter Property="Source"
-                    Value="{Binding IconSourceObj, Converter={x:Static local:MpAvStringHexToBitmapTintConverter.Instance}, ConverterParameter=ThemeInteractiveColor}" />
+                    Value="{Binding IconSourceObj, Converter={x:Static local:MpAvIconSourceObjToBitmapConverter.Instance}}" />
+            <Setter Property="Tint"
+                    Value="{DynamicResource ThemeInteractiveBrush}" />
             <Setter Property="VerticalAlignment"
                     Value="Center" />
             <Setter Property="HorizontalAlignment"
@@ -82,6 +84,30 @@
                     Value="16" />
             <Setter Property="Height"
                     Value="16" />
+        </Style>
+
+        <Style Selector="MenuItem.mobile local|MpAvTintedImage">
+            <Setter Property="Width"
+                    Value="18" />
+            <Setter Property="Height"
+                    Value="18" />
+        </Style>
+
+        <Style Selector="MenuItem local|MpAvTintedImage.tinted"
+               x:DataType="local:MpAvIMenuItemViewModel">
+            <Setter Property="Tint"
+                    Value="{Binding IconTintHexStr, Converter={x:Static local:MpAvStringHexToBrushConverter.Instance}}" />
+        </Style>
+        <Style Selector="MenuItem local|MpAvTintedImage.colored"
+               x:DataType="local:MpAvIMenuItemViewModel">
+            <Setter Property="Tint"
+                    Value="{x:Null}" />
+        </Style>
+
+        <Style Selector="MenuItem local|MpAvTintedImage:not(.tinted):not(.colored)"
+               x:DataType="local:MpAvIMenuItemViewModel">
+            <Setter Property="Tint"
+                    Value="{Binding IconSourceObj, Converter={x:Static local:MpAvIconSourceObjToRandomBrushConverter.Instance}}" />
         </Style>
 
         <!--  HEADER  -->
@@ -96,6 +122,14 @@
                     Value="{Binding Header}" />
             <Setter Property="Foreground"
                     Value="{DynamicResource ThemeInteractiveColor}" />
+        </Style>
+        <Style Selector="MenuItem.mobile TextBlock.textheader">
+            <Setter Property="FontSize"
+                    Value="18" />
+            <Setter Property="MaxWidth"
+                    Value="300" />
+            <Setter Property="Margin"
+                    Value="10,0,0,0" />
         </Style>
 
         <!--  SEPARATOR  -->
@@ -117,14 +151,17 @@
                     <!--  DEFAULT  -->
                     <DataTemplate x:Key="Default"
                                   x:DataType="local:MpAvIMenuItemViewModel">
-                        <MenuItem Classes.dark="{Binding IsThemeDark, Source={x:Static local:MpAvPrefViewModel.Instance}}"
+                        <MenuItem Classes.mobile="{Binding IsMobileOrWindowed, Source={x:Static local:MpAvThemeViewModel.Instance}}"
+                                  Classes.dark="{Binding IsThemeDark, Source={x:Static local:MpAvPrefViewModel.Instance}}"
                                   Classes.hasGesture="{Binding InputGestureText, Converter={x:Static local:MpAvIsNotNullZeroOrEmptyToBoolConverter.Instance}}">
                             <MenuItem.Resources>
                                 <Thickness x:Key="MenuIconPresenterMargin">0,0,6,0</Thickness>
 
                             </MenuItem.Resources>
                             <MenuItem.Icon>
-                                <Image Classes="icon" />
+                                <local:MpAvTintedImage Classes.colored="{Binding IconSourceObj, Converter={x:Static local:MpAvIconSourceObjToIsColoredConverter.Instance}}"
+                                                       Classes.tinted="{Binding IconTintHexStr, Converter={x:Static local:MpAvIsNotNullZeroOrEmptyToBoolConverter.Instance}}"
+                                                       Classes="icon" />
                             </MenuItem.Icon>
                             <MenuItem.Header>
                                 <TextBlock Classes="textheader" />
@@ -136,6 +173,7 @@
                     <DataTemplate x:Key="Checkable"
                                   x:DataType="local:MpAvIMenuItemViewModel">
                         <MenuItem Classes="checkable"
+                                  Classes.mobile="{Binding IsMobileOrWindowed, Source={x:Static local:MpAvThemeViewModel.Instance}}"
                                   Classes.hasGesture="{Binding InputGestureText, Converter={x:Static local:MpAvIsNotNullZeroOrEmptyToBoolConverter.Instance}}"
                                   Classes.dark="{Binding IsThemeDark, Source={x:Static local:MpAvPrefViewModel.Instance}}">
                             <MenuItem.Icon>
@@ -182,7 +220,7 @@
                     <DataTemplate x:Key="CheckableWithIcon"
                                   x:DataType="local:MpAvIMenuItemViewModel">
                         <MenuItem Classes="checkable checkWithIcon"
-                                  Classes.mobile="{Binding !IsDesktop, Source={x:Static local:MpAvThemeViewModel.Instance}}"
+                                  Classes.mobile="{Binding IsMobileOrWindowed, Source={x:Static local:MpAvThemeViewModel.Instance}}"
                                   Classes.hasGesture="{Binding InputGestureText, Converter={x:Static local:MpAvIsNotNullZeroOrEmptyToBoolConverter.Instance}}"
                                   Classes.dark="{Binding IsThemeDark, Source={x:Static local:MpAvPrefViewModel.Instance}}">
                             <MenuItem.Icon>
@@ -225,7 +263,9 @@
                             <MenuItem.Header>
                                 <StackPanel Orientation="Horizontal"
                                             Spacing="10">
-                                    <Image Classes="icon" />
+                                    <local:MpAvTintedImage Classes.colored="{Binding IconSourceObj, Converter={x:Static local:MpAvIconSourceObjToIsColoredConverter.Instance}}"
+                                                           Classes.tinted="{Binding IconTintHexStr, Converter={x:Static local:MpAvIsNotNullZeroOrEmptyToBoolConverter.Instance}}"
+                                                           Classes="icon" />
                                     <TextBlock Classes="textheader" />
                                 </StackPanel>
                             </MenuItem.Header>

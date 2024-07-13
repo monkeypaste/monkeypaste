@@ -1,6 +1,48 @@
-﻿
-
-.svg-icon {
+﻿.svg-icon {
     width: 18px;
     height: 18px;
+}
+
+.ql-stroke {
+    stroke: var(--editortoolbarbuttoncolor) !important;
+    stroke-width: 1px !important;
+}
+
+.ql-fill, .ql-path {
+    fill: var(--editortoolbarbuttoncolor) !important;
+}
+
+button.locked .ql-stroke {
+    stroke: var(--insertselectcolor) !important;
+}
+
+button.locked .ql-fill, button.locked .ql-path {
+    fill: var(--insertselectcolor) !important;
+}
+button.toggled:not(.locked) .ql-stroke {
+    stroke: var(--optselectcolor) !important;
+}
+
+button.toggled:not(.locked) .ql-fill, button.toggled:not(.locked).ql-path {
+    fill: var(--optselectcolor) !important;
+}
+
+button.toggled:not(.locked) .ql-fill, button.toggled:not(.locked).ql-path {
+    fill: var(--optselectcolor) !important;
+}
+
+.no-fill {
+    fill: transparent !important;
+}
+
+.disabled .ql-stroke, .disabled .ql-path {
+    stroke: white !important;
+    fill: white !important;
+}
+
+.template-type-icon .ql-fill, .paste-toolbar-icon .ql-fill {
+    fill: white !important;
+}
+.template-type-icon .ql-stroke, .paste-toolbar-icon .ql-stroke {
+    stroke: white;
 }

@@ -34,6 +34,7 @@ var UiStrings = {
 	EditorNextTemplateLabel: `Næsta sniðmát`,
 	EditorPasteButtonAppendBeginLabel: `Bæta við ...`,
 	EditorPasteButtonLabel: `Límu`,
+	EditorPasteButtonLabelMobile: `Afritaðu`,
 	EditorPasteTemplateWatermark: `Sláðu inn líma texta ...`,
 	EditorPrevTemplateLabel: `Fyrra sniðmát`,
 	EditorRegExLabel: ` Regluleg tjáning`,

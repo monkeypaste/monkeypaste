@@ -34,6 +34,7 @@ var UiStrings = {
 	EditorNextTemplateLabel: `ແມ່ແບບຕໍ່ໄປ`,
 	EditorPasteButtonAppendBeginLabel: `ເພີ່ມເຕີມ ...`,
 	EditorPasteButtonLabel: `ວາງໄວ້`,
+	EditorPasteButtonLabelMobile: `ສໍາເນົາ`,
 	EditorPasteTemplateWatermark: `ໃສ່ຂໍ້ຄວາມທີ່ວາງໄວ້ ...`,
 	EditorPrevTemplateLabel: `ແມ່ແບບຜ່ານມາ`,
 	EditorRegExLabel: ` ການສະແດງອອກເປັນປະຈໍາ`,

@@ -35,7 +35,7 @@
     <Grid RowDefinitions="Auto,*"
           Margin="5">
         <Button x:Name="BackToDetailButton"
-                Classes="noBg noHoverBg squareByHeight"
+                Classes="no-bg no-hover-bg squareByHeight"
                 Margin="5"
                 HorizontalAlignment="Left"
                 VerticalAlignment="Stretch"
@@ -54,7 +54,7 @@
             <ItemsControl.ItemTemplate>
                 <DataTemplate x:DataType="local:MpAvAnalyticItemPresetViewModel">
                     <Grid RowDefinitions="Auto,*">
-                        <!--<TextBlock x:DataType="pcl:MpILabelTextViewModel"
+                        <!--<TextBlock x:DataType="local:MpILabelTextViewModel"
                                    Text="{Binding LabelText}" />-->
                         <ListBox x:Name="SharedParameterListBox"
                                  Classes="paramHost"

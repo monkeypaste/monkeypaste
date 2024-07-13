@@ -2996,4 +2996,49 @@ feedback@monkeypaste.com</value>
   <data name="DonateLabel" xml:space="preserve">
     <value>บริจาค</value>
   </data>
+  <data name="MobileCopiedNtfText" xml:space="preserve">
+    <value>คัดลอกไปยังคลิปบอร์ด</value>
+  </data>
+  <data name="PinTraySidebarLabel" xml:space="preserve">
+    <value>ที่ถูกตรึง</value>
+  </data>
+  <data name="QueryTraySidebarLabel" xml:space="preserve">
+    <value>สอบถาม</value>
+  </data>
+  <data name="PluginBrowserWindowTitle" xml:space="preserve">
+    <value>ปลั๊กอินเบราว์เซอร์</value>
+  </data>
+  <data name="PluginBrowserFormattedWindowTitle" xml:space="preserve">
+    <value>เบราว์เซอร์ปลั๊กอิน - {0}</value>
+  </data>
+  <data name="ClipboardSetMessage" xml:space="preserve">
+    <value>ชุดคลิปบอร์ด</value>
+  </data>
+  <data name="AddNewActionLabel" xml:space="preserve">
+    <value>เพิ่มใหม่</value>
+  </data>
+  <data name="EditorPasteButtonLabelMobile" xml:space="preserve">
+    <value>สำเนา</value>
+  </data>
+  <data name="PrefSyntaxThemeHint" xml:space="preserve">
+    <value>ชุดรูปแบบที่ใช้สำหรับบล็อกของรหัสที่ตรวจพบในคลิปข้อความ</value>
+  </data>
+  <data name="PrefSyntaxThemeLabel" xml:space="preserve">
+    <value>ธีมไวยากรณ์</value>
+  </data>
+  <data name="PrefCodeFontLabel" xml:space="preserve">
+    <value>ไวยากรณ์</value>
+  </data>
+  <data name="CommonViewLabel" xml:space="preserve">
+    <value>ดู</value>
+  </data>
+  <data name="WrapTextMenuLabel" xml:space="preserve">
+    <value>ตัดข้อความ</value>
+  </data>
+  <data name="ClipAssignShortcutLabel" xml:space="preserve">
+    <value>กำหนดทางลัด ...</value>
+  </data>
+  <data name="ClipUpdateShortcutLabel" xml:space="preserve">
+    <value>อัปเดตทางลัด ...</value>
+  </data>
 </root>

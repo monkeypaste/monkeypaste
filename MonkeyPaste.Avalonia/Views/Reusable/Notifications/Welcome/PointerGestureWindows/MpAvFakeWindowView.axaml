@@ -6,6 +6,7 @@
                        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
                        xmlns:local="using:MonkeyPaste.Avalonia"
                        x:TypeArguments="local:MpAvFakeWindowViewModel"
+                       x:DataType="local:MpAvFakeWindowViewModel"
                        x:Class="MonkeyPaste.Avalonia.MpAvFakeWindowView"
                        mc:Ignorable="d"
                        d:DesignWidth="400"
@@ -14,7 +15,7 @@
         <!--  MW BACKGROUND  -->
         <Style Selector="Border#PlaceholderWindow">
             <Setter Property="Background"
-                    Value="{DynamicResource ClipTrayBgColor}" />
+                    Value="{DynamicResource QueryTrayBgBrush}" />
         </Style>
         <Style Selector="Border#PlaceholderWindow.dragover">
             <Setter Property="Background"

@@ -23,6 +23,9 @@ function initThemeAttributes() {
 // #region Setters
 
 function setAttrThemeColorVal(attributes, colorVal, isBg) {
+    if (!globals.IsThemeEnabled) {
+        return attributes;
+    }
     // store original color in theme attributes
     let theme_attr = isBg ? 'themebgcoloroverride' : 'themecoloroverride';
     let color_type_attr = isBg ? 'background' : 'color';
@@ -32,6 +35,9 @@ function setAttrThemeColorVal(attributes, colorVal, isBg) {
 }
 
 function unsetAttrThemeColorVal(attributes, isBg) {
+    if (!globals.IsThemeEnabled) {
+        return attributes;
+    }
     // store original color in theme attributes
     let theme_attr = isBg ? 'themebgcoloroverride' : 'themecoloroverride';
     let color_type_attr = isBg ? 'background' : 'color';
@@ -47,6 +53,12 @@ function unsetAttrThemeColorVal(attributes, isBg) {
 
 // #region State
 
+function isNodeThemable(node) {
+    if (isNullOrUndefined(node) || isClassInElementPath(node, ['ql-code-block', 'ql-code-block-container'])) {
+        return false;
+    }
+    return true;
+}
 function isThemeColorOverriden(attr) {
     if (!attr || attr['themecoloroverride'] === undefined) {
         return false;
@@ -70,6 +82,9 @@ function isAnyThemeOverriden(attr) {
 // #region Actions
 
 function restoreContentColorsFromDelta(delta) {
+    if (!globals.IsThemeEnabled) {
+        return delta;
+    }
     if (!delta || !Array.isArray(delta.ops)) {
         return delta;
     }
@@ -80,6 +95,9 @@ function restoreContentColorsFromDelta(delta) {
 }
 
 function restoreContentColorsFromOp(op) {
+    if (!globals.IsThemeEnabled) {
+        return op;
+    }
     if (!op || op.attributes === undefined) {
         return op;
     }
@@ -104,6 +122,9 @@ function removeThemeAttrFromDocRange(range, isBg = false, source = 'api') {
 }
 
 function adjustDeltaOpForTheme(op) {
+    if (!globals.IsThemeEnabled) {
+        return op;
+    }
     // NOTE based on theme fg/bg this adjusts non-user defined fg/bg colors
     // to theme, when that happens the original color is stored in the an attr
 
@@ -193,7 +214,10 @@ function adjustFgToTheme(fg_color_obj) {
     return css_rgba;
 }
 
-function applyThemeToDelta(delta) {
+function applyThemeToDelta(node, delta) {
+    if (!globals.IsThemeEnabled || !isNodeThemable(node)) {
+        return delta;
+    }
     if (!delta || delta.ops === undefined || delta.ops.length == 0) {
         return delta;
     }

@@ -3061,4 +3061,49 @@ Hozirgi kunda tizimning trafik menyusida global yorliq yoqilishi mumkin</value>
   <data name="DonateLabel" xml:space="preserve">
     <value>Xayr-ehson qilmoq</value>
   </data>
+  <data name="MobileCopiedNtfText" xml:space="preserve">
+    <value>Clipboardga ko'chirilgan</value>
+  </data>
+  <data name="PinTraySidebarLabel" xml:space="preserve">
+    <value>Zebo</value>
+  </data>
+  <data name="QueryTraySidebarLabel" xml:space="preserve">
+    <value>So'rov</value>
+  </data>
+  <data name="PluginBrowserWindowTitle" xml:space="preserve">
+    <value>Plagin brauzeri</value>
+  </data>
+  <data name="ClipboardSetMessage" xml:space="preserve">
+    <value>Clipboard Set</value>
+  </data>
+  <data name="PluginBrowserFormattedWindowTitle" xml:space="preserve">
+    <value>Plagin brauzeri - {0}</value>
+  </data>
+  <data name="AddNewActionLabel" xml:space="preserve">
+    <value>Yangi qo'shish</value>
+  </data>
+  <data name="EditorPasteButtonLabelMobile" xml:space="preserve">
+    <value>Nusxa ko'chirmoq</value>
+  </data>
+  <data name="PrefSyntaxThemeHint" xml:space="preserve">
+    <value>Matnli kliplarda aniqlangan kod bloklari uchun ishlatiladigan mavzu.</value>
+  </data>
+  <data name="PrefSyntaxThemeLabel" xml:space="preserve">
+    <value>Sintaksis mavzusi</value>
+  </data>
+  <data name="PrefCodeFontLabel" xml:space="preserve">
+    <value>Sintaksis</value>
+  </data>
+  <data name="CommonViewLabel" xml:space="preserve">
+    <value>Ko'rinish</value>
+  </data>
+  <data name="WrapTextMenuLabel" xml:space="preserve">
+    <value>Matnni o'rash</value>
+  </data>
+  <data name="ClipAssignShortcutLabel" xml:space="preserve">
+    <value>Yorliqni tayinlang ...</value>
+  </data>
+  <data name="ClipUpdateShortcutLabel" xml:space="preserve">
+    <value>Yorliqni yangilash ...</value>
+  </data>
 </root>

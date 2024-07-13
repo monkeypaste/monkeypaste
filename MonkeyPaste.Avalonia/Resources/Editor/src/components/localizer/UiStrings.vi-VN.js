@@ -34,6 +34,7 @@ var UiStrings = {
 	EditorNextTemplateLabel: `Mẫu tiếp theo`,
 	EditorPasteButtonAppendBeginLabel: `Nối thêm ...`,
 	EditorPasteButtonLabel: `Dán`,
+	EditorPasteButtonLabelMobile: `Sao chép`,
 	EditorPasteTemplateWatermark: `Nhập văn bản Paste ...`,
 	EditorPrevTemplateLabel: `Mẫu trước`,
 	EditorRegExLabel: ` Biểu hiện thông thường`,

@@ -12,6 +12,7 @@ using System.Windows.Input;
 namespace MonkeyPaste.Avalonia {
     public class MpAvSettingsFrameViewModel :
         MpAvViewModelBase,
+        MpAvIMenuItemViewModel,
         MpILabelTextViewModel,
         MpIIconResourceViewModel,
         MpISelectableViewModel,
@@ -27,6 +28,45 @@ namespace MonkeyPaste.Avalonia {
         #endregion
 
         #region Interfaces
+
+        #region MpAvIMenuItemViewModel Implementation
+
+        string MpAvIMenuItemViewModel.IconTintHexStr =>
+            null;
+        ICommand MpAvIMenuItemViewModel.Command => new MpAsyncCommand<object>(
+            async (args) => {
+                var menu_result = await Mp.Services.NotificationBuilder.ShowNotificationAsync(
+                    notificationType: MpNotificationType.ModalSettingsFrameMenu,
+                    title: LabelText,
+                    body: this,
+                    iconSourceObj: IconResourceObj);
+
+                if (menu_result == MpNotificationDialogResultType.Done) {
+                    MpAvMenuView.CloseMenu();
+                    return;
+                }
+                MpAvSettingsViewModel.Instance.ShowSettingsWindowCommand.Execute(null);
+            });
+        object MpAvIMenuItemViewModel.CommandParameter =>
+            null;
+        string MpAvIMenuItemViewModel.Header =>
+            LabelText;
+        object MpAvIMenuItemViewModel.IconSourceObj =>
+            IconResourceObj;
+        string MpAvIMenuItemViewModel.InputGestureText =>
+            null;
+        bool MpAvIMenuItemViewModel.StaysOpenOnClick { get; }
+        bool MpAvIMenuItemViewModel.HasLeadingSeparator { get; }
+        bool MpAvIIsVisibleViewModel.IsVisible =>
+            IsVisible;
+        bool? MpAvIMenuItemViewModel.IsChecked { get; }
+        bool MpAvIMenuItemViewModel.IsThreeState { get; }
+        bool MpAvIMenuItemViewModel.IsSubMenuOpen { get; set; }
+        string MpAvIMenuItemViewModel.IconBorderHexColor { get; }
+        MpMenuItemType MpAvIMenuItemViewModel.MenuItemType { get; } = MpMenuItemType.Default;
+        IEnumerable<MpAvIMenuItemViewModel> MpAvIMenuItemViewModel.SubItems { get; }
+        bool MpIHoverableViewModel.IsHovering { get; set; }
+        #endregion
 
         #region MpIIconResourceViewModel Implementation
         public object IconResourceObj {
@@ -157,13 +197,20 @@ namespace MonkeyPaste.Avalonia {
 
         #region State
 
+        public bool IsExpanded { get; private set; } =
+#if MOBILE_OR_WINDOWED
+            false;
+#else
+            true;
+#endif
+        public bool IsUserExpanded { get; private set; }
         public MpSettingsFrameType FrameType { get; set; } = MpSettingsFrameType.None;
 
 
         public bool IsVisible { get; set; } = true;
 
         public MpTooltipHintType FrameHintType { get; set; }
-        #endregion
+#endregion
 
         #region Layout
 
@@ -175,7 +222,7 @@ namespace MonkeyPaste.Avalonia {
 
         public string FrameHint { get; set; }
         #endregion
-        #endregion
+#endregion
 
         #region Constructors
         public MpAvSettingsFrameViewModel() : this(MpSettingsFrameType.None) {
@@ -239,10 +286,37 @@ namespace MonkeyPaste.Avalonia {
             }
             IsBusy = false;
         }
+
         #endregion
 
 
         #region Commands
+        public ICommand RestoreExpandedCommand => new MpCommand(
+            () => {
+                if(IsUserExpanded) {
+                    ExpandFrameCommand.Execute(null);
+                } else {
+                    UnexpandFrameCommand.Execute(null);
+                }
+            });
+        public ICommand ExpandFrameCommand => new MpCommand<object>(
+            (args) => {
+                IsExpanded = true;
+                IsUserExpanded = args == null;
+            });
+        public ICommand UnexpandFrameCommand => new MpCommand<object>(
+            (args) => {
+                IsExpanded = false;
+                IsUserExpanded = false;
+            });
+        public ICommand ToggleExpandFrameCommand => new MpCommand<object>(
+            (args) => {
+                if(IsExpanded) {
+                    UnexpandFrameCommand.Execute(null);
+                } else {
+                    ExpandFrameCommand.Execute(null);
+                }
+            });
         #endregion
     }
 }

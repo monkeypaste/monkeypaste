@@ -34,6 +34,7 @@ var UiStrings = {
 	EditorNextTemplateLabel: `የሚቀጥለው ንድፍ`,
 	EditorPasteButtonAppendBeginLabel: `ተማርኩ ...`,
 	EditorPasteButtonLabel: `ፓስተር`,
+	EditorPasteButtonLabelMobile: `ቅጂ`,
 	EditorPasteTemplateWatermark: `የመለጠጥ ጽሑፍ ያስገቡ ...`,
 	EditorPrevTemplateLabel: `ያለፈው አብነት`,
 	EditorRegExLabel: ` መደበኛ አገላለጽ`,

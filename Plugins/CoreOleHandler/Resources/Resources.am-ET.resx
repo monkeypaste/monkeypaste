@@ -222,4 +222,10 @@
   <data name="ToFileExtHint" xml:space="preserve">
     <value>«{0}» በትዕዛዝ ላይ ፋይል ለመፍጠር ጥቅም ላይ የሚውለው የፋይል ቅጥያ ነው።</value>
   </data>
+  <data name="RtfParaTagNameHint" xml:space="preserve">
+    <value>ለኮድ ማድመቂያ የ'PRE' መለያ ይጠቀሙ አለበለዚያ RTF እንደ መደበኛ የበለጸገ ጽሑፍ ይቆጠራል።</value>
+  </data>
+  <data name="RtfParaTagNameLabel" xml:space="preserve">
+    <value>የኤችቲኤምኤል አንቀጽ መለያ</value>
+  </data>
 </root>

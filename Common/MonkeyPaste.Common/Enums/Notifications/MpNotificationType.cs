@@ -61,6 +61,7 @@
         ModalRestartIgnore,
         ModalRestartNowOrLater,
         ModalShutdownLater,
+        ModalSettingsFrameMenu,
 
         ConfirmEndAppend,
 

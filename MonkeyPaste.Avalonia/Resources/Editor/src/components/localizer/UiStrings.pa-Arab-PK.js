@@ -34,6 +34,7 @@ var UiStrings = {
 	EditorNextTemplateLabel: `ਅਗਲਾ ਟੈਂਪਲੇਟ`,
 	EditorPasteButtonAppendBeginLabel: `ਜੋੜ ...`,
 	EditorPasteButtonLabel: `ਚਿਪਕਾਓ`,
+	EditorPasteButtonLabelMobile: `ਕਾਪੀ`,
 	EditorPasteTemplateWatermark: `ਪੇਸਟ ਟੈਕਸਟ ਦਰਜ ਕਰੋ ...`,
 	EditorPrevTemplateLabel: `ਪਿਛਲਾ ਟੈਂਪਲੇਟ`,
 	EditorRegExLabel: ` ਨਿਯਮਤ ਸਮੀਕਰਨ`,

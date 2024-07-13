@@ -147,7 +147,7 @@ namespace MonkeyPaste.Common.Avalonia {
             while (result == default) {
                 result = visual.GetVisualDescendant<T>(includeSelf);
                 await Task.Delay(100);
-                if (sw.ElapsedMilliseconds >= timeOutMs) {
+                if (sw.ElapsedMilliseconds >= timeOutMs && timeOutMs >= 0) {
                     MpConsole.WriteLine($"GetVisualDescendantAsync from {visual.GetType()} to {typeof(T)} timeout {timeOutMs} reached.");
                     return null;
                 }
@@ -271,8 +271,9 @@ namespace MonkeyPaste.Common.Avalonia {
             }
         }
         public static void RenderToFile(this Control target, string path) {
-            if (target.RenderToBitmap() is RenderTargetBitmap rtb) {
-                rtb.Save(path);
+            if (target.RenderToBitmap() is RenderTargetBitmap rtb &&
+                rtb.ToAvBitmap() is { }  bmp) {
+                bmp.Save(path);
                 rtb.Dispose();
             }
         }
@@ -759,15 +760,23 @@ namespace MonkeyPaste.Common.Avalonia {
             sv.ScrollToPoint(new_offset);
         }
 
-        public static void ScrollToPoint(this ScrollViewer sv, MpPoint p) {
+        public static void ScrollToPoint(this ScrollViewer sv, MpPoint p, bool invalidate = true) {
+            if(sv == null) {
+                return;
+            }
             sv.ScrollToHorizontalOffset(p.X);
             sv.ScrollToVerticalOffset(p.Y);
 
-            sv.InvalidateMeasure();
-            sv.InvalidateArrange();
+            if(invalidate) {
+                sv.InvalidateMeasure();
+                sv.InvalidateArrange();
+            }
         }
 
         public static void ScrollToHorizontalOffset(this ScrollViewer sv, double xOffset) {
+            if(sv == null) {
+                return;
+            }
             var newOffset = new Vector(
                 Math.Max(0, Math.Min(sv.Extent.Width, xOffset)),
                 sv.Offset.Y);
@@ -797,8 +806,8 @@ namespace MonkeyPaste.Common.Avalonia {
         }
 
         public static bool IsRightPress(this PointerPressedEventArgs ppea, Visual? control) {
-            return ppea.GetCurrentPoint(control)
-                            .Properties.PointerUpdateKind == PointerUpdateKind.RightButtonPressed;
+            var cp = ppea.GetCurrentPoint(control);
+            return cp.Properties.PointerUpdateKind == PointerUpdateKind.RightButtonPressed;
         }
 
         public static bool IsLeftRelease(this PointerReleasedEventArgs ppea, Visual? control) {
@@ -930,7 +939,11 @@ namespace MonkeyPaste.Common.Avalonia {
         #endregion
 
         #region Size
+        public static MpSize ToPortableSize(this MpSize s, double scaling) {
+            // NOTE this is to keep compatibility for WINDOWED mode
 
+            return s.ToAvPixelSize(1).ToPortableSize(scaling);
+        }
         public static MpSize ToPortableSize(this MpPoint p) {
             return new MpSize(p.X, p.Y);
         }
@@ -986,6 +999,10 @@ namespace MonkeyPaste.Common.Avalonia {
             prect.TranslateOrigin(relativeTo, toScreen);
             return prect;
         }
+        public static MpRect ToPortableRect(this MpRect rect, Control relativeTo = null, bool toScreen = false) {
+            // NOTE just for WINDOWED compat
+            return rect.ToAvRect().ToPortableRect(relativeTo, toScreen);
+        }
 
         public static Rect ToAvRect(this MpRect rect) {
             return new Rect(rect.Location.ToAvPoint(), rect.Size.ToAvSize());
@@ -993,6 +1010,10 @@ namespace MonkeyPaste.Common.Avalonia {
 
         public static MpRect ToPortableRect(this PixelRect rect, double pixelDensity) {
             return new MpRect(rect.Position.ToPortablePoint(pixelDensity), rect.Size.ToPortableSize(pixelDensity));
+        }
+        public static MpRect ToPortableRect(this MpRect rect, double pixelDensity) {
+            // NOTE just for WINDOWED compat
+            return rect.ToAvPixelRect(pixelDensity).ToPortableRect(pixelDensity);
         }
 
         public static PixelRect ToAvPixelRect(this MpRect rect, double pixelDensity) {
@@ -1003,7 +1024,9 @@ namespace MonkeyPaste.Common.Avalonia {
             return new PixelRect(rect.Location.ToAvPixelPoint(pixelDensity), rect.Size.ToAvPixelSize(pixelDensity));
         }
 
-
+        public static bool Contains(this MpRect rect, PixelPoint pp, double scaling = 1) {
+            return rect.Contains(pp.ToPortablePoint(scaling));
+        }
 
         #endregion
     }

@@ -1,5 +1,6 @@
 ﻿using Avalonia.Controls;
 using Avalonia.Interactivity;
+using Avalonia.Media;
 using Avalonia.Threading;
 using MonkeyPaste.Common;
 using MonkeyPaste.Common.Avalonia;
@@ -27,7 +28,8 @@ namespace MonkeyPaste.Avalonia {
         MpIContextMenuViewModel,
         MpIPopupMenuViewModel,
         MpIPopupMenuPicker,
-        MpIProgressIndicatorViewModel {
+        MpIProgressIndicatorViewModel,
+        MpAvIFocusHeaderMenuViewModel {
 
         #region Private Variables
         private object _notifierLock = new object();
@@ -46,8 +48,39 @@ namespace MonkeyPaste.Avalonia {
 
         #region Interfaces
 
+        #region MpAvIFocusHeaderMenuViewModel Implementation
+
+        MpAvHeaderBackButtonType MpAvIHeaderMenuViewModel.BackButtonType =>
+            MpAvHeaderBackButtonType.Close;
+        public bool IsFocused { get; set; }
+        IBrush MpAvIHeaderMenuViewModel.HeaderBackground =>
+           TagHexColor.ToAvBrush(force_alpha: 1);
+        
+        string MpAvIHeaderMenuViewModel.HeaderTitle =>
+            TagName;
+        public IEnumerable<MpAvIMenuItemViewModel> HeaderMenuItems =>
+            new MpAvMenuItemViewModel[] {
+                new MpAvMenuItemViewModel() {
+                    IconSourceObj = "PlusImage",
+                    IsVisible = CanAddChild,
+                    Command = AddNewChildTagCommand,
+                },
+                new MpAvMenuItemViewModel() {
+                    IconSourceObj = "Dots3x1Image",
+                    Command = ShowContextMenuCommand
+                }
+            };
+        ICommand MpAvIHeaderMenuViewModel.BackCommand =>
+            null;
+        object MpAvIHeaderMenuViewModel.BackCommandParameter =>
+            null;
+
+        #endregion
+
         #region MpAvIMenuItemViewModel Implementation
 
+        string MpAvIMenuItemViewModel.IconTintHexStr =>
+            null;
         public string IconBorderHexColor =>
             TagHexColor.IsHexStringBright() ? MpSystemColors.black : MpSystemColors.White;
 
@@ -58,7 +91,7 @@ namespace MonkeyPaste.Avalonia {
         string MpAvIMenuItemViewModel.InputGestureText { get; }
         bool MpAvIMenuItemViewModel.StaysOpenOnClick => true;
         bool MpAvIMenuItemViewModel.HasLeadingSeparator => false;
-        bool MpAvIMenuItemViewModel.IsVisible => true;
+        bool MpAvIIsVisibleViewModel.IsVisible => true;
         bool? MpAvIMenuItemViewModel.IsChecked =>
             IsLinkedToSelectedClipTile;
         bool MpAvIMenuItemViewModel.IsThreeState => Items.Count > 0;
@@ -1026,11 +1059,16 @@ namespace MonkeyPaste.Avalonia {
 
                     break;
                 case nameof(TagHexColor):
+                    if(this is MpAvIFocusHeaderMenuViewModel fhvm) {
+                        fhvm.OnPropertyChanged(nameof(fhvm.HeaderBackground));
+                    }
                     Dispatcher.UIThread.Post(async () => {
                         while (HasModelChanged) {
                             await Task.Delay(100);
                         }
                         await Task.WhenAll(MpAvClipTrayViewModel.Instance.Items.Select(x => x.InitTitleLayersAsync()));
+
+
                     });
                     break;
                 //case nameof(TagTileTrayWidth):
@@ -1101,6 +1139,10 @@ namespace MonkeyPaste.Avalonia {
                 case nameof(TagName):
                     OnPropertyChanged(nameof(TagNameWidth));
                     OnPropertyChanged(nameof(TagNameLength));
+
+                    if (this is MpAvIFocusHeaderMenuViewModel fhvm2) {
+                        fhvm2.OnPropertyChanged(nameof(fhvm.HeaderTitle));
+                    }
                     break;
                 case nameof(BadgeCount):
                     if (Parent == null) {
@@ -1361,6 +1403,7 @@ namespace MonkeyPaste.Avalonia {
                     return;
                 }
                 Parent.SelectTagCommand.Execute(TagId);
+                this.FocusThisHeader();
             }, (args) => {
                 return IsTagNameReadOnly;
             });

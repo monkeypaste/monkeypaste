@@ -2,7 +2,7 @@
 // #region Life Cycle
 
 function initEditor() {
-	if (globals.IsLoaded) {
+	if (globals.IsEditorLoaded) {
 		log('editor already initialized, ignoring init');
 		return;
 	}
@@ -18,8 +18,10 @@ function initEditor() {
 	initContentClassAttributes();
 
 	initScroll();
+	initWrap();
 	initTooltip();
 	initTemplates();
+	initSyntax();
 	initMacros();
 	initOverlay();
 	//initHistory();
@@ -93,6 +95,7 @@ function getEditorZoom() {
 	return zoom_prop_val;
 }
 
+
 // #endregion Getters
 
 // #region Setters
@@ -118,13 +121,20 @@ function setEditorPlaceholderText(text) {
 }
 
 function setEditorIsLoaded(isLoaded) {
-	globals.IsLoaded = isLoaded;
+	globals.IsEditorLoaded = isLoaded;
+	updateEditorPlaceholderText();
 }
 
 // #endregion Setters
 
 // #region State
 
+function isEditorEmpty() {
+	if (getText() == '\n') {
+		return true;
+	}
+	return false;
+}
 function isShowingEditorToolbar() {
 	$(".ql-toolbar").css("display") != "none";
 }
@@ -182,7 +192,7 @@ function isEditorFocused() {
 // #region Actions
 
 function updateEditorPlaceholderText() {
-	let plt = UiStrings.EditorWatermark;
+	let plt = globals.IsEditorLoaded && globals.IsContentLoaded ? '' : UiStrings.EditorWatermark;
 	setEditorPlaceholderText(plt);
 }
 function hideEditorScrollbars() {
@@ -193,12 +203,6 @@ function hideEditorScrollbars() {
 
 function showEditorScrollbars() {
 	showElementScrollbars(getEditorContainerElement());
-}
-
-function hideAllToolbars() {
-	hideEditorToolbar();
-	hideEditTemplateToolbar();
-	hidePasteToolbar();
 }
 
 function updateEditorSizesAndPositions() {
@@ -222,18 +226,14 @@ function focusEditor() {
 	globals.quill.focus();
 	getEditorElement().focus();
 }
-
-
 function disableTextWrapping() {
 	getEditorElement().style.whiteSpace = 'nowrap';
 	getEditorElement().style.width = Number.MAX_SAFE_INTEGER + 'px';
 }
-
 function enableTextWrapping() {
 	getEditorElement().style.whiteSpace = '';
 	getEditorElement().style.width = '';
 }
-
 function createLink() {
 	var range = globals.quill.getSelection(true);
 	if (range) {
@@ -247,8 +247,6 @@ function createLink() {
 		console.table("\nhtml:\n" + getHtml());
 	}
 }
-
-
 function enableReadOnly(fromHost = false) {
 	getEditorElement().style.caretColor = 'transparent';
 	if (isReadOnly()) {
@@ -369,6 +367,15 @@ function disableSubSelection(fromHost = false) {
 	log('sub-selection DISABLED from: '+(fromHost ? 'HOST':'INTERNAL'));
 }
 
+function checkAndClearEmptyContent() {
+	// deleting all content doesn't remove head blocks format and its annoying sometimes
+	// so if doc is empty clear all formatting
+	if (!isEditorEmpty()) {
+		return;
+	}
+	setEditorText('');
+}
+
 function suppressTextChanged(guid = null) {
 	guid = guid == null ? generateGuid() : guid;
 	let was_found = false;
@@ -455,7 +462,7 @@ function onEditorTextChanged(delta, oldDelta, source) {
 	
 	updateAllElements();
 
-	if (!globals.IsLoaded || globals.IsLoadingContent) {
+	if (!globals.IsEditorLoaded || !globals.IsContentLoaded) {
 		return;
 	}
 	addHistoryItem(delta, oldDelta);
@@ -464,12 +471,13 @@ function onEditorTextChanged(delta, oldDelta, source) {
 		updateTemplatesAfterTextChanged();
 	}
 
+	checkAndClearEmptyContent();
 	loadLinkHandlers(true);
 	populateFindReplaceResults();
 
 	let suppress_text_change_ntf = isTextChangeSupressed();
 
-	if (globals.IsLoaded &&
+	if (globals.IsEditorLoaded &&
 		!suppress_text_change_ntf &&		
 		isDeltaContainTemplate(delta) &&
 		isAnyTemplateToolbarElementFocused()) {

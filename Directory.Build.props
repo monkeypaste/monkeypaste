@@ -24,14 +24,18 @@
     <ResolveAssemblyWarnOrErrorOnTargetArchitectureMismatch>None</ResolveAssemblyWarnOrErrorOnTargetArchitectureMismatch>
     <!-- This removes duplicate warnings for cef dylibs -->
     <ErrorOnDuplicatePublishOutputFiles>false</ErrorOnDuplicatePublishOutputFiles>
+    <DisableFastUpToDateCheck>true</DisableFastUpToDateCheck>
+    <LangVersion>Latest</LangVersion>
   </PropertyGroup>
 
   <!-- GLOBAL PACKAGE VERSIONS -->
   <PropertyGroup>
     <StableAvaloniaVersion>11.0.10</StableAvaloniaVersion> 
     <AvaloniaVersion>11.0.10</AvaloniaVersion>
-    <SugarWvVersion>11.0.0.6</SugarWvVersion>    
-    <!--<SugarWvVersion>11.0.0.0</SugarWvVersion>-->
+    <DefSugarWvVersion>11.0.0.1</DefSugarWvVersion>    
+    <CustomSugarWvVersion>11.0.0.6</CustomSugarWvVersion>    
+    <SugarWvVersion>$(DefSugarWvVersion)</SugarWvVersion>    
+    <PublicSugarWvVersion>11.0.0.1</PublicSugarWvVersion>
     <CefNetWvVersion>105.3.24107.1511</CefNetWvVersion>
     <AvHtmlRendererVersion>11.0.19</AvHtmlRendererVersion>
   </PropertyGroup>
@@ -40,7 +44,7 @@
   
   <!-- NOTE If changing BuildOs delete bin/obj folders, esp PCL-->
   <PropertyGroup>
-    <BuildOs>LINUX</BuildOs>
+    <BuildOs>WINDOWS</BuildOs>
   </PropertyGroup>
   
   <PropertyGroup>
@@ -66,7 +70,7 @@
     <DefaultTargetFramework>net8.0</DefaultTargetFramework>
     <CommonTargetFramework>net8.0</CommonTargetFramework>
     <StartupOutputType>Exe</StartupOutputType>
-    <!--<ConfigForHotReload>true</ConfigForHotReload>-->
+    <ConfigForHotReload>true</ConfigForHotReload>
   </PropertyGroup>
 
   <!-- CUSTOM PROPERTIES -->
@@ -91,29 +95,25 @@
 
   <!-- WINDOWS -->
   <PropertyGroup Condition="$(BuildOs) == 'WINDOWS'">
-    <!-- (people not me should probably not set this to true) -->
-    <!-- When changing this not a bad idea to rebuild plugins -->
-    <UseWap>true</UseWap>
-    <!-- NOTE when ConfigForHotReload is enabled, UseWap must be false-->
-    <!-- Tfm from https://stackoverflow.com/a/70380286/105028 -->
-    <Tfm>10.0.22621.0</Tfm>
-    <DefineConstants>$(DefineConstants);WINDOWS;DESKTOP;</DefineConstants>
+    <UseWap>false</UseWap>
+    <DefineConstants>$(DefineConstants);WINDOWS;DESKTOP</DefineConstants>
     <MainProjectName>MonkeyPaste.Desktop</MainProjectName>
     <IsDesktop>true</IsDesktop>
-    <!--<Platforms>AnyCPU;x64;x86</Platforms>-->
     <UseOutSysCef>false</UseOutSysCef>
-    <UseCefNet>true</UseCefNet>
-    <UseSugarWv>false</UseSugarWv>
-    <TargetRuntimeIdentifiers>win-x64</TargetRuntimeIdentifiers>
-    <RuntimeIdentifiers>win-x64</RuntimeIdentifiers>
-    <PlatformShortName>uwp</PlatformShortName> 
+    <UseCefNet>false</UseCefNet>
+    <UseSugarWv>true</UseSugarWv>
+    <PlatformShortName>uwp</PlatformShortName>
     <StartupOutputType>WinExe</StartupOutputType>
     <BuildScriptsDir>$(BuildScriptsRootDir)\windows</BuildScriptsDir>
-    <IsWindowed>false</IsWindowed>
+    <IsWindowed>true</IsWindowed>
   </PropertyGroup>
 
   <PropertyGroup Condition="$(UseWap) == 'True' And $(BuildOs) == 'WINDOWS'">
+    <!-- Tfm from https://stackoverflow.com/a/70380286/105028 -->
+    <Tfm>10.0.22621.0</Tfm>
     <MainTargetFramework>$(DefaultTargetFramework)-windows$(Tfm)</MainTargetFramework>
+    <TargetRuntimeIdentifiers>win-x64</TargetRuntimeIdentifiers>
+    <RuntimeIdentifiers>win-x64</RuntimeIdentifiers>
     <DefineConstants>$(DefineConstants);WAP;</DefineConstants>
   </PropertyGroup>
   
@@ -150,6 +150,7 @@
     <PlatformShortName>mac</PlatformShortName>
     <TargetRuntimeIdentifiers>osx-x64</TargetRuntimeIdentifiers>
     <BuildScriptsDir>$(BuildScriptsRootDir)\mac</BuildScriptsDir>
+    <SugarWvVersion>$(CustomSugarWvVersion)</SugarWvVersion>
     <!-- NOTE RuntimeIdentifiers set in mp-bundle-osx-x64.sh -->
     <!--<RuntimeIdentifiers>osx-x64</RuntimeIdentifiers>-->
   </PropertyGroup>
@@ -172,6 +173,8 @@
     <AndroidPackageName>com.Monkey.MonkeyPaste</AndroidPackageName>
     <AndroidInternalStorageDir>/data/user/0/$(AndroidPackageName)/files</AndroidInternalStorageDir>
     <IsMobile>true</IsMobile>
+    <UseSugarWv>true</UseSugarWv>
+    <IsWindowed>true</IsWindowed>
     <PlatformShortName>android</PlatformShortName>
     <BuildScriptsDir>$(BuildScriptsRootDir)\android</BuildScriptsDir>
   </PropertyGroup>
@@ -180,10 +183,18 @@
   
   <PropertyGroup Condition="$(BuildOs) == 'IOS'">
     <MainTargetFramework>$(DefaultTargetFramework)-ios</MainTargetFramework>
+    <!--<CommonTargetFramework>$(DefaultTargetFramework)</CommonTargetFramework>-->
     <DefineConstants>$(DefineConstants);MOBILE;IOS;</DefineConstants>
-    <MainProjectName>MonkeyPaste.Avalonia.iOS</MainProjectName>
+    <!--<MainProjectName>MonkeyPaste.Avalonia.iOS</MainProjectName>-->
+    <MainProjectName>ios\iosTest.iOS</MainProjectName>
     <IsMobile>true</IsMobile>
+    <UseSugarWv>true</UseSugarWv>
+    <IsWindowed>true</IsWindowed>
+    <IncludeCultures>false</IncludeCultures>
     <PlatformShortName>ios</PlatformShortName>
+    <BuildScriptsDir>$(BuildScriptsRootDir)\ios</BuildScriptsDir>
+    <SugarWvVersion>$(PublicSugarWvVersion)</SugarWvVersion>
+    <MinIosVersion>13.0</MinIosVersion>
   </PropertyGroup>
   <!---  END OF TARGETS-->
 
@@ -226,9 +237,21 @@
   <PropertyGroup Condition="$(IsWindowed) == 'True'">
     <DefineConstants>$(DefineConstants);WINDOWED;</DefineConstants>
   </PropertyGroup>
+  
+  <PropertyGroup Condition="$(IsWindowed) == 'True' Or $(IsMobile) == 'True'">
+    <DefineConstants>$(DefineConstants);MOBILE_OR_WINDOWED;</DefineConstants>
+  </PropertyGroup>
+  
+  <PropertyGroup Condition="$(IsWindowed) != 'True' And $(IsMobile) != 'True'">
+    <DefineConstants>$(DefineConstants);MULTI_WINDOW;</DefineConstants>
+  </PropertyGroup>
     
   <PropertyGroup Condition="$(BuildOs) == 'ANDROID'">
     <TargetDatDir>$(MainProjectDir)\Assets\dat</TargetDatDir>
+  </PropertyGroup>
+    
+  <PropertyGroup Condition="$(BuildOs) == 'IOS'">
+    <AppBundleDir>$(MainTargetDir)\$(MainProjectName).app</AppBundleDir>
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(UseCefNet)' == 'True'">

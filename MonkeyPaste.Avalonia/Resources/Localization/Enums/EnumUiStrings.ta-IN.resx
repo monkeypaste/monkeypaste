@@ -1186,4 +1186,16 @@
   <data name="MpShortcutType_ToggleGlobalHooks" xml:space="preserve">
     <value>உலகளாவிய கொக்கிகள் மாற்றவும்</value>
   </data>
+  <data name="MpNotificationType_ModalSettingsFrameMenu" xml:space="preserve">
+    <value>மாதிரி அமைப்புகள் பிரேம் மெனு</value>
+  </data>
+  <data name="MpShortcutType_EnterKeyAction" xml:space="preserve">
+    <value>முக்கிய செயலை உள்ளிடவும்</value>
+  </data>
+  <data name="MpShortcutType_ToggleXamlHotReload" xml:space="preserve">
+    <value>XAML சூடான மறுஏற்றம்</value>
+  </data>
+  <data name="MpShortcutType_ToggleContentWrap" xml:space="preserve">
+    <value>உள்ளடக்க மடக்கை மாற்றவும்</value>
+  </data>
 </root>

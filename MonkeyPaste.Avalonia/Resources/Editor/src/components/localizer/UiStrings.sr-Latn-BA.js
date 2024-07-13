@@ -34,6 +34,7 @@ var UiStrings = {
 	EditorNextTemplateLabel: `Следећи образац`,
 	EditorPasteButtonAppendBeginLabel: `Додати...`,
 	EditorPasteButtonLabel: `Залепити`,
+	EditorPasteButtonLabelMobile: `Копија`,
 	EditorPasteTemplateWatermark: `Унесите налепи текст ...`,
 	EditorPrevTemplateLabel: `Претходни предложак`,
 	EditorRegExLabel: ` Регуларни израз`,

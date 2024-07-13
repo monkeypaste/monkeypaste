@@ -2996,4 +2996,49 @@
   <data name="DonateLabel" xml:space="preserve">
     <value>സംഭാവനചെയ്യുക</value>
   </data>
+  <data name="MobileCopiedNtfText" xml:space="preserve">
+    <value>ക്ലിപ്പ്ബോർഡിലേക്ക് പകർത്തി</value>
+  </data>
+  <data name="PinTraySidebarLabel" xml:space="preserve">
+    <value>പിൻചെയ്തു</value>
+  </data>
+  <data name="QueryTraySidebarLabel" xml:space="preserve">
+    <value>ചോദ ചിഹ്നമിടുക</value>
+  </data>
+  <data name="PluginBrowserFormattedWindowTitle" xml:space="preserve">
+    <value>പ്ലഗിൻ ബ്ര browser സർ - {0}</value>
+  </data>
+  <data name="PluginBrowserWindowTitle" xml:space="preserve">
+    <value>പ്ലഗിൻ ബ്രൗസർ</value>
+  </data>
+  <data name="ClipboardSetMessage" xml:space="preserve">
+    <value>ക്ലിപ്പ്ബോർഡ് സെറ്റ്</value>
+  </data>
+  <data name="AddNewActionLabel" xml:space="preserve">
+    <value>പുതിയത് ചേർക്കുക</value>
+  </data>
+  <data name="EditorPasteButtonLabelMobile" xml:space="preserve">
+    <value>പകര്ത്തുക</value>
+  </data>
+  <data name="PrefSyntaxThemeHint" xml:space="preserve">
+    <value>ടെക്സ്റ്റ് ക്ലിപ്പുകളിൽ കണ്ടെത്തിയ കോഡ് ബ്ലോക്കുകൾക്കായി ഉപയോഗിക്കുന്ന തീം.</value>
+  </data>
+  <data name="PrefSyntaxThemeLabel" xml:space="preserve">
+    <value>വാക്യഘടന തീം</value>
+  </data>
+  <data name="PrefCodeFontLabel" xml:space="preserve">
+    <value>സ്നാനക്സ്</value>
+  </data>
+  <data name="CommonViewLabel" xml:space="preserve">
+    <value>ദര്ശനം</value>
+  </data>
+  <data name="WrapTextMenuLabel" xml:space="preserve">
+    <value>ചുരുക്ക് എഴുത്ത്</value>
+  </data>
+  <data name="ClipAssignShortcutLabel" xml:space="preserve">
+    <value>കുറുക്കുവഴി നൽകുക ...</value>
+  </data>
+  <data name="ClipUpdateShortcutLabel" xml:space="preserve">
+    <value>കുറുക്കുവഴി അപ്ഡേറ്റുചെയ്യുക ...</value>
+  </data>
 </root>
