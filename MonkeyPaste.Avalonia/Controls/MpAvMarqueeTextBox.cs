@@ -634,7 +634,7 @@ namespace MonkeyPaste.Avalonia {
             Init();
         }
         protected override void OnPointerEntered(PointerEventArgs e) {
-            base.OnPointerEntered(e);e.IsLeftDown
+            base.OnPointerEntered(e);
             if (NavigateUriCommand != null &&
                 IsReadOnly) {
                 if (NavigateUriCommand.CanExecute(NavigateUriCommandParameter)) {

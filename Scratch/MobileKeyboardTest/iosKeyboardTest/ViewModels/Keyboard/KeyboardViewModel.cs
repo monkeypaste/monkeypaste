@@ -273,10 +273,10 @@ namespace iosKeyboardTest {
         }
 
         public void SetError(string msg) {
-            Dispatcher.UIThread.Post(() => {
+            //Dispatcher.UIThread.Post(() => {
                 ErrorText = msg;
                 this.RaisePropertyChanged(nameof(ErrorText));
-            });
+            //});
         }
 
         public void SetDesiredSize(Size scaledSize) {

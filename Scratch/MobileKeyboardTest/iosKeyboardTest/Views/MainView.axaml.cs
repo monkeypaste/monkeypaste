@@ -10,11 +10,13 @@ using Avalonia.VisualTree;
 using System;
 using System.Diagnostics;
 using System.Linq;
+using System.Threading.Tasks;
 
 namespace iosKeyboardTest;
 
 public partial class MainView : UserControl
 {
+    public static bool show_windowless_kb = true;
     static IKeyboardInputConnection _conn;
     public static void ForceInputConn(IKeyboardInputConnection conn) {
         _conn = conn;
@@ -76,38 +78,56 @@ public partial class MainView : UserControl
             TopLevel.GetTopLevel(this) is Window w) {
                 scale = w.DesktopScaling;
             }
-            var kbv = KeyboardBuilder.Build(_conn, KeyboardViewModel.GetTotalSizeByScreenSize(this.Bounds.Size), scale, out _);
-            var kbvm = kbv.DataContext as KeyboardViewModel;
-            //var hidden_window = new Window() {
-            //    SizeToContent = SizeToContent.WidthAndHeight,
-            //    ShowInTaskbar = false,
-            //    WindowState = WindowState.Minimized,
-            //    SystemDecorations = SystemDecorations.None,
-            //    Content = kbv
-            //};
-            //hidden_window.Show();
+            Control ctrl_to_add = null;
+            Control kbv = null;
+            KeyboardViewModel kbvm = null;
+            //show_windowless_kb = false;
+            if(show_windowless_kb) {
+                kbv = KeyboardBuilder.Build(_conn, KeyboardViewModel.GetTotalSizeByScreenSize(this.Bounds.Size), scale, out _);
+                kbvm = kbv.DataContext as KeyboardViewModel;
+                //if(_conn is IKeyboardInputConnection_desktop) {
+                //    var hidden_window = new Window() {
+                //        SizeToContent = SizeToContent.WidthAndHeight,
+                //        ShowInTaskbar = false,
+                //        WindowState = WindowState.Minimized,
+                //        SystemDecorations = SystemDecorations.None,
+                //        Content = kbv
+                //    };
+                //    hidden_window.Show();
+                //} else {
 
-            var HeadlessKeyboardImage = new Image();
+                //}
 
-            var bg_border = new Viewbox() {
-                Width = kbvm.TotalWidth,
-                Height = kbvm.TotalHeight,
-                VerticalAlignment = Avalonia.Layout.VerticalAlignment.Bottom,
-                Child = new Border {
-                    Background = Brushes.MidnightBlue,
-                    Child = HeadlessKeyboardImage,
-                }
-            };
+                var HeadlessKeyboardImage = new Image();
 
-            OuterPanel.Children.Add(bg_border);
-            Grid.SetRow(bg_border, 3);
+                var bg_border = new Viewbox() {
+                    Width = kbvm.TotalWidth,
+                    Height = kbvm.TotalHeight,
+                    VerticalAlignment = Avalonia.Layout.VerticalAlignment.Bottom,
+                    Child = new Border {
+                        Background = Brushes.MidnightBlue,
+                        Child = HeadlessKeyboardImage,
+                    }
+                };
+                ctrl_to_add = bg_border;
+            } else {
+                kbv = KeyboardViewModel.CreateKeyboardView(_conn, KeyboardViewModel.GetTotalSizeByScreenSize(this.Bounds.Size), scale, out _);
+                kbvm = kbv.DataContext as KeyboardViewModel;
+                ctrl_to_add = kbv;
+            }
+
+            
+
+            OuterPanel.Children.Add(ctrl_to_add);
+            Grid.SetRow(ctrl_to_add, 3);
 
             if (_conn is IKeyboardInputConnection_desktop icd) {
                 icd.SetKeyboardInputSource(this.TestTextBox);                
             }
+
             if(_conn is IHeadLessRender_desktop hrd) {
-                //hrd.SetRenderSource(kbv);
-                hrd.SetPointerInputSource(bg_border);
+                hrd.SetRenderSource(kbv);
+                hrd.SetPointerInputSource(ctrl_to_add);
                 //scale = 1;
                 var render_timer = new DispatcherTimer() {
                     Interval = TimeSpan.FromMilliseconds(1000d / 120d),
@@ -115,10 +135,16 @@ public partial class MainView : UserControl
                 };
 
                 void RenderKeyboard() {
+                    if(!show_windowless_kb) {
+                        return;
+                    }
                     if (KeyboardRenderer.GetKeyboardImageBytes(scale) is not { } bytes) {
                         return;
                     }
-                    HeadlessKeyboardImage.Source = RenderHelpers.RenderToBitmap(bytes);
+                    if (ctrl_to_add.GetVisualDescendants().OfType<Image>().FirstOrDefault() is not { } img) {
+                        return;
+                    }
+                    img.Source = RenderHelpers.RenderToBitmap(bytes);
                 }
 
                 render_timer.Tick += (s, e) => {
