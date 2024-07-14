@@ -10,6 +10,7 @@ namespace iosKeyboardTest {
         void OnDelete();
         void OnDone();
         void OnNavigate(int dx, int dy);
+        void OnVibrateRequest();
     }
     public interface IKeyboardInputConnection_ios : IKeyboardInputConnection, IHeadlessRender {
         bool NeedsInputModeSwitchKey { get; }
@@ -19,7 +20,7 @@ namespace iosKeyboardTest {
         void SetKeyboardInputSource(TextBox textBox);
     }
     public interface IHeadlessRender {
-        event EventHandler<Point?> OnPointerChanged;
+        event EventHandler<TouchEventArgs> OnPointerChanged;
     }
     public interface IHeadLessRender_desktop : IHeadlessRender {
         void SetRenderSource(Control sourceControl);

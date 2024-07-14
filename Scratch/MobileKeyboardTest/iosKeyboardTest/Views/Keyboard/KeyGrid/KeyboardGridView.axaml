@@ -66,10 +66,10 @@
             <Setter Property="Foreground"
                     Value="{DynamicResource ShiftBrush}" />
         </Style>
-      <Style Selector="local|KeyView.popup-key:not(.down) TextBlock">
-        <Setter Property="Foreground"
-                Value="{DynamicResource HoldFgBrush}" />
-      </Style>
+        <Style Selector="local|KeyView.popup-key:not(.down) TextBlock">
+            <Setter Property="Foreground"
+                    Value="{DynamicResource HoldFgBrush}" />
+        </Style>
 
         <!--  KEY BACKGROUND  -->
         <Style Selector="local|KeyView Border#KeyBgRect">
@@ -151,5 +151,14 @@
                 </ItemsPanelTemplate>
             </ItemsControl.ItemsPanel>
         </ItemsControl>
+
+
+
+        <Canvas x:Name="DebugCanvasOverlay"
+                Grid.Row="1"
+                ClipToBounds="False"
+                HorizontalAlignment="Stretch"
+                VerticalAlignment="Stretch"
+                IsHitTestVisible="False" />
     </Grid>
 </UserControl>

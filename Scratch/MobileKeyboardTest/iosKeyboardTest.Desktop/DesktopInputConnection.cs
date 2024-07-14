@@ -55,32 +55,34 @@ public class DesktopInputConnection : IKeyboardInputConnection_desktop {
 
     #region IHeadlessRender Implementation
 
-    public event EventHandler<Point?> OnPointerChanged;
+    public event EventHandler<TouchEventArgs> OnPointerChanged;
     public void SetPointerInputSource(Control sourceControl) {
         PointerInputSource = sourceControl;
 
         PointerInputSource.PointerPressed += (s, e) => {
             var loc = e.GetPosition(PointerInputSource);
-            OnPointerChanged?.Invoke(this, loc);
+            OnPointerChanged?.Invoke(this, new TouchEventArgs(loc,TouchEventType.Press));
         };
         PointerInputSource.PointerMoved += (s, e) => {
             if (OperatingSystem.IsWindows() &&
                 !e.GetCurrentPoint(s as Visual).Properties.IsLeftButtonPressed) {
                 // ignore mouse movement on desktop
-                OnPointerChanged?.Invoke(this, null);
+                //OnPointerChanged?.Invoke(this, null);
                 return;
             }
             var loc = e.GetPosition(PointerInputSource);
-            OnPointerChanged?.Invoke(this, loc);
+            OnPointerChanged?.Invoke(this, new TouchEventArgs(loc,TouchEventType.Move));
         };
         PointerInputSource.PointerReleased += (s, e) => {
-            OnPointerChanged?.Invoke(this, null);
+            var loc = e.GetPosition(PointerInputSource);
+            OnPointerChanged?.Invoke(this, new TouchEventArgs(loc,TouchEventType.Release));
         };
     }
     public void SetRenderSource(Control sourceControl) {
-        RenderSource = sourceControl;
+        RenderSource = sourceControl;        
+    }
 
-        
+    public void OnVibrateRequest() {
     }
     #endregion
 }

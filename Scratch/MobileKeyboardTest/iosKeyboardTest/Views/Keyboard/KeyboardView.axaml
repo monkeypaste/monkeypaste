@@ -50,7 +50,9 @@
                        FontSize="16"
                        Text="{Binding ErrorText}" />
         </StackPanel>
+
         <!--  CURSOR CONTROL OVERLAY  -->
+
         <Grid Grid.RowSpan="2"
               Background="{DynamicResource CursorControlBgBrush}"
               IsHitTestVisible="False"

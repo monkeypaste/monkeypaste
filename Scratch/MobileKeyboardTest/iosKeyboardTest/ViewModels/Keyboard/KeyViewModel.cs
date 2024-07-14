@@ -2,6 +2,8 @@
 using Avalonia.Controls;
 using Avalonia.Controls.Primitives;
 using Avalonia.Controls.Shapes;
+using Avalonia.Media;
+using Avalonia.Media.Immutable;
 using Avalonia.VisualTree;
 using DynamicData;
 using ReactiveUI;
@@ -9,8 +11,11 @@ using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Diagnostics;
+using System.Drawing;
 using System.Linq;
 using System.Windows.Input;
+using Color = Avalonia.Media.Color;
+using Point = Avalonia.Point;
 
 namespace iosKeyboardTest
 {
@@ -153,16 +158,24 @@ namespace iosKeyboardTest
         #region View Models
         public KeyboardViewModel Parent { get; set; }
         public KeyViewModel PrevKeyViewModel { get; set; }
-        KeyViewModel PopupKeyParent =>
-            IsPopupKey ? Parent.PressedKeyViewModel : null;
+        public KeyViewModel PopupAnchorKey { get; private set; }
+
+        public IEnumerable<KeyViewModel> PopupKeys =>
+            Parent.VisiblePopupKeys
+            .Where(x => x.PopupAnchorKey == this);
+        public KeyViewModel DefaultPopupKey =>
+            PopupKeys
+            .FirstOrDefault(x => x.CurrentChar == CurrentChar);
+        public KeyViewModel ActivePopupKey { get; private set; }
+
         #endregion
 
         #region Appearance
         public double PrimaryFontSize =>
-            Math.Min(MaxFontSize, Math.Min(InnerWidth, InnerHeight) * PrimaryFontSizeRatio);
+            Math.Max(1,Math.Min(MaxFontSize, Math.Min(InnerWidth, InnerHeight) * PrimaryFontSizeRatio));
         public double SecondaryFontSize {
             get {
-                double fs = Math.Min(MaxFontSize, Math.Min(InnerWidth, InnerHeight) * SecondaryFontSizeRatio);
+                double fs = Math.Max(1,Math.Min(MaxFontSize, Math.Min(InnerWidth, InnerHeight) * SecondaryFontSizeRatio));
                 if (!IsPulling) {
                     return fs;
                 }
@@ -221,8 +234,16 @@ namespace iosKeyboardTest
         public bool IsSecondaryVisible =>
             Parent.IsNumbers ||
             (Parent.CharSet == CharSetType.Letters && IsInput);
-        public bool IsVisible =>
-            IsPopupKey || !string.IsNullOrEmpty(PrimaryValue);
+        public bool IsVisible {
+            get {
+                if(IsPopupKey) {
+                    if(IsFakePopupKey) {
+                        return true;
+                    }
+                }
+                return !string.IsNullOrEmpty(CurrentChar);
+            }
+        }
         #endregion
 
         #region Layout
@@ -254,9 +275,9 @@ namespace iosKeyboardTest
         public CornerRadius CornerRadius {
             get {
                 double cr = 5;
-                if (IsPopupKey) {
-                    int max_row = Parent.PopupKeys.Max(x => x.Row);
-                    int max_col = Parent.PopupKeys.Max(x => x.Column);
+                if (IsPopupKey && PopupAnchorKey is { } anchor_kvm) {
+                    int max_row = anchor_kvm.VisiblePopupRowCount - 1;
+                    int max_col = anchor_kvm.VisiblePopupColCount - 1;
                     double tl = 0;
                     double tr = 0;
                     double bl = 0;
@@ -281,43 +302,37 @@ namespace iosKeyboardTest
         }
 
         #endregion
-        
-        int MaxPopupColCount => Parent.MaxPopupColCount;
+
+
+        private Point? _loc;
+
         public double X {
             get {
-                double x = 0;
-                if(IsPopupKey && 
-                    PopupKeyParent is { } pressed_kvm) {
-                    double origin_offset = 0;
-                    if(pressed_kvm.IsRightSideKey) {
-                       origin_offset = Parent.PopupKeys.Max(x => x.Column) * -Width;
-                    }
-                    x = pressed_kvm.X + (Column * Width) + origin_offset; 
-                } else if(PrevKeyViewModel == null) {
-                    if(NeedsOuterTranslate) {
-                        x = OuterTranslateX;
-                    }
-                 } else {
-                    x = PrevKeyViewModel.X + PrevKeyViewModel.Width;
+                if(_loc is not { } p) {
+                    p = FindLocation();
+                    _loc = p;
                 }
-                return x;
+                return p.X;
             }
         }
-
         public double Y {
             get {
-                if(IsPopupKey && PopupKeyParent is { } pressed_kvm) {
-                    if(Row == 1) {
-
-                    }
-                    double offset = Parent.PopupKeys.Max(x => x.Row) * Height;
-                    return pressed_kvm.Y - pressed_kvm.Height - offset + (Row*Height);
+                if (_loc is not { } p) {
+                    p = FindLocation();
+                    _loc = p;
                 }
-                return Row * Height;
+                return p.Y;
             }
         }
+        public Point Location =>
+            new Point(X, Y);
+        public Rect Rect =>
+            new Rect(X, Y, Width, Height);
 
-        
+
+        public int VisiblePopupColCount { get; set; }
+        public int VisiblePopupRowCount { get; set; }
+
         public bool IsRightSideKey =>
             X + (Width / 2) > (Parent.KeyboardWidth / 2);
 
@@ -333,21 +348,37 @@ namespace iosKeyboardTest
         public double InnerHeight =>
             Height - OuterPadY;
 
-        public double OuterTranslateX =>
-            NeedsOuterTranslate && IsVisible ?
+        //public double OuterTranslateX {
+        //    get {
+        //        if(NeedsOuterTranslate) {
+        //            return Parent.DefaultKeyWidth / 2;
+        //        }
+        //        return 0 ;
+        //    }
+        //}
+        public double OuterTranslateX {
+            get {
+                if(Parent.CharSet != CharSetType.Letters) {
+
+                }
+                return NeedsOuterTranslate && IsVisible ?
                 Parent.DefaultKeyWidth / 2 : 0;
+            }
+        }
         public int Row { get; set; }
         public int Column { get; set; }
         public int ColumnSpan { get; set; } = 1;
         #endregion
 
         #region State
+        public string TouchId { get; set; }
+        public DateTime? LastPressDt { get; set; }
         public bool CanPullKey =>
             !IsPopupKey && !string.IsNullOrEmpty(SecondaryValue);
         public bool IsPulling =>
-            PullTranslateY >= MaxPullTranslateY/2;
+            PullTranslateY >= 0;// MaxPullTranslateY * 0.25;
         public bool IsPulled =>
-            PullTranslateY >= MaxPullTranslateY * 0.75;
+            PullTranslateY >= MaxPullTranslateY; //* 0.75;
         public double PullTranslateY { get; set; } = 0;
         public double MaxPullTranslateY =>
             InnerHeight/2;
@@ -363,80 +394,36 @@ namespace iosKeyboardTest
             SecondaryCharacters.Any(x=>x != CurrentChar);
         //public bool IsActiveKey =>
         //    Parent.ActiveKeyViewModel == this;
-        public DateTime? LastActiveDt { get; set; }
-        public bool IsActiveKey {
-            get {
-                if (IsPressed) {
-                    if (Parent != null && Parent.PopupKeys.Any()) {
-                        // popupkeys take active for input
-                        return false;
-                    }
-                    return true;
-                }
-                if (!IsPopupKey ||
-                    //IsFakePopupKey ||
-                    Parent.KeyboardPointerDownLocation is not { } pd ||
-                    Parent.KeyboardPointerLocation is not { } p ||
-                    Parent.DefaultPopupKey is not { } def_pu_kvm ||
-                    Parent.PopupKeys is not { } pu_kvml) {
-                    return false;
-                }
 
-                // anchor touch offset to initial location
-                double multiplier = 3.5d;
-                double initial_x = def_pu_kvm.X;
-                double initial_y = def_pu_kvm.Y;
-                double px = initial_x + ((p.X - pd.X) * multiplier);
-                double py = initial_y + ((p.Y - pd.Y) * multiplier);
+        public bool IsActiveKey =>
+            PopupAnchorKey != null && PopupAnchorKey.ActivePopupKey == this;
 
-                bool in_x = false;
-                bool in_y = false;
-
-                bool is_rightest = Parent.PopupKeys/*.Where(x=>!x.IsFakePopupKey)*/.Max(x => x.X) == X;
-                if (Column == 0) {
-                    // first col
-                    in_x = px <= X + Width;
-                }
-                if (!in_x && is_rightest) {
-                    // last col
-                    in_x = px >= X;
-                }
-                if (!in_x) {
-                    // inner col
-                    in_x = px >= X && px <= X + Width;
-                }
-
-                bool is_bottomest = Parent.PopupKeys/*.Where(x => !x.IsFakePopupKey)*/.Max(x => x.Y) == Y;
-                if (Row == 0) {
-                    // top row 
-                    in_y = py <= Y + Height;
-                }
-                if (!in_y && is_bottomest) {
-                    // bottom row
-                    in_y = py >= Y;
-                }
-                if (!in_y) {
-                    // inner row
-                    in_y = py >= Y && py <= Y + Height;
-                }
-                if(in_x && in_y) {
-
-                }
-                return in_x && in_y;
-            }
-        }
-        public DateTime? PressedDt { get; private set; }
-        public bool IsPressed { get; set; }
+        public bool IsPressed { get; private set; }
         public bool IsPopupKey =>
             PopupKeyIdx >= 0;
-        public bool IsFakePopupKey =>
-            IsPopupKey && PrimaryValue == string.Empty;
+        public bool IsFakePopupKey { get; set; }
+
+        public bool IsLastPopupKey =>
+            Parent.PopupKeys
+            .Where(x => x.PopupAnchorKey == PopupAnchorKey && !x.IsFakePopupKey)
+            .OrderBy(x => x.PopupKeyIdx)
+            .LastOrDefault() == this;
         public int PopupKeyIdx { get; set; } = -1;
         public int PopupRowIdx { get; set; } = 0;
         public int PopupRowCount =>
             Parent.PopupKeys.Any() ?
                 Parent.PopupKeys.Max(x => x.PopupRowIdx) + 1 : 0;
-        public bool NeedsOuterTranslate { get; set; }
+        public bool NeedsOuterTranslate {
+            get {
+                if(IsPopupKey) {
+                    if(PopupAnchorKey == null) {
+                        return false;
+                    }
+                    return PopupAnchorKey.NeedsOuterTranslate;
+                }
+                return Row == 2 && Parent.CharSet == CharSetType.Letters;
+            }
+        }
         public bool NeedsSymbolTranslate =>
             MisAlignedCharacters.Contains(PrimaryValue);
         public bool IsSpecial =>
@@ -511,7 +498,6 @@ namespace iosKeyboardTest
         #endregion
 
         #region Events
-
         public event EventHandler OnCleanup;
         #endregion
 
@@ -521,20 +507,69 @@ namespace iosKeyboardTest
             Parent = parent;
             PrevKeyViewModel = prev;
             Init(keyObj);
-            PropertyChanged += KeyViewModel_PropertyChanged;
         }
 
         #endregion
 
         #region Public Methods
-
         public void Cleanup() {
-            PropertyChanged -= KeyViewModel_PropertyChanged;
             OnCleanup?.Invoke(this, EventArgs.Empty);
         }
+
+        public void UpdateActive(Touch touch) {
+#if DEBUG
+            KeyboardGridView.DebugCanvas.Children.Clear();
+            KeyboardGridView.DebugCanvas.InvalidateVisual();
+#endif
+            var last_active = ActivePopupKey;
+            ActivePopupKey = PopupKeys.FirstOrDefault(x => x.CheckIsActive(touch,false));
+
+            if (last_active != ActivePopupKey && ActivePopupKey != null) {
+                Parent.InputConnection.OnVibrateRequest();
+            }
+            foreach(var pkvm in PopupKeys) {
+                pkvm.CheckIsActive(touch, false);
+            }
+
+            Parent.UpdateKeyboardState();
+        }
+        public void SetPressed(bool isPressed) {
+            if (isPressed) {
+                if (Touches.Locate(Rect.Center) is { } t) {
+                    IsPressed = true;
+                    TouchId = t.Id;
+                    LastPressDt = DateTime.Now;
+                    Parent.InputConnection.OnVibrateRequest();
+                } else {
+                 //   Debugger.Break();
+                    IsPressed = false;
+                }
+
+            } else {
+                ActivePopupKey = null;
+                IsPressed = false;
+                PullTranslateY = 0;
+                LastPressDt = null;
+                TouchId = null;
+            }
+        }
+        public void SetPopupAnchor(KeyViewModel anchor_kvm, string disp_val) {
+            _loc = null;
+            PopupAnchorKey = anchor_kvm;
+            Characters.Clear();
+            Characters.Add(disp_val);
+            IsFakePopupKey = string.IsNullOrEmpty(disp_val);
+        }
+        public void RemovePopupAnchor() {
+            _loc = null;
+            PopupAnchorKey = null;
+            Characters.Clear();
+            IsFakePopupKey = false;
+        }
+
         public override string ToString()
         {
-            return $"{PrimaryValue} X:{(int)X} Y:{(int)Y} W:{(int)Width} H:{(int)Height}";
+            return $"'{PrimaryValue}' X:{(int)X} Y:{(int)Y} W:{(int)Width} H:{(int)Height}";
         }
         #endregion
 
@@ -570,24 +605,148 @@ namespace iosKeyboardTest
             }
         }
 
-        private void KeyViewModel_PropertyChanged(object sender, System.ComponentModel.PropertyChangedEventArgs e) {
-            switch(e.PropertyName) {
-                case nameof(IsPressed):
-                    //PullTranslateY = IsPressed ? 50 : 0;
-                    //this.RaisePropertyChanged(nameof(PullTranslateY));
-                    PressedDt = IsPressed ? DateTime.Now : null;
-                    if(!IsPressed) {
-                        PullTranslateY = 0;
-                    }
-                    break;
-                case nameof(IsActiveKey):
-                    if(IsActiveKey) {
-                        LastActiveDt = DateTime.Now;
-                    }
-                    break;
+        bool CheckIsActive(Touch touch, bool debug) {
+            if (IsPressed) {
+                if (Parent != null && Parent.VisiblePopupKeys.Any()) {
+                    // popupkeys take active for input
+                    return false;
+                }
+                return true;
             }
+            if (!IsPopupKey ||
+                IsFakePopupKey ||
+                PopupAnchorKey is not { } anchor_kvm ||
+                anchor_kvm.DefaultPopupKey is not { } def_kvm) {
+                return false;
+            }
+
+            // anchor touch offset to initial location
+            var p = touch.Location;
+            var pd = touch.PressLocation;
+            double multiplier = 3.5d;
+            double offset_x = def_kvm.Rect.Center.X;
+            double offset_y = def_kvm.Rect.Center.Y;
+            double px = offset_x + ((p.X - pd.X) * multiplier);
+            double py = offset_y + ((p.Y - pd.Y) * multiplier);
+
+            // snap perimeter cells to outer bounds
+            double ol = 0;
+            double ot = 0;
+            double or = Parent.KeyboardWidth;
+            double ob = Parent.KeyboardHeight;
+            double l = X;
+            double t = Y;
+            double r = X + Width;
+            double b = Y + Height;
+
+            if (Row == 0) {
+                t = Math.Min(t,ot);
+            }
+            if (Row == anchor_kvm.VisiblePopupRowCount - 1) {
+                b = Math.Max(b,ob);
+            }
+            if (Column == 0) {
+                l = Math.Min(l,ol);
+            }
+            if (Column == anchor_kvm.VisiblePopupColCount - 1) {
+                r = Math.Max(r,or);
+            }
+            if (IsLastPopupKey) {
+                r = Math.Max(r,or);
+                b = Math.Max(b,ob);
+            }
+
+            var hit_rect = new Rect(l, t, Math.Max(0, r - l), Math.Max(0, b - t));
+            var adj_p = new Point(px, py);
+            if(debug) {
+                DrawActiveDebug(hit_rect, adj_p);
+            }
+
+            bool is_hit = hit_rect.Contains(adj_p);
+            return is_hit;
         }
-        
+        public void ResetLocation() {
+            _loc = FindLocation();
+        }
+
+        Point FindLocation() {
+            double x = 0;
+            double y = 0;
+            if (IsPopupKey) {
+                if(PopupAnchorKey is not { } anchor_kvm) {
+                    return new();
+                }
+                double origin_offset = 0;
+                if (anchor_kvm.IsRightSideKey) {
+                    origin_offset = Parent.VisiblePopupKeys.Max(x => x.Column) * -Width;
+                }
+                x = anchor_kvm.X + (Column * Width) + origin_offset;
+
+                double offset = Parent.VisiblePopupKeys.Max(x => x.Row) * Height;
+                y = anchor_kvm.Y - anchor_kvm.Height - offset + (Row * Height);
+                return new Point(x, y);
+            }
+            if (PrevKeyViewModel == null) {
+                x = NeedsOuterTranslate ? OuterTranslateX : 0;
+            } else {
+                x = PrevKeyViewModel.X + PrevKeyViewModel.Width;
+            }
+            y = Row * Height;
+            return new Point(x, y);
+        }
+        void DrawActiveDebug(Rect hitRect, Point p) {
+#if DEBUG
+            var colors = new IBrush[]{
+                Brushes.Red,
+                Brushes.Orange,
+                Brushes.Yellow,
+                Brushes.Green,
+                Brushes.Blue,
+                Brushes.Indigo,
+                Brushes.Violet,
+                Brushes.Purple,
+                Brushes.Red,
+                Brushes.Orange,
+                Brushes.Yellow,
+                Brushes.Green,
+                Brushes.Blue,
+                Brushes.Indigo,
+                Brushes.Violet,
+                Brushes.Purple, };
+            Color color = Colors.Pink;
+            if(PopupKeyIdx < colors.Length && colors[PopupKeyIdx] is ImmutableSolidColorBrush scb) {
+                color = scb.Color;
+            }
+
+            var cnvs = KeyboardGridView.DebugCanvas;
+
+            var rect = new Avalonia.Controls.Shapes.Rectangle() {
+                Tag = PopupKeyIdx,
+                Opacity = 0.5,
+                Stroke = Brushes.Black,
+                StrokeThickness = 1,
+                Fill = new SolidColorBrush(color, 0.5),
+                Width = hitRect.Width,
+                Height = hitRect.Height
+            };
+
+            cnvs.Children.Add(rect);
+            Canvas.SetLeft(rect, hitRect.X);
+            Canvas.SetTop(rect, hitRect.Y);
+
+            double r = 2.5;
+            var ellipse = new Avalonia.Controls.Shapes.Ellipse() {
+                Opacity = 0.5,
+                Fill = Brushes.Red,
+                Width = r*2,
+                Height = r*2
+            };
+
+            cnvs.Children.Add(ellipse);
+            Canvas.SetLeft(ellipse, p.X - r);
+            Canvas.SetTop(ellipse, p.Y - r);
+#endif
+        }
         #endregion
 
         #region Commands

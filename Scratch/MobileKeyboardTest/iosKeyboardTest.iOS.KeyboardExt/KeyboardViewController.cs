@@ -631,6 +631,19 @@ PC.Dispose();
             //InitAvAndKeyboard();
         }
 
+        public void OnVibrateRequest() {
+
+        }
+
+        event EventHandler<TouchEventArgs> IHeadlessRender.OnPointerChanged {
+            add {
+                throw new NotImplementedException();
+            }
+
+            remove {
+                throw new NotImplementedException();
+            }
+        }
     }
 
 #pragma warning disable CA1010 // Generic interface should also be implemented

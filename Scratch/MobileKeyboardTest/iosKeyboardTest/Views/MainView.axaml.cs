@@ -16,7 +16,7 @@ namespace iosKeyboardTest;
 
 public partial class MainView : UserControl
 {
-    public static bool show_windowless_kb = true;
+    public static bool show_windowless_kb = false;
     static IKeyboardInputConnection _conn;
     public static void ForceInputConn(IKeyboardInputConnection conn) {
         _conn = conn;
@@ -125,7 +125,7 @@ public partial class MainView : UserControl
                 icd.SetKeyboardInputSource(this.TestTextBox);                
             }
 
-            if(_conn is IHeadLessRender_desktop hrd) {
+            if(_conn is IHeadLessRender_desktop hrd && show_windowless_kb) {
                 hrd.SetRenderSource(kbv);
                 hrd.SetPointerInputSource(ctrl_to_add);
                 //scale = 1;

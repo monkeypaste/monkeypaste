@@ -4,7 +4,9 @@ using Android.Content;
 using Android.Content.Res;
 using Android.Graphics;
 using Android.Hardware.Lights;
+using Android.Icu.Util;
 using Android.InputMethodServices;
+using Android.OS;
 using Android.Text;
 using Android.Views;
 using Android.Views.InputMethods;
@@ -12,21 +14,23 @@ using Android.Widget;
 using Avalonia;
 using Avalonia.Android;
 using Avalonia.Layout;
+using Microsoft.Maui.Devices;
 using System;
 using System.Diagnostics;
 using Color = Android.Graphics.Color;
+using Debug = System.Diagnostics.Debug;
 using Exception = System.Exception;
 using Keycode = Android.Views.Keycode;
 using View = Android.Views.View;
 
-namespace iosKeyboardTest.Android
-{
+namespace iosKeyboardTest.Android {
     [Service(Name = "com.CompanyName.MyInputMethodService")]
     public class MyInputMethodService : InputMethodService, IKeyboardInputConnection
     {
         // from https://learn.microsoft.com/en-us/answers/questions/252318/creating-a-custom-android-keyboard
 
         private ClipboardListener _cbListener;
+        
         public MyInputMethodService() : base()
         {
         }
@@ -41,7 +45,6 @@ namespace iosKeyboardTest.Android
                     Focusable = false,
                     Content = KeyboardViewModel.CreateKeyboardView(this, kb_size, AndroidDisplayInfo.Scaling, out var unscaledSize)
                 };
-
                 var cntr2 = (LinearLayout)LayoutInflater.Inflate(Resource.Layout.keyboard_layout_view, null);
                 cntr2.AddView(av);
                 cntr2.Focusable = false;
@@ -81,9 +84,13 @@ namespace iosKeyboardTest.Android
 
             _cbListener.OnClipboardChanged += OnCbChanged;
         }
+        void Vibrate() {
+            Vibration.Vibrate(MyInputConfig.Instance.VibrationLevel);
+        }
+
         #region IKeyboardInputConnection
 
-        public void OnText(string text)
+        void IKeyboardInputConnection.OnText(string text)
         {
             if(this.CurrentInputConnection == null)
             {
@@ -91,9 +98,10 @@ namespace iosKeyboardTest.Android
             }
 
             this.CurrentInputConnection.CommitText(text, 1);
+            Vibrate();
         }
 
-        public void OnDelete()
+        void IKeyboardInputConnection.OnDelete()
         {
             if(this.CurrentInputConnection == null)
             {
@@ -108,9 +116,10 @@ namespace iosKeyboardTest.Android
             {
                 this.CurrentInputConnection.CommitText(string.Empty, 1);
             }
+            Vibrate();
         }
 
-        public void OnDone()
+        void IKeyboardInputConnection.OnDone()
         {
             if(this.CurrentInputConnection == null)
             {
@@ -119,28 +128,33 @@ namespace iosKeyboardTest.Android
             this.CurrentInputConnection.SendKeyEvent(new KeyEvent(KeyEventActions.Down, global::Android.Views.Keycode.Enter));
         }
 
-        public void OnNavigate(int dx, int dy) {
+        void IKeyboardInputConnection.OnNavigate(int dx, int dy) {
             if(this.CurrentInputConnection == null) {
                 return;
             }
+
             int? x_dir = dx == 0 ? null : dx > 0 ? 1 : -1;
             int? y_dir = dy == 0 ? null : dy > 0 ? 1 : -1;
 
-            if(y_dir.HasValue) {
+            if (x_dir.HasValue) {
+                for (int i = 0; i < (int)Math.Abs(dx); i++) {
+                    Keycode kc = x_dir > 0 ? Keycode.SoftLeft : Keycode.SoftRight;
+                    this.CurrentInputConnection.SendKeyEvent(new KeyEvent(KeyEventActions.Down, kc));
+                    this.CurrentInputConnection.SendKeyEvent(new KeyEvent(KeyEventActions.Up, kc));
+                    Vibrate();
+                }
+            }
+            if (y_dir.HasValue) {
                 for (int i = 0; i < (int)Math.Abs(dy); i++) {
                     Keycode kc = y_dir > 0 ? Keycode.DpadDown : Keycode.DpadUp;
                     this.CurrentInputConnection.SendKeyEvent(new KeyEvent(KeyEventActions.Down, kc));
                     this.CurrentInputConnection.SendKeyEvent(new KeyEvent(KeyEventActions.Up, kc));
-                }
-            }
-            if(x_dir.HasValue) {
-                for (int i = 0; i < (int)Math.Abs(dx); i++) {
-                    Keycode kc = x_dir > 0 ? Keycode.DpadRight : Keycode.DpadLeft;
-                    this.CurrentInputConnection.SendKeyEvent(new KeyEvent(KeyEventActions.Down, kc));
-                    this.CurrentInputConnection.SendKeyEvent(new KeyEvent(KeyEventActions.Up, kc));
+                    Vibrate();
                 }
             }
         }
+        void IKeyboardInputConnection.OnVibrateRequest() =>
+            Vibrate();
         #endregion
     }
 }
