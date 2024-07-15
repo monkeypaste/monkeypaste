@@ -6,10 +6,14 @@ using System;
 namespace iosKeyboardTest {
     public interface IKeyboardInputConnection
     {
+        event EventHandler OnCursorChanged;
+        string GetLeadingText(int n);
         void OnText(string text);
         void OnDelete();
         void OnDone();
         void OnNavigate(int dx, int dy);
+        void OnVibrateRequest();
+        KeyboardFlags Flags { get; }
     }
     public interface IKeyboardInputConnection_ios : IKeyboardInputConnection, IHeadlessRender {
         bool NeedsInputModeSwitchKey { get; }
@@ -19,7 +23,7 @@ namespace iosKeyboardTest {
         void SetKeyboardInputSource(TextBox textBox);
     }
     public interface IHeadlessRender {
-        event EventHandler<Point?> OnPointerChanged;
+        event EventHandler<TouchEventArgs> OnPointerChanged;
     }
     public interface IHeadLessRender_desktop : IHeadlessRender {
         void SetRenderSource(Control sourceControl);

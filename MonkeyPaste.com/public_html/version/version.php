@@ -23,7 +23,7 @@ function exit_w_version_resp(string $device_type) {
           case 'Android':
                $resp_obj = ['device_version' => ANDROID_VER];
                break;
-          case 'Ios':
+	  case 'Ios':
                $resp_obj = ['device_version' => IOS_VER];
                break;
           default:

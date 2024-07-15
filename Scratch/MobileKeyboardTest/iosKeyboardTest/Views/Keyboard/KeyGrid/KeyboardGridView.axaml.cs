@@ -15,16 +15,19 @@ namespace iosKeyboardTest
 {
 
     public partial class KeyboardGridView : UserControl {
+        public static Canvas DebugCanvas { get; private set; }
+
         public KeyboardViewModel BindingContext =>
             DataContext as KeyboardViewModel;
 
         public KeyboardGridView() 
         {
             InitializeComponent();
+            DebugCanvas = this.DebugCanvasOverlay;
         }
         protected override void OnPointerPressed(PointerPressedEventArgs e) {
             base.OnPointerPressed(e);
-            BindingContext.SetPointerLocation(e.GetPosition(this));
+            BindingContext.SetPointerLocation(new TouchEventArgs(e.GetPosition(this),TouchEventType.Press));
         }
         protected override void OnPointerMoved(PointerEventArgs e) {
             base.OnPointerMoved(e);
@@ -32,14 +35,14 @@ namespace iosKeyboardTest
             if (OperatingSystem.IsWindows() &&
                 !e.GetCurrentPoint(this).Properties.IsLeftButtonPressed) {
                 // ignore mouse movement on desktop
-                BindingContext.SetPointerLocation(null);
+                //BindingContext.SetPointerLocation(null,false);
                 return;
             }
-            BindingContext.SetPointerLocation(e.GetPosition(this));
+            BindingContext.SetPointerLocation(new TouchEventArgs(e.GetPosition(this), TouchEventType.Move));
         }
         protected override void OnPointerReleased(PointerReleasedEventArgs e) {
             base.OnPointerReleased(e);
-            BindingContext.SetPointerLocation(null);
+            BindingContext.SetPointerLocation(new TouchEventArgs(e.GetPosition(this), TouchEventType.Release));
         }
     }
 }

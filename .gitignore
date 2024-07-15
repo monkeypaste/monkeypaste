@@ -398,4 +398,5 @@ MigrationBackup/
 MonkeyPaste.code-workspace
 git-filter-repo
 omnisharp.json
+/file_templates
 /MonkeyPaste.com/public_html/docs
