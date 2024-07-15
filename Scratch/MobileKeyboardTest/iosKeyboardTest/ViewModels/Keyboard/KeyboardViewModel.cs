@@ -2,6 +2,7 @@
 using Avalonia.Controls;
 using Avalonia.Controls.Primitives;
 using Avalonia.Controls.Shapes;
+using Avalonia.Data;
 using Avalonia.Interactivity;
 using Avalonia.Media;
 using Avalonia.Threading;
@@ -35,8 +36,8 @@ namespace iosKeyboardTest {
             var kbvm = new KeyboardViewModel(inputConn, scaledSize, scale);
             var kbv = new KeyboardView() {
                 DataContext = kbvm,
-                Width = kbvm.TotalWidth,
-                Height = kbvm.TotalHeight
+                [!Control.WidthProperty] = new Binding { Source = kbvm, Path = nameof(kbvm.TotalWidth)}, 
+                [!Control.HeightProperty] = new Binding { Source = kbvm, Path = nameof(kbvm.TotalHeight)}, 
             };
             unscaledSize = new Size(kbvm.TotalWidth * scale, kbvm.TotalHeight * scale);
             return kbv;
@@ -65,6 +66,8 @@ namespace iosKeyboardTest {
             Keys
             .FirstOrDefault(x => x != null && x.IsActiveKey);
         public KeyViewModel SpacebarKey { get; private set; }
+        public KeyViewModel BackspaceKey { get; private set; }
+        public KeyViewModel PeriodKey { get; private set; }
         
         IEnumerable<IEnumerable<KeyViewModel>> Rows =>
             Keys.Where(x => x != null && !x.IsPopupKey)
@@ -149,12 +152,18 @@ namespace iosKeyboardTest {
         #endregion
 
         #region Appearance
+        public double CursorControlOpacity =>
+            IsCursorControlEnabled ? 1 : 0;
         public bool IsSecondaryVisible =>
             IsNumbers || CharSet == CharSetType.Letters;
         #endregion
 
         #region State
-
+        string LastInput { get; set; } = string.Empty;
+        public bool IsPullEnabled =>
+            IsTablet;
+        public bool IsSlideEnabled =>
+            IsMobile;
         bool IsHeadlessMode =>
             InputConnection is IKeyboardInputConnection_ios;
         public double ScreenScaling { get; set; }
@@ -164,20 +173,19 @@ namespace iosKeyboardTest {
             (OperatingSystem.IsIOS() &&
             InputConnection != null &&
             (InputConnection as IKeyboardInputConnection_ios).NeedsInputModeSwitchKey);
-        double CursorControlFactorX => 4;
-        double CursorControlFactorY => 4;
-        public bool IsNumbers { get; private set; }
-        KeyboardFlags KeyboardFlags { get; set; }
+        double CursorControlFactorX => 18;
+        double CursorControlFactorY => 18;
+        bool IsAnyPopupMenuVisible =>
+            VisiblePopupKeys.Any();
         bool IsHoldMenuVisible =>
             VisiblePopupKeys.Skip(1).Any();
-        int RepeatCount { get; set; }
 
-        int MinHoldMs => 750;
-        int MinRepeatMs => 300;
-        TimeSpan MinHoldDur => TimeSpan.FromMilliseconds(MinHoldMs);
-        TimeSpan MinRepeatDur => TimeSpan.FromMilliseconds(MinRepeatMs);
-        public Point? KeyboardPointerLocation { get; private set; }
-        public Point? KeyboardPointerDownLocation { get; private set; }
+        int RepeatCount { get; set; }
+        int HoldDelayMs => 20;
+        int MinHoldMs => 500; // NOTE! must be a factor of HoldDelayMs
+        int MinRepeatMs => 300; // NOTE! must be a factor of HoldDelayMs
+        int MinPopupShowMs => 260;
+        int MaxDoubleTapSpaceForPeriodMs => 500;
         public CharSetType CharSet { get; set; }
         public ShiftStateType ShiftState { get; set; }
         public IKeyboardInputConnection InputConnection { get; set; }
@@ -185,6 +193,19 @@ namespace iosKeyboardTest {
             InputConnection as IHeadlessRender;
         public bool IsCursorControlEnabled => LastCursorControlUpdateLocation.HasValue;
         Point? LastCursorControlUpdateLocation { get; set; }
+        public bool IsAutoCapitalizationEnabled =>
+            IsFreeText;
+        #endregion
+
+        #region Model
+        public bool IsFreeText { get; private set; }
+        public bool IsNumbers { get; private set; }
+        public bool IsThemeDark { get; private set; }
+        public bool IsTablet { get; private set; }
+        public bool IsMobile { get; private set; }
+        
+
+        KeyboardFlags KeyboardFlags { get; set; }
         #endregion
 
         #endregion
@@ -198,7 +219,7 @@ namespace iosKeyboardTest {
             Keys.CollectionChanged += Keys_CollectionChanged;
             SetInputConnection(inputConn);
 
-            Init(KeyboardFlags.Phone);
+            Init(KeyboardFlags.Mobile | KeyboardFlags.FreeText);
             SetDesiredSize(scaledSize);
         }
 
@@ -240,68 +261,24 @@ namespace iosKeyboardTest {
                 return;
             }
 
-            //if (IsTouchBounced(e)) {
-            //    return;
-            //}
-            //_lastDebouncedTouchEventArgs = e;
-
-            KeyViewModel touch_kvm = default;
-
-            if(IsCursorControlEnabled) {
-                touch_kvm = SpacebarKey;
-            } else {
-                touch_kvm = GetKeyUnderPoint(mp);
+            if (IsTouchBounced(e)) {
+                return;
             }
-            Debug.WriteLine($"Event: '{touchType}' Id: {touch.Id} Key: '{touch_kvm}'");
+            _lastDebouncedTouchEventArgs = e;
 
-            if (Touches.Primary is { } pt) {
-                KeyboardPointerLocation = pt.Location;
-            } else {
-                KeyboardPointerLocation = null;
-            }
-            if(KeyboardPointerDownLocation == null || KeyboardPointerLocation == null) {
-                // set down on press and clear on release
-                KeyboardPointerDownLocation = KeyboardPointerLocation;
-            }
+
+            Debug.WriteLine($"Event: '{touchType}' Id: {touch.Id}");
+
             var pressed_kvm = GetPressedKeyForTouch(touch);
             switch(touchType) {
                 case TouchEventType.Press:
-                    PressKey(touch_kvm).ConfigureAwait(false);
-                    MoveKey(touch_kvm, touch);
+                    PressKey(touch).ConfigureAwait(false);
                     break;
                 case TouchEventType.Move:
-                    UpdatePull(touch);
-                    if (IsHoldMenuVisible) {
-                        MoveKey(pressed_kvm,touch);
-                        break;
-                    } 
-                    if(IsCursorControlEnabled) {
-                        UpdateCursorControl();
-                        break;
-                    }
-
-                    if(pressed_kvm != touch_kvm &&
-                        touch_kvm != null && 
-                        pressed_kvm.Row + 1 != touch_kvm.Row) {
-                        // when key is pressed and this is its
-                        // associated touch but the touch isn't over the key
-                        
-                        // soft release it
-                        ReleaseKey(pressed_kvm,false, false);
-
-                        PressKey(touch_kvm).ConfigureAwait(false);
-                    }
+                    MoveKey(touch);
                     break;
                 case TouchEventType.Release:
-                    var to_release = touch_kvm;
-                    if(to_release == null || 
-                        !to_release.IsPressed) {
-                        to_release = pressed_kvm;
-                    }
-                    if(to_release == null) {
-                        break;
-                    }
-                    ReleaseKey(to_release,false,true);
+                    ReleaseKey(touch);
                     break;
             }
             UpdateKeyboardState();
@@ -326,18 +303,6 @@ namespace iosKeyboardTest {
             }
             KeyboardWidth = w;
             KeyboardHeight = h;
-            //while(true) {
-            //    // hack to update layout until Total Size equals param size
-            //    // since layout depends on KeyboardWidth/Height NOT total
-            //    //RefreshLayout();
-            //    // initially TotalHeight is bigger than param size by top/bottom menu heights
-            //    double diff = TotalHeight - size.Height;
-            //    if(Math.Abs(diff) < 0.01) {
-            //        break;
-            //    }
-            //    KeyboardHeight -= 0.01;
-            //}
-            //double final_diff = TotalHeight - size.Height;
         }
 
         #endregion
@@ -348,11 +313,10 @@ namespace iosKeyboardTest {
         #region Private Methods
         void Init(KeyboardFlags flags)
         {
-            KeyboardFlags = flags;
-            IsNumbers = KeyboardFlags.HasFlag(KeyboardFlags.Numbers);
-            MaxColCount = 0;
+            SetFlags(flags);
 
             var keyRows = GetKeyRows(KeyboardFlags);
+            MaxColCount = 0;
             RowCount = keyRows.Count;
             for(int r = 0; r < keyRows.Count; r++)
             {
@@ -367,25 +331,75 @@ namespace iosKeyboardTest {
                     prev_kvm = kvm;
                     if(kvm.IsSpaceBar) {
                         SpacebarKey = kvm;
+                    } else if(kvm.IsPeriod) {
+                        PeriodKey = kvm;
+                    } else if(kvm.IsBackspace) {
+                        BackspaceKey = kvm;
                     }
                 }
             }
             int max_popup_keys = Keys.Max(x => x.SecondaryCharacters.Count());
             MaxPopupRowCount = (int)Math.Floor((double)max_popup_keys / (double)(MaxPopupColCount));
 
-            KeyViewModel prev_pukvm = null;
-            int idx = 0;
-            for (int r = 0; r < MaxPopupRowCount; r++) {
-                for (int c = 0; c < MaxPopupColCount; c++) {
-                    var pukvm = CreatePopUpKeyViewModel(idx++, r,c, prev_pukvm);
-                    Keys.Add(pukvm);
-                    prev_pukvm = pukvm;
+            for (int i = 0; i < 2; i++) {
+                // create 2x Max possible popup keys for multi touch
+                KeyViewModel prev_pukvm = null;
+                int idx = 0;
+                for (int r = 0; r < MaxPopupRowCount; r++) {
+                    for (int c = 0; c < MaxPopupColCount; c++) {
+                        var pukvm = CreatePopUpKeyViewModel(idx++, r, c, prev_pukvm);
+                        Keys.Add(pukvm);
+                        prev_pukvm = pukvm;
+                    }
                 }
+            }
+
+            SetShiftByLeadingText();
+            if (InputConnection is { } ic) {
+                ic.OnCursorChanged += Ic_OnCursorChanged;
             }
 
             UpdateKeyboardState();
         }
 
+        private void Ic_OnCursorChanged(object sender, EventArgs e) {
+            Dispatcher.UIThread.Post(SetShiftByLeadingText);
+        }
+
+        void SetShiftByLeadingText() {
+            if(!IsAutoCapitalizationEnabled ||
+                InputConnection is not { } ic ||
+                ShiftState == ShiftStateType.ShiftLock) {
+                return;
+            }
+            string[] eos_chars = ["\n", ".", "!", "?", string.Empty];
+            bool needs_shift = false;
+            if(ic.GetLeadingText(-1) is { } leading_text) {
+                for (int i = 0; i < leading_text.Length; i++) {
+                    string cur_char = leading_text[leading_text.Length - i - 1].ToString();
+                    if(cur_char == " ") {
+                        continue;
+                    }
+                    int eos_idx = eos_chars.IndexOf(cur_char);
+                    // only allow shift if prev char is newline or
+                    // space(s) after any end-of-sentence char 
+                    needs_shift = 
+                        eos_idx >= 0 && 
+                        ((i == 0 && eos_idx == 0) || i > 0);
+                    break;
+                }
+            }
+            ShiftState = needs_shift ? ShiftStateType.Shift : ShiftStateType.None;
+            UpdateKeyboardState();
+        }
+        void SetFlags(KeyboardFlags kbFlags) {
+            KeyboardFlags = kbFlags;
+            IsThemeDark = KeyboardFlags.HasFlag(KeyboardFlags.Dark);
+            IsNumbers = KeyboardFlags.HasFlag(KeyboardFlags.Numbers);
+            IsFreeText = KeyboardFlags.HasFlag(KeyboardFlags.FreeText);
+            IsMobile = KeyboardFlags.HasFlag(KeyboardFlags.Mobile);
+            IsTablet = KeyboardFlags.HasFlag(KeyboardFlags.Tablet);
+        }
         private void Keys_CollectionChanged(object sender, System.Collections.Specialized.NotifyCollectionChangedEventArgs e) {
             if(e.OldItems == null ||
                 e.OldItems.OfType<KeyViewModel>() is not { } removed_kvml) {
@@ -403,7 +417,7 @@ namespace iosKeyboardTest {
                 p = new Point(scaledPoint.X, scaledPoint.Y - MenuHeight);
             }
             var result = Keys
-                .Where(x => x != null)
+                .Where(x => x != null && !x.IsPopupKey)
                 .Select(x => (x, new Rect(x.X, x.Y, x.Width, x.Height)))
                 .FirstOrDefault(x => x.Item2.Contains(p));
             return result.x;
@@ -412,7 +426,8 @@ namespace iosKeyboardTest {
             this.RaisePropertyChanged(nameof(Keys));
             this.RaisePropertyChanged(nameof(KeyboardWidth));
             this.RaisePropertyChanged(nameof(KeyboardHeight));
-            this.RaisePropertyChanged(nameof(IsCursorControlEnabled));
+            this.RaisePropertyChanged(nameof(NeedsNextKeyboardButton));
+            this.RaisePropertyChanged(nameof(CursorControlOpacity));
             this.RaisePropertyChanged(nameof(TotalWidth));
             this.RaisePropertyChanged(nameof(TotalHeight));
             this.RaisePropertyChanged(nameof(MenuHeight));
@@ -453,12 +468,17 @@ namespace iosKeyboardTest {
                 }
                 //Debug.WriteLine(key.PrimaryValue);
             }
+#if DEBUG
+            if(KeyboardGridView.DebugCanvas != null) {
+                KeyboardGridView.DebugCanvas.InvalidateVisual();
+            }
+#endif
         }
 
 
         void ShowPopUpKeyViewModel(KeyViewModel source_kvm, int r, int c, string disp_val) {
             if (source_kvm.IsSpecial ||
-                PopupKeys.FirstOrDefault(x=>x.Row == r && x.Column == c) is not { } pukvm) {
+                PopupKeys.FirstOrDefault(x=>x.Row == r && x.Column == c && (x.PopupAnchorKey == null || x.PopupAnchorKey == source_kvm)) is not { } pukvm) {
                 return;
             }
 
@@ -509,14 +529,33 @@ namespace iosKeyboardTest {
                     return "+";
             }
         }
+        SpecialKeyType GetPrimarySpecialKey(KeyboardFlags kbFlags) {
+            if(kbFlags.HasFlag(KeyboardFlags.FreeText)) {
+                return SpecialKeyType.Enter;
+            }
+            if(kbFlags.HasFlag(KeyboardFlags.Numbers) ||
+                kbFlags.HasFlag(KeyboardFlags.Email)) {
+                return SpecialKeyType.Next;
+            }
+            
+            if(kbFlags.HasFlag(KeyboardFlags.Search)) {
+                return SpecialKeyType.Search;
+            }
+            if (kbFlags.HasFlag(KeyboardFlags.Url)) {
+                return SpecialKeyType.Go;
+            }
+
+            return SpecialKeyType.Done;
+        }
         List<List<object>> GetKeyRows(KeyboardFlags kbFlags) {
             List<List<object>> keys = null;
-            if (kbFlags.HasFlag(KeyboardFlags.Phone)) {
+            SpecialKeyType primarySpecialType = GetPrimarySpecialKey(kbFlags);
+            if (kbFlags.HasFlag(KeyboardFlags.Mobile)) {
                 if (kbFlags.HasFlag(KeyboardFlags.Numbers)) {
                     keys = new List<List<object>>
                 {
                     (["1,(", "2,/", "3,)", SpecialKeyType.Backspace]),
-                    (["4,N", "5,comma", "6,.", SpecialKeyType.Next]),
+                    (["4,N", "5,comma", "6,.", primarySpecialType]),
                     (["7,*", "8,;", "9,#", SpecialKeyType.NumberSymbolsToggle]),
                     (["*,-", "0,+", "#,__", "comma"])
                 };
@@ -527,7 +566,7 @@ namespace iosKeyboardTest {
                     (["q,+,`", "w,×,~", "e,÷,\\", "r,=,|", "t,/,{", "y,_,}", "u,<,€", "i,>,£", "o,[,¥", "p,],₩"]),
                     (["a,!,○", "s,@,•", "d,#,⚪", "f,$,⚫", "g,%,□", "h,^,🔳", "j,&,♤", "k,*,♡", "l,(,♢", "none,),♧"]),
                     ([SpecialKeyType.Shift, "z,-,☆", "x,',▪", "c,\",▫", "v,:,≪", "b,;,≫", "n,comma,¡", "m,?,¿", SpecialKeyType.Backspace]),
-                    ([SpecialKeyType.SymbolToggle, "comma", " ", ".", SpecialKeyType.Enter])
+                    ([SpecialKeyType.SymbolToggle, "comma", " ", ".", primarySpecialType])
                 };
                 }
 
@@ -536,7 +575,7 @@ namespace iosKeyboardTest {
                 {
                     (["1", "2", "3", "4", "5", "6", "7", "8", "9", "0", SpecialKeyType.Backspace]),
                     ([SpecialKeyType.Tab, "q,+,`", "w,×,~", "e,÷,\\", "r,=,|", "t,/,{", "y,_,}", "u,<,€", "i,>,£", "o,[,¥", "p,],₩"]),
-                    ([SpecialKeyType.CapsLock, "a,!,○", "s,@,•", "d,#,⚪", "f,$,⚫", "g,%,□", "h,^,🔳", "j,&,♤", "k,*,♡", "l,(,♢", "none,),♧", SpecialKeyType.Enter]),
+                    ([SpecialKeyType.CapsLock, "a,!,○", "s,@,•", "d,#,⚪", "f,$,⚫", "g,%,□", "h,^,🔳", "j,&,♤", "k,*,♡", "l,(,♢", "none,),♧", primarySpecialType]),
                     ([SpecialKeyType.Shift, "z,-,☆", "x,',▪", "c,\",▫", "v,:,≪", "b,;,≫", "n,comma,¡", "m,?,¿", "comma",".", SpecialKeyType.Shift]),
                     ([SpecialKeyType.SymbolToggle,SpecialKeyType.Emoji, " ", SpecialKeyType.ArrowLeft, SpecialKeyType.ArrowRight, SpecialKeyType.NextKeyboard])
                 };
@@ -581,76 +620,89 @@ namespace iosKeyboardTest {
             }
         }
 
-        void ClearHoldKeys(KeyViewModel kvm) {
-            kvm.VisiblePopupColCount = 0;
-            kvm.VisiblePopupRowCount = 0;
-            var to_remove = PopupKeys.Where(x => x.PopupAnchorKey == kvm).ToList();
-            foreach (var rmv in to_remove) {
-                rmv.RemovePopupAnchor();
-            }
+        void ClearPopup(KeyViewModel kvm) {
+            Dispatcher.UIThread.Post(async () => {
+                var to_remove = PopupKeys.Where(x => x.PopupAnchorKey == kvm).ToList();
+                while(DateTime.Now - kvm.PressPopupShowDt < TimeSpan.FromMilliseconds(MinPopupShowMs)) {
+                    // ensure the popup shows up cause everythings so SLOW
+                    await Task.Delay(20);
+                }
+                kvm.VisiblePopupColCount = 0;
+                kvm.VisiblePopupRowCount = 0;
+                foreach (var rmv in to_remove) {
+                    rmv.RemovePopupAnchor();
+                }
+            });
         }
         void ShowPressPopup(KeyViewModel kvm) {
-            ClearHoldKeys(kvm);
+            ClearPopup(kvm);
             ShowPopUpKeyViewModel(kvm, 0, 0, kvm.CurrentChar);
-            UpdateKeyboardState();
+            kvm.PressPopupShowDt = DateTime.Now;
         }
         void ShowHoldPopup(KeyViewModel kvm) {
             if(IsHoldMenuVisible && kvm != null && !kvm.HasHoldPopup) {
                 return;
             }
-            ClearHoldKeys(kvm);
-            if(kvm != null) {
-                if(kvm.HasHoldPopup) {
-                    var chars = kvm.SecondaryCharacters.ToList();
-                    int idx = 0;
-                    for (int r = 0; r < MaxPopupRowCount; r++) {
-                        for (int c = 0; c < MaxPopupColCount; c++) {
-                            string pv = string.Empty;
-                            if(idx < chars.Count) {
-                                // visible popup
-                                pv = chars[idx];
-                            } else if(r == 0) {
-                                break;
-                            }
-                            ShowPopUpKeyViewModel(kvm, r, c, pv);
-                            idx++;
-                        }
-                        if(idx >= chars.Count) {
-                            break;
-                        }
+            ClearPopup(kvm);
+            if(kvm == null ||
+                !kvm.HasHoldPopup) {
+                return;
+            }
+            var chars = kvm.SecondaryCharacters.ToList();
+            if(kvm.IsRightSideKey) {
+                chars.Reverse();
+            }
+            int idx = 0;
+            for (int r = 0; r < MaxPopupRowCount; r++) {
+                for (int c = 0; c < MaxPopupColCount; c++) {
+                    string pv = string.Empty;
+                    if (idx < chars.Count) {
+                        // visible popup
+                        pv = chars[idx];
+                    } else if (r == 0) {
+                        break;
                     }
-                }                
+                    ShowPopUpKeyViewModel(kvm, r, c, pv);
+                    idx++;
+                }
+                if (idx >= chars.Count) {
+                    break;
+                }
             }
-            KeyboardGridView.DebugCanvas.InvalidateVisual();
-            UpdateKeyboardState();
         }
-        void ShowPullKey(KeyViewModel kvm) {
 
-        }
         #region Cursor Control
-        void StartCursorControl() {
-            if(KeyboardPointerLocation == null) {
-                // shouldn't happen
-                Debugger.Break();
+        void StartCursorControl(string touchId) {
+            if(Touches.Locate(touchId) is not { } touch) {
+                return;
             }
-            LastCursorControlUpdateLocation = KeyboardPointerLocation.Value;
+            LastCursorControlUpdateLocation = touch.Location;
             UpdateKeyboardState();
         }
         void StopCursorControl() {
             LastCursorControlUpdateLocation = null;
-            //UpdateKeyboardState();
+            if(SpacebarKey is { } sb_kvm) {
+                sb_kvm.SetPressed(false);
+            }
+            UpdateKeyboardState();
         }
-        void UpdateCursorControl() {
-            var mp = KeyboardPointerLocation.Value;
+        void UpdateCursorControl(Touch touch) {
+            var mp = touch.Location;
             var lump = LastCursorControlUpdateLocation.Value;
 
             int dx = (int)Math.Floor((mp.X - lump.X)/CursorControlFactorX);
             int dy = (int)Math.Floor((mp.Y - lump.Y)/CursorControlFactorY);
-            if(dx == 0 && dy == 0) {
-                return;
-            }
-            LastCursorControlUpdateLocation = mp;
+            //if(dx == 0 && dy == 0) {
+            //    return;
+            //}
+            dx = dx == 0 ? 0 : dx > 0 ? 1 : -1;
+            dy = dy == 0 ? 0 : dy > 0 ? 1 : -1;
+
             InputConnection.OnNavigate(dx,dy);
+            LastCursorControlUpdateLocation = mp;
+            if(dx != 0 || dy != 0) {
+                InputConnection.OnVibrateRequest();
+            }
         }
         #endregion
 
@@ -673,63 +725,112 @@ namespace iosKeyboardTest {
         }
         #endregion
 
-        async Task PressKey(KeyViewModel kvm) {
-            if(kvm == null) {
+        async Task PressKey(Touch touch) {
+            if(GetKeyUnderPoint(touch.Location) is not { } kvm) {
                 return;
             }
             kvm.SetPressed(true);
-            int delay_ms = 20;
+
             int t = 0;
             var touch_center = kvm.Rect.Center;
             while (true) {
                 if (t == 0 && kvm.HasPressPopup) {
                     ShowPressPopup(kvm);
+                    kvm.UpdateActive(touch);
+                    UpdateKeyboardState();
                 } else if (t == MinHoldMs) {
                     if (kvm.HasHoldPopup) {
                         ShowHoldPopup(kvm);
+                        UpdateKeyboardState();
+                        return;
                     } else if(kvm.IsSpaceBar) {
-                        StartCursorControl();
+                        StartCursorControl(touch.Id);
+                        UpdateKeyboardState();
+                        return;
                     }
                 }
-                if (kvm.CanRepeat && t % MinRepeatMs == 0) {
+                if (kvm.CanRepeat && t > 0 && t % MinRepeatMs == 0) {
                     int del_count = RepeatCount + RepeatCount + 1;
                     Debug.WriteLine($"Repeat Count: {RepeatCount} Del Count: {del_count}");
                     for (int i = 0; i < del_count; i++) {
-                        ReleaseKey(kvm, true,true);
+                        ReleaseKey(touch);
                     }
                     RepeatCount++;
                 }
-                await Task.Delay(delay_ms);
-                t += delay_ms;
+                await Task.Delay(HoldDelayMs);
+                t += HoldDelayMs;
                 if (!PressedKeys.Contains(kvm)) {
                     return;
                 }
             }
         }
-        void MoveKey(KeyViewModel kvm, Touch touch) {
-            if(kvm == null) {
+        void MoveKey(Touch touch) {
+            if (IsCursorControlEnabled) {
+                UpdateCursorControl(touch);
+                return;
+            } 
+            if(IsPullEnabled) {
+                UpdatePull(touch);
+            }
+            var pressed_kvm = GetPressedKeyForTouch(touch);
+            if(IsHoldMenuVisible && 
+                pressed_kvm != null) {
+                pressed_kvm.UpdateActive(touch);
                 return;
             }
-            kvm.UpdateActive(touch);
+            var touch_kvm = GetKeyUnderPoint(touch.Location);
+            if (IsSlideEnabled &&
+                        pressed_kvm != null &&
+                        touch_kvm != null &&
+                        pressed_kvm != touch_kvm) {
+                // when key is pressed and this is its
+                // associated touch but the touch isn't over the key
+
+                // soft release it
+                SoftReleaseKey(pressed_kvm);
+
+                PressKey(touch).ConfigureAwait(false);
+            }
         }
-        void ReleaseKey(KeyViewModel kvm, bool isRepeat, bool performAction) {
+        //void ReleaseKey(KeyViewModel kvm, bool isRepeat, bool performAction) {
+        void SoftReleaseKey(KeyViewModel kvm) {
             if(kvm == null) {
                 return;
             }
-            if(!performAction) {
-                kvm.SetPressed(false);
-                UpdateKeyboardState();
+            kvm.SetPressed(false);
+            ClearPopup(kvm);
+        }
+        void ReleaseKey(Touch touch) {
+            if (IsCursorControlEnabled) {
+                StopCursorControl();
                 return;
             }
-            var active_kvm = kvm.ActivePopupKey;
-            if (active_kvm == null) {
-                active_kvm = kvm;
-            }
-            if (active_kvm == null) {                      
+            if (GetPressedKeyForTouch(touch) is not { } pressed_kvm)  {
                 return;
             }
 
-            switch (kvm.SpecialKeyType) {
+            PerformKeyAction(pressed_kvm);
+
+            bool is_released = Touches.Locate(touch.Id) == null;
+            if(is_released) {
+                pressed_kvm.SetPressed(false);
+                ClearPopup(pressed_kvm);
+                if(pressed_kvm.CanRepeat) {
+                    RepeatCount = 0;
+                }
+            }
+        }
+
+        void PerformKeyAction(KeyViewModel pressed_kvm) {
+            var active_kvm = pressed_kvm.ActivePopupKey;
+            if (active_kvm == null) {
+                active_kvm = pressed_kvm;
+            }
+            if (active_kvm == null) {
+                return;
+            }
+
+            switch (pressed_kvm.SpecialKeyType) {
                 case SpecialKeyType.Shift:
                     HandleShift();
                     break;
@@ -752,14 +853,11 @@ namespace iosKeyboardTest {
                         ios_ic.OnInputModeSwitched();
                     }
                     break;
-
                 default:
-                    if(IsCursorControlEnabled) {
-                        StopCursorControl();
-                        break;
-                    }
                     string pv = active_kvm.PrimaryValue;
-                    if(active_kvm.IsPopupKey && active_kvm.PopupAnchorKey is { } anchor_kvm &&
+                    if (IsPullEnabled &&
+                        active_kvm.IsPopupKey && 
+                        active_kvm.PopupAnchorKey is { } anchor_kvm &&
                         anchor_kvm.IsPulled) {
                         // release comes from active not pressed
                         // when pulled don't care whats active just use secondary
@@ -767,25 +865,30 @@ namespace iosKeyboardTest {
                         anchor_kvm.PullTranslateY = 0;
                     }
                     InputConnection?.OnText(pv);
+                    LastInput = pv;
 
                     if (ShiftState == ShiftStateType.Shift) {
                         ShiftState = ShiftStateType.None;
                     }
-                    if(active_kvm.IsSpaceBar && !IsNumbers) {
-                        // after typing space reset to default keyboard
-                        CharSet = CharSetType.Letters;
+                    if (active_kvm.IsSpaceBar) {
+                        if(!IsNumbers) {
+                            // after typing space reset to default keyboard
+                            CharSet = CharSetType.Letters;
+
+                            if(active_kvm.LastReleaseDt is { } lrdt &&
+                                DateTime.Now - lrdt <= TimeSpan.FromMilliseconds(MaxDoubleTapSpaceForPeriodMs) &&
+                                BackspaceKey is { } backspace_kvm &&
+                                PeriodKey is { } period_kvm) {
+                                // double tap space for period
+                                // automate backspace, then period press
+                                PerformKeyAction(backspace_kvm);
+                                PerformKeyAction(backspace_kvm);
+                                PerformKeyAction(period_kvm);
+                            }
+                        }
                     }
                     break;
             }
-            if(active_kvm.CanRepeat && !isRepeat) {
-                RepeatCount = 0;
-            }
-
-            if (!isRepeat) {
-                kvm.SetPressed(false);
-                ClearHoldKeys(kvm);
-            }
-            //Debug.WriteLine($"Tapped {kvm.CurrentChar}");
         }
         #endregion
 

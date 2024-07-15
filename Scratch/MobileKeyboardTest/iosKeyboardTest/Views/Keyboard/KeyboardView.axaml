@@ -11,15 +11,318 @@
              x:DataType="local:KeyboardViewModel"
              x:Class="iosKeyboardTest.KeyboardView">
     <UserControl.Resources>
-        <SolidColorBrush x:Key="CursorControlBgBrush" Opacity="0.7" Color="Black" />
-        <SolidColorBrush x:Key="CursorControlFgBrush">White</SolidColorBrush>
+
+        <!--  DARK MODE  -->
+        <SolidColorBrush x:Key="FgBrush2_dark">Silver</SolidColorBrush>
+        <SolidColorBrush x:Key="FgBrush_dark">White</SolidColorBrush>
+        <SolidColorBrush x:Key="BgBrush_dark">Black</SolidColorBrush>
+        <SolidColorBrush x:Key="HoldBgBrush_dark">Gold</SolidColorBrush>
+        <SolidColorBrush x:Key="HoldFocusBgBrush_dark">Orange</SolidColorBrush>
+        <SolidColorBrush x:Key="HoldFgBrush_dark">Black</SolidColorBrush>
+        <SolidColorBrush x:Key="PressedBgBrush_dark">Gray</SolidColorBrush>
+        <SolidColorBrush x:Key="SpecialPressedBgBrush_dark">DimGray</SolidColorBrush>
+        <SolidColorBrush x:Key="PrimarySpecialPressedBgBrush_dark">MediumBlue</SolidColorBrush>
+        <SolidColorBrush x:Key="ShiftBrush_dark">Cyan</SolidColorBrush>
+        <SolidColorBrush x:Key="MenuBgBrush_dark">#333333</SolidColorBrush>
+
+        <LinearGradientBrush x:Key="DefaultKeyBgBrush_dark" TransformOrigin="50%,50%" StartPoint="15%,0%" EndPoint="15%,100%">
+            <LinearGradientBrush.GradientStops>
+                <GradientStop Color="Silver" Offset="0" />
+                <GradientStop Color="DimGray" Offset="0.09" />
+                <GradientStop Color="#444444" Offset="0.8" />
+                <GradientStop Color="#444444" Offset="1" />
+            </LinearGradientBrush.GradientStops>
+        </LinearGradientBrush>
+        <LinearGradientBrush x:Key="SpecialKeyBgBrush_dark" TransformOrigin="50%,50%" StartPoint="15%,0%" EndPoint="15%,100%">
+            <LinearGradientBrush.GradientStops>
+                <GradientStop Color="DimGray" Offset="0" />
+                <GradientStop Color="#333333" Offset="0.07" />
+                <GradientStop Color="#333333" Offset="0.8" />
+                <GradientStop Color="#222222" Offset="1" />
+            </LinearGradientBrush.GradientStops>
+        </LinearGradientBrush>
+        <LinearGradientBrush x:Key="PrimarySpecialKeyBgBrush_dark" TransformOrigin="50%,50%" StartPoint="15%,0%" EndPoint="15%,100%">
+            <LinearGradientBrush.GradientStops>
+                <GradientStop Color="MediumBlue" Offset="0" />
+                <GradientStop Color="Navy" Offset="0.07" />
+                <GradientStop Color="MidnightBlue" Offset="0.8" />
+                <GradientStop Color="DarkBlue" Offset="1" />
+            </LinearGradientBrush.GradientStops>
+        </LinearGradientBrush>
+        <SolidColorBrush x:Key="CursorControlBgBrush_dark" Opacity="0.7" Color="Black" />
+        <SolidColorBrush x:Key="CursorControlFgBrush_dark">White</SolidColorBrush>
+
+        <!--  LIGHT MODE  -->
+        <SolidColorBrush x:Key="FgBrush2">DimGray</SolidColorBrush>
+        <SolidColorBrush x:Key="FgBrush">Black</SolidColorBrush>
+        <SolidColorBrush x:Key="BgBrush">White</SolidColorBrush>
+        <SolidColorBrush x:Key="HoldBgBrush">LightGoldenRodYellow</SolidColorBrush>
+        <SolidColorBrush x:Key="HoldFocusBgBrush">Khaki</SolidColorBrush>
+        <SolidColorBrush x:Key="HoldFgBrush">Black</SolidColorBrush>
+        <SolidColorBrush x:Key="PressedBgBrush">Gainsboro</SolidColorBrush>
+        <SolidColorBrush x:Key="SpecialPressedBgBrush">MintCream</SolidColorBrush>
+        <SolidColorBrush x:Key="PrimarySpecialPressedBgBrush">LightSkyBlue</SolidColorBrush>
+        <SolidColorBrush x:Key="ShiftBrush">CornflowerBlue</SolidColorBrush>
+        <SolidColorBrush x:Key="MenuBgBrush">#CCCCCC</SolidColorBrush>
+
+        <LinearGradientBrush x:Key="DefaultKeyBgBrush" TransformOrigin="50%,50%" StartPoint="15%,0%" EndPoint="15%,100%">
+            <LinearGradientBrush.GradientStops>
+                <GradientStop Color="#555555" Offset="0" />
+                <GradientStop Color="#EEEEEE" Offset="0.09" />
+                <GradientStop Color="#DCDCDC" Offset="0.6" />
+                <GradientStop Color="#CCCCCC" Offset="1" />
+            </LinearGradientBrush.GradientStops>
+        </LinearGradientBrush>
+        <LinearGradientBrush x:Key="SpecialKeyBgBrush" TransformOrigin="50%,50%" StartPoint="15%,0%" EndPoint="15%,100%">
+            <LinearGradientBrush.GradientStops>
+                <GradientStop Color="#CCCCCC" Offset="0" />
+                <GradientStop Color="MintCream" Offset="0.07" />
+                <GradientStop Color="MintCream" Offset="0.8" />
+                <GradientStop Color="#EEEEEE" Offset="1" />
+            </LinearGradientBrush.GradientStops>
+        </LinearGradientBrush>
+        <LinearGradientBrush x:Key="PrimarySpecialKeyBgBrush" TransformOrigin="50%,50%" StartPoint="15%,0%" EndPoint="15%,100%">
+            <LinearGradientBrush.GradientStops>
+                <GradientStop Color="MediumBlue" Offset="0" />
+                <GradientStop Color="LightSkyBlue" Offset="0.07" />
+                <GradientStop Color="LightSkyBlue" Offset="0.8" />
+                <GradientStop Color="DeepSkyBlue" Offset="1" />
+            </LinearGradientBrush.GradientStops>
+        </LinearGradientBrush>
+
+        <SolidColorBrush x:Key="CursorControlBgBrush" Opacity="0.7" Color="White" />
+        <SolidColorBrush x:Key="CursorControlFgBrush">Black</SolidColorBrush>
     </UserControl.Resources>
-    <Grid RowDefinitions="Auto,*,Auto"
+    <UserControl.Styles>
+        <!--  BEGIN PALETTE  -->
+
+        <!--  ...................................  -->
+        <!--  LIGHT THEME  -->
+        <!--  ...................................  -->
+
+        <!--  KEYBOARD  -->
+        <Style Selector="Grid#OuterGrid">
+            <Setter Property="Background"
+                    Value="{DynamicResource BgBrush}" />
+        </Style>
+
+        <!--  MENU  -->
+        <Style Selector="local|KeyboardMenuStripView">
+            <Setter Property="Background"
+                    Value="{DynamicResource MenuBgBrush}" />
+        </Style>
+
+        <!--  CURSOR CONTROL  -->
+
+        <Style Selector="Grid#CursorControlGrid">
+            <Setter Property="Background"
+                    Value="{DynamicResource CursorControlBgBrush}" />
+        </Style>
+
+        <Style Selector="Grid#CursorControlGrid TextBlock">
+            <Setter Property="Foreground"
+                    Value="{DynamicResource CursorControlFgBrush}" />
+        </Style>
+
+        <!--  KEY FOREGROUND  -->
+
+        <Style Selector="local|KeyView TextBlock">
+            <Setter Property="Foreground"
+                    Value="{DynamicResource FgBrush}" />
+        </Style>
+        <Style Selector="local|KeyView TextBlock#SecondaryKeyTextBlock">
+            <Setter Property="Foreground"
+                    Value="{DynamicResource FgBrush2}" />
+        </Style>
+
+        <Style Selector="local|KeyView.shift TextBlock">
+            <Setter Property="Foreground"
+                    Value="{DynamicResource ShiftBrush}" />
+        </Style>
+        <Style Selector="local|KeyView.popup-key TextBlock">
+            <Setter Property="Foreground"
+                    Value="{DynamicResource HoldFgBrush}" />
+        </Style>
+
+        <!--  KEY BACKGROUND  -->
+        <Style Selector="local|KeyView Border#KeyBgRect">
+            <Setter Property="Background"
+                    Value="{DynamicResource DefaultKeyBgBrush}" />
+        </Style>
+        <Style Selector="local|KeyView:not(.popup-key):not(.down) Border#KeyBgRect">
+            <Setter Property="BoxShadow"
+                    Value="0.5 0.5 0 0 black" />
+        </Style>
+        <Style Selector="local|KeyView.special:not(.primary-special):not(.popup-key):not(.down) Border#KeyBgRect">
+            <Setter Property="BoxShadow"
+                    Value="0.5 0.5 0 0 black" />
+        </Style>
+        <Style Selector="local|KeyView.special:not(.down) Border#KeyBgRect">
+            <Setter Property="Background"
+                    Value="{DynamicResource SpecialKeyBgBrush}" />
+        </Style>
+        <Style Selector="local|KeyView.special.primary-special:not(.down) Border#KeyBgRect">
+            <Setter Property="Background"
+                    Value="{DynamicResource PrimarySpecialKeyBgBrush}" />
+        </Style>
+        <Style Selector="local|KeyView.down Border#KeyBgRect">
+            <Setter Property="Background"
+                    Value="{DynamicResource PressedBgBrush}" />
+        </Style>
+        <Style Selector="local|KeyView.down.special Border#KeyBgRect">
+            <Setter Property="Background"
+                    Value="{DynamicResource SpecialPressedBgBrush}" />
+        </Style>
+        <Style Selector="local|KeyView.down.primary-special.special Border#KeyBgRect">
+            <Setter Property="Background"
+                    Value="{DynamicResource PrimarySpecialPressedBgBrush}" />
+        </Style>
+        <Style Selector="local|KeyView.shift-lock Border#KeyBgRect">
+            <Setter Property="Background"
+                    Value="{DynamicResource ShiftBrush}" />
+        </Style>
+        <Style Selector="local|KeyView.popup-key Border#KeyBgRect">
+            <Setter Property="Background"
+                    Value="{DynamicResource HoldBgBrush}" />
+        </Style>
+        <Style Selector="local|KeyView.popup-key.hold-focus-key Border#KeyBgRect">
+            <Setter Property="Background"
+                    Value="{DynamicResource HoldFocusBgBrush}" />
+        </Style>
+
+        <!--  ...................................  -->
+        <!--  DARK THEME  -->
+        <!--  ...................................  -->
+
+        <!--  KEYBOARD  -->
+        <Style Selector="Grid#OuterGrid.dark">
+            <Setter Property="Background"
+                    Value="{DynamicResource BgBrush_dark}" />
+        </Style>
+
+        <!--  MENU  -->
+        <Style Selector="Grid#OuterGrid.dark local|KeyboardMenuStripView">
+            <Setter Property="Background"
+                    Value="{DynamicResource MenuBgBrush_dark}" />
+        </Style>
+
+        <!--  CURSOR CONTROL  -->
+
+        <Style Selector="Grid#OuterGrid.dark Grid#CursorControlGrid">
+            <Setter Property="Background"
+                    Value="{DynamicResource CursorControlBgBrush_dark}" />
+        </Style>
+
+        <Style Selector="Grid#OuterGrid.dark Grid#CursorControlGrid TextBlock">
+            <Setter Property="Foreground"
+                    Value="{DynamicResource CursorControlFgBrush_dark}" />
+        </Style>
+
+
+        <!--  KEY FOREGROUND  -->
+
+        <Style Selector="Grid#OuterGrid.dark local|KeyView TextBlock">
+            <Setter Property="Foreground"
+                    Value="{DynamicResource FgBrush_dark}" />
+        </Style>
+        <Style Selector="Grid#OuterGrid.dark local|KeyView TextBlock#SecondaryKeyTextBlock">
+            <Setter Property="Foreground"
+                    Value="{DynamicResource FgBrush2_dark}" />
+        </Style>
+
+        <Style Selector="Grid#OuterGrid.dark local|KeyView.shift TextBlock">
+            <Setter Property="Foreground"
+                    Value="{DynamicResource ShiftBrush_dark}" />
+        </Style>
+        <Style Selector="Grid#OuterGrid.dark local|KeyView.popup-key:not(.down) TextBlock">
+            <Setter Property="Foreground"
+                    Value="{DynamicResource HoldFgBrush_dark}" />
+        </Style>
+
+        <!--  KEY BACKGROUND  -->
+        <Style Selector="Grid#OuterGrid.dark local|KeyView Border#KeyBgRect">
+            <Setter Property="Background"
+                    Value="{DynamicResource DefaultKeyBgBrush_dark}" />
+        </Style>
+        <Style Selector="Grid#OuterGrid.dark local|KeyView:not(.popup-key):not(.down) Border#KeyBgRect">
+            <Setter Property="BoxShadow"
+                    Value="0.5 0.5 0 0 whitesmoke" />
+        </Style>
+        <Style Selector="Grid#OuterGrid.dark local|KeyView.special:not(.primary-special):not(.popup-key):not(.down) Border#KeyBgRect">
+            <Setter Property="BoxShadow"
+                    Value="0.5 0.5 0 0 whitesmoke" />
+        </Style>
+        <Style Selector="Grid#OuterGrid.dark local|KeyView.special:not(.down) Border#KeyBgRect">
+            <Setter Property="Background"
+                    Value="{DynamicResource SpecialKeyBgBrush_dark}" />
+        </Style>
+        <Style Selector="Grid#OuterGrid.dark local|KeyView.special.primary-special:not(.down) Border#KeyBgRect">
+            <Setter Property="Background"
+                    Value="{DynamicResource PrimarySpecialKeyBgBrush_dark}" />
+        </Style>
+        <Style Selector="Grid#OuterGrid.dark local|KeyView.down Border#KeyBgRect">
+            <Setter Property="Background"
+                    Value="{DynamicResource PressedBgBrush_dark}" />
+        </Style>
+        <Style Selector="Grid#OuterGrid.dark local|KeyView.down.special Border#KeyBgRect">
+            <Setter Property="Background"
+                    Value="{DynamicResource SpecialPressedBgBrush_dark}" />
+        </Style>
+        <Style Selector="Grid#OuterGrid.dark local|KeyView.down.primary-special.special Border#KeyBgRect">
+            <Setter Property="Background"
+                    Value="{DynamicResource PrimarySpecialPressedBgBrush_dark}" />
+        </Style>
+        <Style Selector="Grid#OuterGrid.dark local|KeyView.shift-lock:not(.down) Border#KeyBgRect">
+            <Setter Property="Background"
+                    Value="{DynamicResource ShiftBrush_dark}" />
+        </Style>
+        <Style Selector="Grid#OuterGrid.dark local|KeyView.popup-key:not(.down) Border#KeyBgRect">
+            <Setter Property="Background"
+                    Value="{DynamicResource HoldBgBrush_dark}" />
+        </Style>
+        <Style Selector="Grid#OuterGrid.dark local|KeyView.hold-focus-key:not(.down) Border#KeyBgRect">
+            <Setter Property="Background"
+                    Value="{DynamicResource HoldFocusBgBrush_dark}" />
+        </Style>
+
+        <!--  END PALETTE  -->
+
+
+        <!--  KEY LOCATION  -->
+        <Style Selector="ItemsControl#KeyItemsControl ContentPresenter"
+               x:DataType="local:KeyViewModel">
+            <Setter Property="Canvas.Left"
+                    Value="{Binding X}" />
+            <Setter Property="Canvas.Top"
+                    Value="{Binding Y}" />
+            <Setter Property="Width"
+                    Value="{Binding Width}" />
+            <Setter Property="Height"
+                    Value="{Binding Height}" />
+        </Style>
+
+        <!--  DEFAULT TEXT LAYOUTS  -->
+
+        <Style Selector="ItemsControl#KeyItemsControl TextBlock#KeyTextBlock">
+            <Setter Property="HorizontalAlignment"
+                    Value="Center" />
+            <Setter Property="VerticalAlignment"
+                    Value="Center" />
+        </Style>
+        <Style Selector="ItemsControl#KeyItemsControl TextBlock#SecondaryKeyTextBlock">
+            <Setter Property="HorizontalAlignment"
+                    Value="Right" />
+            <Setter Property="VerticalAlignment"
+                    Value="Top" />
+        </Style>
+    </UserControl.Styles>
+    <Grid x:Name="OuterGrid"
+          Classes.dark="{Binding IsThemeDark}"
+          RowDefinitions="Auto,*,Auto"
           Width="{Binding TotalWidth}"
           Height="{Binding TotalHeight}">
         <!--  MENU STRIP  -->
-        <local:KeyboardMenuStripView Background="Purple"
-                                     Height="{Binding MenuHeight}" />
+        <local:KeyboardMenuStripView Height="{Binding MenuHeight}" />
         <!--  KEYBOARD  -->
         <local:KeyboardGridView x:Name="KeyboardGridView"
                                 Grid.Row="1"
@@ -53,15 +356,20 @@
 
         <!--  CURSOR CONTROL OVERLAY  -->
 
-        <Grid Grid.RowSpan="2"
-              Background="{DynamicResource CursorControlBgBrush}"
+        <Grid x:Name="CursorControlGrid"
+              Grid.RowSpan="2"
               IsHitTestVisible="False"
-              IsVisible="{Binding IsCursorControlEnabled}">
+              Opacity="{Binding CursorControlOpacity}">
+            <Grid.Transitions>
+                <Transitions>
+                    <DoubleTransition Property="Opacity"
+                                      Duration="0:0:0.33" />
+                </Transitions>
+            </Grid.Transitions>
             <TextBlock HorizontalAlignment="Center"
                        VerticalAlignment="Center"
                        TextAlignment="Center"
-                       Foreground="{DynamicResource CursorControlFgBrush}"
-                       Text="Cursor Control" />
+                       Text="👆Cursor Control" />
         </Grid>
     </Grid>
 </UserControl>

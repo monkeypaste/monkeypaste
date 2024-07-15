@@ -57,6 +57,11 @@ public partial class MainView : UserControl
             //        Height = 100
             //    }
             //};
+            Touches.Clear();
+            if(!show_windowless_kb) {
+                return;
+            }
+
             var rect = new Rect(0, 0, 1000, 300);
             //var test = new TestView() {
             //    Width = rect.Width,

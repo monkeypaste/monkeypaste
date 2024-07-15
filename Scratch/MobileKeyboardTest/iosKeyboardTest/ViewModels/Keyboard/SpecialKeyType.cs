@@ -15,6 +15,9 @@ namespace iosKeyboardTest
         ArrowLeft,
         ArrowRight,
         NextKeyboard,
+        Done, // PrimarySpecial (default)
+        Go, // PrimarySpecial
+        Search, // PrimarySpecial
         Enter, // PrimarySpecial
         Next, // PrimarySpecial
     }
@@ -61,7 +64,7 @@ namespace iosKeyboardTest
         Dark = 1L << 13,
 
         // DEVICE
-        Phone = 1L << 14,
+        Mobile = 1L << 14,
         Tablet = 1L << 15,
     }
 }
