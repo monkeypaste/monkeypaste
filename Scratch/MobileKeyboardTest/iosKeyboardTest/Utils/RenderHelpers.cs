@@ -2,11 +2,12 @@
 using Avalonia.Controls;
 using Avalonia.Media;
 using Avalonia.Media.Imaging;
-using System;
 using System.IO;
+using System.Runtime.CompilerServices;
 using Size = Avalonia.Size;
 
 namespace iosKeyboardTest {
+
     public static class RenderHelpers {
         public static Bitmap RenderToBitmap(byte[] bytes) {
             using(var ms = new MemoryStream(bytes)) {

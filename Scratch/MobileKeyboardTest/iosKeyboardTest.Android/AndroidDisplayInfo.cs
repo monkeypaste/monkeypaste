@@ -13,6 +13,8 @@ namespace iosKeyboardTest.Android
                 ScaledPortraitSize : ScaledLandscapeSize;
         public static double Scaling =>
             DeviceDisplay.MainDisplayInfo.Density;
+        public static bool IsPortrait =>
+            ScaledSize.Width < ScaledSize.Height;
         static AndroidDisplayInfo()
         {
             double scaling = DeviceDisplay.MainDisplayInfo.Density;

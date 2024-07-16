@@ -20,13 +20,11 @@ namespace iosKeyboardTest {
     public static class Touches {
 
         private static List<Touch> _touches = [];
-        public static Touch Primary =>
-            _touches.OrderBy(x => x.CreatedDt).FirstOrDefault();
         public static Touch Locate(Point p) {
             if(!_touches.Any()) {
                 return null;
             }
-            return _touches.Aggregate((a, b) => Dist(a.Location, p) < Dist(b.Location, p) ? a : b);
+            return _touches.Aggregate((a, b) => DistSquared(a.Location, p) < DistSquared(b.Location, p) ? a : b);
         }
         public static Touch Locate(string id) {
             return _touches.FirstOrDefault(x => x.Id == id);
@@ -59,7 +57,10 @@ namespace iosKeyboardTest {
             _touches.Clear();
         }
         public static double Dist(Point p1, Point p2) {
-            return Math.Sqrt(Math.Pow(p2.X - p1.X, 2) + Math.Pow(p2.Y - p1.Y, 2));
+            return Math.Sqrt(DistSquared(p1,p2));
+        }
+        public static double DistSquared(Point p1, Point p2) {
+            return Math.Pow(p2.X - p1.X, 2) + Math.Pow(p2.Y - p1.Y, 2);
         }
     }
     public class Touch {

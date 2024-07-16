@@ -28,8 +28,7 @@
                       ItemsSource="{Binding Keys}">
             <ItemsControl.ItemTemplate>
                 <DataTemplate x:DataType="local:KeyViewModel">
-                    <local:KeyView IsVisible="{Binding IsVisible}"
-                                   Classes.down="{Binding IsPressed}"
+                    <local:KeyView Classes.down="{Binding IsPressed}"
                                    Classes.hold-focus-key="{Binding IsActiveKey}"
                                    Classes.popup-key="{Binding IsPopupKey}"
                                    Classes.special="{Binding IsSpecial}"

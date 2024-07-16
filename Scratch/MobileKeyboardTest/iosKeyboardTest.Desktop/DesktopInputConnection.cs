@@ -37,16 +37,16 @@ public class DesktopInputConnection : IKeyboardInputConnection_desktop {
         }
     }
 
-    public string GetLeadingText(int n) {
+    public string GetLeadingText(int offset, int len) {
         if(InputTextBox == null) {
             return string.Empty;
         }
         string pre_text = InputTextBox.Text.Substring(0, InputTextBox.SelectionStart);
-        if(n < 0) {
-            n = pre_text.Length;
+        if(offset < 0) {
+            offset = pre_text.Length;
         }
         var sb = new StringBuilder();
-        for (int i = 0; i < n; i++) {
+        for (int i = 0; i < offset; i++) {
             int pre_text_idx = pre_text.Length - 1 - i;
             if(pre_text_idx < 0) {
                 break;
@@ -70,7 +70,6 @@ public class DesktopInputConnection : IKeyboardInputConnection_desktop {
         if(InputTextBox == null) {
             return;
         }
-        Debug.WriteLine($"DX: {dx} DY: {dy}");
         //InputTextBox.SelectionStart = InputTextBox.SelectionEnd;
         InputTextBox.CaretIndex += CursorControlHelper.FindCaretOffset(InputTextBox.Text, InputTextBox.CaretIndex, dx, dy);
     }
@@ -104,10 +103,12 @@ public class DesktopInputConnection : IKeyboardInputConnection_desktop {
         RenderSource = sourceControl;        
     }
 
-    public void OnVibrateRequest() {
+    public void OnFeedback(KeyboardFeedbackFlags flags) {
     }
 
     public event EventHandler OnCursorChanged;
+    public event EventHandler OnFlagsChanged;
+
 
     #endregion
 }

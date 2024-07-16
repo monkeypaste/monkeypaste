@@ -49,8 +49,8 @@ namespace iosKeyboardTest
         Landscape = 1L << 4,
 
         // LAYOUT
-        Float = 1L << 5,
-        Full = 1L << 6,
+        FloatLayout = 1L << 5,
+        FullLayout = 1L << 6,
 
         // MODE
         FreeText = 1L << 7,

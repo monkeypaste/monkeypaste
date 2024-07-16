@@ -4,7 +4,7 @@
         #endregion
 
         #region Constants
-        const int DEFAULT_VIBRATION_LEVEL = 75;
+        const int DEFAULT_VIBRATION_LEVEL = 50;
         #endregion
 
         #region Statics
