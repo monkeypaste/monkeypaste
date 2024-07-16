@@ -25,24 +25,5 @@ namespace iosKeyboardTest
             InitializeComponent();
             DebugCanvas = this.DebugCanvasOverlay;
         }
-        protected override void OnPointerPressed(PointerPressedEventArgs e) {
-            base.OnPointerPressed(e);
-            BindingContext.SetPointerLocation(new TouchEventArgs(e.GetPosition(this),TouchEventType.Press));
-        }
-        protected override void OnPointerMoved(PointerEventArgs e) {
-            base.OnPointerMoved(e);
-
-            if (OperatingSystem.IsWindows() &&
-                !e.GetCurrentPoint(this).Properties.IsLeftButtonPressed) {
-                // ignore mouse movement on desktop
-                //BindingContext.SetPointerLocation(null,false);
-                return;
-            }
-            BindingContext.SetPointerLocation(new TouchEventArgs(e.GetPosition(this), TouchEventType.Move));
-        }
-        protected override void OnPointerReleased(PointerReleasedEventArgs e) {
-            base.OnPointerReleased(e);
-            BindingContext.SetPointerLocation(new TouchEventArgs(e.GetPosition(this), TouchEventType.Release));
-        }
     }
 }

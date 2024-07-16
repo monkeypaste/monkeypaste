@@ -4,15 +4,24 @@ using Avalonia.Media.Imaging;
 using System;
 
 namespace iosKeyboardTest {
+    [Flags]
+    public enum KeyboardFeedbackFlags : long {
+        None = 0,
+        Vibrate = 1L << 1,
+        Click = 1L << 2,
+        Return = 1L << 3,
+    }
     public interface IKeyboardInputConnection
     {
         event EventHandler OnCursorChanged;
-        string GetLeadingText(int n);
+        event EventHandler OnFlagsChanged;
+        event EventHandler OnDismissed;
+        string GetLeadingText(int offset, int len);
         void OnText(string text);
         void OnDelete();
         void OnDone();
         void OnNavigate(int dx, int dy);
-        void OnVibrateRequest();
+        void OnFeedback(KeyboardFeedbackFlags flags);
         KeyboardFlags Flags { get; }
     }
     public interface IKeyboardInputConnection_ios : IKeyboardInputConnection, IHeadlessRender {

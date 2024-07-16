@@ -299,6 +299,10 @@
                     Value="{Binding Width}" />
             <Setter Property="Height"
                     Value="{Binding Height}" />
+            <Setter Property="ZIndex"
+                    Value="{Binding ZIndex}" />
+            <Setter Property="Opacity"
+                    Value="{Binding KeyOpacity}" />
         </Style>
 
         <!--  DEFAULT TEXT LAYOUTS  -->

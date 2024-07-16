@@ -631,7 +631,7 @@ PC.Dispose();
             //InitAvAndKeyboard();
         }
 
-        public void OnVibrateRequest() {
+        public void OnFeedback() {
 
         }
 
