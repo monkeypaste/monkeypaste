@@ -24,17 +24,20 @@ namespace iosKeyboardTest {
         void OnFeedback(KeyboardFeedbackFlags flags);
         KeyboardFlags Flags { get; }
     }
-    public interface IKeyboardInputConnection_ios : IKeyboardInputConnection, IHeadlessRender {
+    public interface IKeyboardRenderer {
+        void Render();
+    }
+    public interface IKeyboardInputConnection_ios : IKeyboardInputConnection, ITriggerTouchEvents {
         bool NeedsInputModeSwitchKey { get; }
         void OnInputModeSwitched();
     }
     public interface IKeyboardInputConnection_desktop : IKeyboardInputConnection, IHeadLessRender_desktop {
         void SetKeyboardInputSource(TextBox textBox);
     }
-    public interface IHeadlessRender {
+    public interface ITriggerTouchEvents {
         event EventHandler<TouchEventArgs> OnPointerChanged;
     }
-    public interface IHeadLessRender_desktop : IHeadlessRender {
+    public interface IHeadLessRender_desktop : ITriggerTouchEvents {
         void SetRenderSource(Control sourceControl);
         void SetPointerInputSource(Control sourceControl);
     }

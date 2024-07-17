@@ -89,7 +89,7 @@ namespace iosKeyboardTest {
                 }
             }
 
-            if (conn is IHeadlessRender hrd) {
+            if (conn is ITriggerTouchEvents hrd) {
                 hrd.OnPointerChanged += (s, e) => {
                     if (KeyboardView.DataContext is not KeyboardViewModel kbvm) {
                         return;

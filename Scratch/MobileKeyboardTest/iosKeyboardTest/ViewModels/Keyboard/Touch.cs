@@ -5,6 +5,7 @@ using System.Linq;
 
 namespace iosKeyboardTest {
     public enum TouchEventType {
+        None,
         Press,
         Move,
         Release

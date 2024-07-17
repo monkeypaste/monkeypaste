@@ -25,7 +25,7 @@
                      AcceptsReturn="True"
                      HorizontalAlignment="Center"
                      VerticalAlignment="Center"
-                     Text="Yo how ya doin?" />
+                     Text="{Binding Greeting}" />
             <Button HorizontalAlignment="Center"
                     Grid.Row="2"
                     VerticalAlignment="Center"

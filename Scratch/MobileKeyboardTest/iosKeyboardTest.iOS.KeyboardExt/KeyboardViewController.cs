@@ -635,7 +635,7 @@ PC.Dispose();
 
         }
 
-        event EventHandler<TouchEventArgs> IHeadlessRender.OnPointerChanged {
+        event EventHandler<TouchEventArgs> ITriggerTouchEvents.OnPointerChanged {
             add {
                 throw new NotImplementedException();
             }

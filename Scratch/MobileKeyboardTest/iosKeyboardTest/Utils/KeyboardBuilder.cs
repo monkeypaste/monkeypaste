@@ -16,17 +16,19 @@ using System.Security.Cryptography;
 namespace iosKeyboardTest {
     public static class KeyboardBuilder {
         #region Brushes
-        static SolidColorBrush FgBrush2 { get; } = new SolidColorBrush(Colors.Silver);
-        static SolidColorBrush FgBrush { get; } = new SolidColorBrush(Colors.White);
-        static SolidColorBrush BgBrush { get; } = new SolidColorBrush(Colors.Black);
-        static SolidColorBrush HoldBgBrush { get; } = new SolidColorBrush(Colors.Gold);
-        static SolidColorBrush HoldFocusBgBrush { get; } = new SolidColorBrush(Colors.Orange);
-        static SolidColorBrush HoldFgBrush { get; } = new SolidColorBrush(Colors.Black);
-        static SolidColorBrush PressedBrush { get; } = new SolidColorBrush(Colors.Gray);
-        static SolidColorBrush ShiftBrush { get; } = new SolidColorBrush(Colors.Cyan);
-        static SolidColorBrush CursorControlBgBrush { get; } = new SolidColorBrush(Color.FromArgb(150,20,20,20));
-        static SolidColorBrush CursorControlFgBrush { get; } = new SolidColorBrush(Colors.White);
-        static LinearGradientBrush DefaultKeyBgBrush { get; } = new LinearGradientBrush() {
+        public static SolidColorBrush FgBrush2 { get; } = new SolidColorBrush(Colors.Gainsboro);
+        public static SolidColorBrush FgBrush { get; } = new SolidColorBrush(Colors.White);
+        public static SolidColorBrush BgBrush { get; } = new SolidColorBrush(Colors.Black);
+        public static SolidColorBrush HoldBgBrush { get; } = new SolidColorBrush(Colors.Gold);
+        public static SolidColorBrush HoldFocusBgBrush { get; } = new SolidColorBrush(Colors.Orange);
+        public static SolidColorBrush HoldFgBrush { get; } = new SolidColorBrush(Colors.Black);
+        public static SolidColorBrush PressedBrush { get; } = new SolidColorBrush(Colors.Gray);
+        public static SolidColorBrush ShiftBrush { get; } = new SolidColorBrush(Colors.Cyan);
+        public static SolidColorBrush MenuBgBrush { get; } = new SolidColorBrush(Colors.Silver);
+        public static SolidColorBrush CursorControlBgBrush { get; } = new SolidColorBrush(Color.FromArgb(150,20,20,20));
+        public static SolidColorBrush CursorControlFgBrush { get; } = new SolidColorBrush(Colors.White);
+        public static SolidColorBrush DefaultKeyBgBrush { get; } = new SolidColorBrush(Colors.Silver);
+        public static LinearGradientBrush DefaultKeyGradBgBrush { get; } = new LinearGradientBrush() {
             TransformOrigin = new RelativePoint(0.5, 0.5, RelativeUnit.Relative),
             StartPoint = new RelativePoint(0.15, 0, RelativeUnit.Relative),
             EndPoint = new RelativePoint(0.15, 1, RelativeUnit.Relative),
@@ -37,7 +39,8 @@ namespace iosKeyboardTest {
                 new GradientStop(Color.FromRgb(68,68,68),1)
                 ]
         };
-        static LinearGradientBrush SpecialKeyBgBrush { get; } = new LinearGradientBrush() {
+        public static SolidColorBrush SpecialKeyBgBrush { get; } = new SolidColorBrush(Colors.DimGray);
+        public static LinearGradientBrush SpecialKeyGradBgBrush { get; } = new LinearGradientBrush() {
             TransformOrigin = new RelativePoint(0.5, 0.5, RelativeUnit.Relative),
             StartPoint = new RelativePoint(0.15, 0, RelativeUnit.Relative),
             EndPoint = new RelativePoint(0.15, 1, RelativeUnit.Relative),

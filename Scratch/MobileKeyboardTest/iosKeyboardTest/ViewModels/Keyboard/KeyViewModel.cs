@@ -178,7 +178,8 @@ namespace iosKeyboardTest
             private set {
                 if(_activePopupKey != value) {
                     _activePopupKey = value;
-                    this.RaisePropertyChanged(nameof(ActivePopupKey));
+                    //this.RaisePropertyChanged(nameof(ActivePopupKey));
+                    Parent.UpdateKeyboardState();
                 }
             }
         }
@@ -222,6 +223,8 @@ namespace iosKeyboardTest
             }
         }
 
+        public double PrimaryTranslateOffsetX { get; set; } = 0;
+        public double PrimaryTranslateOffsetY { get; set; } = 0;
         public double SecondaryTranslateOffsetX {
             get {
                 double x = -3;
@@ -272,20 +275,20 @@ namespace iosKeyboardTest
         #region Layout
 
         #region Factors
-        double PopupKeyWidthRatio =>
+        public double PopupKeyWidthRatio =>
             1.07;
-        double DefaultOuterPadX =>
+        public double DefaultOuterPadX =>
             7;// Math.Min(10, Width / Parent.MaxColCount);
-        double OuterPadX =>
+        public double OuterPadX =>
             IsPopupKey ? 0 : DefaultOuterPadX;
-        double OuterPadY => 
+        public double OuterPadY => 
             IsPopupKey ? 
                 0 : 
                 Parent.KeyHeight * 0.15;
-        double PrimaryFontSizeRatio => 0.5;
-        double MaxFontSize => 16;
-        double SecondaryFontSizeRatio => 0.25;
-        double SecondaryRatio => 0.25;
+        public double PrimaryFontSizeRatio => 0.5;
+        public double MaxFontSize => 16;
+        public double SecondaryFontSizeRatio => 0.25;
+        public double SecondaryRatio => 0.25;
         string[] MisAlignedCharacters => [
             //"✖️",
             "♠️",
@@ -593,7 +596,8 @@ namespace iosKeyboardTest
                 LastReleaseDt = DateTime.Now;
                 Parent.PressedKeys.Remove(this);
             }
-            this.RaisePropertyChanged(nameof(IsPressed));
+            //this.RaisePropertyChanged(nameof(IsPressed));
+            Parent.UpdateKeyboardState();
         }
         public void UpdateActive(Touch touch) {
             KeyViewModel last_active = ActivePopupKey;
@@ -621,6 +625,9 @@ namespace iosKeyboardTest
             }
         }
         public void FitPopupInFrame() {
+            if(!PopupKeys.Any()) {
+                return;
+            }
             double l = PopupKeys.Min(x => x.TotalRect.Left);
             double t = PopupKeys.Min(x => x.TotalRect.Top);
             double r = PopupKeys.Max(x => x.TotalRect.Right);

@@ -2,7 +2,6 @@
 using Android.App;
 using Android.Content;
 using Android.Content.Res;
-using Android.Graphics;
 using Android.Hardware.Lights;
 using Android.Icu.Util;
 using Android.InputMethodServices;
@@ -13,18 +12,18 @@ using Android.Text;
 using Android.Views;
 using Android.Views.InputMethods;
 using Android.Widget;
-using Avalonia;
 using Avalonia.Android;
 using Avalonia.Layout;
 using Avalonia.Styling;
+using Java.Util;
 using Microsoft.Maui.ApplicationModel;
 using Microsoft.Maui.Devices;
 using System;
 using System.Diagnostics;
 using System.Text;
 using System.Threading.Tasks;
+using static Android.Provider.MediaStore.Audio;
 using static System.Net.Mime.MediaTypeNames;
-using Color = Android.Graphics.Color;
 using Debug = System.Diagnostics.Debug;
 using Exception = System.Exception;
 using Keycode = Android.Views.Keycode;
@@ -32,43 +31,85 @@ using View = Android.Views.View;
 
 namespace iosKeyboardTest.Android {
     [Service(Name = "com.CompanyName.MyInputMethodService")]
-    public class MyInputMethodService : InputMethodService, IKeyboardInputConnection
-    {
+    public class MyInputMethodService : InputMethodService, IKeyboardInputConnection, ITriggerTouchEvents {
         // from https://learn.microsoft.com/en-us/answers/questions/252318/creating-a-custom-android-keyboard
 
         private ClipboardListener _cbListener;
         private EditorInfo _lastEditorInfo = default;
-        
+        private AdKeyboardView _keyboardView = default;
+        private Handler _handler;
+        Context CurrentContext =>
+            MainActivity.Instance; //this.Window.Context;
         public MyInputMethodService() : base()
         {
         }
         
-        public override View? OnCreateInputView()
-        {
-            try
-            {
-                this.Window.CancelEvent += Window_CancelEvent;
-                this.Window.DismissEvent += Window_DismissEvent;
+        public override View? OnCreateInputView() {
+            Init();
+            //return CreateAdKeyboard();
+            return CreateAvKeyboard();
+        }
+
+        private void _keyboardView_OnMotionEvent(object sender, MotionEvent e) {
+            if(e == null) {
+                return;
+            }
+            double x = e.GetX() / AndroidDisplayInfo.Scaling;
+            double y = e.GetY() / AndroidDisplayInfo.Scaling;
+            Avalonia.Point p = new Avalonia.Point(x, y);
+            var tet = 
+                e.Action == MotionEventActions.Down ? 
+                    TouchEventType.Press : 
+                    e.Action == MotionEventActions.Move ? 
+                        TouchEventType.Move : 
+                        e.Action == MotionEventActions.Up ? 
+                            TouchEventType.Release : 
+                            TouchEventType.None;
+
+            OnPointerChanged?.Invoke(this, new TouchEventArgs(p, tet));
+        }
+
+        View CreateAdKeyboard() {
+            _keyboardView = new AdKeyboardView(this, this);
+            _keyboardView.OnMotionEvent += _keyboardView_OnMotionEvent;
+
+            //Timer timer = new Timer();
+            //timer.ScheduleAtFixedRate(new RenderTask(_keyboardView,new Handler()), (long)0, (long)(1000d / 60d));
+            
+            return _keyboardView;
+        }
+
+        View CreateAvKeyboard() {
+            try {
                 var kb_size = KeyboardViewModel.GetTotalSizeByScreenSize(AndroidDisplayInfo.ScaledSize);
-                var av = new AvaloniaView(MainActivity.Instance)
-                {
+                var av = new AvaloniaView(CurrentContext) {
                     Focusable = false,
                     Content = KeyboardViewModel.CreateKeyboardView(this, kb_size, AndroidDisplayInfo.Scaling, out var unscaledSize)
                 };
                 var cntr2 = (LinearLayout)LayoutInflater.Inflate(Resource.Layout.keyboard_layout_view, null);
                 cntr2.AddView(av);
                 cntr2.Focusable = false;
-                var cntr = new KeyboardLinearLayout(MainActivity.Instance, (int)unscaledSize.Height);
+                var cntr = new KeyboardLinearLayout(CurrentContext, (int)unscaledSize.Height);
                 cntr.AddView(cntr2);
                 return cntr;
-            } catch(Exception ex)
-            {
+            }
+            catch (Exception ex) {
                 Debug.WriteLine(ex.ToString());
             }
             return null;
         }
 
+        void Init() {
+            _handler = new Handler();
+            this.Window.CancelEvent += Window_CancelEvent;
+            this.Window.DismissEvent += Window_DismissEvent;
+        }
+
         private void Window_DismissEvent(object sender, EventArgs e) {
+            // this is called:
+            // 1. when the keyboard is toggled to disabled in 'Manage Keyboards'
+            // 2. When a different keyboard is selected
+
             this.OnDismissed?.Invoke(this, EventArgs.Empty);
         }
 
@@ -88,6 +129,15 @@ namespace iosKeyboardTest.Android {
             }
         }
 
+        #region IKeyboardRenderer
+        public void Render() {
+            if(_keyboardView == null) {
+                return;
+            }
+            //_keyboardView.Invalidate();
+        }
+        #endregion
+
         #region IKeyboardInputConnection
         KeyboardFlags IKeyboardInputConnection.Flags {
             get {
@@ -98,37 +148,47 @@ namespace iosKeyboardTest.Android {
                 // does android have floating keyboard? 
                 kbf |= KeyboardFlags.FullLayout;
 
-                if (_lastEditorInfo.InputType.HasFlag(InputTypes.TextVariationUri)) {
-                    kbf |= KeyboardFlags.Url;
-                } else if (_lastEditorInfo.InputType.HasFlag(InputTypes.TextVariationWebEmailAddress) ||
-                           _lastEditorInfo.InputType.HasFlag(InputTypes.TextVariationEmailAddress)) {
-                    kbf |= KeyboardFlags.Email;
-                } else if (/*_lastEditorInfo.InputType.HasFlag(InputTypes.NumberFlagDecimal) ||
+                if(_lastEditorInfo != null) {
+                    if (_lastEditorInfo.InputType.HasFlag(InputTypes.TextVariationUri)) {
+                        kbf |= KeyboardFlags.Url;
+                    } else if (_lastEditorInfo.InputType.HasFlag(InputTypes.TextVariationWebEmailAddress) ||
+                               _lastEditorInfo.InputType.HasFlag(InputTypes.TextVariationEmailAddress)) {
+                        kbf |= KeyboardFlags.Email;
+                    } else if (/*_lastEditorInfo.InputType.HasFlag(InputTypes.NumberFlagDecimal) ||
                             _lastEditorInfo.InputType.HasFlag(InputTypes.NumberFlagSigned) ||
                             _lastEditorInfo.InputType.HasFlag(InputTypes.NumberVariationNormal) ||
                             _lastEditorInfo.InputType.HasFlag(InputTypes.NumberVariationPassword) ||
                             _lastEditorInfo.InputType.HasFlag(InputTypes.ClassPhone) ||
                             _lastEditorInfo.InputType.HasFlag(InputTypes.ClassDatetime) ||*/
-                            _lastEditorInfo.InputType.HasFlag(InputTypes.ClassNumber)
-                            ) {
-                    kbf |= KeyboardFlags.Numbers;
-                } else if(_lastEditorInfo.InputType.HasFlag(InputTypes.ClassText)) {
-                    kbf |= KeyboardFlags.FreeText;
-                } else {
-                    kbf |= KeyboardFlags.Search;
+                                _lastEditorInfo.InputType.HasFlag(InputTypes.ClassNumber)
+                                ) {
+                        kbf |= KeyboardFlags.Numbers;
+                    } else if (_lastEditorInfo.InputType.HasFlag(InputTypes.ClassText)) {
+                        kbf |= KeyboardFlags.FreeText;
+                    } else {
+                        kbf |= KeyboardFlags.Search;
+                    }
                 }
 
-                if(App.Current.ActualThemeVariant == ThemeVariant.Dark) { 
-                    kbf |= KeyboardFlags.Dark;
-                } else {
-                    kbf |= KeyboardFlags.Light;
+                if(CurrentContext != null &&
+                    CurrentContext.GetSystemService(Context.UiModeService) is UiModeManager uimm) {
+                    kbf |= uimm.NightMode == UiNightMode.Yes ? KeyboardFlags.Dark : KeyboardFlags.Light;
                 }
+                //if(App.Current is { } app) {
+                //    if (app.ActualThemeVariant == ThemeVariant.Dark) {
+                //        kbf |= KeyboardFlags.Dark;
+                //    } else {
+                //        kbf |= KeyboardFlags.Light;
+                //    }
+                //}
 
-                TelephonyManager tm = (TelephonyManager)MainActivity.Instance.ApplicationContext.GetSystemService(Context.TelephonyService);
-                if(tm.PhoneType == PhoneType.None) {
-                    kbf |= KeyboardFlags.Tablet;
-                } else {
-                    kbf |= KeyboardFlags.Mobile;
+                if(CurrentContext != null &&
+                    CurrentContext.GetSystemService(Context.TelephonyService) is TelephonyManager tm) {
+                    if (tm.PhoneType == PhoneType.None) {
+                        kbf |= KeyboardFlags.Tablet;
+                    } else {
+                        kbf |= KeyboardFlags.Mobile;
+                    }
                 }
 
                 return kbf;
@@ -284,6 +344,23 @@ namespace iosKeyboardTest.Android {
             _cbListener.OnClipboardChanged += OnCbChanged;
         }
 
+        public event EventHandler<TouchEventArgs> OnPointerChanged;
+
         #endregion
+    }
+
+    public class RenderTask : TimerTask {
+        View _view;
+        Handler _handler;
+        public RenderTask(View view, Handler handler) {
+            _view = view;
+            _handler = handler;
+        }
+        public override void Run() {
+            _handler.Post(() => {
+                _view.Invalidate();
+            });
+            
+        }
     }
 }

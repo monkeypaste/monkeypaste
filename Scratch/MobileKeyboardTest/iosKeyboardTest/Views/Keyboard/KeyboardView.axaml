@@ -13,8 +13,8 @@
     <UserControl.Resources>
 
         <!--  DARK MODE  -->
-        <SolidColorBrush x:Key="FgBrush2_dark">Silver</SolidColorBrush>
         <SolidColorBrush x:Key="FgBrush_dark">White</SolidColorBrush>
+        <SolidColorBrush x:Key="FgBrush2_dark">Silver</SolidColorBrush>
         <SolidColorBrush x:Key="BgBrush_dark">Black</SolidColorBrush>
         <SolidColorBrush x:Key="HoldBgBrush_dark">Gold</SolidColorBrush>
         <SolidColorBrush x:Key="HoldFocusBgBrush_dark">Orange</SolidColorBrush>
@@ -53,8 +53,8 @@
         <SolidColorBrush x:Key="CursorControlFgBrush_dark">White</SolidColorBrush>
 
         <!--  LIGHT MODE  -->
-        <SolidColorBrush x:Key="FgBrush2">DimGray</SolidColorBrush>
         <SolidColorBrush x:Key="FgBrush">Black</SolidColorBrush>
+        <SolidColorBrush x:Key="FgBrush2">DimGray</SolidColorBrush>
         <SolidColorBrush x:Key="BgBrush">White</SolidColorBrush>
         <SolidColorBrush x:Key="HoldBgBrush">LightGoldenRodYellow</SolidColorBrush>
         <SolidColorBrush x:Key="HoldFocusBgBrush">Khaki</SolidColorBrush>
@@ -151,11 +151,11 @@
         </Style>
         <Style Selector="local|KeyView:not(.popup-key):not(.down) Border#KeyBgRect">
             <Setter Property="BoxShadow"
-                    Value="0.5 0.5 0 0 black" />
+                    Value="0 0.5 0 0 black" />
         </Style>
         <Style Selector="local|KeyView.special:not(.primary-special):not(.popup-key):not(.down) Border#KeyBgRect">
             <Setter Property="BoxShadow"
-                    Value="0.5 0.5 0 0 black" />
+                    Value="0 0.5 0 0 black" />
         </Style>
         <Style Selector="local|KeyView.special:not(.down) Border#KeyBgRect">
             <Setter Property="Background"
@@ -246,11 +246,11 @@
         </Style>
         <Style Selector="Grid#OuterGrid.dark local|KeyView:not(.popup-key):not(.down) Border#KeyBgRect">
             <Setter Property="BoxShadow"
-                    Value="0.5 0.5 0 0 whitesmoke" />
+                    Value="0 0.5 0 0 whitesmoke" />
         </Style>
         <Style Selector="Grid#OuterGrid.dark local|KeyView.special:not(.primary-special):not(.popup-key):not(.down) Border#KeyBgRect">
             <Setter Property="BoxShadow"
-                    Value="0.5 0.5 0 0 whitesmoke" />
+                    Value="0 0.5 0 0 whitesmoke" />
         </Style>
         <Style Selector="Grid#OuterGrid.dark local|KeyView.special:not(.down) Border#KeyBgRect">
             <Setter Property="Background"

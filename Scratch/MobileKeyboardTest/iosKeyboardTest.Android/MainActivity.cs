@@ -1,4 +1,5 @@
 ﻿using Android.App;
+using Android.Content;
 using Android.Content.PM;
 using Android.OS;
 using Android.Text;
@@ -20,6 +21,10 @@ public class MainActivity : AvaloniaMainActivity<App>
 {
     public static MainActivity Instance { get; private set; }
 
+    public static void CreateManually() {
+        Instance = new MainActivity();
+    }
+    public MainActivity() : base() { }
     protected override AppBuilder CustomizeAppBuilder(AppBuilder builder)
     {
         Instance = this;
@@ -30,4 +35,5 @@ public class MainActivity : AvaloniaMainActivity<App>
         
         return result;
     }
+
 }

@@ -175,17 +175,17 @@ namespace iosKeyboardTest {
         int RepeatCount { get; set; }
         int HoldDelayMs => 20;
         int MinHoldMs => 500; // NOTE! must be a factor of HoldDelayMs
-        int MinRepeatMs => 300; // NOTE! must be a factor of HoldDelayMs
+        static int DefMinRepeatMs => 300; // NOTE! must be a factor of HoldDelayMs
+        int MinRepeatMs { get; set; } = DefMinRepeatMs; // NOTE! must be a factor of HoldDelayMs
         int MinPopupShowMs => 260;
         int MaxDoubleTapSpaceForPeriodMs => 500;
         public CharSetType CharSet { get; set; }
         public ShiftStateType ShiftState { get; set; }
         public IKeyboardInputConnection InputConnection { get; set; }
-        IHeadlessRender HeadlessRender =>
-            InputConnection as IHeadlessRender;
+        ITriggerTouchEvents HeadlessRender =>
+            InputConnection as ITriggerTouchEvents;
         public bool IsCursorControlEnabled { get; private set; }
-        double? LastCursorControlUpdateLocationX { get; set; }
-        double? LastCursorControlUpdateLocationY { get; set; }
+        Point? LastCursorControlUpdateLocation { get; set; }
         
         public bool IsAutoCapitalizationEnabled =>
             IsFreeText;
@@ -234,6 +234,9 @@ namespace iosKeyboardTest {
             InputConnection.OnFlagsChanged += Ic_OnFlagsChanged;
             InputConnection.OnDismissed += InputConnection_OnDismissed;
 
+            if(InputConnection is ITriggerTouchEvents tte) {
+                tte.OnPointerChanged += (s, e) => SetPointerLocation(e);
+            }
         }
 
         private void InputConnection_OnDismissed(object sender, EventArgs e) {
@@ -252,8 +255,6 @@ namespace iosKeyboardTest {
             _lastDebouncedTouchEventArgs = null;
             LastInput = string.Empty;
             IsCursorControlEnabled = false;
-            LastCursorControlUpdateLocationX = null;
-            LastCursorControlUpdateLocationY = null;
             foreach(var pkvm in PressedKeys.ToList()) {
                 pkvm.ClearPopups();
                 pkvm.SetPressed(false,null);
@@ -398,6 +399,7 @@ namespace iosKeyboardTest {
 
         private void Ic_OnCursorChanged(object sender, EventArgs e) {
             Dispatcher.UIThread.Post(SetShiftByLeadingText);
+            //SetShiftByLeadingText();
         }
 
         void SetShiftByLeadingText() {
@@ -457,6 +459,10 @@ namespace iosKeyboardTest {
             return result;
         }
         public void UpdateKeyboardState() {
+            if(InputConnection is IKeyboardRenderer kr) {
+                kr.Render();
+                return;
+            }
             this.RaisePropertyChanged(nameof(Keys));
             this.RaisePropertyChanged(nameof(KeyboardWidth));
             this.RaisePropertyChanged(nameof(KeyboardHeight));
@@ -691,14 +697,11 @@ namespace iosKeyboardTest {
                 return;
             }
             IsCursorControlEnabled = true;
-            LastCursorControlUpdateLocationX = touch.Location.X;
-            LastCursorControlUpdateLocationY = touch.Location.Y;
             UpdateKeyboardState();
         }
         void StopCursorControl(Touch touch) {
             IsCursorControlEnabled = false;
-            LastCursorControlUpdateLocationX = null;
-            LastCursorControlUpdateLocationY = null;
+            LastCursorControlUpdateLocation = null;
             if(SpacebarKey is { } sb_kvm) {
                 sb_kvm.SetPressed(false,touch);
             }
@@ -707,19 +710,15 @@ namespace iosKeyboardTest {
         void UpdateCursorControl(Touch touch) {
             double x = touch.Location.X;
             double y = touch.Location.Y;
-            double lx = LastCursorControlUpdateLocationX ?? x;
-            double ly = LastCursorControlUpdateLocationY ?? y;
+            var lp = LastCursorControlUpdateLocation ?? touch.Location;
+            double lx = lp.X;
+            double ly = lp.Y;
+            //double lx = LastCursorControlUpdateLocationX ?? x;
+            //double ly = LastCursorControlUpdateLocationY ?? y;
 
-            int dx = 0;
-            int dy = 0;
-            if(Math.Abs(x-lx) > ScreenScaling) {
-                dx = (int)((x - lx) / ScreenScaling);
-                LastCursorControlUpdateLocationX = x;
-            }
-            if(Math.Abs(y-ly) > ScreenScaling) {
-                dy = (int)((y - ly) / ScreenScaling);
-                LastCursorControlUpdateLocationY = y;
-            }
+            int dx = (int)Math.Floor((x - lx) / ScreenScaling);
+            int dy = (int)Math.Floor((y - ly) / ScreenScaling);
+
             if (dx == 0 && dy == 0) {
                 return;
             }
@@ -729,8 +728,7 @@ namespace iosKeyboardTest {
             InputConnection.OnFeedback(CursorChangeFeedback);
 
             // ensure when updated last pos is actual position
-            LastCursorControlUpdateLocationX = x;
-            LastCursorControlUpdateLocationY = y;
+            LastCursorControlUpdateLocation = touch.Location;
         }
         #endregion
 
@@ -757,6 +755,7 @@ namespace iosKeyboardTest {
             if(GetKeyUnderPoint(touch.Location) is not { } kvm) {
                 return;
             }
+            InputConnection.OnFeedback(KeyReleaseFeedback);
             kvm.SetPressed(true,touch);
             int t = 0;
             var touch_center = kvm.KeyboardRect.Center;
@@ -778,12 +777,14 @@ namespace iosKeyboardTest {
                     }
                 }
                 if (kvm.CanRepeat && t > 0 && t % MinRepeatMs == 0) {
-                    int del_count = RepeatCount + RepeatCount + 1;
+                    MinRepeatMs = Math.Max(0, MinRepeatMs - HoldDelayMs);
+                    int del_count = 1;// RepeatCount + RepeatCount + 1;
                     Debug.WriteLine($"Repeat Count: {RepeatCount} Del Count: {del_count}");
                     for (int i = 0; i < del_count; i++) {
                         ReleaseKey(touch);
+                        InputConnection.OnFeedback(KeyboardFeedbackFlags.Vibrate);
                     }
-                    RepeatCount++;
+                    //RepeatCount++;
                 }
                 await Task.Delay(HoldDelayMs);
                 t += HoldDelayMs;
@@ -844,9 +845,9 @@ namespace iosKeyboardTest {
                 pressed_kvm.SetPressed(false,null);
                 pressed_kvm.ClearPopups();
                 if(pressed_kvm.CanRepeat) {
+                    MinRepeatMs = DefMinRepeatMs;
                     RepeatCount = 0;
                 }
-                InputConnection.OnFeedback(KeyReleaseFeedback);
             }
             UpdateKeyboardState();
         }

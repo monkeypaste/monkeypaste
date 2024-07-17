@@ -170,7 +170,10 @@ public partial class MainView : UserControl
                 
             }
         }
-        TestTextBox.Focus();
+        if(!OperatingSystem.IsAndroid()) {
+            TestTextBox.Focus();
+        }
+        
     }
     
 }
