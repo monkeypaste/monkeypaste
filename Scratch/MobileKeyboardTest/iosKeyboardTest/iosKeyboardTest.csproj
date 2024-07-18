@@ -2,7 +2,6 @@
   <PropertyGroup>
     <TargetFramework>$(TargetFrameworkPrefix)</TargetFramework>
     <Nullable>disable</Nullable>
-    <LangVersion>latest</LangVersion>
     <AvaloniaUseCompiledBindingsByDefault>true</AvaloniaUseCompiledBindingsByDefault>
   </PropertyGroup>
 

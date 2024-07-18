@@ -18,7 +18,7 @@ namespace iosKeyboardTest {
         event EventHandler OnDismissed;
         string GetLeadingText(int offset, int len);
         void OnText(string text);
-        void OnDelete();
+        void OnBackspace(int count);
         void OnDone();
         void OnNavigate(int dx, int dy);
         void OnFeedback(KeyboardFeedbackFlags flags);
@@ -27,7 +27,7 @@ namespace iosKeyboardTest {
     public interface IKeyboardRenderer {
         void Render();
     }
-    public interface IKeyboardInputConnection_ios : IKeyboardInputConnection, ITriggerTouchEvents {
+    public interface IKeyboardInputConnection_ios : IKeyboardInputConnection {
         bool NeedsInputModeSwitchKey { get; }
         void OnInputModeSwitched();
     }

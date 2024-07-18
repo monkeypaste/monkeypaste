@@ -9,18 +9,12 @@
              ClipToBounds="False"
              x:DataType="local:KeyboardViewModel"
              x:Class="iosKeyboardTest.KeyboardGridView">
-    <UserControl.Resources>
-    </UserControl.Resources>
-    <UserControl.Styles>
-
-    </UserControl.Styles>
-    <Grid RowDefinitions="Auto,*">
+    <Grid>
 
         <!--  KEYBOARD  -->
 
         <ItemsControl x:Name="KeyItemsControl"
                       ClipToBounds="False"
-                      Grid.Row="1"
                       HorizontalAlignment="Left"
                       VerticalAlignment="Top"
                       Width="{Binding KeyboardWidth}"
@@ -34,11 +28,7 @@
                                    Classes.special="{Binding IsSpecial}"
                                    Classes.primary-special="{Binding IsPrimarySpecial}"
                                    Classes.shift="{Binding IsShiftOn}"
-                                   Classes.shift-lock="{Binding IsShiftLock}">
-                        <!--<local:KeyView.RenderTransform>
-                        <TranslateTransform X="{Binding OuterTranslateX, FallbackValue=0, TargetNullValue=0}" />
-                    </local:KeyView.RenderTransform>-->
-                    </local:KeyView>
+                                   Classes.shift-lock="{Binding IsShiftLock}" />
                 </DataTemplate>
             </ItemsControl.ItemTemplate>
             <ItemsControl.ItemsPanel>
@@ -48,8 +38,6 @@
                 </ItemsPanelTemplate>
             </ItemsControl.ItemsPanel>
         </ItemsControl>
-
-
 
         <Canvas x:Name="DebugCanvasOverlay"
                 Grid.Row="1"

@@ -135,7 +135,7 @@
                     Value="{DynamicResource FgBrush2}" />
         </Style>
 
-        <Style Selector="local|KeyView.shift TextBlock">
+        <Style Selector="local|KeyView.special.shift TextBlock">
             <Setter Property="Foreground"
                     Value="{DynamicResource ShiftBrush}" />
         </Style>
@@ -330,6 +330,7 @@
         <!--  KEYBOARD  -->
         <local:KeyboardGridView x:Name="KeyboardGridView"
                                 Grid.Row="1"
+                                Margin="{Binding KeyboardMargin}"
                                 Width="{Binding KeyboardWidth}"
                                 Height="{Binding KeyboardHeight}" />
 
@@ -367,7 +368,7 @@
             <Grid.Transitions>
                 <Transitions>
                     <DoubleTransition Property="Opacity"
-                                      Duration="0:0:0.33" />
+                                      Duration="0:0:0.1" />
                 </Transitions>
             </Grid.Transitions>
             <TextBlock HorizontalAlignment="Center"

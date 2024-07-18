@@ -19,6 +19,11 @@
     <PackageReference Include="Avalonia.iOS" Version="$(AvaloniaVersion)" />
   </ItemGroup>
 
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
+    <PublishAot>true</PublishAot>
+    <IsAotCompatible>true</IsAotCompatible>
+  </PropertyGroup>
+
   <ItemGroup>
     <!--<ProjectReference Include="..\iosKeyboardTest.iOS.KeyboardExt\iosKeyboardTest.iOS.KeyboardExt.csproj" />-->
     <ProjectReference Include="..\iosKeyboardTest\iosKeyboardTest.csproj" />

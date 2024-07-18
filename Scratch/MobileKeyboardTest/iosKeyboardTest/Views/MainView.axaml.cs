@@ -41,8 +41,14 @@ public partial class MainView : UserControl
 
     protected override void OnLoaded(RoutedEventArgs e) {
         base.OnLoaded(e);
+        KeyboardViewModel kbvm = null;
 
         TestButton.Click += (s, e) => {
+            TestTextBox.Text = "Welcome to Avalonia!" + Environment.NewLine + "Welcome to Avalonia!" + Environment.NewLine + "Welcome to Avalonia!" + Environment.NewLine + "Welcome to Avalonia!" + Environment.NewLine + "Welcome to Avalonia!" + Environment.NewLine + "Welcome to Avalonia!";
+            
+            if (kbvm != null) {
+                kbvm.UpdateKeyboardState();
+            }
             //var test = new Border() {
             //    Background = Brushes.Purple,
             //    Width = 1000,
@@ -85,7 +91,6 @@ public partial class MainView : UserControl
             }
             Control ctrl_to_add = null;
             Control kbv = null;
-            KeyboardViewModel kbvm = null;
             //show_windowless_kb = false;
             if(show_windowless_kb) {
                 kbv = KeyboardBuilder.Build(_conn, KeyboardViewModel.GetTotalSizeByScreenSize(this.Bounds.Size), scale, out _);
@@ -121,7 +126,7 @@ public partial class MainView : UserControl
                 ctrl_to_add = kbv;
             }
 
-            
+            ctrl_to_add.VerticalAlignment = Avalonia.Layout.VerticalAlignment.Bottom;
 
             OuterPanel.Children.Add(ctrl_to_add);
             Grid.SetRow(ctrl_to_add, 3);

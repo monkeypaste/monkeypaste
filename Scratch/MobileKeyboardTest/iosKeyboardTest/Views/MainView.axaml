@@ -19,6 +19,7 @@
                                  VerticalAlignment="Center"
                                  TextWrapping="WrapWithOverflow"
                                  MaxWidth="300"
+                                 MinHeight="300"
                                  Foreground="Red" />
             <TextBox x:Name="TestTextBox"
                      Grid.Row="1"

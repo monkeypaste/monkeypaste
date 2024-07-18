@@ -1,9 +1,12 @@
 ﻿using Avalonia;
 using Avalonia.Controls;
+using Avalonia.Input;
+using Avalonia.Interactivity;
 using Avalonia.Media.Imaging;
 using System;
 using System.Diagnostics;
 using System.Text;
+using static System.Runtime.CompilerServices.RuntimeHelpers;
 
 namespace iosKeyboardTest.Desktop;
 
@@ -18,7 +21,7 @@ public class DesktopInputConnection : IKeyboardInputConnection_desktop {
         InputTextBox.SelectedText = text;
     }
 
-    public void OnDelete() {
+    public void OnBackspace(int count) {
         if (InputTextBox == null) {
             return;
         }
@@ -56,7 +59,7 @@ public class DesktopInputConnection : IKeyboardInputConnection_desktop {
         return sb.ToString();
     }
     public KeyboardFlags Flags =>
-        KeyboardFlags.Mobile;
+        KeyboardFlags.Mobile | KeyboardFlags.FreeText | KeyboardFlags.Dark;
     public void OnDone() {
 
     }
@@ -70,8 +73,39 @@ public class DesktopInputConnection : IKeyboardInputConnection_desktop {
         if(InputTextBox == null) {
             return;
         }
-        //InputTextBox.SelectionStart = InputTextBox.SelectionEnd;
-        InputTextBox.CaretIndex += CursorControlHelper.FindCaretOffset(InputTextBox.Text, InputTextBox.CaretIndex, dx, dy);
+        
+
+        //InputTextBox.CaretIndex += CursorControlHelper.FindCaretOffset(InputTextBox.Text, InputTextBox.CaretIndex, dx, dy);
+
+        int? x_dir = dx == 0 ? null : dx > 0 ? 1 : -1;
+        int? y_dir = dy == 0 ? null : dy > 0 ? 1 : -1;
+
+        if (x_dir.HasValue) {
+            Key kc = x_dir > 0 ? Key.Right : Key.Left;
+            for (int i = 0; i < (int)Math.Abs(dx); i++) {
+                InputTextBox.RaiseEvent(new KeyEventArgs {
+                    Key = kc,
+                    RoutedEvent = TextBox.KeyDownEvent
+                });
+                InputTextBox.RaiseEvent(new KeyEventArgs {
+                    Key = kc,
+                    RoutedEvent = TextBox.KeyUpEvent
+                });
+            }
+        }
+        if (y_dir.HasValue) {
+            Key kc = y_dir > 0 ? Key.Down : Key.Up;
+            for (int i = 0; i < (int)Math.Abs(dy); i++) {
+                InputTextBox.RaiseEvent(new KeyEventArgs {
+                    Key = kc,
+                    RoutedEvent = TextBox.KeyDownEvent
+                });
+                InputTextBox.RaiseEvent(new KeyEventArgs {
+                    Key = kc,
+                    RoutedEvent = TextBox.KeyUpEvent
+                });
+            }
+        }
     }
 
     #region IHeadlessRender Implementation
@@ -108,6 +142,7 @@ public class DesktopInputConnection : IKeyboardInputConnection_desktop {
 
     public event EventHandler OnCursorChanged;
     public event EventHandler OnFlagsChanged;
+    public event EventHandler OnDismissed;
 
 
     #endregion

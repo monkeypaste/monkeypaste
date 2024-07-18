@@ -193,37 +193,41 @@ namespace iosKeyboardTest.Android {
 
                 return kbf;
             }
-        }
-       
-
-        
+        }      
         string IKeyboardInputConnection.GetLeadingText(int offset, int len) =>
             GetTextAroundCursor(offset,len, true);
         void IKeyboardInputConnection.OnText(string text)
         {
-            if(this.CurrentInputConnection == null)
+            if(this.CurrentInputConnection == null ||
+                string.IsNullOrEmpty(text))
             {
                 return;
             }
-
-            this.CurrentInputConnection.CommitText(text, 1);
+            try { 
+                this.CurrentInputConnection.CommitText(text, 1);
+            }catch(Exception ex) {
+                Debug.WriteLine(ex.ToString());
+            }
         }
 
-        void IKeyboardInputConnection.OnDelete()
+        void IKeyboardInputConnection.OnBackspace(int count)
         {
             if(this.CurrentInputConnection == null)
             {
                 return;
             }
-            string selectedText = this.CurrentInputConnection.GetSelectedText(0);
+            try {
 
-            if(string.IsNullOrEmpty(selectedText))
-            {
-                this.CurrentInputConnection.DeleteSurroundingText(1, 0);
-            } else
-            {
-                this.CurrentInputConnection.CommitText(string.Empty, 1);
-            }
+                string selectedText = this.CurrentInputConnection.GetSelectedText(0);
+
+                if (string.IsNullOrEmpty(selectedText)) {
+                    this.CurrentInputConnection.DeleteSurroundingText(count, 0);
+                } else {
+                    this.CurrentInputConnection.CommitText(string.Empty, 1);
+                }
+            } catch(Exception ex) {
+                Debug.WriteLine(ex.ToString());
+            } 
         }
 
         void IKeyboardInputConnection.OnDone()

@@ -8,6 +8,6 @@ public class MainViewModel : ViewModelBase {
     public static string ErrorText { get; set; } //= Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData);
     public static string Test => "Yoooo dude";
 #pragma warning disable CA1822 // Mark members as static
-    public string Greeting => "Welcome to Avalonia!"+Environment.NewLine+"Welcome to Avalonia!"+Environment.NewLine+"Welcome to Avalonia!"+Environment.NewLine+"Welcome to Avalonia!"+Environment.NewLine+"Welcome to Avalonia!"+Environment.NewLine+"Welcome to Avalonia!"+Environment.NewLine;
+    public static string Greeting { get; set; } = "Welcome to Avalonia!"+Environment.NewLine+"Welcome to Avalonia!"+Environment.NewLine+"Welcome to Avalonia!"+Environment.NewLine+"Welcome to Avalonia!"+Environment.NewLine+"Welcome to Avalonia!"+Environment.NewLine+"Welcome to Avalonia!";
 #pragma warning restore CA1822 // Mark members as static
 }

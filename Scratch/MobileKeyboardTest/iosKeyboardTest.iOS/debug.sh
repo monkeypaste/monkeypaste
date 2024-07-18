@@ -1,5 +1,5 @@
 #!/bin/bash
-CONFIG=Debug
+CONFIG=Release
 FRAMEWORK="net8.0-ios"
 RUNTIME="ios-arm64"
 PLATFORM="AnyCPU"

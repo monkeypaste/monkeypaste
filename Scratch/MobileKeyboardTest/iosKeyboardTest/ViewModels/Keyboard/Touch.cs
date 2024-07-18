@@ -1,6 +1,7 @@
 ﻿using Avalonia;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 
 namespace iosKeyboardTest {
@@ -48,8 +49,7 @@ namespace iosKeyboardTest {
             if(touchType == TouchEventType.Move) {
                 t.SetLocation(p);
             } else {
-
-                _touches.Remove(t);
+                RemoveTouch(t);
             }
             return t;
 
@@ -62,6 +62,11 @@ namespace iosKeyboardTest {
         }
         public static double DistSquared(Point p1, Point p2) {
             return Math.Pow(p2.X - p1.X, 2) + Math.Pow(p2.Y - p1.Y, 2);
+        }
+        static void RemoveTouch(Touch t) {
+            var up_time = DateTime.Now;
+            _touches.Remove(t);
+            Debug.WriteLine($"Touch time: {(DateTime.Now - t.CreatedDt).Milliseconds}ms");
         }
     }
     public class Touch {
