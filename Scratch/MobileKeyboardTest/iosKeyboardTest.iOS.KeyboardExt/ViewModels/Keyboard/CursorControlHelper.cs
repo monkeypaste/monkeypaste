@@ -1,7 +1,7 @@
 ﻿using Avalonia.Controls;
 using System;
 
-namespace iosKeyboardTest {
+namespace iosKeyboardTest.iOS.KeyboardExt {
     public static class CursorControlHelper {
         public static int FindCaretOffset(string text, int idx, int dx, int dy) {
             int new_idx = idx + dx;

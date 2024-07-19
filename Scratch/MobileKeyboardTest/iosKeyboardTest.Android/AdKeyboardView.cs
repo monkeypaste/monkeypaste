@@ -7,6 +7,7 @@ using Android.Runtime;
 using Android.Util;
 using Android.Views;
 using Android.Widget;
+using iosKeyboardTest;
 using Java.Lang;
 using System;
 using System.Linq;

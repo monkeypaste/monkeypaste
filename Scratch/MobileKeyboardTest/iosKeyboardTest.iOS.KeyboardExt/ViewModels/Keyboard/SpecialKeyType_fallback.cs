@@ -1,8 +1,8 @@
 ﻿using System;
 
-namespace iosKeyboardTest
+namespace iosKeyboardTest.iOS.KeyboardExt
 {
-    public enum SpecialKeyType
+    public enum SpecialKeyType_fallback
     {
         None = 0,
         Shift,
@@ -21,13 +21,13 @@ namespace iosKeyboardTest
         Enter, // PrimarySpecial
         Next, // PrimarySpecial
     }
-    public enum ShiftStateType
+    public enum ShiftStateType_fallback
     {
         None = 0,
         Shift,
         ShiftLock
     }
-    public enum CharSetType
+    public enum CharSetType_fallback
     {
         Letters = 0,
         Symbols1,
@@ -37,7 +37,7 @@ namespace iosKeyboardTest
     }
 
     [Flags]
-    public enum KeyboardFlags : long {
+    public enum KeyboardFlags_fallback : long {
         None = 0,
 
         // PLATFORM

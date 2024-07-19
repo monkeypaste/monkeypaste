@@ -29,22 +29,13 @@
    <ItemGroup>
      <Compile Remove="Main.cs" />
    </ItemGroup>
-
-   <ItemGroup>
-     <None Remove="banner_full.png" />
-   </ItemGroup>
   <ItemGroup>
     <PackageReference Include="Avalonia.iOS" Version="$(AvaloniaVersion)" />
-  </ItemGroup>
-  <ItemGroup>
-    <ProjectReference Include="..\iosKeyboardTest\iosKeyboardTest.csproj" />
   </ItemGroup>
   <ItemGroup>
     <UpToDateCheckInput Remove="App.axaml" />
   </ItemGroup>
   <ItemGroup>
-    <AvaloniaResource Include="banner_full.png">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </AvaloniaResource>
+    <ProjectReference Include="..\iosKeyboardTest\iosKeyboardTest.csproj" />
   </ItemGroup>
 </Project>

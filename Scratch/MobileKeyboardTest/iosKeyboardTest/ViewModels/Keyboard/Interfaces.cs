@@ -4,13 +4,6 @@ using Avalonia.Media.Imaging;
 using System;
 
 namespace iosKeyboardTest {
-    [Flags]
-    public enum KeyboardFeedbackFlags : long {
-        None = 0,
-        Vibrate = 1L << 1,
-        Click = 1L << 2,
-        Return = 1L << 3,
-    }
     public interface IKeyboardInputConnection
     {
         event EventHandler OnCursorChanged;

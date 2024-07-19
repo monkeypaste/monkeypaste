@@ -4,9 +4,9 @@ using System.ComponentModel;
 using System.Runtime.CompilerServices;
 using System.Text.Json.Serialization;
 
-namespace iosKeyboardTest;
+namespace iosKeyboardTest.iOS.KeyboardExt;
 
-public class ViewModelBase : INotifyPropertyChanged
+public class ViewModelBase_fallback : INotifyPropertyChanged
 {
     public event PropertyChangedEventHandler PropertyChanged;
 

@@ -33,7 +33,7 @@ namespace iosKeyboardTest.Android {
     [Service(Name = "com.CompanyName.MyInputMethodService")]
     public class MyInputMethodService : InputMethodService, IKeyboardInputConnection, ITriggerTouchEvents {
         // from https://learn.microsoft.com/en-us/answers/questions/252318/creating-a-custom-android-keyboard
-
+        private KeyboardFlags? _lastFlags;
         private ClipboardListener _cbListener;
         private EditorInfo _lastEditorInfo = default;
         private AdKeyboardView _keyboardView = default;
@@ -100,7 +100,7 @@ namespace iosKeyboardTest.Android {
         }
 
         void Init() {
-            _handler = new Handler();
+            //_handler = new Handler();
             this.Window.CancelEvent += Window_CancelEvent;
             this.Window.DismissEvent += Window_DismissEvent;
         }
@@ -123,10 +123,11 @@ namespace iosKeyboardTest.Android {
         }
         public override void OnStartInput(EditorInfo attribute, bool restarting) {
             base.OnStartInput(attribute, restarting);
-            if (_lastEditorInfo != attribute) {
-                _lastEditorInfo = attribute;
+            var new_flags = Flags;
+            if(_lastFlags.HasValue && _lastFlags.Value != new_flags) {
                 this.OnFlagsChanged?.Invoke(this, EventArgs.Empty);
             }
+            _lastFlags = new_flags;
         }
 
         #region IKeyboardRenderer
@@ -139,7 +140,7 @@ namespace iosKeyboardTest.Android {
         #endregion
 
         #region IKeyboardInputConnection
-        KeyboardFlags IKeyboardInputConnection.Flags {
+        public KeyboardFlags Flags {
             get {
                 var kbf = KeyboardFlags.Android;
 
@@ -191,6 +192,7 @@ namespace iosKeyboardTest.Android {
                     }
                 }
 
+                _lastFlags = kbf;
                 return kbf;
             }
         }      
