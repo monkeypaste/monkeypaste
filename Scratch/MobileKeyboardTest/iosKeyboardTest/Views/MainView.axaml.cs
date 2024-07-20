@@ -21,6 +21,8 @@ public partial class MainView : UserControl
     public static void ForceInputConn(IKeyboardInputConnection conn) {
         _conn = conn;
     }
+    public Canvas OuterCanvas =>
+        ContainerCanvas;
 
     public MainView()
     {
@@ -121,7 +123,7 @@ public partial class MainView : UserControl
                 };
                 ctrl_to_add = bg_border;
             } else {
-                kbv = KeyboardViewModel.CreateKeyboardView(_conn, KeyboardViewModel.GetTotalSizeByScreenSize(this.Bounds.Size), scale, out _);
+                kbv = KeyboardFactory.CreateKeyboardView(_conn, KeyboardViewModel.GetTotalSizeByScreenSize(this.Bounds.Size), scale, out _);
                 kbvm = kbv.DataContext as KeyboardViewModel;
                 ctrl_to_add = kbv;
             }

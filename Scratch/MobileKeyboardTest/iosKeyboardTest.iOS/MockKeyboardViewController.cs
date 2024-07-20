@@ -6,15 +6,15 @@ using UIKit;
 using static System.Net.Mime.MediaTypeNames;
 
 namespace iosKeyboardTest.iOS {
-    public partial class MockKeyboardViewController : UIViewController, IKeyboardInputConnection_ios_fallback, ITriggerTouchEvents_fallback {
+    public partial class MockKeyboardViewController : UIViewController, IKeyboardInputConnection_ios, ITriggerTouchEvents {
         KeyboardView KeyboardView { get; set; }
         UITextView InputTextBox { get; set; }
         public override void ViewDidLoad() {
             base.ViewDidLoad();
 
             InputTextBox = new UITextView();
-            InputTextBox.InputView = new UIView();
-            InputTextBox.InputAccessoryView = new UIView();
+            //InputTextBox.InputView = new UIView();
+            //InputTextBox.InputAccessoryView = new UIView();
             InputTextBox.Editable = true;
             InputTextBox.Text = "Whats up yo";
             double w1 = 300;
@@ -121,19 +121,21 @@ namespace iosKeyboardTest.iOS {
             //thrownew NotImplementedException();
         }
 
-        public void OnFeedback(KeyboardFeedbackFlags_fallback flags) {
+        public void OnFeedback(KeyboardFeedbackFlags flags) {
             //throw new NotImplementedException();
         }
 
-        public KeyboardFlags_fallback Flags { 
+        public KeyboardFlags Flags { 
             get {
-                var kbf = KeyboardFlags_fallback.None;
-                kbf |= KeyboardFlags_fallback.Mobile;
-                kbf |= KeyboardFlags_fallback.FreeText;
+                var kbf = KeyboardFlags.None;
+                kbf |= KeyboardFlags.Mobile;
+                kbf |= KeyboardFlags.PlatformView;
+                kbf |= KeyboardFlags.FreeText;
+                kbf |= KeyboardFlags.iOS;
                 return kbf;
             }
         }
 
-        public event EventHandler<TouchEventArgs_fallback> OnPointerChanged;
+        public event EventHandler<TouchEventArgs> OnPointerChanged;
     }
 }

@@ -1,8 +1,14 @@
-﻿using System;
+using System;
 
-namespace iosKeyboardTest.iOS.KeyboardExt
-{
-    public enum SpecialKeyType_fallback
+namespace iosKeyboardTest.iOS {
+    [Flags]
+    public enum KeyboardFeedbackFlags : long {
+        None = 0,
+        Vibrate = 1L << 1,
+        Click = 1L << 2,
+        Return = 1L << 3,
+    }
+    public enum SpecialKeyType
     {
         None = 0,
         Shift,
@@ -16,18 +22,18 @@ namespace iosKeyboardTest.iOS.KeyboardExt
         ArrowRight,
         NextKeyboard,
         Done, // PrimarySpecial (default)
+        Search, // PrimarySpecial (ios only)
         Go, // PrimarySpecial
-        Search, // PrimarySpecial
         Enter, // PrimarySpecial
         Next, // PrimarySpecial
     }
-    public enum ShiftStateType_fallback
+    public enum ShiftStateType
     {
         None = 0,
         Shift,
         ShiftLock
     }
-    public enum CharSetType_fallback
+    public enum CharSetType
     {
         Letters = 0,
         Symbols1,
@@ -37,7 +43,7 @@ namespace iosKeyboardTest.iOS.KeyboardExt
     }
 
     [Flags]
-    public enum KeyboardFlags_fallback : long {
+    public enum KeyboardFlags : long {
         None = 0,
 
         // PLATFORM
@@ -58,13 +64,17 @@ namespace iosKeyboardTest.iOS.KeyboardExt
         Url = 1L << 9,
         Email = 1L << 10,
         Search = 1L << 11,
+        Next = 1L << 12,
 
         // THEME
-        Light = 1L << 12,
-        Dark = 1L << 13,
+        Light = 1L << 13,
+        Dark = 1L << 14,
 
         // DEVICE
-        Mobile = 1L << 14,
-        Tablet = 1L << 15,
+        Mobile = 1L << 15,
+        Tablet = 1L << 16,
+        
+        // UI
+        PlatformView = 1L << 17,
     }
 }

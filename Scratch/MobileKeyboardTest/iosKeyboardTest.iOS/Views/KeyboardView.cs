@@ -9,9 +9,7 @@ using System.Linq;
 using UIKit;
 
 namespace iosKeyboardTest.iOS {
-#pragma warning disable CA1010 // Generic interface should also be implemented
-    public class KeyboardView : UIView, IViewHelper {
-#pragma warning restore CA1010 // Generic interface should also be implemented
+    public class KeyboardView : UIView, IKeyboardViewRenderer {
         #region Private Variables
         #endregion
 
@@ -46,7 +44,7 @@ namespace iosKeyboardTest.iOS {
         #region Properties
 
         #region View Models
-        KeyboardViewModel_fallback DC { get; set; }
+        KeyboardViewModel DC { get; set; }
         #endregion
 
         #region State
@@ -70,7 +68,7 @@ namespace iosKeyboardTest.iOS {
         #endregion
 
         #region Public Methods
-        public KeyboardView(IKeyboardInputConnection_ios_fallback conn) {
+        public KeyboardView(IKeyboardInputConnection_ios conn) {
             Init(conn);
         }
         #endregion
@@ -79,13 +77,14 @@ namespace iosKeyboardTest.iOS {
         #endregion
 
         #region Private Methods
-        private void Init(IKeyboardInputConnection_ios_fallback conn) {
+        private void Init(IKeyboardInputConnection_ios conn) {
             HasFullAccess = false;
 
             Subviews.ToList().ForEach(x => x.RemoveFromSuperview());
             double s = 1;// UIScreen.MainScreen.Scale;
-            var kbs = KeyboardViewModel_fallback.GetTotalSizeByScreenSize(new Avalonia.Size(UIScreen.MainScreen.Bounds.Width / s, UIScreen.MainScreen.Bounds.Height / s));
-            DC = new KeyboardViewModel_fallback(conn,kbs,s);
+            var kbs = KeyboardViewModel.GetTotalSizeByScreenSize(new Avalonia.Size(UIScreen.MainScreen.Bounds.Width / s, UIScreen.MainScreen.Bounds.Height / s));
+            DC = new KeyboardViewModel(conn,kbs,s);
+            DC.SetRenderer(this);
 
             InitPalette(false);
 
@@ -174,8 +173,8 @@ namespace iosKeyboardTest.iOS {
                 AddKey(kvm);
             }
         }
-        void AddKey(KeyViewModel_fallback kvm) {
-            var kv = new KeyView(kvm);
+        void AddKey(KeyViewModel kvm) {
+            var kv = new KeyView(kvm).SetDefaultProps();
             KeyViews.Add(kv);
             KeyboardGridView.AddSubview(kv);
         }
@@ -201,20 +200,20 @@ namespace iosKeyboardTest.iOS {
         }
 
         #region Input Handlers
-        public event EventHandler<TouchEventArgs_fallback> OnTouchEvent;
+        public event EventHandler<TouchEventArgs> OnTouchEvent;
         public override void TouchesBegan(NSSet touches, UIEvent evt) {
             if (touches.FirstOrDefault() is not UITouch t) {
                 return;
             }
             var p = t.LocationInView(this);
-            OnTouchEvent?.Invoke(this, new TouchEventArgs_fallback(new Point(p.X,p.Y),TouchEventType_fallback.Press));
+            OnTouchEvent?.Invoke(this, new TouchEventArgs(new Point(p.X,p.Y),TouchEventType.Press));
         }
         public override void TouchesMoved(NSSet touches, UIEvent evt) {
             if (touches.FirstOrDefault() is not UITouch t) {
                 return;
             }
             var p = t.LocationInView(this);
-            OnTouchEvent?.Invoke(this, new TouchEventArgs_fallback(new Point(p.X, p.Y),TouchEventType_fallback.Move));
+            OnTouchEvent?.Invoke(this, new TouchEventArgs(new Point(p.X, p.Y),TouchEventType.Move));
 
         }
         public override void TouchesEnded(NSSet touches, UIEvent evt) {
@@ -222,7 +221,7 @@ namespace iosKeyboardTest.iOS {
                 return;
             }
             var p = t.LocationInView(this);
-            OnTouchEvent?.Invoke(this, new TouchEventArgs_fallback(new Point(p.X, p.Y),TouchEventType_fallback.Release));
+            OnTouchEvent?.Invoke(this, new TouchEventArgs(new Point(p.X, p.Y),TouchEventType.Release));
         }
         #endregion
     }

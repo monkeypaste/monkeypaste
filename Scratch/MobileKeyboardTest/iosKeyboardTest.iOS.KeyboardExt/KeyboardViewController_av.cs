@@ -7,10 +7,15 @@ using Avalonia.Media;
 using Avalonia.Media.Imaging;
 using Avalonia.Rendering;
 using Avalonia.Threading;
+
 using CoreFoundation;
+
 using CoreGraphics;
+
 using Foundation;
+
 using ObjCRuntime;
+
 using System;
 using System.Diagnostics;
 using System.IO;
@@ -18,9 +23,11 @@ using System.Linq;
 using System.Runtime.InteropServices;
 using System.Threading;
 using System.Threading.Tasks;
+
 using UIKit;
 
 using static System.Net.Mime.MediaTypeNames;
+
 using Thickness = Avalonia.Thickness;
 
 namespace iosKeyboardTest.iOS.KeyboardExt {
@@ -293,8 +300,8 @@ namespace iosKeyboardTest.iOS.KeyboardExt {
                     outerStackView2.LeftAnchor.ConstraintEqualTo(View.LeftAnchor),
                     outerStackView2.RightAnchor.ConstraintEqualTo(View.RightAnchor) });
 
-                var kbs = KeyboardViewModel.GetTotalSizeByScreenSize(iosDisplayInfo.ScaledSize);
-                var kb2 = KeyboardViewModel.CreateKeyboardView(this, kbs, iosDisplayInfo.Scaling, out var unscaledSize);
+                var kbs = KeyboardViewModelBase.GetTotalSizeByScreenSize(iosDisplayInfo.ScaledSize);
+                var kb2 = KeyboardViewModelBase.CreateKeyboardView(this, kbs, iosDisplayInfo.Scaling, out var unscaledSize);
                 var keyboardSize2 = new CGSize(unscaledSize.Width / iosDisplayInfo.Scaling, unscaledSize.Height / iosDisplayInfo.Scaling);
 
                 var kbv2 = new AvaloniaView() {

@@ -1,4 +1,4 @@
-﻿using Avalonia;
+using Avalonia;
 using Avalonia.Controls;
 using Avalonia.Controls.Primitives;
 using Avalonia.Controls.Shapes;
@@ -17,7 +17,7 @@ using System.Windows.Input;
 using Color = Avalonia.Media.Color;
 using Point = Avalonia.Point;
 
-namespace iosKeyboardTest {
+namespace iosKeyboardTest.iOS.KeyboardExt {
     public class KeyViewModel : ViewModelBase, IKeyboardViewRenderer {
         #region Private Variables
         #endregion

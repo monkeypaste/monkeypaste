@@ -6,34 +6,18 @@ using System.Linq;
 using UIKit;
 
 namespace iosKeyboardTest.iOS.KeyboardExt {
-    public class KeyView : UIView, IViewHelper {
+    public class KeyView : UIView, IKeyboardViewRenderer {
         UITextView SecondaryTextView { get; set; }
         UITextView PrimaryTextView { get; set; }
-        public KeyViewModel_fallback DC { get; private set; }
-        public KeyView(KeyViewModel_fallback kvm) : base() {
-            this.TranslatesAutoresizingMaskIntoConstraints = false;
+        public KeyViewModel DC { get; private set; }
+        public KeyView(KeyViewModel kvm) : base() {
             DC = kvm;
-            kvm.VH = this;
+            kvm.SetRenderer(this);
 
-            PrimaryTextView = new UITextView() { 
-                BackgroundColor = UIColor.FromRGBA(0, 0, 0, 0),
-                TranslatesAutoresizingMaskIntoConstraints = false,
-                Selectable = false,
-                
-            };
-            PrimaryTextView.TextContainer.LineBreakMode = UILineBreakMode.TailTruncation;
-            PrimaryTextView.TextContainer.MaximumNumberOfLines = 1;
-            PrimaryTextView.Font = UIFont.SystemFontOfSize((nfloat)DC.PrimaryFontSize, UIFontWeight.Regular);
+            PrimaryTextView = new UITextView().SetDefaultTextProps();            
             this.AddSubview(PrimaryTextView);
 
-            SecondaryTextView = new UITextView() { 
-                BackgroundColor = UIColor.FromRGBA(0, 0, 0, 0), 
-                TranslatesAutoresizingMaskIntoConstraints = false,
-                Selectable = false
-            };
-            PrimaryTextView.TextContainer.LineBreakMode = UILineBreakMode.TailTruncation;
-            PrimaryTextView.TextContainer.MaximumNumberOfLines = 1;
-            SecondaryTextView.Font = UIFont.SystemFontOfSize((nfloat)DC.SecondaryFontSize, UIFontWeight.Regular);
+            SecondaryTextView = new UITextView().SetDefaultTextProps();            
             this.AddSubview(SecondaryTextView);
 
             Render(true);
@@ -69,13 +53,21 @@ namespace iosKeyboardTest.iOS.KeyboardExt {
             double px = (w / 2) - (PrimaryTextView.Frame.Width / 2);
             double py = (h / 2) - (PrimaryTextView.Frame.Height / 2);
             PrimaryTextView.Frame = new CGRect(px, py, PrimaryTextView.Frame.Width, PrimaryTextView.Frame.Height);
+            double pfs = DC.PrimaryFontSize * UIScreen.MainScreen.Scale;
+            if (PrimaryTextView.Font == null || PrimaryTextView.Font.PointSize != pfs) {
+                PrimaryTextView.Font = UIFont.SystemFontOfSize((nfloat)pfs, UIFontWeight.Regular);
+            }
 
             double pad = 5;
             double sx = w - SecondaryTextView.Frame.Width - pad;
             double sy = 0;
             SecondaryTextView.Frame = new CGRect(sx, sy, SecondaryTextView.Frame.Width, SecondaryTextView.Frame.Height);
+            double sfs = DC.SecondaryFontSize * UIScreen.MainScreen.Scale;
+            if (SecondaryTextView.Font == null || SecondaryTextView.Font.PointSize != sfs) {
+                SecondaryTextView.Font = UIFont.SystemFontOfSize((nfloat)sfs, UIFontWeight.Regular);
+            }
 
-            if(invalidate) {
+            if (invalidate) {
                 Redraw(PrimaryTextView);
                 Redraw(SecondaryTextView);
                 RoundCorners(DC.CornerRadius);
@@ -92,7 +84,7 @@ namespace iosKeyboardTest.iOS.KeyboardExt {
             UIColor fg = KeyboardView.FgBrush;
             if (DC.IsSpecial) {
                 bg = DC.IsPressed ? KeyboardView.SpecialPressedBgBrush : KeyboardView.SpecialBgBrush;
-                if (DC.SpecialKeyType == SpecialKeyType_fallback.Shift) {
+                if (DC.SpecialKeyType == SpecialKeyType.Shift) {
                     if (DC.IsShiftOn) {
                         fg = KeyboardView.ShiftBrush;
                     } else if (DC.IsShiftLock) {
@@ -132,19 +124,61 @@ namespace iosKeyboardTest.iOS.KeyboardExt {
         }
 
         void RoundCorners(CornerRadius cr) {
-            var tlr = new CGSize(cr.TopLeft, cr.TopLeft);
-            var trr = new CGSize(cr.TopRight, cr.TopRight);
-            var brr = new CGSize(cr.BottomRight, cr.BottomRight);
-            var blr = new CGSize(cr.BottomLeft, cr.BottomLeft);
-            var maskPath = new UIBezierPathExt(Bounds, tlr, trr, brr, blr);
-            var shape = new CAShapeLayer() {
-                Path = maskPath.CGPath
-            };
-            this.Layer.Mask = shape;
+            
+
+            /*
+            func roundCorners(_ corners: UIRectCorner, radius: CGFloat) {
+        if #available(iOS 11.0, *) {
+            clipsToBounds = true
+            layer.cornerRadius = radius
+            layer.maskedCorners = CACornerMask(rawValue: corners.rawValue)
+        } else {
+            let path = UIBezierPath(
+                roundedRect: bounds, 
+                byRoundingCorners: corners, 
+                cornerRadii: CGSize(width: radius, height: radius)
+            )
+            let mask = CAShapeLayer()
+            mask.path = path.cgPath
+            layer.mask = mask
         }
     }
+            */
+            if(UIDevice.CurrentDevice.CheckSystemVersion(11,0)) {
+                // from https://stackoverflow.com/a/71329483/105028
+                UIRectCorner corner_mask = (UIRectCorner)0;
+                double radius = 0;
+                if (cr.TopLeft > 0) {
+                    corner_mask |= UIRectCorner.TopLeft;
+                    radius = cr.TopLeft;
+                }
+                if (cr.TopRight > 0) {
+                    corner_mask |= UIRectCorner.TopRight;
+                    radius = cr.TopRight;
+                }
+                if (cr.BottomRight > 0) {
+                    corner_mask |= UIRectCorner.BottomRight;
+                    radius = cr.BottomRight;
+                }
+                if (cr.BottomLeft > 0) {
+                    corner_mask |= UIRectCorner.BottomLeft;
+                    radius = cr.BottomLeft;
+                }
+                this.ClipsToBounds = true;
+                this.Layer.CornerRadius = (nfloat)radius;
+                this.Layer.MaskedCorners = (CACornerMask)corner_mask;
+            } else {
+                var tlr = new CGSize(cr.TopLeft, cr.TopLeft);
+                var trr = new CGSize(cr.TopRight, cr.TopRight);
+                var brr = new CGSize(cr.BottomRight, cr.BottomRight);
+                var blr = new CGSize(cr.BottomLeft, cr.BottomLeft);
+                var maskPath = new UIBezierPathExt(Bounds, tlr, trr, brr, blr);
+                var shape = new CAShapeLayer() {
+                    Path = maskPath.CGPath
+                };
+                this.Layer.Mask = shape;
+            }
 
-    public static class ViewHelpers {
-
+        }
     }
 }

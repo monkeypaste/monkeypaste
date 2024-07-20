@@ -28,5 +28,7 @@
       <IsAppExtension>true</IsAppExtension>
       <IsWatchExtension>false</IsWatchExtension>
     </ProjectReference>
+    
+    <ProjectReference Include="..\iosKeyboardTest\iosKeyboardTest.csproj" />
   </ItemGroup>
 </Project>

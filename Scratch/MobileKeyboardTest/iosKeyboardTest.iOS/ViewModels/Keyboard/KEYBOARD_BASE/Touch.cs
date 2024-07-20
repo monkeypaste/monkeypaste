@@ -1,52 +1,52 @@
-﻿using Avalonia;
+using Avalonia;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
 
-namespace iosKeyboardTest.iOS.KeyboardExt {
-    public enum TouchEventType_fallback {
+namespace iosKeyboardTest.iOS {
+    public enum TouchEventType {
         None,
         Press,
         Move,
         Release
     }
-    public class TouchEventArgs_fallback : EventArgs {
+    public class TouchEventArgs : EventArgs {
         public Point Location { get; private set; }
-        public TouchEventType_fallback TouchEventType { get; private set; }
-        public TouchEventArgs_fallback(Point location, TouchEventType_fallback touchEventType) {
+        public TouchEventType TouchEventType { get; private set; }
+        public TouchEventArgs(Point location, TouchEventType touchEventType) {
             Location = location;
             TouchEventType = touchEventType;
         }
     }
-    public static class Touches_fallback {
+    public static class Touches {
 
-        private static List<Touch_fallback> _touches = [];
-        public static Touch_fallback Locate(Point p) {
+        private static List<Touch> _touches = [];
+        public static Touch Locate(Point p) {
             if(!_touches.Any()) {
                 return null;
             }
             return _touches.Aggregate((a, b) => DistSquared(a.Location, p) < DistSquared(b.Location, p) ? a : b);
         }
-        public static Touch_fallback Locate(string id) {
+        public static Touch Locate(string id) {
             return _touches.FirstOrDefault(x => x.Id == id);
         }
-        public static Touch_fallback Update(Point p, TouchEventType_fallback touchType) {
+        public static Touch Update(Point p, TouchEventType touchType) {
             // returns touch at p loc
-            if(touchType == TouchEventType_fallback.Press) {
-                _touches.Add(new Touch_fallback(p));
+            if(touchType == TouchEventType.Press) {
+                _touches.Add(new Touch(p));
                 return _touches.Last();
             }
             if(Locate(p) is not { } t) {
-                if(touchType == TouchEventType_fallback.Move) {
+                if(touchType == TouchEventType.Move) {
                     // probably shouldn't happen but when pointer moves onto surface
-                    t = new Touch_fallback(p);
+                    t = new Touch(p);
                     _touches.Add(t);
                     return _touches.Last();
                 }
                 return null;
             }
-            if(touchType == TouchEventType_fallback.Move) {
+            if(touchType == TouchEventType.Move) {
                 t.SetLocation(p);
             } else {
                 RemoveTouch(t);
@@ -63,22 +63,22 @@ namespace iosKeyboardTest.iOS.KeyboardExt {
         public static double DistSquared(Point p1, Point p2) {
             return Math.Pow(p2.X - p1.X, 2) + Math.Pow(p2.Y - p1.Y, 2);
         }
-        static void RemoveTouch(Touch_fallback t) {
+        static void RemoveTouch(Touch t) {
             var up_time = DateTime.Now;
             _touches.Remove(t);
             Debug.WriteLine($"Touch time: {(DateTime.Now - t.CreatedDt).Milliseconds}ms");
         }
     }
-    public class Touch_fallback {
-        
+    public class Touch {
+
         public string Id { get; set; }
         public DateTime LastEventDt { get; private set; }
         public DateTime CreatedDt { get; private set; }
         public Point Location { get; private set; }
         public Point PressLocation { get; private set; }
 
-        private Touch_fallback() { }
-        public Touch_fallback(Point p) {
+        private Touch() { }
+        public Touch(Point p) {
             PressLocation = p;
             Location = p;
             CreatedDt = DateTime.Now;
@@ -90,8 +90,8 @@ namespace iosKeyboardTest.iOS.KeyboardExt {
             LastEventDt = DateTime.Now;
         }
 
-        public Touch_fallback Clone() {
-            return new Touch_fallback() {
+        public Touch Clone() {
+            return new Touch() {
                 Id = Id,
                 LastEventDt = LastEventDt,
                 CreatedDt = CreatedDt,

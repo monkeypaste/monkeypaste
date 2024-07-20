@@ -1,9 +1,9 @@
-﻿using Avalonia;
+using Avalonia;
 using Avalonia.Controls;
 using Avalonia.Media.Imaging;
 using System;
 
-namespace iosKeyboardTest {
+namespace iosKeyboardTest.iOS.KeyboardExt {
     public interface IKeyboardInputConnection
     {
         event EventHandler OnCursorChanged;

@@ -1,4 +1,4 @@
-﻿using Avalonia;
+using Avalonia;
 using Avalonia.Controls.Primitives;
 using Avalonia.Controls.Shapes;
 using Avalonia.Interactivity;
@@ -18,7 +18,7 @@ using System.Threading.Tasks;
 using System.Windows.Input;
 using Size = Avalonia.Size;
 
-namespace iosKeyboardTest {
+namespace iosKeyboardTest.iOS.KeyboardExt {
     public class KeyboardViewModel : ViewModelBase, IKeyboardViewRenderer {
         #region Private Variables        
         #endregion

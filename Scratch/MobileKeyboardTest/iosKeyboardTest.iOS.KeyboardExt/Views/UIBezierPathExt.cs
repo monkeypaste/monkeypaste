@@ -16,47 +16,47 @@ namespace iosKeyboardTest.iOS.KeyboardExt {
             var bottomLeft = new CGPoint(rect.GetMinX(), rect.GetMaxY());
 
             if(topLeftRadius != CGSize.Empty) {
-                path.MoveToPoint(new CGPoint(topLeft.X + topLeftRadius.Width, topLeft.Y));
+                path.MoveToPoint(new CGPoint(topLeft.X - topLeftRadius.Width, topLeft.Y));
             } else {
                 path.MoveToPoint(new CGPoint(topLeft.X, topLeft.Y));
             }
             
             if(topRightRadius != CGSize.Empty) {
-                path.AddLineToPoint(new CGPoint(topRight.X - topRightRadius.Width, topRight.Y));
+                path.AddLineToPoint(new CGPoint(topRight.X + topRightRadius.Width, topRight.Y));
                 path.AddCurveToPoint(
-                    new CGPoint(topRight.X, topRight.Y + topRightRadius.Height), 
+                    new CGPoint(topRight.X, topRight.Y - topRightRadius.Height), 
                     new CGPoint(topRight.X,topRight.Y), 
-                    new CGPoint(topRight.X,topRight.Y + topRightRadius.Height));
+                    new CGPoint(topRight.X,topRight.Y - topRightRadius.Height));
             } else {
                 path.AddLineToPoint(new CGPoint(topRight.X, topRight.Y));
             }
 
             if(bottomRightRadius != CGSize.Empty) {
-                path.AddLineToPoint(new CGPoint(bottomRight.X, bottomRight.Y-bottomRightRadius.Height));
+                path.AddLineToPoint(new CGPoint(bottomRight.X, bottomRight.Y + bottomRightRadius.Height));
                 path.AddCurveToPoint(
-                    new CGPoint(bottomRight.X - bottomRightRadius.Width, bottomRight.Y),
+                    new CGPoint(bottomRight.X + bottomRightRadius.Width, bottomRight.Y),
                     new CGPoint(bottomRight.X, bottomRight.Y),
-                    new CGPoint(bottomRight.X - bottomRightRadius.Width, bottomRight.Y));
+                    new CGPoint(bottomRight.X + bottomRightRadius.Width, bottomRight.Y));
             } else {
                 path.AddLineToPoint(new CGPoint(bottomRight.X, bottomRight.Y));
             }
             
             if(bottomLeftRadius != CGSize.Empty) {
-                path.AddLineToPoint(new CGPoint(bottomLeft.X+bottomLeftRadius.Width, bottomLeft.Y));
+                path.AddLineToPoint(new CGPoint(bottomLeft.X - bottomLeftRadius.Width, bottomLeft.Y));
                 path.AddCurveToPoint(
-                    new CGPoint(bottomLeft.X, bottomLeft.Y - bottomLeftRadius.Height),
+                    new CGPoint(bottomLeft.X, bottomLeft.Y + bottomLeftRadius.Height),
                     new CGPoint(bottomLeft.X, bottomLeft.Y),
-                    new CGPoint(bottomLeft.X, bottomLeft.Y - bottomLeftRadius.Height));
+                    new CGPoint(bottomLeft.X, bottomLeft.Y + bottomLeftRadius.Height));
             } else {
                 path.AddLineToPoint(new CGPoint(bottomLeft.X, bottomLeft.Y));
             }
 
             if (topLeftRadius != CGSize.Empty) {
-                path.AddLineToPoint(new CGPoint(topLeft.X, topLeft.Y + topLeftRadius.Height));
+                path.AddLineToPoint(new CGPoint(topLeft.X, topLeft.Y - topLeftRadius.Height));
                 path.AddCurveToPoint(
-                    new CGPoint(topLeft.X + topLeftRadius.Width, topLeft.Y),
+                    new CGPoint(topLeft.X - topLeftRadius.Width, topLeft.Y),
                     new CGPoint(topLeft.X, topLeft.Y),
-                    new CGPoint(topLeft.X + topLeftRadius.Width, topLeft.Y));
+                    new CGPoint(topLeft.X - topLeftRadius.Width, topLeft.Y));
             } else {
                 path.AddLineToPoint(new CGPoint(topLeft.X, topLeft.Y));
             }

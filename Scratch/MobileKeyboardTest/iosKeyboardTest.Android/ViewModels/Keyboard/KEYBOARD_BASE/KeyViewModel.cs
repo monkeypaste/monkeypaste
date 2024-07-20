@@ -1,4 +1,4 @@
-﻿using Avalonia;
+using Avalonia;
 using Avalonia.Controls;
 using Avalonia.Controls.Primitives;
 using Avalonia.Controls.Shapes;
@@ -17,56 +17,54 @@ using System.Windows.Input;
 using Color = Avalonia.Media.Color;
 using Point = Avalonia.Point;
 
-namespace iosKeyboardTest.iOS
-{
-    public class KeyViewModel_fallback : ViewModelBase_fallback {
+namespace iosKeyboardTest.Android {
+    public class KeyViewModel : ViewModelBase, IKeyboardViewRenderer {
         #region Private Variables
-        
         #endregion
 
         #region Constants
         #endregion
 
         #region Statics 
-        static IEnumerable<string> GetSpecialKeyChars(SpecialKeyType_fallback skt) {
+        static IEnumerable<string> GetSpecialKeyChars(SpecialKeyType skt) {
             switch (skt) {
-                case SpecialKeyType_fallback.None:
+                case SpecialKeyType.None:
                     yield break;
-                case SpecialKeyType_fallback.Shift:
+                case SpecialKeyType.Shift:
                     yield return "⬆️";
                     yield return "1/2";
                     yield return "2/2";
                     break;
-                case SpecialKeyType_fallback.Tab:
+                case SpecialKeyType.Tab:
                     yield return "Tab";
                     break;
-                case SpecialKeyType_fallback.CapsLock:
+                case SpecialKeyType.CapsLock:
                     yield return "Caps Lock";
                     break;
-                case SpecialKeyType_fallback.Go:
+                case SpecialKeyType.Go:
                     yield return "Go";
                     break;
-                case SpecialKeyType_fallback.Next:
+                case SpecialKeyType.Next:
                     yield return "Next";
                     break;
-                case SpecialKeyType_fallback.Done:
+                case SpecialKeyType.Done:
                     yield return "Done";
                     break;
-                case SpecialKeyType_fallback.Backspace:
+                case SpecialKeyType.Backspace:
                     yield return "⌫";
                     break;
-                case SpecialKeyType_fallback.SymbolToggle:
+                case SpecialKeyType.SymbolToggle:
                     yield return "!#1";
                     yield return "ABC";
                     break;
-                case SpecialKeyType_fallback.NumberSymbolsToggle:
+                case SpecialKeyType.NumberSymbolsToggle:
                     yield return "*+#";
                     yield return "123";
                     break;
-                case SpecialKeyType_fallback.Enter:
+                case SpecialKeyType.Enter:
                     yield return "⏎";
                     break;
-                case SpecialKeyType_fallback.Search:
+                case SpecialKeyType.Search:
                     yield return "🔍";
                     break;
 
@@ -161,29 +159,80 @@ namespace iosKeyboardTest.iOS
         #endregion
 
         #region Interfaces
+
+        #region IKeyboardViewRenderer Implementation
+        public void Measure(bool invalidate) {
+            RaisePropertyChanged(nameof(NeedsSymbolTranslate));
+            RaisePropertyChanged(nameof(NeedsOuterTranslate));
+            RaisePropertyChanged(nameof(IsSpecial));
+            RaisePropertyChanged(nameof(PrimaryFontSize));
+            RaisePropertyChanged(nameof(SecondaryFontSize));
+            RaisePropertyChanged(nameof(OuterTranslateX));
+            RaisePropertyChanged(nameof(X));
+            RaisePropertyChanged(nameof(Y));
+            RaisePropertyChanged(nameof(PrimaryTranslateOffsetX));
+            RaisePropertyChanged(nameof(PrimaryTranslateOffsetY));
+            RaisePropertyChanged(nameof(SecondaryTranslateOffsetX));
+            RaisePropertyChanged(nameof(SecondaryTranslateOffsetY));
+            RaisePropertyChanged(nameof(PullTranslateY));
+        }
+
+        public void Paint(bool invalidate) {
+            RaisePropertyChanged(nameof(IsSecondaryVisible));
+            RaisePropertyChanged(nameof(IsPressed));
+            RaisePropertyChanged(nameof(KeyOpacity));
+            RaisePropertyChanged(nameof(PrimaryValue));
+            RaisePropertyChanged(nameof(SecondaryValue));
+            RaisePropertyChanged(nameof(PrimaryOpacity));
+            RaisePropertyChanged(nameof(SecondaryOpacity));
+            RaisePropertyChanged(nameof(IsShiftOn));
+            RaisePropertyChanged(nameof(IsShiftLock));
+        }
+
+        public void Layout(bool invalidate) {
+            RaisePropertyChanged(nameof(ZIndex));
+            RaisePropertyChanged(nameof(IsActiveKey));
+
+            RaisePropertyChanged(nameof(Width));
+            RaisePropertyChanged(nameof(Height));
+            RaisePropertyChanged(nameof(InnerWidth));
+            RaisePropertyChanged(nameof(InnerHeight));
+            RaisePropertyChanged(nameof(CornerRadius));
+        }
+        public void Render(bool invalidate) {
+            Renderer.Layout(false);
+            Renderer.Measure(false);
+            Renderer.Paint(invalidate);
+        }
+        #endregion
+
         #endregion
 
         #region Properties
 
-        #region View Models
-        public KeyboardViewModel_fallback Parent { get; set; }
-        public KeyViewModel_fallback PrevKeyViewModel { get; set; }
-        public KeyViewModel_fallback PopupAnchorKey { get; private set; }
+        #region Members
+        IKeyboardViewRenderer _renderer;
+        public IKeyboardViewRenderer Renderer =>
+            _renderer ?? this;
+        #endregion
 
-        public IEnumerable<KeyViewModel_fallback> PopupKeys =>
+        #region View Models
+        public KeyboardViewModel Parent { get; set; }
+        public KeyViewModel PrevKeyViewModel { get; set; }
+        public KeyViewModel PopupAnchorKey { get; private set; }
+
+        public IEnumerable<KeyViewModel> PopupKeys =>
             Parent.VisiblePopupKeys
             .Where(x => x.PopupAnchorKey == this);
-        public KeyViewModel_fallback DefaultPopupKey =>
+        public KeyViewModel DefaultPopupKey =>
             PopupKeys
             .FirstOrDefault(x => x.IsDefaultPopupKey);
-        private KeyViewModel_fallback _activePopupKey;
-        public KeyViewModel_fallback ActivePopupKey {
+        private KeyViewModel _activePopupKey;
+        public KeyViewModel ActivePopupKey {
             get => _activePopupKey ?? DefaultPopupKey;
             private set {
-                if(_activePopupKey != value) {
+                if (_activePopupKey != value) {
                     _activePopupKey = value;
-                    //this.RaisePropertyChanged(nameof(ActivePopupKey));
-                    //Parent.UpdateKeyboardState();
                 }
             }
         }
@@ -192,10 +241,10 @@ namespace iosKeyboardTest.iOS
 
         #region Appearance
         public double PrimaryFontSize =>
-            Math.Max(1,Math.Min(MaxFontSize, Math.Min(InnerWidth, InnerHeight) * PrimaryFontSizeRatio));
+            Math.Max(1, Math.Min(MaxFontSize, Math.Min(InnerWidth, InnerHeight) * PrimaryFontSizeRatio));
         public double SecondaryFontSize {
             get {
-                double fs = Math.Max(1,Math.Min(MaxFontSize, Math.Min(InnerWidth, InnerHeight) * SecondaryFontSizeRatio));
+                double fs = Math.Max(1, Math.Min(MaxFontSize, Math.Min(InnerWidth, InnerHeight) * SecondaryFontSizeRatio));
                 if (!IsPulling) {
                     return fs;
                 }
@@ -206,8 +255,8 @@ namespace iosKeyboardTest.iOS
         }
         public double SecondaryOpacity {
             get {
-                double op = IsSecondaryVisible ? 1:0;
-                if(!IsPulling) {
+                double op = IsSecondaryVisible ? 1 : 0;
+                if (!IsPulling) {
                     return op;
                 }
                 double pull_percent = PullTranslateY / MaxPullTranslateY;
@@ -218,7 +267,7 @@ namespace iosKeyboardTest.iOS
         public double PrimaryOpacity {
             get {
                 double op = 1;
-                if(!IsPulling) {
+                if (!IsPulling) {
                     return op;
                 }
                 double pull_percent = PullTranslateY / MaxPullTranslateY;
@@ -232,7 +281,7 @@ namespace iosKeyboardTest.iOS
         public double SecondaryTranslateOffsetX {
             get {
                 double x = -3;
-                if(!IsPulling) {
+                if (!IsPulling) {
                     return x;
                 }
                 double max_x = (-Width / 4);// - (SecondaryFontSize/2);
@@ -255,13 +304,13 @@ namespace iosKeyboardTest.iOS
         }
         public bool IsSecondaryVisible {
             get {
-                if(Parent.IsNumbers) {
-                    if(SpecialKeyType == SpecialKeyType_fallback.NumberSymbolsToggle) {
+                if (Parent.IsNumbers) {
+                    if (SpecialKeyType == SpecialKeyType.NumberSymbolsToggle) {
                         return false;
                     }
                     return true;
                 }
-                if(Parent.CharSet == CharSetType_fallback.Letters && IsInput) {
+                if (Parent.CharSet == CharSetType.Letters && IsInput) {
                     return true;
                 }
                 return false;
@@ -271,8 +320,8 @@ namespace iosKeyboardTest.iOS
             IsVisible ? 1 : 0;
         public bool IsVisible {
             get {
-                if(IsPopupKey) {
-                    if(IsFakePopupKey) {
+                if (IsPopupKey) {
+                    if (IsFakePopupKey) {
                         return true;
                     }
                 }
@@ -290,13 +339,14 @@ namespace iosKeyboardTest.iOS
             7;// Math.Min(10, Width / Parent.MaxColCount);
         public double OuterPadX =>
             IsPopupKey ? 0 : DefaultOuterPadX;
-        public double OuterPadY => 
-            IsPopupKey ? 
-                0 : 
+        public double OuterPadY =>
+            IsPopupKey ?
+                0 :
                 Parent.KeyHeight * 0.15;
-        public double PrimaryFontSizeRatio => 1.0;
-        public double MaxFontSize => 24;
+        public double PrimaryFontSizeRatio => 0.75;
+        public double MaxFontSize => 16;
         public double SecondaryFontSizeRatio => 0.33;
+        public double SecondaryRatio => 0.25;
         string[] MisAlignedCharacters => [
             //"✖️",
             "♠️",
@@ -338,7 +388,7 @@ namespace iosKeyboardTest.iOS
             IsPopupKey ? 1 : 0;
         public double X {
             get {
-                if(_keyboardRect is not { } rect) {
+                if (_keyboardRect is not { } rect) {
                     rect = FindRect();
                     _keyboardRect = rect;
                 }
@@ -355,20 +405,19 @@ namespace iosKeyboardTest.iOS
             }
         }
         public void TranslateLocation(double ox, double oy) {
-            if(_keyboardRect is not { } rect) {
+            if (_keyboardRect is not { } rect) {
                 rect = FindRect();
             }
-            _keyboardRect = new Rect(rect.X + ox, rect.Y + oy, rect.Width,rect.Height);
+            _keyboardRect = new Rect(rect.X + ox, rect.Y + oy, rect.Width, rect.Height);
             _totalRect = null;
-            this.RaisePropertyChanged(nameof(X));
-            this.RaisePropertyChanged(nameof(Y));
+            Renderer.Measure(true);
         }
 
 
         private Rect? _keyboardRect;
         public Rect KeyboardRect {
             get {
-                if(_keyboardRect is not { } kbRect) {
+                if (_keyboardRect is not { } kbRect) {
                     kbRect = FindRect();
                     _keyboardRect = kbRect;
                 }
@@ -379,8 +428,8 @@ namespace iosKeyboardTest.iOS
         private Rect? _totalRect;
         public Rect TotalRect {
             get {
-                if(_totalRect is not { } tRect) {
-                    if(_keyboardRect is not { } kbRect) {
+                if (_totalRect is not { } tRect) {
+                    if (_keyboardRect is not { } kbRect) {
                         kbRect = FindRect();
                         _keyboardRect = kbRect;
                     }
@@ -399,8 +448,8 @@ namespace iosKeyboardTest.iOS
             X + (Width / 2) > (Parent.KeyboardWidth / 2);
 
         public double Width =>
-            IsPopupKey ? Parent.DefaultKeyWidth*PopupKeyWidthRatio :
-             ColumnSpan * (SpecialKeyType == SpecialKeyType_fallback.None ?
+            IsPopupKey ? Parent.DefaultKeyWidth * PopupKeyWidthRatio :
+             ColumnSpan * (SpecialKeyType == SpecialKeyType.None ?
                 Parent.DefaultKeyWidth :
                 Parent.SpecialKeyWidth);
         public double Height =>
@@ -425,17 +474,16 @@ namespace iosKeyboardTest.iOS
         #endregion
 
         #region State
-        public IViewHelper VH { get; set; }
+
         public DateTime? PressPopupShowDt { get; set; }
         public bool IsDefaultPopupKey =>
             PopupAnchorKey != null &&
             PopupAnchorKey.SecondaryCharacters.FirstOrDefault() == CurrentChar;
         public bool IsPrimarySpecial =>
-            SpecialKeyType == SpecialKeyType_fallback.Enter ||
-            SpecialKeyType == SpecialKeyType_fallback.Done ||
-            SpecialKeyType == SpecialKeyType_fallback.Go ||
-            SpecialKeyType == SpecialKeyType_fallback.Search ||
-            SpecialKeyType == SpecialKeyType_fallback.Next;
+            SpecialKeyType == SpecialKeyType.Enter ||
+            SpecialKeyType == SpecialKeyType.Done ||
+            SpecialKeyType == SpecialKeyType.Go ||
+            SpecialKeyType == SpecialKeyType.Next;
         public string TouchId { get; set; }
         public DateTime? LastPressDt { get; set; }
         public DateTime? LastReleaseDt { get; set; }
@@ -447,7 +495,7 @@ namespace iosKeyboardTest.iOS
             PullTranslateY >= MaxPullTranslateY; //* 0.75;
         public double PullTranslateY { get; set; } = 0;
         public double MaxPullTranslateY =>
-            InnerHeight/2;
+            InnerHeight / 2;
         bool IsSpaceKey =>
             PrimaryValue == " ";
         public bool HasAnyPopup =>
@@ -455,7 +503,7 @@ namespace iosKeyboardTest.iOS
         public bool HasPressPopup =>
             IsInput && !IsSpaceKey;
         public bool HasHoldPopup =>
-            SecondaryCharacters.Any(x=>x != CurrentChar);
+            SecondaryCharacters.Any(x => x != CurrentChar);
         //public bool IsActiveKey =>
         //    Parent.ActiveKeyViewModel == this;
 
@@ -476,39 +524,39 @@ namespace iosKeyboardTest.iOS
         public int PopupKeyIdx { get; set; } = -1;
         public bool NeedsOuterTranslate {
             get {
-                if(IsPopupKey) {
-                    if(PopupAnchorKey == null) {
+                if (IsPopupKey) {
+                    if (PopupAnchorKey == null) {
                         return false;
                     }
                     return PopupAnchorKey.NeedsOuterTranslate;
                 }
-                return Row == 2 && Parent.CharSet == CharSetType_fallback.Letters;
+                return Row == 2 && Parent.CharSet == CharSetType.Letters;
             }
         }
         public bool NeedsSymbolTranslate =>
             MisAlignedCharacters.Contains(PrimaryValue);
         public bool IsSpecial =>
-            SpecialKeyType != SpecialKeyType_fallback.None;
+            SpecialKeyType != SpecialKeyType.None;
         public bool IsSpaceBar =>
             CurrentChar == " ";
         public bool IsPeriod =>
             CurrentChar == ".";
         public bool IsBackspace =>
-            SpecialKeyType == SpecialKeyType_fallback.Backspace;
+            SpecialKeyType == SpecialKeyType.Backspace;
         public bool IsShift =>
-            SpecialKeyType == SpecialKeyType_fallback.Shift;
+            SpecialKeyType == SpecialKeyType.Shift;
         public bool IsInput =>
             !IsSpecial;
         public bool IsShiftOn =>
-            SpecialKeyType == SpecialKeyType_fallback.Shift &&
-            Parent.CharSet == CharSetType_fallback.Letters &&
-            Parent.ShiftState == ShiftStateType_fallback.Shift;
+            SpecialKeyType == SpecialKeyType.Shift &&
+            Parent.CharSet == CharSetType.Letters &&
+            Parent.ShiftState == ShiftStateType.Shift;
         public bool IsShiftLock =>
-            SpecialKeyType == SpecialKeyType_fallback.Shift &&
-            Parent.CharSet == CharSetType_fallback.Letters &&
-            Parent.ShiftState == ShiftStateType_fallback.ShiftLock;
+            SpecialKeyType == SpecialKeyType.Shift &&
+            Parent.CharSet == CharSetType.Letters &&
+            Parent.ShiftState == ShiftStateType.ShiftLock;
         bool IsShifted =>
-            Parent.ShiftState != ShiftStateType_fallback.None;
+            Parent.ShiftState != ShiftStateType.None;
 
 
         public string CurrentChar { get; private set; }
@@ -523,7 +571,7 @@ namespace iosKeyboardTest.iOS
         #endregion
 
         #region Model
-        public SpecialKeyType_fallback SpecialKeyType { get; set; }
+        public SpecialKeyType SpecialKeyType { get; set; }
         public ObservableCollection<string> Characters { get; set; } = [];
         #endregion
 
@@ -534,8 +582,7 @@ namespace iosKeyboardTest.iOS
         #endregion
 
         #region Constructors
-        public KeyViewModel_fallback(KeyboardViewModel_fallback parent, KeyViewModel_fallback prev, object keyObj)
-        {
+        public KeyViewModel(KeyboardViewModel parent, KeyViewModel prev, object keyObj) {
             Parent = parent;
             PrevKeyViewModel = prev;
             Init(keyObj);
@@ -544,11 +591,14 @@ namespace iosKeyboardTest.iOS
         #endregion
 
         #region Public Methods
+        public void SetRenderer(IKeyboardViewRenderer renderer) {
+            _renderer = renderer;
+        }
         public void Cleanup() {
             OnCleanup?.Invoke(this, EventArgs.Empty);
         }
 
-        public void SetPressed(bool isPressed, Touch_fallback t) {
+        public void SetPressed(bool isPressed, Touch t) {
             if (isPressed) {
                 IsPressed = true;
                 TouchId = t.Id;
@@ -567,15 +617,14 @@ namespace iosKeyboardTest.iOS
                 ClearPopups();
 
             }
-            //this.RaisePropertyChanged(nameof(IsPressed));
-            VH?.Paint(true);
+            Renderer.Paint(true);
         }
 
         #region Popups
-        public void UpdateActivePopup(Touch_fallback touch) {
-            KeyViewModel_fallback last_active = ActivePopupKey;
+        public void UpdateActivePopup(Touch touch) {
+            KeyViewModel last_active = ActivePopupKey;
 #if DEBUG 
-            if(false) {
+            if (false) {
                 KeyboardGridView.DebugCanvas.Children.Clear();
                 KeyboardGridView.DebugCanvas.InvalidateVisual();
                 foreach (var pukvm in PopupKeys) {
@@ -589,19 +638,18 @@ namespace iosKeyboardTest.iOS
 #else
             ActivePopupKey = PopupKeys.FirstOrDefault(x => x.CheckIsActive(touch,false));
 #endif
-            foreach(var pukvm in PopupKeys) {
-                //pukvm.RaisePropertyChanged(nameof(pukvm.IsActiveKey));
-                //pukvm.RaisePropertyChanged(nameof(pukvm.CornerRadius));
-                VH?.Render(true);
+            foreach (var pukvm in PopupKeys) {
+                pukvm.RaisePropertyChanged(nameof(pukvm.IsActiveKey));
+                pukvm.RaisePropertyChanged(nameof(pukvm.CornerRadius));
             }
 
-            if (last_active != ActivePopupKey && 
+            if (last_active != ActivePopupKey &&
                 ActivePopupKey != null) {
                 Parent.InputConnection.OnFeedback(Parent.ActiveChangeFeedback);
             }
         }
-        public void FitPopupInFrame(Touch_fallback touch) {
-            if(!PopupKeys.Any()) {
+        public void FitPopupInFrame(Touch touch) {
+            if (!PopupKeys.Any()) {
                 return;
             }
             double l = PopupKeys.Min(x => x.TotalRect.Left);
@@ -612,7 +660,7 @@ namespace iosKeyboardTest.iOS
             double x_diff = 0;
             double y_diff = t - Parent.TotalRect.Top;
 
-            if(y_diff < 0) {
+            if (y_diff < 0) {
                 t -= y_diff;
                 b -= y_diff;
             } else {
@@ -622,13 +670,13 @@ namespace iosKeyboardTest.iOS
             var this_key_rect = this.TotalRect;
             var y_adj_rect = new Rect(l, t, r - l, b - t);
             if (y_adj_rect.Intersects(this_key_rect)) {
-                if(IsRightSideKey) {
-                    x_diff = this_key_rect.Left - r;
+                if (IsRightSideKey) {
+                    x_diff = this_key_rect.Left - r - Width;
                 } else {
-                    x_diff = l - this_key_rect.Right + (Width*2);
+                    x_diff = l - this_key_rect.Right + (Width * 2);
                 }
             }
-            foreach(var pukvm in PopupKeys) {
+            foreach (var pukvm in PopupKeys) {
                 pukvm.TranslateLocation(x_diff, -y_diff);
             }
             UpdateActivePopup(touch);
@@ -643,20 +691,20 @@ namespace iosKeyboardTest.iOS
                 VisiblePopupColCount = Math.Max(c + 1, VisiblePopupColCount);
                 VisiblePopupRowCount = Math.Max(r + 1, VisiblePopupRowCount);
             }
-        }       
+        }
 
-        public void SetPopupAnchor(KeyViewModel_fallback anchor_kvm, string disp_val) {
+        public void SetPopupAnchor(KeyViewModel anchor_kvm, string disp_val) {
             _keyboardRect = null;
             _totalRect = null;
             PopupAnchorKey = anchor_kvm;
             SetCharacters([disp_val]);
             IsFakePopupKey = string.IsNullOrEmpty(disp_val);
-            if(!Parent.VisiblePopupKeys.Contains(this)) {
+            if (!Parent.VisiblePopupKeys.Contains(this)) {
                 Parent.VisiblePopupKeys.Add(this);
             }
 
-            ResetDisplayValues();
-            ResetSize();
+            Renderer.Layout(false);
+            Renderer.Paint(true);
         }
         public void RemovePopupAnchor() {
             _keyboardRect = null;
@@ -664,16 +712,17 @@ namespace iosKeyboardTest.iOS
             PopupAnchorKey = null;
             IsFakePopupKey = false;
             Parent.VisiblePopupKeys.Remove(this);
-            this.RaisePropertyChanged(nameof(IsActiveKey));
+            Renderer.Layout(false);
             SetCharacters([]);
-            ResetDisplayValues();
+            Renderer.Paint(true);
         }
+
         public void ClearPopups() {
             VisiblePopupColCount = 0;
             VisiblePopupRowCount = 0;
             ActivePopupKey = null;
             var to_rmv = PopupKeys.ToArray();
-            foreach(var rmv in to_rmv) {
+            foreach (var rmv in to_rmv) {
                 rmv.RemovePopupAnchor();
             }
         }
@@ -713,39 +762,17 @@ namespace iosKeyboardTest.iOS
             } else {
                 CurrentChar = string.Empty;
             }
-            VH?.Layout(true);
         }
-        public void ResetDisplayValues() {
-            //RaisePropertyChanged(nameof(KeyOpacity));
-            //RaisePropertyChanged(nameof(PrimaryValue));
-            //RaisePropertyChanged(nameof(SecondaryValue));
-            //RaisePropertyChanged(nameof(SecondaryOpacity));
-            //if(IsShift) {
-            //    RaisePropertyChanged(nameof(IsShiftOn));
-            //    RaisePropertyChanged(nameof(IsShiftLock));
-            //}
-            VH?.Paint(true);
-        }
+
         #endregion
 
-        public void ResetLocation() {
+        public void ResetLocation(bool invalidate) {
             _keyboardRect = FindRect();
             _totalRect = null;
-            //this.RaisePropertyChanged(nameof(X));
-            //this.RaisePropertyChanged(nameof(Y));
-            VH?.Measure(true);
+            Renderer.Measure(invalidate);
         }
 
-        public void ResetSize() {
-            //RaisePropertyChanged(nameof(Width));
-            //RaisePropertyChanged(nameof(Height));
-            //RaisePropertyChanged(nameof(InnerWidth));
-            //RaisePropertyChanged(nameof(InnerHeight));
-            //RaisePropertyChanged(nameof(CornerRadius));
-            VH?.Measure(true);
-        }
-        public override string ToString()
-        {
+        public override string ToString() {
             return $"'{PrimaryValue}' X:{(int)X} Y:{(int)Y} W:{(int)Width} H:{(int)Height}";
         }
         #endregion
@@ -757,11 +784,11 @@ namespace iosKeyboardTest.iOS
 
         private void Init(object keyObj) {
             List<string> chars = [];
-            if (keyObj is string keyStr && keyStr.Split(new string[] {","},StringSplitOptions.RemoveEmptyEntries) is { } keyParts) {
+            if (keyObj is string keyStr && keyStr.Split(new string[] { "," }, StringSplitOptions.RemoveEmptyEntries) is { } keyParts) {
                 // special strings:
                 // none
                 // comma
-                if(!keyParts.Any() && keyStr == ",") {
+                if (!keyParts.Any() && keyStr == ",") {
                     // encode comma for comma popup from its decoded display value
                     keyParts = ["comma"];
                 }
@@ -777,17 +804,17 @@ namespace iosKeyboardTest.iOS
                     }
                     chars.Add(text);
                 }
-            } else if (keyObj is SpecialKeyType_fallback skt) {
+            } else if (keyObj is SpecialKeyType skt) {
                 SpecialKeyType = skt;
                 chars.AddRange(GetSpecialKeyChars(skt));
-            } else if(keyObj is int popupIdx) {
+            } else if (keyObj is int popupIdx) {
                 PopupKeyIdx = popupIdx;
             }
             SetCharacters(chars);
-            ResetDisplayValues();
+            Renderer.Render(true);
         }
 
-        bool CheckIsActive(Touch_fallback touch, bool debug) {
+        bool CheckIsActive(Touch touch, bool debug) {
             if (IsPressed) {
                 // popupkeys take active for input
                 return !HasAnyPopup;
@@ -809,35 +836,35 @@ namespace iosKeyboardTest.iOS
             double py = offset_y + ((p.Y - pd.Y) * multiplier);
 
             // snap perimeter cells to outer bounds
-            double ol = Math.Min(0,px);
-            double ot = Math.Min(0,py);
-            double or = Math.Max(Parent.KeyboardWidth,px);
-            double ob = Math.Max(Parent.KeyboardHeight,py);
+            double ol = Math.Min(0, px);
+            double ot = Math.Min(0, py);
+            double or = Math.Max(Parent.KeyboardWidth, px);
+            double ob = Math.Max(Parent.KeyboardHeight, py);
             double l = X;
             double t = Y;
             double r = X + Width;
             double b = Y + Height;
 
             if (Row == 0) {
-                t = Math.Min(t,ot);
+                t = Math.Min(t, ot);
             }
             if (Row == anchor_kvm.VisiblePopupRowCount - 1) {
-                b = Math.Max(b,ob);
+                b = Math.Max(b, ob);
             }
             if (Column == 0) {
-                l = Math.Min(l,ol);
+                l = Math.Min(l, ol);
             }
             if (Column == anchor_kvm.VisiblePopupColCount - 1) {
-                r = Math.Max(r,or);
+                r = Math.Max(r, or);
             }
             if (IsLastPopupKey) {
-                r = Math.Max(r,or);
-                b = Math.Max(b,ob);
+                r = Math.Max(r, or);
+                b = Math.Max(b, ob);
             }
 
             var hit_rect = new Rect(l, t, Math.Max(0, r - l), Math.Max(0, b - t));
             var adj_p = new Point(px, py);
-            if(debug) {
+            if (debug) {
                 DrawActiveDebug(hit_rect, adj_p);
             }
 
@@ -849,7 +876,7 @@ namespace iosKeyboardTest.iOS
             double x = 0;
             double y = 0;
             if (IsPopupKey) {
-                if(PopupAnchorKey is not { } anchor_kvm) {
+                if (PopupAnchorKey is not { } anchor_kvm) {
                     return new();
                 }
                 double origin_offset = 0;
@@ -860,7 +887,7 @@ namespace iosKeyboardTest.iOS
 
                 double offset = PopupAnchorKey.PopupKeys.Max(x => x.Row) * Height;
                 y = anchor_kvm.Y - anchor_kvm.Height - offset + (Row * Height);
-                if(y < 0) {
+                if (y < 0) {
 
                 }
                 return new Rect(x, y, Width, Height);
@@ -893,7 +920,7 @@ namespace iosKeyboardTest.iOS
                 Brushes.Violet,
                 Brushes.Purple, };
             Color color = Colors.Pink;
-            if(PopupKeyIdx < colors.Length && colors[PopupKeyIdx] is ImmutableSolidColorBrush scb) {
+            if (PopupKeyIdx < colors.Length && colors[PopupKeyIdx] is ImmutableSolidColorBrush scb) {
                 color = scb.Color;
             }
 
@@ -917,8 +944,8 @@ namespace iosKeyboardTest.iOS
             var ellipse = new Avalonia.Controls.Shapes.Ellipse() {
                 Opacity = 0.5,
                 Fill = Brushes.Red,
-                Width = r*2,
-                Height = r*2
+                Width = r * 2,
+                Height = r * 2
             };
 
             cnvs.Children.Add(ellipse);

@@ -27,6 +27,8 @@
    </PropertyGroup>
 
    <ItemGroup>
+     <Compile Remove="KeyboardViewController_av.cs" />
+     <Compile Remove="KeyboardViewController_av.Designer.cs" />
      <Compile Remove="Main.cs" />
    </ItemGroup>
   <ItemGroup>

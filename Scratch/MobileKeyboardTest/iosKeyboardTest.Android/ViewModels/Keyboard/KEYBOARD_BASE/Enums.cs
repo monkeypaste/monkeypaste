@@ -1,6 +1,6 @@
-﻿using System;
+using System;
 
-namespace iosKeyboardTest {
+namespace iosKeyboardTest.Android {
     [Flags]
     public enum KeyboardFeedbackFlags : long {
         None = 0,
