@@ -33,6 +33,7 @@ namespace MonkeyBuild {
         GEN_EDITOR_UISTRS,
         DO_JS_UISTRINGS,
         MOVE_NUGET_CACHE,
+        MOVE_KEYBOARD,
         DEBUG,
         RELEASE,
     }
@@ -215,7 +216,56 @@ namespace MonkeyBuild {
 
         #endregion
 
-        #region Env
+        #region Keyboard Mover
+        static string KeyboardTargetDirName => "KEYBOARD_BASE";
+        static string KeyboardSourceNamespace => "iosKeyboardTest";
+        static string KeyboardSourceDir =>
+            Path.Combine(
+                    MpPlatformHelpers.GetSolutionDir(),
+                    "Scratch",
+                    "MobileKeyboardTest",
+                    "iosKeyboardTest",
+                    "ViewModels",
+                    "Keyboard"
+                    );
+        static List<string> KeyboardTargetDirs =>
+            [
+                Path.Combine(
+                    MpPlatformHelpers.GetSolutionDir(),
+                    "Scratch",
+                    "MobileKeyboardTest",
+                    "iosKeyboardTest.Android",
+                    "ViewModels",
+                    "Keyboard",
+                    KeyboardTargetDirName
+                    ),
+            Path.Combine(
+                    MpPlatformHelpers.GetSolutionDir(),
+                    "Scratch",
+                    "MobileKeyboardTest",
+                    "iosKeyboardTest.iOS",
+                    "ViewModels",
+                    "Keyboard",
+                    KeyboardTargetDirName
+                    ),
+            Path.Combine(
+                    MpPlatformHelpers.GetSolutionDir(),
+                    "Scratch",
+                    "MobileKeyboardTest",
+                    "iosKeyboardTest.iOS.KeyboardExt",
+                    "ViewModels",
+                    "Keyboard",
+                    KeyboardTargetDirName
+                    ),
+            ];
+
+        static Dictionary<string, string[]> OmittedFilesForTargetNamespaceLookup => new Dictionary<string, string[]>() {
+            {"iosKeyboardTest.iOS",["KeyboardFactory.cs"] },
+            {"iosKeyboardTest.iOS.KeyboardExt",["KeyboardFactory.cs"] },
+        };
+        #endregion
+
+            #region Env
         private static IConfiguration _config;
         static IConfigurationSection ServerSecrets { 
             get {
@@ -254,6 +304,9 @@ namespace MonkeyBuild {
             }                        
         }
         static void ProcessAll() {
+            if (BuildTasks.Contains(MpBuildFlags.MOVE_KEYBOARD)) {
+                MoveKeyboard();
+            }
             if (BuildTasks.Contains(MpBuildFlags.GEN_EDITOR_UISTRS)) {
                 GenEditorUiStrings();
             }
@@ -355,7 +408,6 @@ namespace MonkeyBuild {
             }
             return true;
         }
-
         static void SelectPlugins() {
             Console.Clear();
             WorkingPluginNames.Clear();
@@ -1958,6 +2010,94 @@ TrailerThumbnail15,1054,Relative path (or URL to file in Partner Center),
             MpConsole.WriteLine($"Output:");
             MpConsole.WriteLine(sb.ToString());
             MpConsole.WriteLine($"DONE");
+        }
+        #endregion
+
+        #region Keyboard Mover
+        static void MoveKeyboard() {
+            bool is_done = false;
+
+            Task.Run(async () => {
+                // NOTE need to stagger delete/create/update so WinSCP can pickup the changes
+                MpConsole.WriteLine($"Moving Keyboard BEGIN...");
+
+                int wait_ms = 0;
+
+                // delete old target dirs
+                foreach (string target_dir in KeyboardTargetDirs) {
+                    // delete current target dir if exist
+                    if (target_dir.IsDirectory()) {
+                        // unmark all files as read-only
+                        var all_old_target_paths = new DirectoryInfo(target_dir).EnumerateFiles("*.cs", SearchOption.AllDirectories).Select(x => x.FullName);
+                        all_old_target_paths.Select(x => new FileInfo(x)).ForEach(x => x.IsReadOnly = false);
+                        //all_old_target_paths.ForEach(x =>File.SetAttributes(x, File.GetAttributes(x) & ~FileAttributes.ReadOnly));
+
+                        MpFileIo.DeleteDirectory(target_dir);
+                        MpConsole.WriteLine($"Target Dir Deleted: '{target_dir}'");
+                    } else {
+                        MpConsole.WriteLine($"Target Dir NOT FOUND: '{target_dir}'");
+                    }
+                }
+                MpConsole.WriteLine($"Targets deleted. Press key to continue...");
+                Console.ReadLine();
+
+                await Task.Delay(wait_ms);
+                
+                // create new target dirs
+                foreach (string target_dir in KeyboardTargetDirs) {
+                    // create empty target dir
+                    MpFileIo.CreateDirectory(target_dir);
+
+                    // duplicate current source dir
+                    MpFileIo.CopyDirectory(KeyboardSourceDir, target_dir);
+                }
+
+                MpConsole.WriteLine($"Targets Copied. Press key to continue...");
+                Console.ReadLine();
+                await Task.Delay(wait_ms);
+
+                // update target dir files
+                foreach (string target_dir in KeyboardTargetDirs) {
+                    // parse target dir path for namespace name
+                    string target_namespace_name = Path.GetFileName(Directory.GetParent(target_dir).Parent.Parent.FullName);
+
+                    // create match strs
+                    string source_match_str = $"namespace {KeyboardSourceNamespace}";
+                    string target_match_str = $"namespace {target_namespace_name}";
+
+                    // get all keyboard code files in target dir
+                    var all_target_paths = new DirectoryInfo(target_dir).EnumerateFiles("*.cs", SearchOption.AllDirectories).Select(x => x.FullName);
+
+                    foreach (string target_path in all_target_paths) {
+                        if (OmittedFilesForTargetNamespaceLookup.TryGetValue(target_namespace_name, out var omitted_file_names) &&
+                            omitted_file_names.Any(x => x == Path.GetFileName(target_path))) {
+                            MpFileIo.DeleteFile(target_path);
+                            MpConsole.WriteLine($"Deleted '{Path.GetFileName(target_path)}'");
+                            continue;
+                        }
+                        string msg_prefix = "Skipping ";
+                        // replace all namespace references with project dir
+                        string target_text = MpFileIo.ReadTextFromFile(target_path);
+                        if (target_text.Contains(source_match_str)) {
+                            msg_prefix = "Fixed ";
+                            target_text = target_text.Replace(source_match_str, target_match_str);
+                            MpFileIo.WriteTextToFile(target_path, target_text);
+                        }
+                        MpConsole.WriteLine($"{msg_prefix}'{Path.GetFileName(target_path)}'");
+
+                        // mark target file as read-only
+                        new FileInfo(target_path).IsReadOnly = true;
+                    }
+                    MpConsole.WriteLine($"{target_namespace_name} DONE...");
+                }
+
+                is_done = true;
+            });
+
+            while(!is_done) {
+                Thread.Sleep(50);
+            }
+            MpConsole.WriteLine($"Keyboard Mover DONE...");
         }
         #endregion
 
