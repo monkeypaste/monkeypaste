@@ -11,29 +11,39 @@
              x:DataType="local:MainViewModel">
     <Canvas x:Name="ContainerCanvas">
         <Grid x:Name="OuterPanel"
+              Width="{Binding $parent.Bounds.Width}"
+              Height="{Binding $parent.Bounds.Height}"
               RowDefinitions="Auto,Auto,Auto,0.3*">
             <SelectableTextBlock Text="{Binding ErrorText}"
                                  Grid.Row="0"
                                  FontSize="24"
                                  HorizontalAlignment="Center"
-                                 VerticalAlignment="Center"
+                                 VerticalAlignment="Top"
                                  TextWrapping="WrapWithOverflow"
-                                 MaxWidth="300"
-                                 MinHeight="300"
+                                 Margin="10"
                                  Foreground="Red" />
             <TextBox x:Name="TestTextBox"
                      Grid.Row="1"
                      AcceptsReturn="True"
                      HorizontalAlignment="Center"
-                     VerticalAlignment="Center"
+                     VerticalAlignment="Top"
                      Text="{Binding Greeting}" />
-            <Button HorizontalAlignment="Center"
-                    Grid.Row="2"
-                    VerticalAlignment="Center"
-                    x:Name="TestButton">
-                Sup
-            </Button>
-            <!--<local:KeyboardView Grid.Row="3" />-->
+            <StackPanel Grid.Row="2"
+                        HorizontalAlignment="Center"
+                        VerticalAlignment="Top"
+                        Orientation="Horizontal"
+                        Spacing="5">
+                <Button HorizontalAlignment="Center"
+                        VerticalAlignment="Center"
+                        x:Name="TestButton">
+                    Test
+                </Button>
+                <Button HorizontalAlignment="Center"
+                        VerticalAlignment="Center"
+                        x:Name="OrientationButton">
+                    Orientation
+                </Button>
+            </StackPanel>
         </Grid>
     </Canvas>
 </UserControl>

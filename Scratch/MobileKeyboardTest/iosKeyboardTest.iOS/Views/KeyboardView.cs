@@ -44,7 +44,7 @@ namespace iosKeyboardTest.iOS {
         #region Properties
 
         #region View Models
-        KeyboardViewModel DC { get; set; }
+        public KeyboardViewModel DC { get; set; }
         #endregion
 
         #region State
@@ -52,8 +52,11 @@ namespace iosKeyboardTest.iOS {
         #endregion
         #region Views
         UIView MenuView { get; set; }
-        UIView FooterView { get; set; }
         UIView KeyboardGridView { get; set; }
+        UIView FooterView { get; set; }
+        UIButton NextKeyboardButton { get; set; }
+        UITextView CursorControlLabelView { get; set; }
+        UIView CursorControlView { get; set; }
         List<KeyView> KeyViews { get; set; } = [];
 
         #endregion
@@ -91,6 +94,10 @@ namespace iosKeyboardTest.iOS {
             SetBackground();
             AddMenu();
             AddKeyGrid();
+            AddFooter();
+            AddCursorControl();
+
+            DC.Renderer.Render(true);
         }
 
 
@@ -137,33 +144,17 @@ namespace iosKeyboardTest.iOS {
 
         #region Add Views
         void SetBackground() {
-            double w = DC.TotalWidth;
-            double h = DC.TotalHeight;
-            double x = 0;
-            double y = UIScreen.MainScreen.Bounds.Height - h;
-            this.Frame = new CGRect(x, y, w, h);
-            this.BackgroundColor = UIColor.Orange;
             this.Layer.CornerRadius = 0;
             this.Layer.MasksToBounds = true;
-            this.TranslatesAutoresizingMaskIntoConstraints = false;
+            this.TranslatesAutoresizingMaskIntoConstraints = true;
         }
 
         void AddMenu() {
-            double x = 0;
-            double y = 0;
-            double w = this.Frame.Width;
-            double h = DC.MenuHeight;
-            MenuView = new UIView(new CGRect(x, y, w, h)) { TranslatesAutoresizingMaskIntoConstraints = false };
-            MenuView.BackgroundColor = MenuBgBrush;
+            MenuView = new UIView().SetDefaultProps();
             this.AddSubview(MenuView);
         }
         void AddKeyGrid() {
-            double x = 0;
-            double y = DC.MenuHeight;
-            double w = this.Frame.Width;
-            double h = DC.KeyboardHeight;
-            KeyboardGridView = new UIView(new CGRect(x, y, w, h)) { TranslatesAutoresizingMaskIntoConstraints = false };
-            KeyboardGridView.BackgroundColor = BgBrush;
+            KeyboardGridView = new UIView().SetDefaultProps();
             this.AddSubview(KeyboardGridView);
             AddKeys();
         }
@@ -178,25 +169,137 @@ namespace iosKeyboardTest.iOS {
             KeyViews.Add(kv);
             KeyboardGridView.AddSubview(kv);
         }
+
+        void AddFooter() {
+            FooterView = new UIView().SetDefaultProps();
+            FooterView.BackgroundColor = UIColor.Purple;
+            FooterView.UserInteractionEnabled = true;
+            this.Add(FooterView);
+            NSLayoutConstraint.ActivateConstraints([
+                FooterView.HeightAnchor.ConstraintEqualTo(50),// (nfloat)DC.FooterHeight),
+                FooterView.LeftAnchor.ConstraintEqualTo(this.LeftAnchor),
+                FooterView.BottomAnchor.ConstraintEqualTo(this.BottomAnchor)
+                ]);
+
+            NextKeyboardButton = new UIButton(UIButtonType.System);
+            NextKeyboardButton.SetTitle("🌐", UIControlState.Normal);
+            NextKeyboardButton.SizeToFit();
+            NextKeyboardButton.TranslatesAutoresizingMaskIntoConstraints = false;
+            NextKeyboardButton.AddTarget(this, new ObjCRuntime.Selector("advanceToNextInputMode"), UIControlEvent.TouchUpInside);
+            FooterView.AddSubview(NextKeyboardButton);
+
+            NSLayoutConstraint.ActivateConstraints([
+                NextKeyboardButton.LeftAnchor.ConstraintEqualTo(FooterView.LeftAnchor),
+                NextKeyboardButton.BottomAnchor.ConstraintEqualTo(FooterView.BottomAnchor)
+                ]);
+        }
+
+        void AddCursorControl() {
+            CursorControlView = new UIView(this.Frame).SetDefaultProps();
+            this.AddSubview(KeyboardGridView);
+
+            CursorControlLabelView = new UITextView().SetDefaultProps();
+            CursorControlLabelView.Text = "👆Cursor Control";
+
+            CursorControlView.AddSubview(CursorControlLabelView);
+
+            HideCursorControl();
+        }
         #endregion
+
+        void HideCursorControl() {
+            if(CursorControlView == null) {
+                return;
+            }
+            CursorControlView.Hidden = true;
+            CursorControlView.Redraw();
+        }
+        void ShowCursorControl() {
+            if(CursorControlView == null) {
+                return;
+            }
+            CursorControlView.Hidden = false;
+            CursorControlView.Redraw();
+        }
         #endregion
 
         public void Layout(bool invalidate) {
-            throw new System.NotImplementedException();
+            if(DC.IsCursorControlEnabled) {
+                ShowCursorControl();
+            } else {
+                HideCursorControl();
+            }
+
         }
 
         public void Measure(bool invalidate) {
-            throw new System.NotImplementedException();
+            double w = DC.TotalWidth;
+            double h = DC.TotalHeight;
+            double x = 0;
+            double y = 0;
+            this.Frame = new CGRect(x, y, w, h);
+
+            double mx = 0;
+            double my = 0;
+            double mw = this.Frame.Width;
+            double mh = DC.MenuHeight;
+            MenuView.Frame = new CGRect(mx, my, mw, mh);
+
+            double kgx = 0;
+            double kgy = DC.MenuHeight;
+            double kgw = this.Frame.Width;
+            double kgh = DC.KeyboardHeight;
+            KeyboardGridView.Frame = new CGRect(kgx, kgy, kgw, kgh);
+
+            foreach(var kv in KeyViews) {
+                kv.Measure(invalidate);
+            }
+
+            //double fx = 0;
+            //double fy = this.Bounds.Bottom - DC.FooterHeight;
+            //double fw = this.Frame.Width;
+            //double fh = DC.FooterHeight;
+            //FooterView.Frame = new CGRect(fx, fy, fw, fh);
+
+            CursorControlLabelView.Font = UIFont.SystemFontOfSize(24);
+            CursorControlLabelView.SizeToFit();
+            var cclvs = CursorControlLabelView.TextSize();
+            double cx = (this.Bounds.Width / 2) - (cclvs.Width / 2);
+            double cy = (this.Bounds.Height / 2) - (cclvs.Height / 2);
+            CursorControlLabelView.Frame = new CGRect(cx, cy, cclvs.Width, cclvs.Height);
+
+            if(invalidate) {
+                MenuView.Redraw();
+                KeyboardGridView.Redraw();
+                FooterView.Redraw();
+                CursorControlView.Redraw();
+                this.Redraw();
+            }
         }
 
         public void Paint(bool invalidate) {
-            throw new System.NotImplementedException();
+            this.BackgroundColor = UIColor.Orange;
+
+            MenuView.BackgroundColor = MenuBgBrush;
+
+            KeyboardGridView.BackgroundColor = BgBrush;
+
+            FooterView.BackgroundColor = UIColor.Purple;
+
+            CursorControlView.BackgroundColor = CursorControlBgBrush;
+
+            CursorControlLabelView.BackgroundColor = UIColor.FromRGBA(0, 0, 0, 0);
+            CursorControlLabelView.TextColor = CursorControlFgBrush;
         }
 
         public void Render(bool invalidate) {
+            Layout(invalidate);
+            Measure(invalidate);
+            Paint(invalidate);
             foreach(var kv in KeyViews) {
                 kv.Render(invalidate);
             }
+            this.Redraw();
         }
 
         #region Input Handlers

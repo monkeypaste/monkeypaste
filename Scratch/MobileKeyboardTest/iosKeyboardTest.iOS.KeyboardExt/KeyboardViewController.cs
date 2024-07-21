@@ -8,22 +8,53 @@ namespace iosKeyboardTest.iOS.KeyboardExt {
 #pragma warning restore CA1010
         string error = string.Empty;
         UIButton showErrorButton;
-        UIImpactFeedbackGenerator vibrator; 
+        UIImpactFeedbackGenerator vibrator;
+
+        UIStackView outerStackView = null;
         KeyboardView KeyboardView { get; set; }
         public override void ViewDidLoad() {
             base.ViewDidLoad();
 
             try {
-                KeyboardView = new KeyboardView(this);
-                View.AddSubview(KeyboardView);
+                AddOuterContainer();
+                AddKeyboard();
+
+                View.NeedsUpdateConstraints();
+                View.Layer.SetNeedsDisplay();
+                View.Layer.DisplayIfNeeded();
 
                 KeyboardView.OnTouchEvent += (s, e) => {
                     OnPointerChanged?.Invoke(this, e);
                 };
             }
             catch(Exception ex) {
-                SetError(ex.Message);
+                SetError(ex.StackTrace.ToString());
             }
+        }
+        void AddKeyboard() {
+            KeyboardView = new KeyboardView(this);
+            KeyboardView.TranslatesAutoresizingMaskIntoConstraints = false;
+            outerStackView.AddArrangedSubview(KeyboardView);
+            NSLayoutConstraint.ActivateConstraints([
+                KeyboardView.WidthAnchor.ConstraintEqualTo((nfloat)KeyboardView.DC.TotalWidth),
+                KeyboardView.HeightAnchor.ConstraintEqualTo((nfloat)KeyboardView.DC.TotalHeight),
+                ]);
+            KeyboardView.Render(true);
+        }
+        void AddOuterContainer() {
+            outerStackView = new UIStackView() {
+                BackgroundColor = UIColor.Magenta,
+                Axis = UILayoutConstraintAxis.Vertical,
+                TranslatesAutoresizingMaskIntoConstraints = false,
+            };
+            View.AddSubview(outerStackView);
+            NSLayoutConstraint.ActivateConstraints(new NSLayoutConstraint[]{
+                    //outerStackView.HeightAnchor.ConstraintGreaterThanOrEqualTo(100),
+                    outerStackView.TopAnchor.ConstraintEqualTo(View.TopAnchor),
+                    outerStackView.BottomAnchor.ConstraintEqualTo(View.BottomAnchor),
+                    outerStackView.LeftAnchor.ConstraintEqualTo(View.LeftAnchor),
+                    outerStackView.RightAnchor.ConstraintEqualTo(View.RightAnchor),
+                    });
         }
         void SetError(string er) {
             error = er;
@@ -32,11 +63,9 @@ namespace iosKeyboardTest.iOS.KeyboardExt {
             }
             showErrorButton.SetTitle(error, UIControlState.Normal);
             showErrorButton.SizeToFit();
+            OnText(er);
         }
         void AddDebugButton() {
-            //if (innerStackView.Subviews.Contains(showErrorButton)) {
-            //    return;
-            //}
             showErrorButton = new UIButton(UIButtonType.System);
             showErrorButton.SetTitle(error, UIControlState.Normal);
             showErrorButton.SizeToFit();
@@ -44,6 +73,11 @@ namespace iosKeyboardTest.iOS.KeyboardExt {
             showErrorButton.TouchUpInside += (s, e) => {
             };
             View.AddSubview(showErrorButton);
+            NSLayoutConstraint.ActivateConstraints([
+                showErrorButton.LeftAnchor.ConstraintEqualTo(View.LeftAnchor),
+                showErrorButton.RightAnchor.ConstraintEqualTo(View.RightAnchor),
+                showErrorButton.TopAnchor.ConstraintEqualTo(View.TopAnchor),
+                ]);
         }
 
         public event EventHandler OnCursorChanged;
@@ -52,7 +86,11 @@ namespace iosKeyboardTest.iOS.KeyboardExt {
         public event EventHandler<TouchEventArgs> OnPointerChanged;
 
         public string GetLeadingText(int offset, int len) {
-            string pre_text = TextDocumentProxy?.DocumentContextBeforeInput;
+            if(TextDocumentProxy == null ||
+                TextDocumentProxy.DocumentContextBeforeInput is not { } pre_text) {
+                return string.Empty;
+            }
+
             if (offset < 0) {
                 offset = pre_text.Length;
             }
@@ -68,15 +106,27 @@ namespace iosKeyboardTest.iOS.KeyboardExt {
         }
 
         public void OnBackspace(int count) {
+            if(TextDocumentProxy == null) {
+                return;
+            }
             this.TextDocumentProxy?.DeleteBackward();
         }
 
+        bool IKeyboardInputConnection_ios.NeedsInputModeSwitchKey =>
+            true;
+
 
         public void OnInputModeSwitched() {
+            if (TextDocumentProxy == null) {
+                return;
+            }
             this.AdvanceToNextInputMode();
         }
 
         public void OnText(string text) {
+            if (TextDocumentProxy == null) {
+                return;
+            }
             this.TextDocumentProxy?.InsertText(text);
         }
 
@@ -86,6 +136,9 @@ namespace iosKeyboardTest.iOS.KeyboardExt {
 
         public void OnNavigate(int dx, int dy) {
 
+            if (TextDocumentProxy == null) {
+                return;
+            }
             this.TextDocumentProxy?.AdjustTextPositionByCharacterOffset(dx);
         }
 
@@ -99,31 +152,33 @@ namespace iosKeyboardTest.iOS.KeyboardExt {
             }
         }
 
-        KeyboardFlags IKeyboardInputConnection.Flags {
+        public KeyboardFlags Flags {
             get {
                 var kbf = KeyboardFlags.None;
                 kbf |= KeyboardFlags.Portrait | KeyboardFlags.Mobile | KeyboardFlags.PlatformView;
 
-                switch(TextDocumentProxy?.GetKeyboardType()) {
-                    case UIKeyboardType.NumberPad:
-                    case UIKeyboardType.NumbersAndPunctuation:
-                    case UIKeyboardType.DecimalPad:
-                    case UIKeyboardType.AsciiCapableNumberPad:
-                    case UIKeyboardType.PhonePad:
-                        kbf |= KeyboardFlags.Numbers;
-                        break;
-                    case UIKeyboardType.EmailAddress:
-                        kbf |= KeyboardFlags.Email;
-                        break;
-                    case UIKeyboardType.WebSearch:
-                        kbf |= KeyboardFlags.Search;
-                        break;
-                    case UIKeyboardType.Url:
-                        kbf |= KeyboardFlags.Url;
-                        break;
-                    default:
-                        kbf |= KeyboardFlags.FreeText;
-                        break;
+                if(TextDocumentProxy != null) {
+                    switch (TextDocumentProxy?.GetKeyboardType()) {
+                        case UIKeyboardType.NumberPad:
+                        case UIKeyboardType.NumbersAndPunctuation:
+                        case UIKeyboardType.DecimalPad:
+                        case UIKeyboardType.AsciiCapableNumberPad:
+                        case UIKeyboardType.PhonePad:
+                            kbf |= KeyboardFlags.Numbers;
+                            break;
+                        case UIKeyboardType.EmailAddress:
+                            kbf |= KeyboardFlags.Email;
+                            break;
+                        case UIKeyboardType.WebSearch:
+                            kbf |= KeyboardFlags.Search;
+                            break;
+                        case UIKeyboardType.Url:
+                            kbf |= KeyboardFlags.Url;
+                            break;
+                        default:
+                            kbf |= KeyboardFlags.FreeText;
+                            break;
+                    }
                 }
                 return kbf;
             }

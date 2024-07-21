@@ -63,7 +63,7 @@ namespace iosKeyboardTest.Android {
                     DC.SpecialKeyWidth.UnscaledF() / 2,
                     0,
                     0,
-                    DC.KeyHeight.UnscaledF(),
+                    DC.DefaultKeyHeight.UnscaledF(),
                     new int[] {
                         Color.Silver.ToArgb(),
                         Color.DimGray.ToArgb(),
@@ -79,7 +79,7 @@ namespace iosKeyboardTest.Android {
                     DC.SpecialKeyWidth.UnscaledF() / 2,
                     0,
                     0,
-                    DC.KeyHeight.UnscaledF(),
+                    DC.DefaultKeyHeight.UnscaledF(),
                     new int[] {
                         Color.DimGray,
                         Color.Rgb(51,51,51),
@@ -95,7 +95,7 @@ namespace iosKeyboardTest.Android {
                     DC.SpecialKeyWidth.UnscaledF() / 2,
                     0,
                     0,
-                    DC.KeyHeight.UnscaledF(),
+                    DC.DefaultKeyHeight.UnscaledF(),
                     new int[] {
                         Color.MediumBlue,
                         Color.Navy,
@@ -127,7 +127,7 @@ namespace iosKeyboardTest.Android {
                 DC.SpecialKeyWidth.UnscaledF() / 2,
                 0,
                 0,
-                DC.KeyHeight.UnscaledF(),
+                DC.DefaultKeyHeight.UnscaledF(),
                 new int[] {
                         Color.Rgb(85,85,85),
                         Color.Rgb(238,238,238),
@@ -144,7 +144,7 @@ namespace iosKeyboardTest.Android {
                 DC.SpecialKeyWidth.UnscaledF() / 2,
                 0,
                 0,
-                DC.KeyHeight.UnscaledF(),
+                DC.DefaultKeyHeight.UnscaledF(),
                 new int[] {
                         Color.Rgb(204,204,204),
                         Color.MintCream,
@@ -160,7 +160,7 @@ namespace iosKeyboardTest.Android {
                 DC.SpecialKeyWidth.UnscaledF() / 2,
                 0,
                 0,
-                DC.KeyHeight.UnscaledF(),
+                DC.DefaultKeyHeight.UnscaledF(),
                 new int[] {
                         Color.MediumBlue,
                         Color.LightSkyBlue,

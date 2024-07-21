@@ -65,16 +65,17 @@ namespace iosKeyboardTest.iOS.KeyboardExt {
         Email = 1L << 10,
         Search = 1L << 11,
         Next = 1L << 12,
+        Done = 1L << 13,
 
         // THEME
-        Light = 1L << 13,
-        Dark = 1L << 14,
+        Light = 1L << 14,
+        Dark = 1L << 15,
 
         // DEVICE
-        Mobile = 1L << 15,
-        Tablet = 1L << 16,
+        Mobile = 1L << 16,
+        Tablet = 1L << 17,
         
         // UI
-        PlatformView = 1L << 17,
+        PlatformView = 1L << 18,
     }
 }

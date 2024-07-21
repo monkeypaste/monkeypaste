@@ -13,13 +13,16 @@ using Android.Views;
 using Android.Views.InputMethods;
 using Android.Widget;
 using Avalonia.Android;
+using Avalonia.Controls;
 using Avalonia.Layout;
 using Avalonia.Styling;
-using Java.Util;
+using Avalonia.Threading;
 using Microsoft.Maui.ApplicationModel;
 using Microsoft.Maui.Devices;
 using System;
+using System.Collections.Generic;
 using System.Diagnostics;
+using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using static Android.Provider.MediaStore.Audio;
@@ -68,30 +71,34 @@ namespace iosKeyboardTest.Android {
         }
 
         void IKeyboardInputConnection.OnBackspace(int count) {
-            if (this.CurrentInputConnection == null) {
-                return;
-            }
-            try {
+            //if (this.CurrentInputConnection == null) {
+            //    return;
+            //}
+            //try {
 
-                string selectedText = this.CurrentInputConnection.GetSelectedText(0);
+            //    string selectedText = this.CurrentInputConnection.GetSelectedText(0);
 
-                if (string.IsNullOrEmpty(selectedText)) {
-                    this.CurrentInputConnection.DeleteSurroundingText(count, 0);
-                } else {
-                    this.CurrentInputConnection.CommitText(string.Empty, 1);
-                }
-            }
-            catch (Exception ex) {
-                Debug.WriteLine(ex.ToString());
+            //    if (string.IsNullOrEmpty(selectedText)) {
+            //        this.CurrentInputConnection.DeleteSurroundingText(count, 0);
+            //    } else {
+            //        this.CurrentInputConnection.CommitText(string.Empty, 1);
+            //    }
+            //}
+            //catch (Exception ex) {
+            //    Debug.WriteLine(ex.ToString());
+            //}
+            for (int i = 0; i < count; i++) {
+                this.SendDownUpKeyEvents(Keycode.Del);
             }
         }
 
         void IKeyboardInputConnection.OnDone() {
-            if (this.CurrentInputConnection == null) {
-                return;
-            }
-            this.CurrentInputConnection.SendKeyEvent(new KeyEvent(KeyEventActions.Down, Keycode.Enter));
-            this.CurrentInputConnection.SendKeyEvent(new KeyEvent(KeyEventActions.Up, Keycode.Enter));
+            //if (this.CurrentInputConnection == null) {
+            //    return;
+            //}
+            //this.CurrentInputConnection.SendKeyEvent(new KeyEvent(KeyEventActions.Down, Keycode.Enter));
+            //this.CurrentInputConnection.SendKeyEvent(new KeyEvent(KeyEventActions.Up, Keycode.Enter));
+            this.SendDownUpKeyEvents(Keycode.Enter);
         }
 
         void IKeyboardInputConnection.OnNavigate(int dx, int dy) {
@@ -140,6 +147,7 @@ namespace iosKeyboardTest.Android {
         #region Properties
         Context CurrentContext =>
             MainActivity.Instance; //this.Window.Context;
+        AvaloniaView AvView { get; set; }
         #endregion
 
         #region Events
@@ -164,12 +172,28 @@ namespace iosKeyboardTest.Android {
         }
         public override void OnStartInput(EditorInfo attribute, bool restarting) {
             base.OnStartInput(attribute, restarting);
+            if(restarting) {
+
+            }
+            var test = _lastEditorInfo == attribute;
             _lastEditorInfo = attribute;
             var new_flags = Flags;
-            //if (_lastFlags.Value != new_flags) {
-                this.OnFlagsChanged?.Invoke(this, EventArgs.Empty);
-            //}
+            this.OnFlagsChanged?.Invoke(this, EventArgs.Empty);
             _lastFlags = new_flags;
+
+            Dispatcher.UIThread.Post(async () => {
+                if (AvView == null ||
+                    AvView.Content is not Control c ||
+                    c.DataContext is not KeyboardViewModel kbvm) {
+                    return;
+                }
+                while (kbvm.IsBusy) {
+                    await Task.Delay(100);
+                }
+
+                AvView.Invalidate();
+            });
+            
         }
         #endregion
 
@@ -209,12 +233,12 @@ namespace iosKeyboardTest.Android {
         View CreateAvKeyboard() {
             try {
                 var kb_size = KeyboardViewModel.GetTotalSizeByScreenSize(AndroidDisplayInfo.ScaledSize);
-                var av = new AvaloniaView(CurrentContext) {
+                AvView = new AvaloniaView(CurrentContext) {
                     Focusable = false,
                     Content = KeyboardFactory.CreateKeyboardView(this, kb_size, AndroidDisplayInfo.Scaling, out var unscaledSize)
                 };
                 var cntr2 = (LinearLayout)LayoutInflater.Inflate(Resource.Layout.keyboard_layout_view, null);
-                cntr2.AddView(av);
+                cntr2.AddView(AvView);
                 cntr2.Focusable = false;
                 var cntr = new KeyboardLinearLayout(CurrentContext, (int)unscaledSize.Height);
                 cntr.AddView(cntr2);
@@ -253,15 +277,36 @@ namespace iosKeyboardTest.Android {
             kbf |= KeyboardFlags.FullLayout;
 
             if (_lastEditorInfo != null) {
-                string input_type_str = _lastEditorInfo.InputType.ToString().ToLower();
-                if(input_type_str.Contains("number") || input_type_str.Contains("date") || input_type_str.Contains("phone")) {
-                    kbf |= KeyboardFlags.Numbers;
-                } else if(input_type_str.Contains("email")) {
-                    kbf |= KeyboardFlags.Email;
-                } else if(input_type_str.Contains("uri")) {
-                    kbf |= KeyboardFlags.Url;
-                } else {
-                    kbf |= KeyboardFlags.FreeText;
+                var ime_type_lookup = new Dictionary<KeyboardFlags, InputTypes[]>() {
+                    {
+                        KeyboardFlags.Email,
+                        [InputTypes.TextVariationEmailAddress,InputTypes.TextVariationWebEmailAddress] 
+                    },
+                    {
+                        KeyboardFlags.Url,
+                        [InputTypes.TextVariationUri] 
+                    },
+                    {
+                        KeyboardFlags.Numbers,
+                        [InputTypes.ClassDatetime,InputTypes.ClassNumber,InputTypes.ClassPhone] 
+                    },
+                    {
+                        KeyboardFlags.FreeText,
+                        [InputTypes.TextFlagMultiLine,InputTypes.TextFlagImeMultiLine] 
+                    },
+                    {
+                        KeyboardFlags.Done,
+                        [(InputTypes)0] 
+                    },
+
+                };
+                foreach(var kvp in ime_type_lookup) {
+                    foreach(var type in kvp.Value) {
+                        if(_lastEditorInfo.InputType.HasFlag(type)) {
+                            kbf |= kvp.Key;
+                            break;
+                        }
+                    }
                 }
 
                 if(_lastEditorInfo.ImeOptions.HasFlag(ImeFlags.NavigateNext)) {
@@ -273,13 +318,6 @@ namespace iosKeyboardTest.Android {
                 CurrentContext.GetSystemService(Context.UiModeService) is UiModeManager uimm) {
                 kbf |= uimm.NightMode == UiNightMode.Yes ? KeyboardFlags.Dark : KeyboardFlags.Light;
             }
-            //if(App.Current is { } app) {
-            //    if (app.ActualThemeVariant == ThemeVariant.Dark) {
-            //        kbf |= KeyboardFlags.Dark;
-            //    } else {
-            //        kbf |= KeyboardFlags.Light;
-            //    }
-            //}
 
             if (CurrentContext != null &&
                 CurrentContext.GetSystemService(Context.TelephonyService) is TelephonyManager tm) {
@@ -367,7 +405,7 @@ namespace iosKeyboardTest.Android {
 
     }
 
-    public class RenderTask : TimerTask {
+    public class RenderTask : Java.Util.TimerTask {
         View _view;
         Handler _handler;
         public RenderTask(View view, Handler handler) {

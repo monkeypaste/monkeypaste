@@ -25,7 +25,11 @@
         <SolidColorBrush x:Key="ShiftBrush_dark">Cyan</SolidColorBrush>
         <SolidColorBrush x:Key="MenuBgBrush_dark">#333333</SolidColorBrush>
 
-        <LinearGradientBrush x:Key="DefaultKeyBgBrush_dark" TransformOrigin="50%,50%" StartPoint="15%,0%" EndPoint="15%,100%">
+        <SolidColorBrush x:Key="DefaultKeyBgBrush_dark">DimGray</SolidColorBrush>
+        <SolidColorBrush x:Key="SpecialKeyBgBrush_dark">#333333</SolidColorBrush>
+        <SolidColorBrush x:Key="PrimarySpecialKeyBgBrush_dark">Navy</SolidColorBrush>
+
+        <LinearGradientBrush x:Key="DefaultKeyBgGradBrush_dark" TransformOrigin="50%,50%" StartPoint="15%,0%" EndPoint="15%,100%">
             <LinearGradientBrush.GradientStops>
                 <GradientStop Color="Silver" Offset="0" />
                 <GradientStop Color="DimGray" Offset="0.09" />
@@ -33,7 +37,7 @@
                 <GradientStop Color="#444444" Offset="1" />
             </LinearGradientBrush.GradientStops>
         </LinearGradientBrush>
-        <LinearGradientBrush x:Key="SpecialKeyBgBrush_dark" TransformOrigin="50%,50%" StartPoint="15%,0%" EndPoint="15%,100%">
+        <LinearGradientBrush x:Key="SpecialKeyBgGradBrush_dark" TransformOrigin="50%,50%" StartPoint="15%,0%" EndPoint="15%,100%">
             <LinearGradientBrush.GradientStops>
                 <GradientStop Color="DimGray" Offset="0" />
                 <GradientStop Color="#333333" Offset="0.07" />
@@ -41,7 +45,7 @@
                 <GradientStop Color="#222222" Offset="1" />
             </LinearGradientBrush.GradientStops>
         </LinearGradientBrush>
-        <LinearGradientBrush x:Key="PrimarySpecialKeyBgBrush_dark" TransformOrigin="50%,50%" StartPoint="15%,0%" EndPoint="15%,100%">
+        <LinearGradientBrush x:Key="PrimarySpecialKeyBgGradBrush_dark" TransformOrigin="50%,50%" StartPoint="15%,0%" EndPoint="15%,100%">
             <LinearGradientBrush.GradientStops>
                 <GradientStop Color="MediumBlue" Offset="0" />
                 <GradientStop Color="Navy" Offset="0.07" />
@@ -65,7 +69,11 @@
         <SolidColorBrush x:Key="ShiftBrush">CornflowerBlue</SolidColorBrush>
         <SolidColorBrush x:Key="MenuBgBrush">#CCCCCC</SolidColorBrush>
 
-        <LinearGradientBrush x:Key="DefaultKeyBgBrush" TransformOrigin="50%,50%" StartPoint="15%,0%" EndPoint="15%,100%">
+        <SolidColorBrush x:Key="DefaultKeyBgBrush">#EEEEEE</SolidColorBrush>
+        <SolidColorBrush x:Key="SpecialKeyBgBrush">MintCream</SolidColorBrush>
+        <SolidColorBrush x:Key="PrimarySpecialKeyBgBrush">LightSkyBlue</SolidColorBrush>
+
+        <LinearGradientBrush x:Key="DefaultKeyBgGradBrush" TransformOrigin="50%,50%" StartPoint="15%,0%" EndPoint="15%,100%">
             <LinearGradientBrush.GradientStops>
                 <GradientStop Color="#555555" Offset="0" />
                 <GradientStop Color="#EEEEEE" Offset="0.09" />
@@ -73,7 +81,7 @@
                 <GradientStop Color="#CCCCCC" Offset="1" />
             </LinearGradientBrush.GradientStops>
         </LinearGradientBrush>
-        <LinearGradientBrush x:Key="SpecialKeyBgBrush" TransformOrigin="50%,50%" StartPoint="15%,0%" EndPoint="15%,100%">
+        <LinearGradientBrush x:Key="SpecialKeyBgGradBrush" TransformOrigin="50%,50%" StartPoint="15%,0%" EndPoint="15%,100%">
             <LinearGradientBrush.GradientStops>
                 <GradientStop Color="#CCCCCC" Offset="0" />
                 <GradientStop Color="MintCream" Offset="0.07" />
@@ -81,7 +89,7 @@
                 <GradientStop Color="#EEEEEE" Offset="1" />
             </LinearGradientBrush.GradientStops>
         </LinearGradientBrush>
-        <LinearGradientBrush x:Key="PrimarySpecialKeyBgBrush" TransformOrigin="50%,50%" StartPoint="15%,0%" EndPoint="15%,100%">
+        <LinearGradientBrush x:Key="PrimarySpecialKeyBgGradBrush" TransformOrigin="50%,50%" StartPoint="15%,0%" EndPoint="15%,100%">
             <LinearGradientBrush.GradientStops>
                 <GradientStop Color="MediumBlue" Offset="0" />
                 <GradientStop Color="LightSkyBlue" Offset="0.07" />
@@ -150,12 +158,12 @@
                     Value="{DynamicResource DefaultKeyBgBrush}" />
         </Style>
         <Style Selector="local|KeyView:not(.popup-key):not(.down) Border#KeyBgRect">
-            <Setter Property="BoxShadow"
-                    Value="0 0.5 0 0 black" />
+            <!--<Setter Property="BoxShadow"
+                    Value="0 0.5 0 0 black" />-->
         </Style>
         <Style Selector="local|KeyView.special:not(.primary-special):not(.popup-key):not(.down) Border#KeyBgRect">
-            <Setter Property="BoxShadow"
-                    Value="0 0.5 0 0 black" />
+            <!--<Setter Property="BoxShadow"
+                    Value="0 0.5 0 0 black" />-->
         </Style>
         <Style Selector="local|KeyView.special:not(.down) Border#KeyBgRect">
             <Setter Property="Background"
@@ -245,12 +253,12 @@
                     Value="{DynamicResource DefaultKeyBgBrush_dark}" />
         </Style>
         <Style Selector="Grid#OuterGrid.dark local|KeyView:not(.popup-key):not(.down) Border#KeyBgRect">
-            <Setter Property="BoxShadow"
-                    Value="0 0.5 0 0 whitesmoke" />
+            <!--<Setter Property="BoxShadow"
+                    Value="0 0.5 0 0 whitesmoke" />-->
         </Style>
         <Style Selector="Grid#OuterGrid.dark local|KeyView.special:not(.primary-special):not(.popup-key):not(.down) Border#KeyBgRect">
-            <Setter Property="BoxShadow"
-                    Value="0 0.5 0 0 whitesmoke" />
+            <!--<Setter Property="BoxShadow"
+                    Value="0 0.5 0 0 whitesmoke" />-->
         </Style>
         <Style Selector="Grid#OuterGrid.dark local|KeyView.special:not(.down) Border#KeyBgRect">
             <Setter Property="Background"
@@ -330,7 +338,6 @@
         <!--  KEYBOARD  -->
         <local:KeyboardGridView x:Name="KeyboardGridView"
                                 Grid.Row="1"
-                                Margin="{Binding KeyboardMargin}"
                                 Width="{Binding KeyboardWidth}"
                                 Height="{Binding KeyboardHeight}" />
 
@@ -338,6 +345,7 @@
         <StackPanel Grid.Row="2"
                     Spacing="10"
                     Orientation="Horizontal"
+                    Height="{Binding FooterHeight}"
                     IsVisible="{Binding NeedsNextKeyboardButton}">
             <Button x:Name="NextKeyboardButton"
                     Command="{Binding NextKeyboardCommand}">

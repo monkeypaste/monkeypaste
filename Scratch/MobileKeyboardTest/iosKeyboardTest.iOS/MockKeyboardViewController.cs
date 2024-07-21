@@ -44,12 +44,12 @@ namespace iosKeyboardTest.iOS {
                 KeyboardView.Render(true);
             };
 
-            KeyboardView = new KeyboardView(this);
-            View.AddSubview(KeyboardView);
+            //KeyboardView = new KeyboardView(this);
+            //View.AddSubview(KeyboardView);
 
-            KeyboardView.OnTouchEvent += (s, e) => {
-                OnPointerChanged?.Invoke(this, e);
-            };
+            //KeyboardView.OnTouchEvent += (s, e) => {
+            //    OnPointerChanged?.Invoke(this, e);
+            //};
         }
 
         public bool NeedsInputModeSwitchKey { get; }

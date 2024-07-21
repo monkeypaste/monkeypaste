@@ -45,38 +45,49 @@ public partial class MainView : UserControl
         base.OnLoaded(e);
         KeyboardViewModel kbvm = null;
 
+        OrientationButton.Click += (s, e) => {
+            if(TopLevel.GetTopLevel(this) is not Window w) {
+                return;
+            }
+            if (w.Width < w.Height) {
+                kbvm.Flags &= ~KeyboardFlags.Landscape;
+                kbvm.Flags |= KeyboardFlags.Portrait;
+            } else {
+                kbvm.Flags &= ~KeyboardFlags.Portrait;
+                kbvm.Flags |= KeyboardFlags.Landscape;
+            }
+            double temp = w.Width;
+            w.Width = w.Height;
+            w.Height = temp;
+            w.InvalidateArrange();
+            w.InvalidateMeasure();
+            w.InvalidateVisual();
+            OnBoundsChanged();
+            kbvm.Init(kbvm.Flags);
+        };
+
         TestButton.Click += (s, e) => {
             TestTextBox.Text = "Welcome to Avalonia!" + Environment.NewLine + "Welcome to Avalonia!" + Environment.NewLine + "Welcome to Avalonia!" + Environment.NewLine + "Welcome to Avalonia!" + Environment.NewLine + "Welcome to Avalonia!" + Environment.NewLine + "Welcome to Avalonia!";
-            
+            KeyboardPalette.PrintPalette();
+
             if (kbvm != null) {
                 kbvm.UpdateKeyboardState();
+                if(kbvm.IsNumbers) {
+                    kbvm.Flags &= ~KeyboardFlags.Numbers;
+                    kbvm.Flags |= KeyboardFlags.FreeText;
+                } else {
+                    kbvm.Flags &= ~KeyboardFlags.FreeText;
+                    kbvm.Flags |= KeyboardFlags.Numbers;
+                }
+
+                kbvm.Init(kbvm.Flags);
             }
-            //var test = new Border() {
-            //    Background = Brushes.Purple,
-            //    Width = 1000,
-            //    Height = 1000,
-            //    //Child = new Ellipse() {
-            //    //    Width = 100,
-            //    //    Height = 100,
-            //    //    Fill = Brushes.Orange
-            //    //}
-            //    Child = new TestView() {
-            //        Width = 100,
-            //        Height = 100
-            //    }
-            //};
             Touches.Clear();
             if(!show_windowless_kb) {
                 return;
             }
 
-            var rect = new Rect(0, 0, 1000, 300);
-            //var test = new TestView() {
-            //    Width = rect.Width,
-            //    Height = rect.Height
-            //};
-            
-
+            var rect = new Rect(0, 0, 1000, 300);         
             var test = KeyboardBuilder.Build(null, new Size(1000, 300), 2.25, out _);
             test.Measure(rect.Size);
             test.Arrange(rect);
