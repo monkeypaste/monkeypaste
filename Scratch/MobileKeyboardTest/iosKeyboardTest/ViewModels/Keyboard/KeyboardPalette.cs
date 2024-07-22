@@ -12,13 +12,15 @@ namespace iosKeyboardTest {
         #region Light
         static string BgHex_light { get; } = "#FFFFFFFF";
         static string FgHex_light { get; } = "#FF000000";
-        static string FgHex2_light { get; } = "#FFA9A9A9";
+        static string FgHex2_light { get; } = "#FF696969";
         static string HoldBgHex_light { get; } = "#FFFAFAD2";
         static string HoldFocusBgHex_light { get; } = "#FFF0E68C";
         static string HoldFgHex_light { get; } = "#FF000000";
         static string PressedBgHex_light { get; } = "#FFDCDCDC";
-        static string SpecialKeyBgHex_light { get; } = "#FFF5FFFA";
+        static string SpecialKeyBgHex_light { get; } = "#FFC7FFE3";
+        static string SpecialKeyPressedBgHex_light { get; } = "#FF38FF9C";
         static string PrimarySpecialKeyBgHex_light { get; } = "#FF87CEFA";
+        static string PrimarySpecialKeyPressedBgHex_light { get; } = "#FF93CAEC";
         static string ShiftHex_light { get; } = "#FF6495ED";
         static string MenuBgHex_light { get; } = "#FFCCCCCC";
         static string CursorControlBgHex_light { get; } = "#96000000";
@@ -35,7 +37,9 @@ namespace iosKeyboardTest {
         static string HoldFgHex_dark { get; } = "#FF000000";
         static string PressedBgHex_dark { get; } = "#FF808080";
         static string SpecialKeyBgHex_dark { get; } = "#FF696969";
+        static string SpecialKeyPressedBgHex_dark { get; } = "#FFB3B3B3";
         static string PrimarySpecialKeyBgHex_dark { get; } = "#FF0000CD";
+        static string PrimarySpecialKeyPressedBgHex_dark { get; } = "#FF5C5CFF";
         static string ShiftHex_dark { get; } = "#FF00FFFF";
         static string MenuBgHex_dark { get; } = "#FFC0C0C0";
         static string CursorControlBgHex_dark { get; } = "#96141414";
@@ -52,7 +56,9 @@ namespace iosKeyboardTest {
         public static string HoldFgHex => IsDark ? HoldFgHex_dark:HoldFgHex_light;        
         public static string PressedBgHex => IsDark ? PressedBgHex_dark:PressedBgHex_light;        
         public static string SpecialKeyBgHex => IsDark ? SpecialKeyBgHex_dark:SpecialKeyBgHex_light;        
+        public static string SpecialKeyPressedBgHex => IsDark ? SpecialKeyPressedBgHex_dark: SpecialKeyPressedBgHex_light;        
         public static string PrimarySpecialKeyBgHex => IsDark ? PrimarySpecialKeyBgHex_dark:PrimarySpecialKeyBgHex_light;        
+        public static string PrimarySpecialKeyPressedBgHex => IsDark ? PrimarySpecialKeyPressedBgHex_dark : PrimarySpecialKeyPressedBgHex_light;        
         public static string ShiftHex => IsDark ? ShiftHex_dark:ShiftHex_light;       
         public static string MenuBgHex => IsDark ? MenuBgHex_dark:MenuBgHex_light;        
         public static string CursorControlBgHex => IsDark ? CursorControlBgHex_dark:CursorControlBgHex_light;        

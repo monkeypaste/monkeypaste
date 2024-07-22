@@ -2,14 +2,17 @@
 using CoreAnimation;
 using CoreGraphics;
 using Foundation;
+using HarfBuzzSharp;
 using System;
 using System.Linq;
 using UIKit;
 
 namespace iosKeyboardTest.iOS.KeyboardExt {
+    
     public class KeyView : UIView, IKeyboardViewRenderer {
         UITextView SecondaryTextView { get; set; }
         UITextView PrimaryTextView { get; set; }
+        UIImageView SpecialImageView { get; set; }
         public KeyViewModel DC { get; private set; }
         public KeyView(KeyViewModel kvm) : base() {
             DC = kvm;
@@ -33,9 +36,11 @@ namespace iosKeyboardTest.iOS.KeyboardExt {
 
         public void Layout(bool invalidate) {
             PrimaryTextView.Text = DC.PrimaryValue;
+            PrimaryTextView.TextAlignment = UITextAlignment.Center;
             PrimaryTextView.SizeToFit();
 
             SecondaryTextView.Text = DC.SecondaryValue;
+            SecondaryTextView.TextAlignment = UITextAlignment.Right;
             SecondaryTextView.SizeToFit();
 
             if(invalidate) {
@@ -51,18 +56,10 @@ namespace iosKeyboardTest.iOS.KeyboardExt {
             Frame = new CGRect(x,y,w,h);
 
             double pfs = DC.PrimaryFontSize * UIScreen.MainScreen.Scale;
-            PrimaryTextView.TranslatesAutoresizingMaskIntoConstraints = true;
             if (PrimaryTextView.Font == null || PrimaryTextView.Font.PointSize != pfs) {
                 PrimaryTextView.Font = UIFont.SystemFontOfSize((nfloat)pfs, UIFontWeight.Regular);
-                //PrimaryTextView.SizeToFit();
             }
-            PrimaryTextView.TextAlignment = UITextAlignment.Center;
-            var pts = PrimaryTextView.TextSize();
-            double pw = pts.Width;
-            double ph = pts.Height;
-            double px = (w / 2) - (pw / 2);
-            double py = (h / 2) - (ph / 2);// - (pfs/2);
-            PrimaryTextView.Frame = new CGRect(px, py, PrimaryTextView.Bounds.Width,PrimaryTextView.Bounds.Height);
+            PrimaryTextView.Frame = this.Bounds;
 
             double sfs = DC.SecondaryFontSize;
             if (SecondaryTextView.Font == null || SecondaryTextView.Font.PointSize != sfs) {
@@ -77,7 +74,8 @@ namespace iosKeyboardTest.iOS.KeyboardExt {
             double sy = 0;
             SecondaryTextView.Frame = new CGRect(sx, sy, SecondaryTextView.Bounds.Width, SecondaryTextView.Bounds.Height);
             SecondaryTextView.SizeToFit();
-
+            
+            TweakText();
 
             if (invalidate) {
                 PrimaryTextView.Redraw();
@@ -92,24 +90,24 @@ namespace iosKeyboardTest.iOS.KeyboardExt {
             if (this.Hidden) {
                 return;
             }
-            UIColor bg = KeyboardView.DefaultBgBrush;
-            UIColor fg = KeyboardView.FgBrush;
+            UIColor bg = KeyboardPalette.DefaultKeyBgHex.ToUIColor();
+            UIColor fg = KeyboardPalette.FgHex.ToUIColor();
             if (DC.IsSpecial) {
-                bg = DC.IsPressed ? KeyboardView.SpecialPressedBgBrush : KeyboardView.SpecialBgBrush;
+                bg = DC.IsPressed ? KeyboardPalette.SpecialKeyPressedBgHex.ToUIColor() : KeyboardPalette.SpecialKeyBgHex.ToUIColor();
                 if (DC.SpecialKeyType == SpecialKeyType.Shift) {
                     if (DC.IsShiftOn) {
-                        fg = KeyboardView.ShiftBrush;
+                        fg = KeyboardPalette.ShiftHex.ToUIColor();
                     } else if (DC.IsShiftLock) {
-                        bg = KeyboardView.ShiftBrush;
+                        bg = KeyboardPalette.ShiftHex.ToUIColor();
                     }
                 } else if (DC.IsPrimarySpecial) {
-                    bg = DC.IsPressed ? KeyboardView.PrimarySpecialPressedBgBrush : KeyboardView.PrimarySpecialBgBrush;
+                    bg = DC.IsPressed ? KeyboardPalette.PrimarySpecialKeyPressedBgHex.ToUIColor() : KeyboardPalette.PrimarySpecialKeyBgHex.ToUIColor();
                 }
             } else if (DC.IsPopupKey) {
-                bg = DC.IsActiveKey ? KeyboardView.HoldFocusBgBrush : KeyboardView.HoldBgBrush;
-                fg = KeyboardView.HoldFgBrush;
+                bg = DC.IsActiveKey ? KeyboardPalette.HoldFocusBgHex.ToUIColor() : KeyboardPalette.HoldBgHex.ToUIColor();
+                fg = KeyboardPalette.HoldFgHex.ToUIColor();
             } else {
-                bg = DC.IsPressed ? KeyboardView.PressedBgBrush : KeyboardView.DefaultBgBrush;
+                bg = DC.IsPressed ? KeyboardPalette.PressedBgHex.ToUIColor() : KeyboardPalette.DefaultKeyBgHex.ToUIColor();
             }
             BackgroundColor = bg;
 
@@ -117,7 +115,7 @@ namespace iosKeyboardTest.iOS.KeyboardExt {
 
             if(DC.IsSecondaryVisible) {
                 SecondaryTextView.Hidden = false;
-                SecondaryTextView.TextColor = KeyboardView.FgBrush2;
+                SecondaryTextView.TextColor = KeyboardPalette.FgHex2.ToUIColor();
             } else {
                 SecondaryTextView.Hidden = true;
             }
@@ -131,6 +129,31 @@ namespace iosKeyboardTest.iOS.KeyboardExt {
         }
 
 
+        void TweakText() {
+            if (DC.IsNumber && !DC.IsPopupKey && !DC.Parent.IsNumbers) {
+                // BUG numbers don't center naturally, trying use existing values no magic numbers
+                // they need a nudge UP
+                nfloat pty = -PrimaryTextView.Frame.Height / 8;
+                PrimaryTextView.Translate(0, pty);
+
+                // make numbers slightly smaller
+                nfloat nfs = PrimaryTextView.Font.PointSize * 0.85f;
+                PrimaryTextView.Font = UIFont.SystemFontOfSize(nfs);
+            }
+            if (DC.IsSpecial) {
+                // BUG special text is too high, nudge DOWN
+
+                nfloat pty = PrimaryTextView.Frame.Height / 8;
+                PrimaryTextView.Translate(0, pty);
+            }
+            if(DC.IsPopupKey) {
+                // BUG popup text isn't centering
+                PrimaryTextView.Translate(this.Bounds.Width / 16, 0);
+            }
+
+            nfloat sty = -SecondaryTextView.Frame.Height / 4;
+            SecondaryTextView.Translate(0, sty);
+        }
         void RoundCorners(CornerRadius cr) {
             var scale = UIScreen.MainScreen.Scale;
             if(UIDevice.CurrentDevice.CheckSystemVersion(11,0)) {

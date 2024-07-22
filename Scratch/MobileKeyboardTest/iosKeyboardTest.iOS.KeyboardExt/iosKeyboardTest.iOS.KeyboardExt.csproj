@@ -31,11 +31,36 @@
      <Compile Remove="KeyboardViewController_av.Designer.cs" />
      <Compile Remove="Main.cs" />
    </ItemGroup>
+
+   <ItemGroup>
+     <None Remove="Assets\backspace.png" />
+     <None Remove="Assets\enter.png" />
+     <None Remove="Assets\globe.png" />
+     <None Remove="Assets\shift-lock.png" />
+     <None Remove="Assets\shift.png" />
+   </ItemGroup>
   <ItemGroup>
     <PackageReference Include="Avalonia.iOS" Version="$(AvaloniaVersion)" />
   </ItemGroup>
   <ItemGroup>
     <UpToDateCheckInput Remove="App.axaml" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Assets\backspace.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Assets\enter.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Assets\globe.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Assets\shift-lock.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Assets\shift.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\iosKeyboardTest\iosKeyboardTest.csproj" />

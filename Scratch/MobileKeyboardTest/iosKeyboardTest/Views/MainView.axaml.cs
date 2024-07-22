@@ -36,7 +36,7 @@ public partial class MainView : UserControl
             return;
         }
 
-        kbmvm.SetDesiredSize(KeyboardViewModel.GetTotalSizeByScreenSize(this.Bounds.Size));
+        kbmvm.SetDesiredSize(KeyboardViewModel.GetTotalSizeByScreenSize(this.Bounds.Size, kbmvm.KeyboardFlags.HasFlag(KeyboardFlags.Portrait)));
         kbv.Width = kbmvm.TotalWidth;
         kbv.Height = kbmvm.TotalHeight;
     }
@@ -49,12 +49,12 @@ public partial class MainView : UserControl
             if(TopLevel.GetTopLevel(this) is not Window w) {
                 return;
             }
-            if (w.Width < w.Height) {
-                kbvm.Flags &= ~KeyboardFlags.Landscape;
-                kbvm.Flags |= KeyboardFlags.Portrait;
+            if (w.Width > w.Height) {
+                kbvm.KeyboardFlags &= ~KeyboardFlags.Landscape;
+                kbvm.KeyboardFlags |= KeyboardFlags.Portrait;
             } else {
-                kbvm.Flags &= ~KeyboardFlags.Portrait;
-                kbvm.Flags |= KeyboardFlags.Landscape;
+                kbvm.KeyboardFlags &= ~KeyboardFlags.Portrait;
+                kbvm.KeyboardFlags |= KeyboardFlags.Landscape;
             }
             double temp = w.Width;
             w.Width = w.Height;
@@ -63,24 +63,24 @@ public partial class MainView : UserControl
             w.InvalidateMeasure();
             w.InvalidateVisual();
             OnBoundsChanged();
-            kbvm.Init(kbvm.Flags);
+            kbvm.Init(kbvm.KeyboardFlags);
         };
 
         TestButton.Click += (s, e) => {
             TestTextBox.Text = "Welcome to Avalonia!" + Environment.NewLine + "Welcome to Avalonia!" + Environment.NewLine + "Welcome to Avalonia!" + Environment.NewLine + "Welcome to Avalonia!" + Environment.NewLine + "Welcome to Avalonia!" + Environment.NewLine + "Welcome to Avalonia!";
-            KeyboardPalette.PrintPalette();
+            //KeyboardPalette.PrintPalette();
 
             if (kbvm != null) {
                 kbvm.UpdateKeyboardState();
                 if(kbvm.IsNumbers) {
-                    kbvm.Flags &= ~KeyboardFlags.Numbers;
-                    kbvm.Flags |= KeyboardFlags.FreeText;
+                    kbvm.KeyboardFlags &= ~KeyboardFlags.Numbers;
+                    kbvm.KeyboardFlags |= KeyboardFlags.FreeText;
                 } else {
-                    kbvm.Flags &= ~KeyboardFlags.FreeText;
-                    kbvm.Flags |= KeyboardFlags.Numbers;
+                    kbvm.KeyboardFlags &= ~KeyboardFlags.FreeText;
+                    kbvm.KeyboardFlags |= KeyboardFlags.Numbers;
                 }
 
-                kbvm.Init(kbvm.Flags);
+                kbvm.Init(kbvm.KeyboardFlags);
             }
             Touches.Clear();
             if(!show_windowless_kb) {
@@ -106,7 +106,7 @@ public partial class MainView : UserControl
             Control kbv = null;
             //show_windowless_kb = false;
             if(show_windowless_kb) {
-                kbv = KeyboardBuilder.Build(_conn, KeyboardViewModel.GetTotalSizeByScreenSize(this.Bounds.Size), scale, out _);
+                kbv = KeyboardBuilder.Build(_conn, KeyboardViewModel.GetTotalSizeByScreenSize(this.Bounds.Size, kbvm.KeyboardFlags.HasFlag(KeyboardFlags.Portrait)), scale, out _);
                 kbvm = kbv.DataContext as KeyboardViewModel;
                 //if(_conn is IKeyboardInputConnection_desktop) {
                 //    var hidden_window = new Window() {
@@ -134,7 +134,7 @@ public partial class MainView : UserControl
                 };
                 ctrl_to_add = bg_border;
             } else {
-                kbv = KeyboardFactory.CreateKeyboardView(_conn, KeyboardViewModel.GetTotalSizeByScreenSize(this.Bounds.Size), scale, out _);
+                kbv = KeyboardFactory.CreateKeyboardView(_conn, KeyboardViewModel.GetTotalSizeByScreenSize(this.Bounds.Size, true), scale, out _);
                 kbvm = kbv.DataContext as KeyboardViewModel;
                 ctrl_to_add = kbv;
             }

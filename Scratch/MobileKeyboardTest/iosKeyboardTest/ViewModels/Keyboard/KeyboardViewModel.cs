@@ -29,8 +29,14 @@ namespace iosKeyboardTest {
         #endregion
 
         #region Statics
-        public static Size GetTotalSizeByScreenSize(Size scaledScreenSize) {
-            return new Size(scaledScreenSize.Width, scaledScreenSize.Height * TOTAL_KEYBOARD_SCREEN_HEIGHT_RATIO_PORTRAIT);
+        static Size? ScaledScreenSize { get; set; }
+        public static Size GetTotalSizeByScreenSize(Size scaledScreenSize, bool isPortrait) {
+            if(ScaledScreenSize == null) {
+                ScaledScreenSize = scaledScreenSize;
+            }
+            double ratio = isPortrait ? TOTAL_KEYBOARD_SCREEN_HEIGHT_RATIO_PORTRAIT : TOTAL_KEYBOARD_SCREEN_HEIGHT_RATIO_LANDSCAPE;
+            
+            return new Size(scaledScreenSize.Width, scaledScreenSize.Height * ratio);
         }
         
         #endregion
@@ -68,21 +74,8 @@ namespace iosKeyboardTest {
         public string Test { get; set; } = "Im a test";
 
         #region Members
-        KeyboardFlags _customFlags;
-        public KeyboardFlags Flags {
-            get {
-                if((int)_customFlags != 0) {
-                    return _customFlags;
-                }
-                if(InputConnection is { } ic) {
-                    return ic.Flags;
-                }
-                return default;
-            }
-            set {
-                _customFlags = value;
-            }
-        }
+        public KeyboardFlags KeyboardFlags { get; set; }
+        KeyboardFlags LastInitializedFlags { get; set; }
 
         public IKeyboardInputConnection InputConnection { get; set; }
 
@@ -196,11 +189,10 @@ namespace iosKeyboardTest {
 
         #region State
         public bool IsBusy { get; set; }
-        KeyboardFlags LastInitializedFlags { get; set; }
 
         string[] eos_chars = ["\n", ".", "!", "?", string.Empty];
         bool IsInitialized =>
-            InputConnection != null && Flags == LastInitializedFlags;
+            InputConnection != null && InputConnection.Flags == LastInitializedFlags;
 
         public KeyboardFeedbackFlags ActiveChangeFeedback =>
             KeyboardFeedbackFlags.Vibrate;
@@ -287,8 +279,6 @@ namespace iosKeyboardTest {
         public bool IsThemeDark { get; private set; }
         public bool IsTablet { get; private set; }
         public bool IsMobile { get; private set; }
-
-        KeyboardFlags KeyboardFlags { get; set; }
         #endregion
 
         #endregion
@@ -491,10 +481,10 @@ namespace iosKeyboardTest {
             }
             PopupKeys = Keys.Where(x => x.IsPopupKey).ToArray();
 
-            LastInitializedFlags = Flags;
             SetDesiredSize(DesiredSize);
             ResetLayout();
             UpdateKeyboardState();
+            LastInitializedFlags = KeyboardFlags;
             IsBusy = false;
         }
 
@@ -502,16 +492,26 @@ namespace iosKeyboardTest {
             this.RaisePropertyChanged(nameof(Keys));
         }
         private void Ic_OnFlagsChanged(object sender, EventArgs e) {
-            if (IsInitialized ||
-                InputConnection is not { } ic) {
-                // ignore flag change before initialized so doesn't double init
+            //if (IsInitialized ||
+            //    InputConnection is not { } ic) {
+            //    // ignore flag change before initialized so doesn't double init
+            //    return;
+            //}
+            var new_flags = InputConnection.Flags;
+            if(IsInitialized && 
+                ((new_flags.HasFlag(KeyboardFlags.Portrait) && LastInitializedFlags.HasFlag(KeyboardFlags.Landscape)) ||
+                (new_flags.HasFlag(KeyboardFlags.Landscape) && LastInitializedFlags.HasFlag(KeyboardFlags.Portrait)))) {
+                // orientation change
+                ScaledScreenSize = new Size(ScaledScreenSize.Value.Height, ScaledScreenSize.Value.Width);
+                var desired_size = GetTotalSizeByScreenSize(ScaledScreenSize.Value, new_flags.HasFlag(KeyboardFlags.Portrait));
+                SetDesiredSize(desired_size);
+                InputConnection.OnText(Environment.NewLine + "VM " + (new_flags.HasFlag(KeyboardFlags.Portrait) ? "PORTRAIT" : "LANDSCAPE"));
+            }
+            if (new_flags.HasFlag(KeyboardFlags.PlatformView)) {
+                Init(new_flags);
                 return;
             }
-            if(Flags.HasFlag(KeyboardFlags.PlatformView)) {
-                Init(Flags);
-                return;
-            }
-            Dispatcher.UIThread.Post(()=>Init(ic.Flags));
+            Dispatcher.UIThread.Post(()=>Init(new_flags));
         }
 
         private void Ic_OnCursorChanged(object sender, EventArgs e) {
@@ -528,7 +528,7 @@ namespace iosKeyboardTest {
             if(do_vibrate) {
                 InputConnection.OnFeedback(KeyboardFeedbackFlags.Vibrate);
             }
-            if (Flags.HasFlag(KeyboardFlags.PlatformView)) {
+            if (KeyboardFlags.HasFlag(KeyboardFlags.PlatformView)) {
                 SetShiftByLeadingText();
                 return;
             }
@@ -692,7 +692,7 @@ namespace iosKeyboardTest {
                     ([SpecialKeyType.Tab, "q,+,`", "w,×,~", "e,÷,\\", "r,=,|", "t,/,{", "y,_,}", "u,<,€", "i,>,£", "o,[,¥", "p,],₩"]),
                     ([SpecialKeyType.CapsLock, "a,!,○", "s,@,•", "d,#,⚪", "f,$,⚫", "g,%,□", "h,^,🔳", "j,&,♤", "k,*,♡", "l,(,♢", "none,),♧", primarySpecialType]),
                     ([SpecialKeyType.Shift, "z,-,☆", "x,',▪", "c,\",▫", "v,:,≪", "b,;,≫", "n,comma,¡", "m,?,¿", "comma",".", SpecialKeyType.Shift]),
-                    ([SpecialKeyType.SymbolToggle,SpecialKeyType.Emoji, " ", SpecialKeyType.ArrowLeft, SpecialKeyType.ArrowRight, SpecialKeyType.NextKeyboard])
+                    ([SpecialKeyType.SymbolToggle, SpecialKeyType.Emoji, " ", SpecialKeyType.ArrowLeft, SpecialKeyType.ArrowRight, SpecialKeyType.NextKeyboard])
                 };
             }
             return keys;
@@ -759,7 +759,6 @@ namespace iosKeyboardTest {
             kvm.AddPopupAnchor(0, 0, kvm.CurrentChar);
             kvm.PressPopupShowDt = DateTime.Now;
             kvm.FitPopupInFrame(touch);
-            //UpdateKeyboardState();
         }
         void ShowHoldPopup(KeyViewModel kvm, Touch touch) {
             if (IsHoldMenuVisible && kvm != null && !kvm.HasHoldPopup) {

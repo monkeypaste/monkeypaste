@@ -1,4 +1,5 @@
 
+using CoreGraphics;
 using System;
 using System.Text;
 using UIKit;
@@ -16,6 +17,7 @@ namespace iosKeyboardTest.iOS.KeyboardExt {
             base.ViewDidLoad();
 
             try {
+                Flags = GetFlags(null);
                 AddOuterContainer();
                 AddKeyboard();
 
@@ -28,8 +30,14 @@ namespace iosKeyboardTest.iOS.KeyboardExt {
                 };
             }
             catch(Exception ex) {
-                SetError(ex.StackTrace.ToString());
+                SetError(ex.Message);
             }
+        }
+        public override void ViewWillTransitionToSize(CGSize toSize, IUIViewControllerTransitionCoordinator coordinator) {
+            base.ViewWillTransitionToSize(toSize, coordinator);
+            Flags = GetFlags(toSize);
+            OnText(Environment.NewLine + (toSize.Width < toSize.Height ? "PORTRAIT" : "LANDSCAPE"));
+            OnFlagsChanged?.Invoke(this, EventArgs.Empty);
         }
         void AddKeyboard() {
             KeyboardView = new KeyboardView(this);
@@ -152,36 +160,57 @@ namespace iosKeyboardTest.iOS.KeyboardExt {
             }
         }
 
-        public KeyboardFlags Flags {
-            get {
-                var kbf = KeyboardFlags.None;
-                kbf |= KeyboardFlags.Portrait | KeyboardFlags.Mobile | KeyboardFlags.PlatformView;
+        public KeyboardFlags Flags { get; private set; }
+        KeyboardFlags GetFlags(CGSize? newScreenSize) {
+            var kbf = KeyboardFlags.PlatformView;
 
-                if(TextDocumentProxy != null) {
-                    switch (TextDocumentProxy?.GetKeyboardType()) {
-                        case UIKeyboardType.NumberPad:
-                        case UIKeyboardType.NumbersAndPunctuation:
-                        case UIKeyboardType.DecimalPad:
-                        case UIKeyboardType.AsciiCapableNumberPad:
-                        case UIKeyboardType.PhonePad:
-                            kbf |= KeyboardFlags.Numbers;
-                            break;
-                        case UIKeyboardType.EmailAddress:
-                            kbf |= KeyboardFlags.Email;
-                            break;
-                        case UIKeyboardType.WebSearch:
-                            kbf |= KeyboardFlags.Search;
-                            break;
-                        case UIKeyboardType.Url:
-                            kbf |= KeyboardFlags.Url;
-                            break;
-                        default:
-                            kbf |= KeyboardFlags.FreeText;
-                            break;
-                    }
-                }
-                return kbf;
+            bool is_portrait = iosDisplayInfo.IsPortrait;
+            if(newScreenSize.HasValue) {
+                is_portrait = newScreenSize.Value.Width < newScreenSize.Value.Height;
             }
+            if (is_portrait) {
+                kbf |= KeyboardFlags.Portrait;
+            } else {
+                kbf |= KeyboardFlags.Landscape;
+            }
+
+            if (UIDevice.CurrentDevice.Model.ToLower().StartsWith("ipad")) {
+                //kbf |= KeyboardFlags.Tablet;
+                kbf |= KeyboardFlags.Mobile;
+            } else {
+                kbf |= KeyboardFlags.Mobile;
+            }
+
+            if (this.TraitCollection.UserInterfaceStyle == UIUserInterfaceStyle.Dark) {
+                kbf |= KeyboardFlags.Dark;
+            } else {
+                kbf |= KeyboardFlags.Light;
+            }
+
+            if (TextDocumentProxy != null) {
+                switch (TextDocumentProxy?.GetKeyboardType()) {
+                    case UIKeyboardType.NumberPad:
+                    case UIKeyboardType.NumbersAndPunctuation:
+                    case UIKeyboardType.DecimalPad:
+                    case UIKeyboardType.AsciiCapableNumberPad:
+                    case UIKeyboardType.PhonePad:
+                        kbf |= KeyboardFlags.Numbers;
+                        break;
+                    case UIKeyboardType.EmailAddress:
+                        kbf |= KeyboardFlags.Email;
+                        break;
+                    case UIKeyboardType.WebSearch:
+                        kbf |= KeyboardFlags.Search;
+                        break;
+                    case UIKeyboardType.Url:
+                        kbf |= KeyboardFlags.Url;
+                        break;
+                    default:
+                        kbf |= KeyboardFlags.FreeText;
+                        break;
+                }
+            }
+            return kbf;
         }
     }
 

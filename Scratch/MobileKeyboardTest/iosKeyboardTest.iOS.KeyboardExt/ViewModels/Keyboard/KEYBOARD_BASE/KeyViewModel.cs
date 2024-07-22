@@ -31,7 +31,7 @@ namespace iosKeyboardTest.iOS.KeyboardExt {
                 case SpecialKeyType.None:
                     yield break;
                 case SpecialKeyType.Shift:
-                    yield return "⬆️";
+                    yield return "⇧";
                     yield return "1/2";
                     yield return "2/2";
                     break;
@@ -457,7 +457,7 @@ namespace iosKeyboardTest.iOS.KeyboardExt {
                 Parent.DefaultKeyWidth :
                 Parent.SpecialKeyWidth);
         public double Height =>
-            IsNumber ? Parent.NumberKeyHeight : Parent.DefaultKeyHeight;
+            !IsPopupKey && !Parent.IsNumbers && IsNumber ? Parent.NumberKeyHeight : Parent.DefaultKeyHeight;
         public double InnerWidth =>
             Width - OuterPadX;
         public double InnerHeight =>
@@ -507,7 +507,7 @@ namespace iosKeyboardTest.iOS.KeyboardExt {
         public bool HasPressPopup =>
             IsInput && !IsSpaceKey;
         public bool HasHoldPopup =>
-            SecondaryCharacters.Any(x => x != CurrentChar);
+            IsInput && SecondaryCharacters.Any(x => x != CurrentChar);
         //public bool IsActiveKey =>
         //    Parent.ActiveKeyViewModel == this;
 
@@ -648,7 +648,7 @@ namespace iosKeyboardTest.iOS.KeyboardExt {
             ActivePopupKey = PopupKeys.FirstOrDefault(x => x.CheckIsActive(touch,false));
 #endif
             foreach (var pukvm in PopupKeys) {
-                pukvm.Paint(true);
+                pukvm.Render(true);
             }
 
             if (last_active != ActivePopupKey &&
@@ -808,7 +808,7 @@ namespace iosKeyboardTest.iOS.KeyboardExt {
                         text = ",";
                     }
                     if (text == " ") {
-                        ColumnSpan = Parent.Flags.HasFlag(KeyboardFlags.Email) || Parent.Flags.HasFlag(KeyboardFlags.Url) ? 3: 5;
+                        ColumnSpan = Parent.KeyboardFlags.HasFlag(KeyboardFlags.Email) || Parent.KeyboardFlags.HasFlag(KeyboardFlags.Url) ? 3: 5;
                     }
                     chars.Add(text);
                 }
@@ -901,13 +901,13 @@ namespace iosKeyboardTest.iOS.KeyboardExt {
                 return new Rect(x + PopupOffsetX, y + PopupOffsetY, Width, Height);
             }
             if (PrevKeyViewModel == null) {
-                x = NeedsOuterTranslate ? OuterTranslateX : 0;
+                x = NeedsOuterTranslate ? OuterTranslateX : Parent.KeyboardMargin.Left;
             } else {
                 x = PrevKeyViewModel.X + PrevKeyViewModel.Width;
             }
-            y = 0;
+            y = Parent.KeyboardMargin.Top;
             if(Row > 0) {
-                y = Parent.Keys.Where(x => x.Row == Row - 1).Max(x => x.KeyboardRect.Bottom);
+                y = Parent.Keys.Where(x => !x.IsPopupKey && x.Row == Row - 1).Max(x => x.KeyboardRect.Bottom);
             }
             return new Rect(x, y, Width, Height);
         }

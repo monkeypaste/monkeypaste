@@ -7,7 +7,7 @@ using static System.Net.Mime.MediaTypeNames;
 
 namespace iosKeyboardTest.iOS {
     public partial class MockKeyboardViewController : UIViewController, IKeyboardInputConnection_ios, ITriggerTouchEvents {
-        KeyboardView KeyboardView { get; set; }
+        //KeyboardView KeyboardView { get; set; }
         UITextView InputTextBox { get; set; }
         public override void ViewDidLoad() {
             base.ViewDidLoad();
@@ -38,10 +38,10 @@ namespace iosKeyboardTest.iOS {
             tbb.Frame = new CGRect(x2, y2, w2, h2);
             View.AddSubview(tbb);
             tbb.TouchUpInside += (s, e) => {
-                if(KeyboardView == null) {
-                    return;
-                }
-                KeyboardView.Render(true);
+                //if(KeyboardView == null) {
+                //    return;
+                //}
+                //KeyboardView.Render(true);
             };
 
             //KeyboardView = new KeyboardView(this);
@@ -50,6 +50,10 @@ namespace iosKeyboardTest.iOS {
             //KeyboardView.OnTouchEvent += (s, e) => {
             //    OnPointerChanged?.Invoke(this, e);
             //};
+        }
+        public override void ViewWillTransitionToSize(CGSize toSize, IUIViewControllerTransitionCoordinator coordinator) {
+            base.ViewWillTransitionToSize(toSize, coordinator);
+            //InputTextBox.Text += Environment.NewLine + (UIScreen.MainScreen.Bounds.Width < UIScreen.MainScreen.Bounds.Height ? "PORTRAIT" : "LANDSCAPE");
         }
 
         public bool NeedsInputModeSwitchKey { get; }

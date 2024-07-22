@@ -1,9 +1,36 @@
-﻿using CoreGraphics;
+﻿using CoreFoundation;
+using CoreGraphics;
 using Foundation;
+using System;
+using System.Drawing;
+using System.Reflection;
 using UIKit;
 
 namespace iosKeyboardTest.iOS.KeyboardExt {
     public static class ViewHelpers {
+        public static byte[] ImageDataFromResource(string r) {
+            // Ensure "this" is an object that is part of your implementation within your Xamarin forms project
+            var assembly = typeof(ViewHelpers).GetTypeInfo().Assembly;
+            byte[] buffer = null;
+
+            using (System.IO.Stream s = assembly.GetManifestResourceStream(r)) {
+                if (s != null) {
+                    long length = s.Length;
+                    buffer = new byte[length];
+                    s.Read(buffer, 0, (int)length);
+                }
+            }
+
+            return buffer;
+        }
+        public static UIColor ToUIColor(this string hex) {
+            Color color = ColorTranslator.FromHtml(hex);
+            //return UIColor.FromRGBA(color.A, color.R, color.G, color.B);
+            return UIColor.FromRGBA(color.R, color.G, color.B, color.A);
+        }
+        public static void Translate(this UIView v,nfloat tx,nfloat ty) {
+            v.Transform = CGAffineTransform.Translate(v.Transform, tx, ty);
+        }
         public static CGSize TextSize(this UITextView tv) {
             var attr = new NSAttributedString(tv.Text, tv.Font);
             return attr.Size;

@@ -17,25 +17,6 @@ namespace iosKeyboardTest.iOS.KeyboardExt {
         #endregion
 
         #region Statics
-
-        #region Pallette
-        public static UIColor FgBrush { get; set; }
-        public static UIColor FgBrush2 { get; set; }
-        public static UIColor BgBrush { get; set; }
-        public static UIColor HoldBgBrush { get; set; }
-        public static UIColor HoldFocusBgBrush { get; set; }
-        public static UIColor HoldFgBrush { get; set; }
-        public static UIColor PressedBgBrush { get; set; }
-        public static UIColor SpecialPressedBgBrush { get; set; }
-        public static UIColor PrimarySpecialPressedBgBrush { get; set; }
-        public static UIColor ShiftBrush { get; set; }
-        public static UIColor MenuBgBrush { get; set; }
-        public static UIColor CursorControlBgBrush { get; set; }
-        public static UIColor CursorControlFgBrush { get; set; }
-        public static UIColor DefaultBgBrush { get; set; }
-        public static UIColor SpecialBgBrush { get; set; }
-        public static UIColor PrimarySpecialBgBrush { get; set; }
-        #endregion
         #endregion
 
         #region Interfaces
@@ -55,7 +36,7 @@ namespace iosKeyboardTest.iOS.KeyboardExt {
         UIView KeyboardGridView { get; set; }
         UIView FooterView { get; set; }
         UIButton NextKeyboardButton { get; set; }
-        UITextView CursorControlLabelView { get; set; }
+        UITextView CursorControlTextViewView { get; set; }
         UIView CursorControlView { get; set; }
         List<KeyView> KeyViews { get; set; } = [];
 
@@ -85,11 +66,11 @@ namespace iosKeyboardTest.iOS.KeyboardExt {
 
             Subviews.ToList().ForEach(x => x.RemoveFromSuperview());
             double s = 1;// UIScreen.MainScreen.Scale;
-            var kbs = KeyboardViewModel.GetTotalSizeByScreenSize(new Avalonia.Size(UIScreen.MainScreen.Bounds.Width / s, UIScreen.MainScreen.Bounds.Height / s));
+            var kbs = KeyboardViewModel.GetTotalSizeByScreenSize(new Size(UIScreen.MainScreen.Bounds.Width / s, UIScreen.MainScreen.Bounds.Height / s), conn.Flags.HasFlag(KeyboardFlags.Portrait));
             DC = new KeyboardViewModel(conn,kbs,s);
             DC.SetRenderer(this);
 
-            InitPalette(false);
+            KeyboardPalette.SetTheme(conn.Flags.HasFlag(KeyboardFlags.Dark));
 
             SetBackground();
             AddMenu();
@@ -98,48 +79,6 @@ namespace iosKeyboardTest.iOS.KeyboardExt {
             AddCursorControl();
 
             DC.Renderer.Render(true);
-        }
-
-
-        void InitPalette(bool isDark) {
-            nfloat bg_alpha = 0.7f;
-            if (isDark) {
-                BgBrush = UIColor.SystemGray6.ColorWithAlpha(bg_alpha);
-                FgBrush = UIColor.White;
-                FgBrush2 = UIColor.SystemGray5;
-                HoldBgBrush = UIColor.Yellow;
-                HoldFocusBgBrush = UIColor.Orange;
-                HoldFgBrush = UIColor.Black;
-                PressedBgBrush = UIColor.Gray;
-                SpecialPressedBgBrush = UIColor.DarkGray;
-                PrimarySpecialPressedBgBrush = UIColor.Blue;
-                ShiftBrush = UIColor.Cyan;
-                MenuBgBrush = UIColor.FromRGB(51, 51, 51);
-                CursorControlBgBrush = UIColor.FromRGBA(20, 20, 20, 150);
-                CursorControlFgBrush = UIColor.White;
-
-                DefaultBgBrush = UIColor.SystemGray3;
-                SpecialBgBrush = UIColor.SystemGray5;
-                PrimarySpecialBgBrush = UIColor.SystemIndigo;
-                return;
-            }
-            BgBrush = UIColor.White.ColorWithAlpha(bg_alpha);
-            FgBrush = UIColor.Black;
-            FgBrush2 = UIColor.DarkGray;
-            HoldBgBrush = UIColor.Yellow;
-            HoldFocusBgBrush = UIColor.Orange;
-            HoldFgBrush = UIColor.Black;
-            PressedBgBrush = UIColor.Gray;
-            SpecialPressedBgBrush = UIColor.Brown;
-            PrimarySpecialPressedBgBrush = UIColor.Blue;
-            ShiftBrush = UIColor.Green;
-            MenuBgBrush = UIColor.SystemGray;
-            CursorControlBgBrush = UIColor.FromRGBA(255, 255, 255,150);
-            CursorControlFgBrush = UIColor.Black;
-
-            DefaultBgBrush = UIColor.SystemGray3;
-            SpecialBgBrush = UIColor.SystemMint;
-            PrimarySpecialBgBrush = UIColor.SystemIndigo;
         }
 
         #region Add Views
@@ -173,13 +112,7 @@ namespace iosKeyboardTest.iOS.KeyboardExt {
         void AddFooter() {
             FooterView = new UIView().SetDefaultProps();
             FooterView.BackgroundColor = UIColor.Purple;
-            FooterView.UserInteractionEnabled = true;
-            this.Add(FooterView);
-            NSLayoutConstraint.ActivateConstraints([
-                FooterView.HeightAnchor.ConstraintEqualTo(50),// (nfloat)DC.FooterHeight),
-                FooterView.LeftAnchor.ConstraintEqualTo(this.LeftAnchor),
-                FooterView.BottomAnchor.ConstraintEqualTo(this.BottomAnchor)
-                ]);
+            this.AddSubview(FooterView);
 
             NextKeyboardButton = new UIButton(UIButtonType.System);
             NextKeyboardButton.SetTitle("🌐", UIControlState.Normal);
@@ -195,13 +128,13 @@ namespace iosKeyboardTest.iOS.KeyboardExt {
         }
 
         void AddCursorControl() {
-            CursorControlView = new UIView(this.Frame).SetDefaultProps();
+            CursorControlView = new UIView().SetDefaultProps();
             this.AddSubview(KeyboardGridView);
 
-            CursorControlLabelView = new UITextView().SetDefaultProps();
-            CursorControlLabelView.Text = "👆Cursor Control";
+            CursorControlTextViewView = new UITextView().SetDefaultProps();
+            CursorControlTextViewView.Text = "👆Cursor Control";
 
-            CursorControlView.AddSubview(CursorControlLabelView);
+            CursorControlView.AddSubview(CursorControlTextViewView);
 
             HideCursorControl();
         }
@@ -255,18 +188,18 @@ namespace iosKeyboardTest.iOS.KeyboardExt {
                 kv.Measure(invalidate);
             }
 
-            //double fx = 0;
-            //double fy = this.Bounds.Bottom - DC.FooterHeight;
-            //double fw = this.Frame.Width;
-            //double fh = DC.FooterHeight;
-            //FooterView.Frame = new CGRect(fx, fy, fw, fh);
-
-            CursorControlLabelView.Font = UIFont.SystemFontOfSize(24);
-            CursorControlLabelView.SizeToFit();
-            var cclvs = CursorControlLabelView.TextSize();
+            double fx = 0;
+            double fy = this.Frame.Bottom - DC.FooterHeight;
+            double fw = this.Frame.Width;
+            double fh = DC.FooterHeight;
+            FooterView.Frame = new CGRect(fx, fy, fw, fh);
+            
+            CursorControlTextViewView.Font = UIFont.SystemFontOfSize(24);
+            CursorControlTextViewView.SizeToFit();
+            var cclvs = CursorControlTextViewView.TextSize();
             double cx = (this.Bounds.Width / 2) - (cclvs.Width / 2);
             double cy = (this.Bounds.Height / 2) - (cclvs.Height / 2);
-            CursorControlLabelView.Frame = new CGRect(cx, cy, cclvs.Width, cclvs.Height);
+            CursorControlTextViewView.Frame = new CGRect(cx, cy, cclvs.Width, cclvs.Height);
 
             if(invalidate) {
                 MenuView.Redraw();
@@ -280,16 +213,16 @@ namespace iosKeyboardTest.iOS.KeyboardExt {
         public void Paint(bool invalidate) {
             this.BackgroundColor = UIColor.Orange;
 
-            MenuView.BackgroundColor = MenuBgBrush;
+            MenuView.BackgroundColor = KeyboardPalette.MenuBgHex.ToUIColor();
 
-            KeyboardGridView.BackgroundColor = BgBrush;
+            KeyboardGridView.BackgroundColor = KeyboardPalette.BgHex.ToUIColor();
 
             FooterView.BackgroundColor = UIColor.Purple;
 
-            CursorControlView.BackgroundColor = CursorControlBgBrush;
+            CursorControlView.BackgroundColor = KeyboardPalette.CursorControlBgHex.ToUIColor();
 
-            CursorControlLabelView.BackgroundColor = UIColor.FromRGBA(0, 0, 0, 0);
-            CursorControlLabelView.TextColor = CursorControlFgBrush;
+            CursorControlTextViewView.BackgroundColor = UIColor.FromRGBA(0, 0, 0, 0);
+            CursorControlTextViewView.TextColor = KeyboardPalette.CursorControlFgHex.ToUIColor();
         }
 
         public void Render(bool invalidate) {

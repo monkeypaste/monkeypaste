@@ -11,18 +11,6 @@
     <AndroidEnableProfiledAot>false</AndroidEnableProfiledAot>
   </PropertyGroup>
   <ItemGroup>
-    <AndroidJavaSource Remove="ViewModels\**" />
-    <AndroidLibrary Remove="ViewModels\**" />
-    <AndroidNativeLibrary Remove="ViewModels\**" />
-    <AvaloniaXaml Remove="ViewModels\**" />
-    <Compile Remove="ViewModels\**" />
-    <EmbeddedResource Remove="ViewModels\**" />
-    <JavaSourceJar Remove="ViewModels\**" />
-    <None Remove="ViewModels\**" />
-    <ProguardConfiguration Remove="ViewModels\**" />
-    <TransformFile Remove="ViewModels\**" />
-  </ItemGroup>
-  <ItemGroup>
     <None Remove="Resources\font\Nunito_Regular.ttf" />
     <None Remove="Resources\layout\keyboard_layout_view.xml" />
   </ItemGroup>

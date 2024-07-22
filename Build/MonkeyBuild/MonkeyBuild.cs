@@ -260,6 +260,7 @@ namespace MonkeyBuild {
             ];
 
         static Dictionary<string, string[]> OmittedFilesForTargetNamespaceLookup => new Dictionary<string, string[]>() {
+            {"iosKeyboardTest.Android",["KeyboardFactory.cs"] },
             {"iosKeyboardTest.iOS",["KeyboardFactory.cs"] },
             {"iosKeyboardTest.iOS.KeyboardExt",["KeyboardFactory.cs"] },
         };

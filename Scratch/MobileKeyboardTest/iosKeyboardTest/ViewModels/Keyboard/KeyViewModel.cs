@@ -31,7 +31,7 @@ namespace iosKeyboardTest {
                 case SpecialKeyType.None:
                     yield break;
                 case SpecialKeyType.Shift:
-                    yield return "⬆️";
+                    yield return "⇧";
                     yield return "1/2";
                     yield return "2/2";
                     break;
@@ -507,7 +507,7 @@ namespace iosKeyboardTest {
         public bool HasPressPopup =>
             IsInput && !IsSpaceKey;
         public bool HasHoldPopup =>
-            SecondaryCharacters.Any(x => x != CurrentChar);
+            IsInput && SecondaryCharacters.Any(x => x != CurrentChar);
         //public bool IsActiveKey =>
         //    Parent.ActiveKeyViewModel == this;
 
@@ -808,7 +808,7 @@ namespace iosKeyboardTest {
                         text = ",";
                     }
                     if (text == " ") {
-                        ColumnSpan = Parent.Flags.HasFlag(KeyboardFlags.Email) || Parent.Flags.HasFlag(KeyboardFlags.Url) ? 3: 5;
+                        ColumnSpan = Parent.KeyboardFlags.HasFlag(KeyboardFlags.Email) || Parent.KeyboardFlags.HasFlag(KeyboardFlags.Url) ? 3: 5;
                     }
                     chars.Add(text);
                 }
