@@ -1,9 +1,12 @@
-﻿using Android.Util;
+﻿using Android.Graphics;
+using Android.Util;
 using Android.Views;
 using Android.Widget;
 using System;
 using System.Drawing;
+using System.Globalization;
 using System.Reflection;
+using static System.Net.Mime.MediaTypeNames;
 using Color = Android.Graphics.Color;
 using Size = Android.Util.Size;
 
@@ -24,6 +27,10 @@ namespace iosKeyboardTest.Android {
 
             return buffer;
         }
+        public static Color ToColor(this int c) {
+            string hex = $"#{c.ToString("x8", CultureInfo.InvariantCulture).ToUpper()}";
+            return hex.ToColor();
+        }
         public static Color ToColor(this string hex) {
             System.Drawing.Color color = ColorTranslator.FromHtml(hex);
             //return Color.FromRGBA(color.A, color.R, color.G, color.B);
@@ -33,22 +40,26 @@ namespace iosKeyboardTest.Android {
             //v.Transform = CGAffineTransform.Translate(v.Transform, tx, ty);
         }
         public static Size TextSize(this TextView tv) {
-            //var attr = new NSAttributedString(tv.Text, tv.Font);
-            //return attr.Size;
-            return default;
+            // from https://stackoverflow.com/a/24359594/105028
+            Rect bounds = new Rect();
+            Paint textPaint = tv.Paint;
+            textPaint.GetTextBounds(tv.Text, 0, tv.Text.Length, bounds);
+            return new Size(bounds.Width(), bounds.Height());
         }
         public static void Redraw(this View v) {
-            //v.Layer.SetNeedsDisplay();
-            //v.Layer.DisplayIfNeeded();
+            v.Invalidate();
         }
-        public static T SetDefaultProps<T>(this T uiv) where T: View {
-            //uiv.TranslatesAutoresizingMaskIntoConstraints = false;
-            //uiv.UserInteractionEnabled = false;
-            //uiv.ClipsToBounds = false;
+        public static T SetDefaultProps<T>(this T uiv, string name = default) where T: View {
+            uiv.Focusable = false;
+            uiv.ClipToOutline = false;
+            if(uiv is CustomView cv && !string.IsNullOrEmpty(name)) {
+                cv.Name = name;
+            }
             return uiv;
         }
         public static T SetDefaultTextProps<T>(this T uitv) where T: TextView{
             uitv = uitv.SetDefaultProps();
+            uitv.SetMaxLines(1);
             //uitv.Selectable = false;
             //uitv.BackgroundColor = Color.FromRGBA(0, 0, 0, 0);
             //uitv.TextContainer.LineBreakMode = UILineBreakMode.TailTruncation;

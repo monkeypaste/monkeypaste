@@ -8,10 +8,11 @@ using iosKeyboardTest.Android;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using GPaint = Android.Graphics.Paint;
 using Rect = Android.Graphics.Rect;
 
 namespace iosKeyboardTest.Android {
-    public class KeyboardView :  CustomViewGroup, IKeyboardViewRenderer {
+    public class KeyboardView : CustomViewGroup, IKeyboardViewRenderer {
         #region Private Variables
         #endregion
 
@@ -31,16 +32,14 @@ namespace iosKeyboardTest.Android {
         #endregion
 
         #region State
+        Paint SharedPaint { get; set; }
         bool HasFullAccess { get; set; }
         #endregion
         #region Views
-        CustomViewGroup MenuView { get; set; }
-        CustomViewGroup KeyboardGridView { get; set; }
-        CustomViewGroup FooterView { get; set; }
-        TextView CursorControlTextViewView { get; set; }
-        CustomViewGroup CursorControlView { get; set; }
-        List<KeyView> KeyViews { get; set; } = [];
-
+        CustomView MenuView { get; set; }
+        KeyGridView KeyGridView { get; set; }
+        CustomTextView CursorControlTextView { get; set; }
+        CustomView CursorControlView { get; set; }
         #endregion
 
 
@@ -53,8 +52,48 @@ namespace iosKeyboardTest.Android {
         #endregion
 
         #region Public Methods
-        public KeyboardView(IKeyboardInputConnection_ios conn, Context context) : base(context) {
-            Init(conn);
+        public KeyboardView(IKeyboardInputConnection conn, Context context) : base(context,null) {
+            SharedPaint = SetupPaint();
+
+            Focusable = false;
+            HasFullAccess = false;
+
+            if (conn is IOnTouchListener otl) {
+                this.SetOnTouchListener(otl);
+            }
+
+            float s = 1;// (float)AndroidDisplayInfo.Scaling;
+            var kbs = KeyboardViewModel.GetTotalSizeByScreenSize(AndroidDisplayInfo.UnscaledSize, AndroidDisplayInfo.IsPortrait);
+            DC = new KeyboardViewModel(conn, kbs, s);
+            DC.SetRenderer(this);
+
+
+            int w = (int)(DC.TotalWidth * s);
+            int h = (int)(DC.TotalHeight * s);
+            this.LayoutParameters = new FrameLayout.LayoutParams(w, h);
+
+            KeyboardPalette.SetTheme(conn.Flags.HasFlag(KeyboardFlags.Dark));
+            SharedPaint = SetupPaint();
+
+            MenuView = new CustomView(context, SharedPaint).SetDefaultProps("Menu");
+            this.AddView(MenuView);
+
+            KeyGridView = new KeyGridView(context, SharedPaint, DC).SetDefaultProps("KeyboardGrid");
+            this.AddView(KeyGridView);
+            KeyGridView.SetZ(10);
+
+            CursorControlView = new CustomView(context, SharedPaint).SetDefaultProps();
+            this.AddView(CursorControlView);
+
+            CursorControlTextView = new CustomTextView(context, SharedPaint).SetDefaultProps();
+            CursorControlTextView.Text = "👆Cursor Control";
+
+            this.AddView(CursorControlTextView);
+
+            HideCursorControl();
+
+            Measure(true);
+            DC.Renderer.Render(true);
         }
         #endregion
 
@@ -62,94 +101,28 @@ namespace iosKeyboardTest.Android {
         #endregion
 
         #region Private Methods
-        private void Init(IKeyboardInputConnection_ios conn) {
-            HasFullAccess = false;
 
-            float s = 1;// UIScreen.MainScreen.Scale;
-            var kbs = KeyboardViewModel.GetTotalSizeByScreenSize(AndroidDisplayInfo.ScaledSize, conn.Flags.HasFlag(KeyboardFlags.Portrait));
-            DC = new KeyboardViewModel(conn,kbs,s);
-            DC.SetRenderer(this);
-
-            KeyboardPalette.SetTheme(conn.Flags.HasFlag(KeyboardFlags.Dark));
-
-            SetBackground();
-            AddMenu();
-            AddKeyGrid();
-            AddFooter();
-            AddCursorControl();
-
-            DC.Renderer.Render(true);
+        private Paint SetupPaint() {
+            var paint = new GPaint();
+            paint.TextAlign = GPaint.Align.Left;
+            paint.AntiAlias = true;
+            paint.SetTypeface(Resources.GetFont(Resource.Font.Nunito_Regular));
+            return paint;
         }
-
-        #region Add Views
-        void SetBackground() {
-
-        }
-
-        void AddMenu() {
-            //MenuView = new ViewGroup(this.Context).SetDefaultProps();
-            this.AddView(MenuView);
-        }
-        void AddKeyGrid() {
-            //KeyboardGridView = new ViewGroup(this.Context).SetDefaultProps();
-            this.AddView(KeyboardGridView);
-            AddKeys();
-        }
-
-        void AddKeys() {
-            foreach(var kvm in DC.Keys) {
-                AddKey(kvm);
-            }
-        }
-        void AddKey(KeyViewModel kvm) {
-            var kv = new KeyView(kvm,this.Context).SetDefaultProps();
-            KeyViews.Add(kv);
-            KeyboardGridView.AddView(kv);
-        }
-
-        void AddFooter() {
-            FooterView = new CustomViewGroup(this.Context).SetDefaultProps();
-            //FooterView.BackgroundColor = UIColor.Purple;
-            //this.AddView(FooterView);
-
-            //NextKeyboardButton = new UIButton(UIButtonType.System);
-            //NextKeyboardButton.SetTitle("🌐", UIControlState.Normal);
-            //NextKeyboardButton.SizeToFit();
-            //NextKeyboardButton.TranslatesAutoresizingMaskIntoConstraints = false;
-            //NextKeyboardButton.AddTarget(this, new ObjCRuntime.Selector("advanceToNextInputMode"), UIControlEvent.TouchUpInside);
-            //FooterView.AddView(NextKeyboardButton);
-
-            //NSLayoutConstraint.ActivateConstraints([
-            //    NextKeyboardButton.LeftAnchor.ConstraintEqualTo(FooterView.LeftAnchor),
-            //    NextKeyboardButton.BottomAnchor.ConstraintEqualTo(FooterView.BottomAnchor)
-            //    ]);
-        }
-
-        void AddCursorControl() {
-            CursorControlView = new CustomViewGroup(this.Context).SetDefaultProps();
-            this.AddView(KeyboardGridView);
-
-            CursorControlTextViewView = new TextView(this.Context).SetDefaultProps();
-            CursorControlTextViewView.Text = "👆Cursor Control";
-
-            CursorControlView.AddView(CursorControlTextViewView);
-
-            HideCursorControl();
-        }
-        #endregion
-
         void HideCursorControl() {
             if(CursorControlView == null) {
                 return;
             }
-            CursorControlView.Visibility = ViewStates.Visible;
+            CursorControlView.Visibility = ViewStates.Invisible;
+            CursorControlTextView.Visibility = ViewStates.Invisible;
             CursorControlView.Redraw();
         }
         void ShowCursorControl() {
             if(CursorControlView == null) {
                 return;
             }
-            CursorControlView.Visibility = ViewStates.Invisible;
+            CursorControlView.Visibility = ViewStates.Visible;
+            CursorControlTextView.Visibility = ViewStates.Visible;
             CursorControlView.Redraw();
         }
         #endregion
@@ -160,50 +133,45 @@ namespace iosKeyboardTest.Android {
             } else {
                 HideCursorControl();
             }
+            KeyGridView.Layout(invalidate);
 
+            if(invalidate) {
+                this.Redraw();
+            }
+        }
+        protected override void OnMeasure(int widthMeasureSpec, int heightMeasureSpec) {
+            //base.OnMeasure(MeasureSpec.MakeMeasureSpec((int)Frame.Width(), MeasureSpecMode.Exactly), MeasureSpec.MakeMeasureSpec((int)Frame.Height(), MeasureSpecMode.Exactly));
+            SetMeasuredDimension((int)DC.TotalWidth, (int)DC.TotalHeight);
         }
 
         public void Measure(bool invalidate) {
-            float w = (float)DC.TotalWidth;
-            float h = (float)DC.TotalHeight;
-            float x = 0;
-            float y = 0;
-            this.Frame = new RectF(x, y, w, h);
 
-            float mx = 0;
-            float my = 0;
-            float mw = this.Frame.Width();
-            float mh = (float)DC.MenuHeight;
-            MenuView.Frame = new RectF(mx, my, mw, mh);
+            float r = (float)DC.TotalWidth;
+            float b = (float)DC.TotalHeight;
+            float l = 0;
+            float t = 0;
+            this.Frame = new RectF(l, t, r, b);
 
-            float kgx = 0;
-            float kgy = (float)DC.MenuHeight;
-            float kgw = this.Frame.Width();
-            float kgh = (float)DC.KeyboardHeight;
-            KeyboardGridView.Frame = new RectF(kgx, kgy, kgw, kgh);
+            float ml = l;
+            float mt = t;
+            float mr = r;
+            float mb = (float)DC.MenuHeight;
+            MenuView.Frame = new RectF(ml, mt, mr, mb);
 
-            foreach(var kv in KeyViews) {
-                kv.Measure(invalidate);
-            }
+            KeyGridView.Measure(invalidate);
 
-            float fx = 0;
-            float fy = this.Frame.Bottom - (float)DC.FooterHeight;
-            float fw = this.Frame.Width();
-            float fh = (float)DC.FooterHeight;
-            FooterView.Frame = new RectF(fx, fy, fw, fh);
-            
-            //CursorControlTextViewView.Font = UIFont.SystemFontOfSize(24);
+            CursorControlView.Frame = new RectF(l, t, r, b);
 
-            var cclvs = CursorControlTextViewView.TextSize();
-            float cx = (this.Frame.Width() / 2) - (cclvs.Width / 2);
-            float cy = (this.Frame.Height() / 2) - (cclvs.Height / 2);
-            //CursorControlTextViewView.Frame = new RectF(cx, cy, cclvs.Width, cclvs.Height);
+            CursorControlTextView.TextSize = 24;
+            var cclvs = CursorControlTextView.TextSize();
+            float cx = ((r - l) / 2) - (cclvs.Width / 2);
+            float cy = ((b - t) / 2) - (cclvs.Height / 2);
+            CursorControlTextView.Frame = new RectF(cx, cy, cclvs.Width, cclvs.Height);
 
             if(invalidate) {
                 MenuView.Redraw();
-                KeyboardGridView.Redraw();
-                FooterView.Redraw();
                 CursorControlView.Redraw();
+                KeyGridView.Redraw();
                 this.Redraw();
             }
         }
@@ -211,55 +179,34 @@ namespace iosKeyboardTest.Android {
         public void Paint(bool invalidate) {
             this.SetBackgroundColor(Color.Orange);
             MenuView.SetBackgroundColor(KeyboardPalette.MenuBgHex.ToColor());
+            //MenuView.CustomBgColor = KeyboardPalette.MenuBgHex.ToColor();
 
-            KeyboardGridView.SetBackgroundColor(KeyboardPalette.BgHex.ToColor());
-
-            FooterView.SetBackgroundColor(Color.Purple);
+            KeyGridView.Paint(invalidate);
 
             CursorControlView.SetBackgroundColor(KeyboardPalette.CursorControlBgHex.ToColor());
+            //CursorControlView.CustomBgColor = KeyboardPalette.CursorControlBgHex.ToColor();
 
-            CursorControlTextViewView.SetBackgroundColor(Color.Argb(0, 0, 0, 0));
-            CursorControlTextViewView.SetTextColor(KeyboardPalette.CursorControlFgHex.ToColor());
+            //CursorControlTextView.SetBackgroundColor(Color.Argb(0, 0, 0, 0));
+            CursorControlTextView.SetTextColor(KeyboardPalette.CursorControlFgHex.ToColor());
+            CursorControlTextView.CustomTextColor = KeyboardPalette.CursorControlFgHex.ToColor();
+
+            if (invalidate) {
+                this.Redraw();
+            }
         }
 
         public void Render(bool invalidate) {
-            Layout(invalidate);
-            Measure(invalidate);
-            Paint(invalidate);
-            foreach(var kv in KeyViews) {
-                kv.Render(invalidate);
+            Layout(false);
+            Measure(false);
+            Paint(false);
+            KeyGridView.Render(invalidate);
+            if (invalidate) {
+                this.Redraw();
+                for (int i = 0; i < ChildCount; i++) {
+                    this.GetChildAt(i).Redraw();
+                }
             }
-            this.Redraw();
+
         }
-
-        #region Input Handlers
-        public event EventHandler<TouchEventArgs> OnTouchEvent;
-        //public override void TouchesBegan(NSSet touches, UIEvent evt) {
-        //    if (touches.FirstOrDefault() is not UITouch t) {
-        //        return;
-        //    }
-        //    var p = t.LocationInView(this);
-        //    OnTouchEvent?.Invoke(this, new TouchEventArgs(new Point(p.X,p.Y),TouchEventType.Press));
-        //}
-        //public override void TouchesMoved(NSSet touches, UIEvent evt) {
-        //    if (touches.FirstOrDefault() is not UITouch t) {
-        //        return;
-        //    }
-        //    var p = t.LocationInView(this);
-        //    OnTouchEvent?.Invoke(this, new TouchEventArgs(new Point(p.X, p.Y),TouchEventType.Move));
-
-        //}
-        //public override void TouchesEnded(NSSet touches, UIEvent evt) {
-        //    if (touches.FirstOrDefault() is not UITouch t) {
-        //        return;
-        //    }
-        //    var p = t.LocationInView(this);
-        //    OnTouchEvent?.Invoke(this, new TouchEventArgs(new Point(p.X, p.Y),TouchEventType.Release));
-        //}
-
-        protected override void OnLayout(bool changed, int l, int t, int r, int b) {
-            throw new NotImplementedException();
-        }
-        #endregion
     }
 }

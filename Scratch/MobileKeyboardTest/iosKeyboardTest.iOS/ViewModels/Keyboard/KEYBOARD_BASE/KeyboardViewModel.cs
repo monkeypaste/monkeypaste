@@ -101,7 +101,7 @@ namespace iosKeyboardTest.iOS {
         public Thickness KeyboardMargin { get; set; } = new Thickness(0, 3,0,5);
         public Rect TotalRect { get; private set; } = new();
         public Rect KeyboardRect { get; private set; } = new();
-        public int MaxColCount { get; private set; }
+        public int MaxColCount { get; private set; } = 1;
         public int RowCount { get; private set; }
         public double NumberRowHeightRatio => IsNumbers ? 1 : 0.75;
 

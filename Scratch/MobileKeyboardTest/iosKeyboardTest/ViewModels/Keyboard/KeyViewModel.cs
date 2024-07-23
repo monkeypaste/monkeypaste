@@ -244,10 +244,10 @@ namespace iosKeyboardTest {
 
         #region Appearance
         public double PrimaryFontSize =>
-            Math.Max(1, Math.Min(MaxFontSize, Math.Min(InnerWidth, InnerHeight) * PrimaryFontSizeRatio));
+            Math.Max(1, Math.Min(InnerWidth, InnerHeight) * PrimaryFontSizeRatio);
         public double SecondaryFontSize {
             get {
-                double fs = Math.Max(1, Math.Min(MaxFontSize, Math.Min(InnerWidth, InnerHeight) * SecondaryFontSizeRatio));
+                double fs = Math.Max(1, Math.Min(InnerWidth, InnerHeight) * SecondaryFontSizeRatio);
                 if (!IsPulling) {
                     return fs;
                 }
@@ -350,10 +350,10 @@ namespace iosKeyboardTest {
         public double PrimaryFontSizeRatio => 
             Parent.IsNumbers && IsInput ? 
                 1.25 :
-                IsDotCom ? 0.3 : 0.75;
-        public double MaxFontSize => 16;
+                IsDotCom ? 
+                    0.3 : 
+                    0.5;
         public double SecondaryFontSizeRatio => 0.33;
-        public double SecondaryRatio => 0.25;
         string[] MisAlignedCharacters => [
             //"✖️",
             "♠️",

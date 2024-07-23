@@ -55,7 +55,7 @@ namespace iosKeyboardTest.iOS.KeyboardExt {
             double h = DC.InnerHeight;
             Frame = new CGRect(x,y,w,h);
 
-            double pfs = DC.PrimaryFontSize * UIScreen.MainScreen.Scale;
+            double pfs = DC.PrimaryFontSize;// * UIScreen.MainScreen.Scale;
             if (PrimaryTextView.Font == null || PrimaryTextView.Font.PointSize != pfs) {
                 PrimaryTextView.Font = UIFont.SystemFontOfSize((nfloat)pfs, UIFontWeight.Regular);
             }

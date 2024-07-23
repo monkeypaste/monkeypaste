@@ -18,6 +18,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using static Android.Views.View;
+using Color = Android.Graphics.Color;
 using Debug = System.Diagnostics.Debug;
 using Exception = System.Exception;
 using Keycode = Android.Views.Keycode;
@@ -31,8 +32,7 @@ namespace iosKeyboardTest.Android {
         private KeyboardFlags? _lastFlags;
         private ClipboardListener _cbListener;
         private EditorInfo _lastEditorInfo = default;
-        private AdKeyboardView _keyboardView = default;
-        private Handler _handler;
+        private KeyboardView _keyboardView = default;
         #endregion
 
         #region Constants
@@ -129,10 +129,13 @@ namespace iosKeyboardTest.Android {
         }
 
         public bool OnTouch(View v, MotionEvent e) {
+            //if(e.Action == MotionEventActions.Up) {
+            //    _keyboardView.Render(true);
+            //}
             //_keyboardView.Renderer.StopRendering();
 
-            double x = e.GetX() / AndroidDisplayInfo.Scaling;
-            double y = e.GetY() / AndroidDisplayInfo.Scaling;
+            double x = e.GetX();// / AndroidDisplayInfo.Scaling;
+            double y = e.GetY();// / AndroidDisplayInfo.Scaling;
             Avalonia.Point p = new Avalonia.Point(x, y);
             var tet =
                 e.Action == MotionEventActions.Down ?
@@ -215,14 +218,12 @@ namespace iosKeyboardTest.Android {
         #region Private Methods
 
         View CreateAdKeyboard() {
-            _keyboardView = new AdKeyboardView(this, this);
-            var cntr = new KeyboardLinearLayout(this, (int)(_keyboardView.DC.TotalHeight*_keyboardView.DC.ScreenScaling));
-            cntr.AddView(_keyboardView);
-
-            //Timer timer = new Timer();
-            //timer.ScheduleAtFixedRate(new RenderTask(_keyboardView,new Handler()), (long)0, (long)(1000d / 60d));
-
-            return cntr;
+            _keyboardView = new KeyboardView(this, this);
+            return _keyboardView;
+            //var cntr = new KeyboardLinearLayout(this, (int)(_keyboardView.DC.TotalHeight*_keyboardView.DC.ScreenScaling));
+            //cntr.SetBackgroundColor(Color.Purple);
+            //cntr.AddView(_keyboardView);
+            //return cntr;
         }
 
         View CreateAvKeyboard() {
@@ -399,20 +400,5 @@ namespace iosKeyboardTest.Android {
         #endregion
         #endregion
 
-    }
-
-    public class RenderTask : Java.Util.TimerTask {
-        View _view;
-        Handler _handler;
-        public RenderTask(View view, Handler handler) {
-            _view = view;
-            _handler = handler;
-        }
-        public override void Run() {
-            _handler.Post(() => {
-                _view.Invalidate();
-            });
-            
-        }
     }
 }

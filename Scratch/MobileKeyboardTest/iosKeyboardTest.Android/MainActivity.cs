@@ -21,9 +21,6 @@ public class MainActivity : AvaloniaMainActivity<App>
 {
     public static MainActivity Instance { get; private set; }
 
-    public static void CreateManually() {
-        Instance = new MainActivity();
-    }
     public MainActivity() : base() { }
     protected override AppBuilder CustomizeAppBuilder(AppBuilder builder)
     {
