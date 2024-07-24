@@ -9,46 +9,52 @@ namespace iosKeyboardTest.iOS {
         #region Properties
         static bool IsDark { get; set; }
 
+        #region Common
+        static string A { get; set; } = ((byte)150).ToString("X2");
+        static string CC_A { get; set; } = ((byte)200).ToString("X2");
+        #endregion
+
         #region Light
-        static string BgHex_light { get; } = "#FFFFFFFF";
-        static string FgHex_light { get; } = "#FF000000";
-        static string FgHex2_light { get; } = "#FF696969";
-        static string HoldBgHex_light { get; } = "#FFFAFAD2";
-        static string HoldFocusBgHex_light { get; } = "#FFF0E68C";
-        static string HoldFgHex_light { get; } = "#FF000000";
-        static string PressedBgHex_light { get; } = "#FFDCDCDC";
-        static string SpecialKeyBgHex_light { get; } = "#FFC7FFE3";
-        static string SpecialKeyPressedBgHex_light { get; } = "#FF38FF9C";
-        static string PrimarySpecialKeyBgHex_light { get; } = "#FF87CEFA";
-        static string PrimarySpecialKeyPressedBgHex_light { get; } = "#FF93CAEC";
-        static string ShiftHex_light { get; } = "#FF6495ED";
-        static string MenuBgHex_light { get; } = "#FFCCCCCC";
-        static string CursorControlBgHex_light { get; } = "#96000000";
-        static string CursorControlFgHex_light { get; } = "#FF000000";
-        static string DefaultKeyBgHex_light { get; } = "#FFC0C0C0";
+        static string BgHex_light { get; } = $"#{A}FFFFFF";
+        static string FgHex_light { get; } = $"#FF000000";
+        static string FgHex2_light { get; } = $"#FF696969";
+        static string DefaultKeyBgHex_light { get; } = $"#{A}C0C0C0";
+        static string HoldBgHex_light { get; } = $"#FFFAFAD2";
+        static string HoldFocusBgHex_light { get; } = $"#FFF0E68C";
+        static string HoldFgHex_light { get; } = $"#FF000000";
+        static string PressedBgHex_light { get; } = $"#{A}DCDCDC";
+        static string SpecialKeyBgHex_light { get; } = $"#{A}C7FFE3";
+        static string SpecialKeyPressedBgHex_light { get; } = $"#{A}38FF9C";
+        static string PrimarySpecialKeyBgHex_light { get; } = $"#{A}87CEFA";
+        static string PrimarySpecialKeyPressedBgHex_light { get; } = $"#{A}93CAEC";
+        static string ShiftHex_light { get; } = $"#FF6495ED";
+        static string MenuBgHex_light { get; } = $"#{A}CCCCCC";
+        static string CursorControlBgHex_light { get; } = $"#{A}141414";
+        static string CursorControlFgHex_light { get; } = $"#FFFFFFFF";
         #endregion
 
         #region Dark
-        static string BgHex_dark { get; } = "#FF000000";
-        static string FgHex_dark { get; } = "#FFFFFFFF";
-        static string FgHex2_dark { get; } = "#FFDCDCDC";
-        static string HoldBgHex_dark { get; } = "#FFFFD700";
-        static string HoldFocusBgHex_dark { get; } = "#FFFFA500";
-        static string HoldFgHex_dark { get; } = "#FF000000";
-        static string PressedBgHex_dark { get; } = "#FF808080";
-        static string SpecialKeyBgHex_dark { get; } = "#FF696969";
-        static string SpecialKeyPressedBgHex_dark { get; } = "#FFB3B3B3";
-        static string PrimarySpecialKeyBgHex_dark { get; } = "#FF0000CD";
-        static string PrimarySpecialKeyPressedBgHex_dark { get; } = "#FF5C5CFF";
-        static string ShiftHex_dark { get; } = "#FF00FFFF";
-        static string MenuBgHex_dark { get; } = "#FFC0C0C0";
-        static string CursorControlBgHex_dark { get; } = "#96141414";
-        static string CursorControlFgHex_dark { get; } = "#FFFFFFFF";
-        static string DefaultKeyBgHex_dark { get; } = "#FFC0C0C0";
+        static string BgHex_dark { get; } = $"#{A}000000";
+        static string DefaultKeyBgHex_dark { get; } = $"#{A}C0C0C0";
+        static string FgHex_dark { get; } = $"#FFFFFFFF";
+        static string FgHex2_dark { get; } = $"#FFDCDCDC";
+        static string HoldBgHex_dark { get; } = $"#FFFFD700";
+        static string HoldFocusBgHex_dark { get; } = $"#FFFFA500";
+        static string HoldFgHex_dark { get; } = $"#FF000000";
+        static string PressedBgHex_dark { get; } = $"#{A}808080";
+        static string SpecialKeyBgHex_dark { get; } = $"#{A}696969";
+        static string SpecialKeyPressedBgHex_dark { get; } = $"#{A}B3B3B3";
+        static string PrimarySpecialKeyBgHex_dark { get; } = $"#{A}0000CD";
+        static string PrimarySpecialKeyPressedBgHex_dark { get; } = $"#{A}5C5CFF";
+        static string ShiftHex_dark { get; } = $"#FF00FFFF";
+        static string MenuBgHex_dark { get; } = $"#{A}C0C0C0";
+        static string CursorControlBgHex_dark { get; } = $"#{A}141414";
+        static string CursorControlFgHex_dark { get; } = $"#FFFFFFFF";
         #endregion
 
         #region Working Set
-        public static string BgHex => IsDark ? BgHex_dark : BgHex_light;        
+        public static string BgHex => IsDark ? BgHex_dark : BgHex_light;
+        public static string DefaultKeyBgHex => IsDark ? DefaultKeyBgHex_dark : DefaultKeyBgHex_light;
         public static string FgHex => IsDark ? FgHex_dark:FgHex_light;        
         public static string FgHex2 => IsDark ? FgHex2_dark:FgHex2_light;        
         public static string HoldBgHex => IsDark ? HoldBgHex_dark:HoldBgHex_light;        
@@ -62,8 +68,7 @@ namespace iosKeyboardTest.iOS {
         public static string ShiftHex => IsDark ? ShiftHex_dark:ShiftHex_light;       
         public static string MenuBgHex => IsDark ? MenuBgHex_dark:MenuBgHex_light;        
         public static string CursorControlBgHex => IsDark ? CursorControlBgHex_dark:CursorControlBgHex_light;        
-        public static string CursorControlFgHex => IsDark ? CursorControlFgHex_dark:CursorControlFgHex_light;        
-        public static string DefaultKeyBgHex => IsDark ? DefaultKeyBgHex_dark:DefaultKeyBgHex_light;
+        public static string CursorControlFgHex => IsDark ? CursorControlFgHex_dark:CursorControlFgHex_light;  
         #endregion
         #endregion
 

@@ -393,6 +393,10 @@ namespace iosKeyboardTest.Android {
 
         public int ZIndex =>
             IsPopupKey ? 1 : 0;
+        public double InnerX =>
+            X + (OuterPadX / 2);
+        public double InnerY =>
+            Y + (OuterPadY / 2);
         public double X {
             get {
                 if (_keyboardRect is not { } rect) {
@@ -417,6 +421,21 @@ namespace iosKeyboardTest.Android {
             Renderer.Measure(true);
         }
 
+        private Rect? _innerRect;
+        public Rect InnerRect {
+            get {
+                if(_innerRect is not { } ir) {
+                    if (_keyboardRect is not { } kbRect) {
+                        kbRect = FindRect();
+                        _keyboardRect = kbRect;
+                    }
+                    ir = new Rect(InnerX,InnerY, InnerWidth, InnerHeight);
+                    _innerRect = ir;
+                }
+                
+                return _innerRect.Value;
+            }
+        }
 
         private Rect? _keyboardRect;
         public Rect KeyboardRect {
@@ -437,7 +456,8 @@ namespace iosKeyboardTest.Android {
                         kbRect = FindRect();
                         _keyboardRect = kbRect;
                     }
-                    tRect = new Rect(kbRect.X, kbRect.Y + Parent.MenuHeight, kbRect.Width, kbRect.Height);
+
+                    tRect = new Rect(kbRect.X, kbRect.Y + Parent.KeyboardRect.Top, kbRect.Width, kbRect.Height);
                     _totalRect = tRect;
                 }
                 return tRect;
@@ -703,10 +723,14 @@ namespace iosKeyboardTest.Android {
                 VisiblePopupRowCount = Math.Max(r + 1, VisiblePopupRowCount);
             }
         }
-
-        public void SetPopupAnchor(KeyViewModel anchor_kvm, string disp_val) {
+        void ClearRects() {
+            _innerRect = null;
             _keyboardRect = null;
             _totalRect = null;
+        }
+
+        public void SetPopupAnchor(KeyViewModel anchor_kvm, string disp_val) {
+            ClearRects();
             PopupAnchorKey = anchor_kvm;
             SetCharacters([disp_val]);
             IsFakePopupKey = string.IsNullOrEmpty(disp_val);
@@ -718,8 +742,7 @@ namespace iosKeyboardTest.Android {
             Renderer.Paint(true);
         }
         public void RemovePopupAnchor() {
-            _keyboardRect = null;
-            _totalRect = null;
+            ClearRects();
             PopupOffsetX = 0;
             PopupOffsetY = 0;
             PopupAnchorKey = null;
@@ -775,6 +798,7 @@ namespace iosKeyboardTest.Android {
             } else {
                 CurrentChar = string.Empty;
             }
+            ClearRects();
         }
 
         #endregion

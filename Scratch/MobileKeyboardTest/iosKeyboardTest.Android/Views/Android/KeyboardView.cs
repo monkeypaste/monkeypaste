@@ -1,4 +1,5 @@
-﻿using Android.Content;
+﻿using Android.App;
+using Android.Content;
 using Android.Graphics;
 using Android.Views;
 using Android.Widget;
@@ -31,10 +32,15 @@ namespace iosKeyboardTest.Android {
         public KeyboardViewModel DC { get; set; }
         #endregion
 
+        #region Appearance
+        public static float Scaling { get; private set; }
+        #endregion
+
         #region State
-        Paint SharedPaint { get; set; }
+        GPaint SharedPaint { get; set; }
         bool HasFullAccess { get; set; }
         #endregion
+
         #region Views
         CustomView MenuView { get; set; }
         KeyGridView KeyGridView { get; set; }
@@ -49,12 +55,8 @@ namespace iosKeyboardTest.Android {
         #endregion
 
         #region Constructors
-        #endregion
-
-        #region Public Methods
-        public KeyboardView(IKeyboardInputConnection conn, Context context) : base(context,null) {
+        public KeyboardView(Context context, IKeyboardInputConnection conn) : base(context) {
             SharedPaint = SetupPaint();
-
             Focusable = false;
             HasFullAccess = false;
 
@@ -62,32 +64,24 @@ namespace iosKeyboardTest.Android {
                 this.SetOnTouchListener(otl);
             }
 
-            float s = 1;// (float)AndroidDisplayInfo.Scaling;
+            Scaling = 1;// (float)AndroidDisplayInfo.Scaling;
             var kbs = KeyboardViewModel.GetTotalSizeByScreenSize(AndroidDisplayInfo.UnscaledSize, AndroidDisplayInfo.IsPortrait);
-            DC = new KeyboardViewModel(conn, kbs, s);
+            DC = new KeyboardViewModel(conn, kbs, Scaling, AndroidDisplayInfo.Scaling);
             DC.SetRenderer(this);
 
-
-            int w = (int)(DC.TotalWidth * s);
-            int h = (int)(DC.TotalHeight * s);
-            this.LayoutParameters = new FrameLayout.LayoutParams(w, h);
-
             KeyboardPalette.SetTheme(conn.Flags.HasFlag(KeyboardFlags.Dark));
-            SharedPaint = SetupPaint();
 
             MenuView = new CustomView(context, SharedPaint).SetDefaultProps("Menu");
             this.AddView(MenuView);
 
             KeyGridView = new KeyGridView(context, SharedPaint, DC).SetDefaultProps("KeyboardGrid");
             this.AddView(KeyGridView);
-            KeyGridView.SetZ(10);
 
             CursorControlView = new CustomView(context, SharedPaint).SetDefaultProps();
             this.AddView(CursorControlView);
 
             CursorControlTextView = new CustomTextView(context, SharedPaint).SetDefaultProps();
             CursorControlTextView.Text = "👆Cursor Control";
-
             this.AddView(CursorControlTextView);
 
             HideCursorControl();
@@ -97,12 +91,20 @@ namespace iosKeyboardTest.Android {
         }
         #endregion
 
+        #region Public Methods
+        public void RemapRenderers() {
+            // NOTE when flags change keys are recreated and renderer
+            KeyGridView.AddOrResetKeys();
+            Render(true);
+        }
+        #endregion
+
         #region Protected Methods
         #endregion
 
         #region Private Methods
 
-        private Paint SetupPaint() {
+        private GPaint SetupPaint() {
             var paint = new GPaint();
             paint.TextAlign = GPaint.Align.Left;
             paint.AntiAlias = true;
@@ -139,56 +141,44 @@ namespace iosKeyboardTest.Android {
                 this.Redraw();
             }
         }
-        protected override void OnMeasure(int widthMeasureSpec, int heightMeasureSpec) {
-            //base.OnMeasure(MeasureSpec.MakeMeasureSpec((int)Frame.Width(), MeasureSpecMode.Exactly), MeasureSpec.MakeMeasureSpec((int)Frame.Height(), MeasureSpecMode.Exactly));
-            SetMeasuredDimension((int)DC.TotalWidth, (int)DC.TotalHeight);
-        }
 
         public void Measure(bool invalidate) {
+            this.Frame = DC.TotalRect.ToRectF();
 
-            float r = (float)DC.TotalWidth;
-            float b = (float)DC.TotalHeight;
-            float l = 0;
-            float t = 0;
-            this.Frame = new RectF(l, t, r, b);
-
-            float ml = l;
-            float mt = t;
-            float mr = r;
-            float mb = (float)DC.MenuHeight;
-            MenuView.Frame = new RectF(ml, mt, mr, mb);
+            MenuView.Frame = DC.MenuRect.ToRectF();
 
             KeyGridView.Measure(invalidate);
 
-            CursorControlView.Frame = new RectF(l, t, r, b);
+            CursorControlView.Frame = DC.InnerRect.ToRectF();
 
             CursorControlTextView.TextSize = 24;
-            var cclvs = CursorControlTextView.TextSize();
-            float cx = ((r - l) / 2) - (cclvs.Width / 2);
-            float cy = ((b - t) / 2) - (cclvs.Height / 2);
-            CursorControlTextView.Frame = new RectF(cx, cy, cclvs.Width, cclvs.Height);
-
+            var cct_size = CursorControlTextView.TextSize();
+            float cct_l = CursorControlView.Frame.CenterX() - (cct_size.Width / 2);
+            float cct_t = CursorControlView.Frame.CenterY() - (cct_size.Height / 2);
+            float cct_r = cct_l + cct_size.Width;
+            float cct_b = cct_t + cct_size.Height;
+            CursorControlTextView.Frame = new RectF(cct_l, cct_t, cct_r, cct_b);
+            
             if(invalidate) {
                 MenuView.Redraw();
                 CursorControlView.Redraw();
+                CursorControlTextView.Redraw();
                 KeyGridView.Redraw();
                 this.Redraw();
             }
         }
 
         public void Paint(bool invalidate) {
-            this.SetBackgroundColor(Color.Orange);
+            //this.SetBackgroundColor(Color.Orange);
+
             MenuView.SetBackgroundColor(KeyboardPalette.MenuBgHex.ToColor());
-            //MenuView.CustomBgColor = KeyboardPalette.MenuBgHex.ToColor();
 
             KeyGridView.Paint(invalidate);
 
             CursorControlView.SetBackgroundColor(KeyboardPalette.CursorControlBgHex.ToColor());
-            //CursorControlView.CustomBgColor = KeyboardPalette.CursorControlBgHex.ToColor();
 
-            //CursorControlTextView.SetBackgroundColor(Color.Argb(0, 0, 0, 0));
             CursorControlTextView.SetTextColor(KeyboardPalette.CursorControlFgHex.ToColor());
-            CursorControlTextView.CustomTextColor = KeyboardPalette.CursorControlFgHex.ToColor();
+            CursorControlTextView.ForegroundColor = KeyboardPalette.CursorControlFgHex.ToColor();
 
             if (invalidate) {
                 this.Redraw();

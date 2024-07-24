@@ -1,17 +1,22 @@
 ﻿using Android.Content;
 using Android.Graphics;
+using Android.Views;
 using System.Collections.Generic;
 
 namespace iosKeyboardTest.Android {
     public class KeyGridView : CustomViewGroup, IKeyboardViewRenderer {
-        Paint SharedPaint { get; set; }
         public KeyboardViewModel DC { get; set; }
 
         public KeyGridView(Context context, Paint paint, KeyboardViewModel dC) : base(context,paint) {
             DC = dC;
+            AddOrResetKeys();            
+        }
+
+        public void AddOrResetKeys() {
+            this.RemoveAllViews();
 
             foreach (var kvm in DC.Keys) {
-                var kv = new KeyView(kvm, context, paint).SetDefaultProps($"Key '{kvm.CurrentChar}'");
+                var kv = new KeyView(kvm, this.Context, SharedPaint).SetDefaultProps($"Key '{kvm.CurrentChar}'");
                 this.AddView(kv);
             }
         }
@@ -20,7 +25,7 @@ namespace iosKeyboardTest.Android {
             for (int i = 0; i < ChildCount; i++) {
                 if(GetChildAt(i) is not KeyView kv) {
                     continue;
-                }
+                }   
                 kv.Layout(invalidate);
             }
             if(invalidate) {
@@ -29,14 +34,8 @@ namespace iosKeyboardTest.Android {
         }
 
         public void Measure(bool invalidate) {
-            int[] p = new int[2];
-            this.GetLocationOnScreen(p);
+            Frame = DC.KeyboardRect.ToRectF();
 
-            float kgl = 0;
-            float kgt = (float)DC.MenuHeight;
-            float kgr = (float)DC.KeyboardWidth;
-            float kgb = kgt + (float)DC.KeyboardHeight;
-            Frame = new RectF(kgl, kgt, kgr, kgb);
 
             for (int i = 0; i < ChildCount; i++) {
                 if (GetChildAt(i) is not KeyView kv) {
@@ -44,6 +43,10 @@ namespace iosKeyboardTest.Android {
                 }
                 kv.Measure(invalidate);
             }
+            this.Measure(
+                View.MeasureSpec.MakeMeasureSpec((int)Frame.Width(), MeasureSpecMode.Exactly),
+                View.MeasureSpec.MakeMeasureSpec((int)Frame.Height(), MeasureSpecMode.Exactly));
+            this.Layout((int)Frame.Left, (int)Frame.Top, (int)Frame.Right, (int)Frame.Bottom);
             if (invalidate) {
                 this.Redraw();
             }

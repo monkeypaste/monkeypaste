@@ -1,4 +1,4 @@
-﻿<Project Sdk="Microsoft.NET.Sdk">
+﻿<Project Sdk="Microsoft.NET.Sdk" InitialTargets="MoveKeyboard">
   <PropertyGroup>
     <TargetFramework>$(TargetFrameworkPrefix)</TargetFramework>
     <Nullable>disable</Nullable>
@@ -59,4 +59,11 @@
       <DependentUpon>KeyboardMenuStripView.axaml</DependentUpon>
     </Compile>
   </ItemGroup>
+
+
+  <!-- KEYBOARD MOVER -->
+  <Target Name="MoveKeyboard">
+    <Exec Command="C:\Users\tkefauver\Source\Repos\MonkeyPaste\Build\MonkeyBuild\bin\Debug\net6.0\MonkeyBuild.exe MOVE_KEYBOARD" />
+    <Message Importance="High" Text="Keyboard Move...DONE" />
+  </Target>
 </Project>

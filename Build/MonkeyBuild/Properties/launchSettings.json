@@ -1,0 +1,7 @@
+{
+  "profiles": {
+    "MonkeyBuild": {
+      "commandName": "Project"
+    }
+  }
+}

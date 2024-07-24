@@ -2,6 +2,7 @@
 using Android.Util;
 using Android.Views;
 using Android.Widget;
+using Avalonia.Media;
 using System;
 using System.Drawing;
 using System.Globalization;
@@ -12,6 +13,18 @@ using Size = Android.Util.Size;
 
 namespace iosKeyboardTest.Android {
     public static class ViewHelpers {
+        public static RectF ToRectF(this Avalonia.Rect av_rect) {
+            return new RectF((float)av_rect.Left, (float)av_rect.Top, (float)av_rect.Right, (float)av_rect.Bottom);
+        }
+        public static Rect ToRect(this Avalonia.Rect av_rect) {
+            return new Rect((int)av_rect.Left, (int)av_rect.Top, (int)av_rect.Right, (int)av_rect.Bottom);
+        }
+        public static Rect ToRect(this RectF rectf) {
+            return new Rect((int)rectf.Left, (int)rectf.Top, (int)rectf.Right, (int)rectf.Bottom);
+        }
+        public static RectF ToRectF(this Rect rectf) {
+            return new RectF((float)rectf.Left, (float)rectf.Top, (float)rectf.Right, (float)rectf.Bottom);
+        }
         public static byte[] ImageDataFromResource(string r) {
             // Ensure "this" is an object that is part of your implementation within your Xamarin forms project
             var assembly = typeof(ViewHelpers).GetTypeInfo().Assembly;
@@ -52,8 +65,12 @@ namespace iosKeyboardTest.Android {
         public static T SetDefaultProps<T>(this T uiv, string name = default) where T: View {
             uiv.Focusable = false;
             uiv.ClipToOutline = false;
+            
             if(uiv is CustomView cv && !string.IsNullOrEmpty(name)) {
                 cv.Name = name;
+            }
+            if(uiv is ViewGroup vg) {
+                vg.SetClipChildren(false);
             }
             return uiv;
         }
@@ -65,6 +82,16 @@ namespace iosKeyboardTest.Android {
             //uitv.TextContainer.LineBreakMode = UILineBreakMode.TailTruncation;
             //uitv.TextContainer.MaximumNumberOfLines = 1;
             return uitv;
+        }
+
+        public static Color ToAdColor(this SolidColorBrush scb) {
+            return new(scb.Color.R, scb.Color.G, scb.Color.B, scb.Color.A);
+        }
+        public static float UnscaledF(this double d) {
+            return (float)(d * KeyboardView.Scaling);
+        }
+        public static int UnscaledI(this double d) {
+            return (int)(d * KeyboardView.Scaling);
         }
     }
 }

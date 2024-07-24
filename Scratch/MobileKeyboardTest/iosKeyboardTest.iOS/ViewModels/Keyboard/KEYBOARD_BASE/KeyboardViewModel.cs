@@ -26,6 +26,8 @@ namespace iosKeyboardTest.iOS {
         #region Constants
         const double TOTAL_KEYBOARD_SCREEN_HEIGHT_RATIO_PORTRAIT = 0.3;
         const double TOTAL_KEYBOARD_SCREEN_HEIGHT_RATIO_LANDSCAPE = 0.5;
+
+        public const double KEYBOARD_CNTR_SCREEN_HEIGHT_RATIO = 0.75;
         #endregion
 
         #region Statics
@@ -89,7 +91,6 @@ namespace iosKeyboardTest.iOS {
         public KeyViewModel[] PopupKeys { get; private set; }
         public List<KeyViewModel> VisiblePopupKeys { get; private set; } = [];
         public List<KeyViewModel> PressedKeys { get; set; } = [];
-
         public KeyViewModel SpacebarKey { get; private set; }
         public KeyViewModel BackspaceKey { get; private set; }
         public KeyViewModel PeriodKey { get; private set; }
@@ -99,7 +100,10 @@ namespace iosKeyboardTest.iOS {
         #region Layout
         Size DesiredSize { get; set; }
         public Thickness KeyboardMargin { get; set; } = new Thickness(0, 3,0,5);
+        public double TotalTopPad { get; private set; }
+        public Rect InnerRect { get; private set; } = new();
         public Rect TotalRect { get; private set; } = new();
+        public Rect MenuRect { get; private set; } = new();
         public Rect KeyboardRect { get; private set; } = new();
         public int MaxColCount { get; private set; } = 1;
         public int RowCount { get; private set; }
@@ -174,9 +178,10 @@ namespace iosKeyboardTest.iOS {
         public double TotalWidth =>
             KeyboardWidth;
         public double TotalHeight =>
+            TotalTopPad +
+            MenuHeight +
             KeyboardHeight +
-            FooterHeight +
-            MenuHeight;
+            FooterHeight;
 
         #endregion
 
@@ -209,7 +214,8 @@ namespace iosKeyboardTest.iOS {
             IsMobile;
         bool IsHeadlessMode =>
             InputConnection is IKeyboardInputConnection_ios;
-        public double ScreenScaling { get; set; }
+        public double ScreenScaling { get; private set; }
+        public double ActualScaling { get; private set; }
         public string ErrorText { get; private set; } = "NO ERRORS";
         public bool NeedsNextKeyboardButton =>
             //OperatingSystem.IsWindows() ||
@@ -269,7 +275,7 @@ namespace iosKeyboardTest.iOS {
         DateTime? LastCursorControlUpdateDt { get; set; }
         #endregion
         public bool IsAutoCapitalizationEnabled =>
-            IsFreeText;
+            true;// IsFreeText;
         #endregion
         #endregion
 
@@ -285,9 +291,12 @@ namespace iosKeyboardTest.iOS {
 
         #region Constructors
         public KeyboardViewModel() : this(null, new Size(360, 740), 2.75) { }
-        public KeyboardViewModel(IKeyboardInputConnection inputConn, Size scaledSize, double scale) {
+        public KeyboardViewModel(IKeyboardInputConnection inputConn, Size scaledSize, double scale) : this(inputConn, scaledSize, scale, scale) { }
+
+        public KeyboardViewModel(IKeyboardInputConnection inputConn, Size scaledSize, double scale, double actualScale) {
             Debug.WriteLine("kbvm ctor called");
             ScreenScaling = scale;
+            ActualScaling = actualScale;
             Keys.CollectionChanged += Keys_CollectionChanged;
             SetInputConnection(inputConn);
             SetDesiredSize(scaledSize);
@@ -417,7 +426,9 @@ namespace iosKeyboardTest.iOS {
             }
             KeyboardWidth = w;
             KeyboardHeight = h;
-            KeyboardRect = new Rect(0, MenuHeight, KeyboardWidth, KeyboardHeight);
+            MenuRect = new Rect(0, TotalTopPad, KeyboardWidth, MenuHeight);
+            KeyboardRect = new Rect(0, MenuRect.Bottom, KeyboardWidth, KeyboardHeight);
+            InnerRect = new Rect(0, MenuRect.Top, KeyboardWidth, MenuHeight + KeyboardHeight);
             TotalRect = new Rect(0, 0, TotalWidth, TotalHeight);
             ResetLayout();
             UpdateKeyboardState();
@@ -466,6 +477,7 @@ namespace iosKeyboardTest.iOS {
             }
             int max_popup_keys = Keys.Max(x => x.GetSecondaryCharacters().Count());
             MaxPopupRowCount = (int)Math.Floor((double)max_popup_keys / (double)(MaxPopupColCount));
+            TotalTopPad = MaxPopupRowCount * DefaultKeyHeight;
 
             for (int i = 0; i < 2; i++) {
                 // create 2x Max possible popup keys for multi touch
@@ -734,8 +746,8 @@ namespace iosKeyboardTest.iOS {
             foreach (var kvm in Keys) {
                 kvm.UpdateCharacters();
                 kvm.Measure(false);
-                kvm.Renderer.Render(true);
             }
+            Renderer.Render(true);
         }
 
         void HandleShift() {
@@ -817,15 +829,22 @@ namespace iosKeyboardTest.iOS {
             var lp = LastCursorControlUpdateLocation ?? touch.Location;
             double lx = lp.X;
             double ly = lp.Y;
-            //double lx = LastCursorControlUpdateLocationX ?? x;
-            //double ly = LastCursorControlUpdateLocationY ?? y;
 
-            int dx = (int)Math.Floor((x - lx) / (ScreenScaling * 2));
-            int dy = (int)Math.Floor((y - ly) / (ScreenScaling * 3));
+            double x_factor = ActualScaling * 7;
+            double y_factor = ActualScaling * 10;
+
+            int max_x = 5;
+            int max_y = 5;
+
+            int dx = (int)Math.Floor((x - lx) / x_factor);
+            int dy = (int)Math.Floor((y - ly) / y_factor);
 
             if (dx == 0 && dy == 0) {
                 return;
             }
+            dx = Math.Clamp(dx, -max_x, max_x);
+            dy = Math.Clamp(dy, -max_y, max_y);
+
             Debug.WriteLine($"DX: {dx} DY: {dy}");
 
             LastCursorControlUpdateDt = DateTime.Now;
@@ -1008,7 +1027,7 @@ namespace iosKeyboardTest.iOS {
                         // double tap space for period
                         // automate backspace, then period press
                         //PerformKeyAction(backspace_kvm);
-                        InputConnection.OnBackspace(2);
+                        InputConnection.OnBackspace(1);
                         pv = ". ";
                     }
                     InputConnection?.OnText(pv);

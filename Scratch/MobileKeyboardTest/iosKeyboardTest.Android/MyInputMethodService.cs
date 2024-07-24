@@ -1,6 +1,7 @@
 ﻿using Android;
 using Android.App;
 using Android.Content;
+using Android.Content.Res;
 using Android.InputMethodServices;
 using Android.Media;
 using Android.OS;
@@ -10,7 +11,8 @@ using Android.Views;
 using Android.Views.InputMethods;
 using Android.Widget;
 using Avalonia.Android;
-using Microsoft.Maui.Devices;
+using Avalonia.Controls;
+using Avalonia.Threading;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
@@ -22,7 +24,10 @@ using Color = Android.Graphics.Color;
 using Debug = System.Diagnostics.Debug;
 using Exception = System.Exception;
 using Keycode = Android.Views.Keycode;
+using Orientation = Android.Content.Res.Orientation;
 using View = Android.Views.View;
+//using Resources = Android.Content.Res.Resources;
+//using Configuration = Android.Content.Res.Configuration;
 
 namespace iosKeyboardTest.Android {
     [Service(Name = "com.CompanyName.MyInputMethodService")]
@@ -32,7 +37,6 @@ namespace iosKeyboardTest.Android {
         private KeyboardFlags? _lastFlags;
         private ClipboardListener _cbListener;
         private EditorInfo _lastEditorInfo = default;
-        private KeyboardView _keyboardView = default;
         #endregion
 
         #region Constants
@@ -65,30 +69,31 @@ namespace iosKeyboardTest.Android {
             //if (this.CurrentInputConnection == null) {
             //    return;
             //}
-            //try {
-
-            //    string selectedText = this.CurrentInputConnection.GetSelectedText(0);
-
-            //    if (string.IsNullOrEmpty(selectedText)) {
-            //        this.CurrentInputConnection.DeleteSurroundingText(count, 0);
-            //    } else {
-            //        this.CurrentInputConnection.CommitText(string.Empty, 1);
-            //    }
-            //}
-            //catch (Exception ex) {
-            //    Debug.WriteLine(ex.ToString());
-            //}
             for (int i = 0; i < count; i++) {
-                this.SendDownUpKeyEvents(Keycode.Del);
+                try {
+                    string selectedText = this.CurrentInputConnection.GetSelectedText(0);
+
+                    bool success = false;
+                    if (string.IsNullOrEmpty(selectedText)) {
+                        success = this.CurrentInputConnection.DeleteSurroundingText(1, 0);
+                    } else {
+                        success = this.CurrentInputConnection.CommitText(string.Empty, 1);
+                    }
+                    if(success) {
+                        continue;
+                    }
+                    // send actual backspace key event when nothing to delete from conn,
+                    // conn method doesn't auto remove Google Keep checkboxes like default keyboard does
+                    // NOTE not sure if below does fix it...
+                    this.SendDownUpKeyEvents(Keycode.Del);
+                }
+                catch (Exception ex) {
+                    Debug.WriteLine(ex.ToString());
+                }
             }
         }
 
         void IKeyboardInputConnection.OnDone() {
-            //if (this.CurrentInputConnection == null) {
-            //    return;
-            //}
-            //this.CurrentInputConnection.SendKeyEvent(new KeyEvent(KeyEventActions.Down, Keycode.Enter));
-            //this.CurrentInputConnection.SendKeyEvent(new KeyEvent(KeyEventActions.Up, Keycode.Enter));
             this.SendDownUpKeyEvents(Keycode.Enter);
         }
 
@@ -129,13 +134,9 @@ namespace iosKeyboardTest.Android {
         }
 
         public bool OnTouch(View v, MotionEvent e) {
-            //if(e.Action == MotionEventActions.Up) {
-            //    _keyboardView.Render(true);
-            //}
-            //_keyboardView.Renderer.StopRendering();
+            double x = e.GetX();
+            double y = e.GetY();
 
-            double x = e.GetX();// / AndroidDisplayInfo.Scaling;
-            double y = e.GetY();// / AndroidDisplayInfo.Scaling;
             Avalonia.Point p = new Avalonia.Point(x, y);
             var tet =
                 e.Action == MotionEventActions.Down ?
@@ -145,6 +146,7 @@ namespace iosKeyboardTest.Android {
                         e.Action == MotionEventActions.Up ?
                             TouchEventType.Release :
                             TouchEventType.None;
+
             OnPointerChanged?.Invoke(this, new iosKeyboardTest.Android.TouchEventArgs(new Avalonia.Point(x, y), tet));
             return true;
         }
@@ -158,9 +160,11 @@ namespace iosKeyboardTest.Android {
         #endregion
 
         #region Properties
-        Context CurrentContext =>
-            MainActivity.Instance; //this.Window.Context;
+        bool IS_PLATFORM_MODE => true;
+        View KeyboardContainerView { get; set; }
         AvaloniaView AvView { get; set; }
+        Context CurrentContext =>
+            IS_PLATFORM_MODE ? this.Window.Context : MainActivity.Instance;
         #endregion
 
         #region Events
@@ -176,39 +180,42 @@ namespace iosKeyboardTest.Android {
         #region Public Methods
         public override View? OnCreateInputView() {
             Init();
-            return CreateAdKeyboard();
+            if(IS_PLATFORM_MODE) {
+                return CreateAdKeyboard();
+            }
+            return CreateAvKeyboard();
         }
         public override void OnUpdateSelection(int oldSelStart, int oldSelEnd, int newSelStart, int newSelEnd, int candidatesStart, int candidatesEnd) {
             base.OnUpdateSelection(oldSelStart, oldSelEnd, newSelStart, newSelEnd, candidatesStart, candidatesEnd);
             this.OnCursorChanged?.Invoke(this, EventArgs.Empty);
         }
+        public override void OnConfigurationChanged(Configuration newConfig) {
+            base.OnConfigurationChanged(newConfig);
+            RefreshState();
+        }
         public override void OnStartInput(EditorInfo attribute, bool restarting) {
             base.OnStartInput(attribute, restarting);
-            //if(restarting) {
 
-            //}
-            //var test = _lastEditorInfo == attribute;
-            //_lastEditorInfo = attribute;
-            //var new_flags = Flags;
-            //this.OnFlagsChanged?.Invoke(this, EventArgs.Empty);
-            //_lastFlags = new_flags;
+            _lastEditorInfo = attribute;
+            var new_flags = Flags;
+            RefreshState();
+            _lastFlags = new_flags;
 
-            //if(!new_flags.HasFlag(KeyboardFlags.PlatformView)) {
-            //    Dispatcher.UIThread.Post(async () => {
-            //        if (AvView == null ||
-            //            AvView.Content is not Control c ||
-            //            c.DataContext is not KeyboardViewModel kbvm) {
-            //            return;
-            //        }
-            //        while (kbvm.IsBusy) {
-            //            await Task.Delay(100);
-            //        }
+            if (new_flags.HasFlag(KeyboardFlags.PlatformView)) {
+                return;
+            }
+            Dispatcher.UIThread.Post(async () => {
+                if (AvView == null ||
+                    AvView.Content is not Control c ||
+                    c.DataContext is not KeyboardViewModel kbvm) {
+                    return;
+                }
+                while (kbvm.IsBusy) {
+                    await Task.Delay(100);
+                }
 
-            //        AvView.Invalidate();
-            //    });
-
-            //}
-            
+                AvView.Invalidate();
+            });
         }
         #endregion
 
@@ -216,10 +223,18 @@ namespace iosKeyboardTest.Android {
         #endregion
 
         #region Private Methods
-
+        void RefreshState() {
+            // reset display if orientation changed
+            Init();
+            // ntf flags probably changed
+            this.OnFlagsChanged?.Invoke(this, EventArgs.Empty);
+            if(KeyboardContainerView is KeyboardView kbv) {
+                kbv.RemapRenderers();
+            }
+        }
         View CreateAdKeyboard() {
-            _keyboardView = new KeyboardView(this, this);
-            return _keyboardView;
+            KeyboardContainerView = new KeyboardView(this, this).SetDefaultProps("keyboardView");
+            return KeyboardContainerView;
             //var cntr = new KeyboardLinearLayout(this, (int)(_keyboardView.DC.TotalHeight*_keyboardView.DC.ScreenScaling));
             //cntr.SetBackgroundColor(Color.Purple);
             //cntr.AddView(_keyboardView);
@@ -248,7 +263,8 @@ namespace iosKeyboardTest.Android {
         }
 
         void Init() {
-            //_handler = new Handler();
+            AndroidDisplayInfo.Init(this.Window.Window,IsPortrait());
+
             this.Window.CancelEvent += Window_CancelEvent;
             this.Window.DismissEvent += Window_DismissEvent;
         }
@@ -266,9 +282,12 @@ namespace iosKeyboardTest.Android {
         }
 
         KeyboardFlags GetFlags(EditorInfo info) {
-            var kbf = KeyboardFlags.Android | KeyboardFlags.PlatformView;
-
-            kbf |= AndroidDisplayInfo.IsPortrait ? KeyboardFlags.Portrait : KeyboardFlags.Landscape;
+            var kbf = KeyboardFlags.Android;
+            if(IS_PLATFORM_MODE) {
+                kbf |= KeyboardFlags.PlatformView;
+            }            
+            
+            kbf |= IsPortrait() ? KeyboardFlags.Portrait : KeyboardFlags.Landscape;
 
             // does android have floating keyboard? 
             kbf |= KeyboardFlags.FullLayout;
@@ -329,8 +348,11 @@ namespace iosKeyboardTest.Android {
             return kbf;
         }
         #region Helpers
+        bool IsPortrait() {
+            return Resources.Configuration.Orientation == Orientation.Portrait;
+        }
         void Vibrate() {
-            Vibration.Vibrate(3);
+            Microsoft.Maui.Devices.Vibration.Vibrate(3);
         }
         (string text, (int start, int len)) GetTextInfo() {
             if (this.CurrentInputConnection == null) {
