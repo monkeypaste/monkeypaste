@@ -294,6 +294,10 @@ namespace MonkeyBuild {
             Trace.AutoFlush = true;
             MpConsole.IsConsoleApp = true;
             MpConsole.HideAllStamps = true;
+            if(ProcessArgs(args)) {
+                return;
+            }
+
             while (SelectTasks()) {
                 Console.Clear();
                 MpConsole.WriteLine($"Tasks: {string.Join(", ", BuildTasks.Select(x => x.ToString()))}");
@@ -303,6 +307,16 @@ namespace MonkeyBuild {
                 MpConsole.WriteLine("Done.. press key to continue");
                 Console.ReadLine();
             }
+        }
+        static bool ProcessArgs(string[] args) {
+            if(args is not { } argParts ||
+                !argParts.Any() ||
+                argParts.Select(x=>x.ToEnum<MpBuildFlags>()) is not { } argFlagParts) {
+                return false;
+            }
+            BuildTasks = argFlagParts.ToList();
+            ProcessAll();
+            return true;
         }
         static void ProcessAll() {
             if (BuildTasks.Contains(MpBuildFlags.MOVE_KEYBOARD)) {
@@ -365,6 +379,8 @@ namespace MonkeyBuild {
             if (BuildTasks.Contains(MpBuildFlags.MOVE_NUGET_CACHE)) {
                 MoveNugetCache();
             }
+
+            BuildTasks.Clear();
         }
 
         #region Menu
