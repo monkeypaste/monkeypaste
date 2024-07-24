@@ -1,0 +1,24 @@
+﻿namespace AutoComplete {
+    public class Node {
+        // stores the word of the current Node
+        public string Word { get; set; }
+
+        // links to other Node in the tree
+        public int[] Next { get; set; }
+
+        // constructor
+        public Node(string x) {
+            Word = x;
+            // initializing next[i] = 0
+            Next = new int[2 * BKTree.MAX_WORD_LEN];
+            for (int i = 0; i < 2 * BKTree.MAX_WORD_LEN; i++)
+                Next[i] = 0;
+        }
+
+        public Node() { }
+    }
+}
+
+
+
+
