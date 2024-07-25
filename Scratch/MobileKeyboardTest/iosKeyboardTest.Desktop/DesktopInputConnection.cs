@@ -59,7 +59,16 @@ public class DesktopInputConnection : IKeyboardInputConnection_desktop {
         return sb.ToString();
     }
     public KeyboardFlags Flags =>
-        KeyboardFlags.Mobile | KeyboardFlags.FreeText | KeyboardFlags.Dark;
+        KeyboardFlags.Mobile | 
+        KeyboardFlags.FreeText | 
+        KeyboardFlags.EmojiKey | 
+        KeyboardFlags.Dark | 
+        KeyboardFlags.ShowPopups | 
+        KeyboardFlags.AutoCap | 
+        KeyboardFlags.DoubleTapSpace | 
+        KeyboardFlags.CursorControl | 
+        KeyboardFlags.Vibrate | 
+        KeyboardFlags.Sound;
     public void OnDone() {
 
     }

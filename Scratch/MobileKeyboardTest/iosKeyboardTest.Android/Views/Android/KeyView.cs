@@ -7,6 +7,7 @@ using HarfBuzzSharp;
 using System;
 using System.Linq;
 using GPaint = Android.Graphics.Paint;
+using Point = Android.Graphics.Point;
 using Rect = Android.Graphics.Rect;
 
 namespace iosKeyboardTest.Android {
@@ -14,8 +15,28 @@ namespace iosKeyboardTest.Android {
     public class KeyView : CustomView, IKeyboardViewRenderer {
         Color PrimaryTextColor { get; set; }
         Color SecondaryTextColor { get; set; }
-        RectF PrimaryTextRect { get; set; } = new();
-        RectF SecondaryTextRect { get; set; } = new();
+        PointF PrimaryTextLoc { get; set; } = new();
+        PointF SecondaryTextLoc { get; set; } = new();
+
+        float[] corners;
+
+        CornerRadius _cr;
+        CornerRadius Cr {
+            get => _cr;
+            set {
+                if (Cr == default || Cr.TopLeft != value.TopLeft || Cr.TopRight != value.TopRight || Cr.BottomRight != value.BottomRight || Cr.BottomLeft != value.BottomLeft) {
+                    _cr = value;
+
+                    corners = new double[]{
+                        value.TopLeft, value.TopLeft,        // Top, left in px
+                        value.TopRight, value.TopRight,        // Top, right in px
+                        value.BottomRight, value.BottomRight,          // Bottom, right in px
+                        value.BottomLeft, value.BottomLeft           // Bottom,left in px
+                    }.Select(x => x.UnscaledF()).ToArray();
+                }
+            }
+        }
+        bool IsPopupVisible { get; set; }
         public KeyViewModel DC { get; private set; }
         public KeyView(KeyViewModel kvm, Context context, Paint paint) : base(context,paint) {
             this.DC = kvm;
@@ -37,43 +58,63 @@ namespace iosKeyboardTest.Android {
             }
         }
         public void Measure(bool invalidate) {
-            //float l = (float)(kvm.X + (kvm.OuterPadX / 2));
-            //float t = (float)(kvm.Y + (kvm.OuterPadY / 2));
-            //float r = l + (float)kvm.InnerWidth;
-            //float b = t + (float)kvm.InnerHeight;            
-            //var new_frame = new RectF(l,t,r,b);
             var new_frame = DC.InnerRect.ToRectF();
             if(new_frame.Left != Frame.Left) {
 
             }
             Frame = new_frame;
 
-            var inner_rect = new RectF(0, 0, Frame.Width(), Frame.Height());
+            Cr = DC.CornerRadius;
 
-            if(DC.PrimaryValue == null) {
-                PrimaryTextRect = new();
+            var inner_rect = Frame.ToBounds();
+
+            float cx = inner_rect.CenterX();
+            float cy = inner_rect.CenterY();
+            float px = 0;
+            float py = 0;
+
+            float pfs = DC.PrimaryFontSize.UnscaledF();
+
+            if (DC.PrimaryValue == null) {
+                PrimaryTextLoc = new();
             } else {
                 var ptb = new Rect();
-                SharedPaint.TextSize = (float)DC.PrimaryFontSize;
+                SharedPaint.TextAlign = GPaint.Align.Center;
+                SharedPaint.TextSize = pfs;
                 SharedPaint.GetTextBounds(DC.PrimaryValue.ToCharArray(), 0, DC.PrimaryValue.Length, ptb);
-                float px = inner_rect.CenterX() + DC.PrimaryTranslateOffsetX.UnscaledF() - ((float)ptb.Width() / 2f);
-                float py = inner_rect.CenterY() + DC.PrimaryTranslateOffsetY.UnscaledF() + ((float)ptb.Height() / 2f);
-                PrimaryTextRect = new RectF(px, py, ptb.Width(), ptb.Height());
+                px = cx;
+                py = cy - ((SharedPaint.Ascent()+SharedPaint.Descent())/2);
+                if(DC.IsShift && DC.Parent.CharSet == CharSetType.Letters) {
+                    py = py - (ptb.Height()/4);
+                }
+                PrimaryTextLoc = new PointF(px, py);
             }
 
-            if(DC.SecondaryValue == null) {
-                SecondaryTextRect = new();
+            if (DC.SecondaryValue == null) {
+                SecondaryTextLoc = new();
             } else {
                 var stb = new Rect();
+                SharedPaint.TextAlign = GPaint.Align.Center;
                 SharedPaint.TextSize = (float)DC.SecondaryFontSize;
                 SharedPaint.GetTextBounds(DC.SecondaryValue.ToCharArray(), 0, DC.SecondaryValue.Length, stb);
-                float sx = inner_rect.Right + DC.SecondaryTranslateOffsetX.UnscaledF() - ((float)stb.Width() / 1f);
-                float sy = inner_rect.Top + DC.SecondaryTranslateOffsetY.UnscaledF() + ((float)stb.Height());
-                SecondaryTextRect = new RectF(sx, sy, stb.Width(), stb.Height());
+                float sx = cx;
+                float sy = cy - ((SharedPaint.Ascent() + SharedPaint.Descent()) / 2);
+                sx = sx + (sx * 0.5f);
+                sy = sy - (sy * 0.5f);
+                SecondaryTextLoc = new PointF(sx, sy);
             }
 
             this.Layout((int)Frame.Left, (int)Frame.Top, (int)Frame.Right, (int)Frame.Bottom);
 
+            if(!DC.IsPopupKey && DC.PopupKeys.Any()) {
+                if(!IsPopupVisible && Parent is KeyGridView kgv) {
+                    kgv.ShowPopup(this);
+                    IsPopupVisible = true;
+                }
+            } else if(IsPopupVisible && Parent is KeyGridView kgv) {
+                kgv.HidePopup(this);
+                IsPopupVisible = false;
+            }
             if (invalidate) {
                 this.Redraw();
             }
@@ -84,34 +125,11 @@ namespace iosKeyboardTest.Android {
             if (this.Visibility == ViewStates.Invisible) {
                 return;
             }
-            Color bg = KeyboardPalette.DefaultKeyBgHex.ToColor();
-            Color fg = KeyboardPalette.FgHex.ToColor();
-            if (DC.IsSpecial) {
-                bg = DC.IsPressed ? KeyboardPalette.SpecialKeyPressedBgHex.ToColor() : KeyboardPalette.SpecialKeyBgHex.ToColor();
-                if (DC.SpecialKeyType == SpecialKeyType.Shift) {
-                    if (DC.IsShiftOn) {
-                        fg = KeyboardPalette.ShiftHex.ToColor();
-                    } else if (DC.IsShiftLock) {
-                        bg = KeyboardPalette.ShiftHex.ToColor();
-                    }
-                } else if (DC.IsPrimarySpecial) {
-                    bg = DC.IsPressed ? KeyboardPalette.PrimarySpecialKeyPressedBgHex.ToColor() : KeyboardPalette.PrimarySpecialKeyBgHex.ToColor();
-                }
-            } else if (DC.IsPopupKey) {
-                bg = DC.IsActiveKey ? KeyboardPalette.HoldFocusBgHex.ToColor() : KeyboardPalette.HoldBgHex.ToColor();
-                fg = KeyboardPalette.HoldFgHex.ToColor();
-            } else {
-                bg = DC.IsPressed ? KeyboardPalette.PressedBgHex.ToColor() : KeyboardPalette.DefaultKeyBgHex.ToColor();
-            }
-            BackgroundColor = bg;
-            PrimaryTextColor = fg;
+            DC.SetBrushes();
+            BackgroundColor = DC.BgHex.ToColor();
+            PrimaryTextColor = DC.PrimaryHex.ToColor();
+            SecondaryTextColor = DC.SecondaryHex.ToColor();
 
-            if(DC.IsSecondaryVisible) {
-                SecondaryTextColor = KeyboardPalette.FgHex2.ToColor();
-            } else {
-                SecondaryTextColor = Color.Argb(0, 0, 0, 0);
-            }
-            
             if(invalidate) {
                 this.Redraw();
             }
@@ -120,12 +138,6 @@ namespace iosKeyboardTest.Android {
             if (this.Visibility == ViewStates.Invisible) {
                 return;
             }
-            if(Frame.Top < 0) {
-                Rect newRect = canvas.ClipBounds;
-                newRect.Inset(0, (int)Frame.Top);
-                canvas.ClipRect(newRect);
-            }
-
             SharedPaint.Color = BackgroundColor;
 
             // fix precision rounding so popups are seamless
@@ -135,30 +147,28 @@ namespace iosKeyboardTest.Android {
             if (DC.CornerRadius == default) {
                 canvas.DrawRect(rect, SharedPaint);
             } else {
-                var corners = new double[]{
-                    DC.CornerRadius.TopLeft, DC.CornerRadius.TopLeft,        // Top, left in px
-                    DC.CornerRadius.TopRight, DC.CornerRadius.TopRight,        // Top, right in px
-                    DC.CornerRadius.BottomRight, DC.CornerRadius.BottomRight,          // Bottom, right in px
-                    DC.CornerRadius.BottomLeft, DC.CornerRadius.BottomLeft           // Bottom,left in px
-                }.Select(x => x.UnscaledF()).ToArray();
-
                 Path path = new Path();
                 path.AddRoundRect(rect, corners, Path.Direction.Cw);
                 canvas.DrawPath(path, SharedPaint);
             }
 
+
             if (!string.IsNullOrEmpty(DC.PrimaryValue)) {
-                SharedPaint.TextSize = (float)DC.PrimaryFontSize;
+                SharedPaint.TextAlign = GPaint.Align.Center;
+                SharedPaint.TextSize = DC.PrimaryFontSize.UnscaledF();
                 SharedPaint.Color = PrimaryTextColor;
-                
-                canvas.DrawText(DC.PrimaryValue, PrimaryTextRect.Left, PrimaryTextRect.Top, SharedPaint);
+
+                canvas.DrawText(DC.PrimaryValue, PrimaryTextLoc.X, PrimaryTextLoc.Y, SharedPaint);
             }
             if (DC.IsSecondaryVisible) {
-                SharedPaint.TextSize = (float)DC.SecondaryFontSize;
+                SharedPaint.TextAlign = GPaint.Align.Center;
+                SharedPaint.TextSize = DC.SecondaryFontSize.UnscaledF();
                 SharedPaint.Color = SecondaryTextColor;
-                canvas.DrawText(DC.SecondaryValue, SecondaryTextRect.Left, SecondaryTextRect.Top, SharedPaint);
+                canvas.DrawText(DC.SecondaryValue, SecondaryTextLoc.X, SecondaryTextLoc.Y, SharedPaint);
             }
         }
+
+
     }
 
 }

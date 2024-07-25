@@ -3,8 +3,6 @@ using Android.Content;
 using Android.Graphics;
 using Android.Views;
 using Android.Widget;
-using Avalonia;
-using Avalonia.Controls;
 using iosKeyboardTest.Android;
 using System;
 using System.Collections.Generic;
@@ -37,15 +35,15 @@ namespace iosKeyboardTest.Android {
         #endregion
 
         #region State
-        GPaint SharedPaint { get; set; }
         bool HasFullAccess { get; set; }
         #endregion
 
         #region Views
         CustomView MenuView { get; set; }
-        KeyGridView KeyGridView { get; set; }
+        public KeyGridView KeyGridView { get; set; }
         CustomTextView CursorControlTextView { get; set; }
         CustomView CursorControlView { get; set; }
+        Window PopupWindow { get; set; }
         #endregion
 
 
@@ -64,12 +62,11 @@ namespace iosKeyboardTest.Android {
                 this.SetOnTouchListener(otl);
             }
 
-            Scaling = 1;// (float)AndroidDisplayInfo.Scaling;
+            Scaling = (float)AndroidDisplayInfo.Scaling;
             var kbs = KeyboardViewModel.GetTotalSizeByScreenSize(AndroidDisplayInfo.UnscaledSize, AndroidDisplayInfo.IsPortrait);
-            DC = new KeyboardViewModel(conn, kbs, Scaling, AndroidDisplayInfo.Scaling);
+            DC = new KeyboardViewModel(conn, kbs / Scaling, Scaling, AndroidDisplayInfo.Scaling);
             DC.SetRenderer(this);
 
-            KeyboardPalette.SetTheme(conn.Flags.HasFlag(KeyboardFlags.Dark));
 
             MenuView = new CustomView(context, SharedPaint).SetDefaultProps("Menu");
             this.AddView(MenuView);
@@ -97,6 +94,11 @@ namespace iosKeyboardTest.Android {
             KeyGridView.AddOrResetKeys();
             Render(true);
         }
+
+        public void TestPopup() {
+            //if(DC.PressedKeys.FirstOrDefault() is { })
+
+        }
         #endregion
 
         #region Protected Methods
@@ -107,8 +109,9 @@ namespace iosKeyboardTest.Android {
         private GPaint SetupPaint() {
             var paint = new GPaint();
             paint.TextAlign = GPaint.Align.Left;
+            //paint.ElegantTextHeight = true;
             paint.AntiAlias = true;
-            paint.SetTypeface(Resources.GetFont(Resource.Font.Nunito_Regular));
+            paint.SetTypeface(Resources.GetFont(Resource.Font.RobotoMono_VariableFont_wght));
             return paint;
         }
         void HideCursorControl() {

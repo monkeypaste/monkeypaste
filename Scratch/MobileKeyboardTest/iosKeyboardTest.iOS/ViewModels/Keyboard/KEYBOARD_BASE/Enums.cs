@@ -75,7 +75,22 @@ namespace iosKeyboardTest.iOS {
         Mobile = 1L << 16,
         Tablet = 1L << 17,
         
-        // UI
+        // LOOK & FEEL
         PlatformView = 1L << 18,
+        NumberRow = 1L << 19,
+        KeyBorders = 1L << 20,
+        EmojiKey = 1L << 21,
+
+        
+        Vibrate = 1L << 22,
+        Sound = 1L << 23,
+        ShowPopups = 1L << 24,
+
+        OneHanded = 1L << 25,
+
+        AutoCap = 1L << 26,
+        DoubleTapSpace = 1L << 27,
+        CursorControl = 1L << 28,
+
     }
 }

@@ -2,6 +2,7 @@
 using Android.App;
 using Android.Content;
 using Android.Content.Res;
+using Android.Health.Connect.DataTypes;
 using Android.InputMethodServices;
 using Android.Media;
 using Android.OS;
@@ -10,6 +11,7 @@ using Android.Text;
 using Android.Views;
 using Android.Views.InputMethods;
 using Android.Widget;
+using Avalonia;
 using Avalonia.Android;
 using Avalonia.Controls;
 using Avalonia.Threading;
@@ -18,7 +20,9 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
+using Xamarin.Essentials;
 using static Android.Views.View;
 using Color = Android.Graphics.Color;
 using Debug = System.Diagnostics.Debug;
@@ -133,21 +137,34 @@ namespace iosKeyboardTest.Android {
             }
         }
 
+        private Dictionary<int, Point> _touches { get; set; } = [];
         public bool OnTouch(View v, MotionEvent e) {
-            double x = e.GetX();
-            double y = e.GetY();
-
-            Avalonia.Point p = new Avalonia.Point(x, y);
             var tet =
-                e.Action == MotionEventActions.Down ?
+                e.Action.IsDown() ?
                     TouchEventType.Press :
-                    e.Action == MotionEventActions.Move ?
+                    e.Action.IsMove() ?
                         TouchEventType.Move :
-                        e.Action == MotionEventActions.Up ?
+                        e.Action.IsUp() ?
                             TouchEventType.Release :
                             TouchEventType.None;
 
-            OnPointerChanged?.Invoke(this, new iosKeyboardTest.Android.TouchEventArgs(new Avalonia.Point(x, y), tet));
+
+            if (tet == TouchEventType.None) {
+                // what motion event is it?
+                return true;
+            }
+            if(tet == TouchEventType.Release) {
+                if(KeyboardView is KeyboardView { } kv) {
+                    kv.KeyGridView.ClearPopups();
+                }
+            }
+            Avalonia.Point p = e.GetMotionPoint(_touches) / Android.KeyboardView.Scaling;
+            OnPointerChanged?.Invoke(this, new iosKeyboardTest.Android.TouchEventArgs(p, tet));
+
+            if (e.Action.IsUp() && e.PointerCount == 1) {
+                // ensure touch lookup empty between breakpoints
+                _touches.Clear();
+            }
             return true;
         }
 
@@ -161,7 +178,7 @@ namespace iosKeyboardTest.Android {
 
         #region Properties
         bool IS_PLATFORM_MODE => true;
-        View KeyboardContainerView { get; set; }
+        View KeyboardView { get; set; }
         AvaloniaView AvView { get; set; }
         Context CurrentContext =>
             IS_PLATFORM_MODE ? this.Window.Context : MainActivity.Instance;
@@ -170,7 +187,7 @@ namespace iosKeyboardTest.Android {
         #region Events
         #endregion
 
-        #region Constructors
+        #region Constructorsart
         
         public MyInputMethodService() : base()
         {
@@ -187,7 +204,11 @@ namespace iosKeyboardTest.Android {
         }
         public override void OnUpdateSelection(int oldSelStart, int oldSelEnd, int newSelStart, int newSelEnd, int candidatesStart, int candidatesEnd) {
             base.OnUpdateSelection(oldSelStart, oldSelEnd, newSelStart, newSelEnd, candidatesStart, candidatesEnd);
-            this.OnCursorChanged?.Invoke(this, EventArgs.Empty);
+            MainThread.BeginInvokeOnMainThread(async() => {
+                //    // BUG when OnUpdateSelection is called actual insert isn't changed yet, wait a sec before signalling handler
+                await Task.Delay(150);
+                OnCursorChanged?.Invoke(this, EventArgs.Empty);
+            });
         }
         public override void OnConfigurationChanged(Configuration newConfig) {
             base.OnConfigurationChanged(newConfig);
@@ -228,13 +249,13 @@ namespace iosKeyboardTest.Android {
             Init();
             // ntf flags probably changed
             this.OnFlagsChanged?.Invoke(this, EventArgs.Empty);
-            if(KeyboardContainerView is KeyboardView kbv) {
+            if(KeyboardView is KeyboardView kbv) {
                 kbv.RemapRenderers();
             }
         }
         View CreateAdKeyboard() {
-            KeyboardContainerView = new KeyboardView(this, this).SetDefaultProps("keyboardView");
-            return KeyboardContainerView;
+            KeyboardView = new KeyboardView(this, this).SetDefaultProps("keyboardView");
+            return KeyboardView;
             //var cntr = new KeyboardLinearLayout(this, (int)(_keyboardView.DC.TotalHeight*_keyboardView.DC.ScreenScaling));
             //cntr.SetBackgroundColor(Color.Purple);
             //cntr.AddView(_keyboardView);
@@ -285,12 +306,21 @@ namespace iosKeyboardTest.Android {
             var kbf = KeyboardFlags.Android;
             if(IS_PLATFORM_MODE) {
                 kbf |= KeyboardFlags.PlatformView;
-            }            
+            } 
             
             kbf |= IsPortrait() ? KeyboardFlags.Portrait : KeyboardFlags.Landscape;
 
             // does android have floating keyboard? 
             kbf |= KeyboardFlags.FullLayout;
+
+            kbf |= KeyboardFlags.EmojiKey;
+            kbf |= KeyboardFlags.ShowPopups |
+                    KeyboardFlags.KeyBorders |
+                    KeyboardFlags.AutoCap |
+                    KeyboardFlags.DoubleTapSpace |
+                    KeyboardFlags.CursorControl |
+                    KeyboardFlags.Vibrate |
+                    KeyboardFlags.Sound;
 
             if (_lastEditorInfo != null) {
                 var ime_type_lookup = new Dictionary<KeyboardFlags, InputTypes[]>() {
@@ -352,8 +382,12 @@ namespace iosKeyboardTest.Android {
             return Resources.Configuration.Orientation == Orientation.Portrait;
         }
         void Vibrate() {
+            if(!_lastFlags.HasValue || !_lastFlags.Value.HasFlag(KeyboardFlags.Vibrate)) {
+                return;
+            }
             Microsoft.Maui.Devices.Vibration.Vibrate(3);
         }
+
         (string text, (int start, int len)) GetTextInfo() {
             if (this.CurrentInputConnection == null) {
                 return default;

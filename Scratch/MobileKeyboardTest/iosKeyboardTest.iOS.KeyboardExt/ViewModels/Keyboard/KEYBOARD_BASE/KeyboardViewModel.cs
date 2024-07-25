@@ -33,20 +33,21 @@ namespace iosKeyboardTest.iOS.KeyboardExt {
         #region Statics
         static Size? ScaledScreenSize { get; set; }
         public static Size GetTotalSizeByScreenSize(Size scaledScreenSize, bool isPortrait) {
-            if(ScaledScreenSize == null) {
+            if (ScaledScreenSize == null) {
                 ScaledScreenSize = scaledScreenSize;
             }
             double ratio = isPortrait ? TOTAL_KEYBOARD_SCREEN_HEIGHT_RATIO_PORTRAIT : TOTAL_KEYBOARD_SCREEN_HEIGHT_RATIO_LANDSCAPE;
-            
+
             return new Size(scaledScreenSize.Width, scaledScreenSize.Height * ratio);
         }
-        
+
         #endregion
 
         #region Interfaces
 
         #region IKeyboardViewRenderer Implementation
         void IKeyboardViewRenderer.Layout(bool invalidate) {
+            Keys.ForEach(x => x.Renderer.Layout(invalidate));
             this.RaisePropertyChanged(nameof(KeyboardWidth));
             this.RaisePropertyChanged(nameof(KeyboardHeight));
             this.RaisePropertyChanged(nameof(TotalWidth));
@@ -55,15 +56,18 @@ namespace iosKeyboardTest.iOS.KeyboardExt {
         }
 
         void IKeyboardViewRenderer.Measure(bool invalidate) {
+            Keys.ForEach(x => x.Renderer.Measure(invalidate));
             this.RaisePropertyChanged(nameof(NeedsNextKeyboardButton));
         }
 
         void IKeyboardViewRenderer.Paint(bool invalidate) {
+            Keys.ForEach(x => x.Renderer.Paint(invalidate));
 
             this.RaisePropertyChanged(nameof(CursorControlOpacity));
             this.RaisePropertyChanged(nameof(ErrorText));
         }
         void IKeyboardViewRenderer.Render(bool invalidate) {
+            Keys.ForEach(x => x.Renderer.Render(invalidate));
             Renderer.Layout(false);
             Renderer.Measure(false);
             Renderer.Paint(invalidate);
@@ -99,7 +103,7 @@ namespace iosKeyboardTest.iOS.KeyboardExt {
 
         #region Layout
         Size DesiredSize { get; set; }
-        public Thickness KeyboardMargin { get; set; } = new Thickness(0, 3,0,5);
+        public Thickness KeyboardMargin { get; set; } = new Thickness(0, 3, 0, 5);
         public double TotalTopPad { get; private set; }
         public Rect InnerRect { get; private set; } = new();
         public Rect TotalRect { get; private set; } = new();
@@ -121,12 +125,17 @@ namespace iosKeyboardTest.iOS.KeyboardExt {
         }
 
         void SetRowHeights() {
-            _keyHeight = -1;
-            var def_height = KeyboardInnerHeight / RowCount;
-            _numKeyHeight = def_height * NumberRowHeightRatio;
-            double num_diff = def_height - _numKeyHeight;
-            double diff_per_row = num_diff / (RowCount - 1);
-            _keyHeight = def_height + diff_per_row;
+            if(IsNumberRowVisible) {
+                _keyHeight = -1;
+                var def_height = KeyboardInnerHeight / RowCount;
+                _numKeyHeight = def_height * NumberRowHeightRatio;
+                double num_diff = def_height - _numKeyHeight;
+                double diff_per_row = num_diff / (RowCount - 1);
+                _keyHeight = def_height + diff_per_row;
+            } else {
+                _keyHeight = KeyboardInnerHeight / RowCount;
+                _numKeyHeight = _keyHeight;
+            }
         }
         private double _numKeyHeight = -1;
         public double NumberKeyHeight {
@@ -172,7 +181,7 @@ namespace iosKeyboardTest.iOS.KeyboardExt {
         public double KeyboardHeight { get; private set; }
         public double KeyboardInnerWidth =>
             KeyboardWidth - KeyboardMargin.Left - KeyboardMargin.Right;
-        
+
         public double KeyboardInnerHeight =>
             KeyboardHeight - KeyboardMargin.Top - KeyboardMargin.Bottom;
         public double TotalWidth =>
@@ -270,12 +279,10 @@ namespace iosKeyboardTest.iOS.KeyboardExt {
 
         #region Cursor Control
         double MinCursorControlDragDist => 10;
-        public bool IsCursorControlEnabled { get; private set; }
         Point? LastCursorControlUpdateLocation { get; set; }
         DateTime? LastCursorControlUpdateDt { get; set; }
+        public bool IsCursorControlEnabled { get; private set; }
         #endregion
-        public bool IsAutoCapitalizationEnabled =>
-            true;// IsFreeText;
         #endregion
         #endregion
 
@@ -285,6 +292,15 @@ namespace iosKeyboardTest.iOS.KeyboardExt {
         public bool IsThemeDark { get; private set; }
         public bool IsTablet { get; private set; }
         public bool IsMobile { get; private set; }
+        public bool IsNumberRowVisible { get; private set; }
+        public bool IsNumberRowHidden =>
+            !IsNumberRowVisible;
+        public bool IsKeyBordersVisible { get; private set; }
+        public bool IsEmojiButtonVisible { get; private set; }
+        public bool IsExtendedPopupsEnabled { get; private set; }
+        public bool IsAutoCapitalizationEnabled { get; private set; }
+        public bool IsDoubleTapSpaceEnabled { get; private set; }
+        public bool CanCursorControlBeEnabled { get; private set; }
         #endregion
 
         #endregion
@@ -381,8 +397,14 @@ namespace iosKeyboardTest.iOS.KeyboardExt {
         public void SetPointerLocation(TouchEventArgs e) {
             var mp = e.Location;
             var touchType = e.TouchEventType;
+            if (Touches.Count == 1 && touchType == TouchEventType.Press) {
+
+            }
             if (Touches.Update(mp, touchType) is not { } touch) {
                 return;
+            }
+            if (Touches.Count > 1) {
+
             }
 
             if (IsTouchBounced(e)) {
@@ -393,7 +415,6 @@ namespace iosKeyboardTest.iOS.KeyboardExt {
 
             //Debug.WriteLine($"Event: '{touchType}' Id: {touch.Id}");
 
-            var pressed_kvm = GetPressedKeyForTouch(touch);
             switch (touchType) {
                 case TouchEventType.Press:
                     PressKeyAsync(touch).FireAndForgetSafeAsync();
@@ -446,12 +467,24 @@ namespace iosKeyboardTest.iOS.KeyboardExt {
 
             SetFlags(flags);
 
+            if(IsKeyBordersVisible) {
+                KeyboardPalette.SetTheme(IsThemeDark);
+            } else {
+                // when bg off ensure popups have bg  and special keys
+                KeyboardPalette.SetTheme(
+                    IsThemeDark,
+                    spa: KeyboardPalette.BG_ALPHA,
+                    pua: 255);
+            }
+            
+
+
             if (IsNumbers) {
                 SetCharSet(CharSetType.Numbers1);
             } else {
                 SetCharSet(CharSetType.Letters);
             }
-            SetShiftByLeadingText();
+            CheckAutoCap();
 
             var keyRows = GetKeyRows(KeyboardFlags);
             Keys.Clear();
@@ -477,7 +510,7 @@ namespace iosKeyboardTest.iOS.KeyboardExt {
             }
             int max_popup_keys = Keys.Max(x => x.GetSecondaryCharacters().Count());
             MaxPopupRowCount = (int)Math.Floor((double)max_popup_keys / (double)(MaxPopupColCount));
-            TotalTopPad = MaxPopupRowCount * DefaultKeyHeight;
+            //TotalTopPad = MaxPopupRowCount * DefaultKeyHeight;
 
             for (int i = 0; i < 2; i++) {
                 // create 2x Max possible popup keys for multi touch
@@ -510,7 +543,7 @@ namespace iosKeyboardTest.iOS.KeyboardExt {
             //    return;
             //}
             var new_flags = InputConnection.Flags;
-            if(IsInitialized && 
+            if (IsInitialized &&
                 ((new_flags.HasFlag(KeyboardFlags.Portrait) && LastInitializedFlags.HasFlag(KeyboardFlags.Landscape)) ||
                 (new_flags.HasFlag(KeyboardFlags.Landscape) && LastInitializedFlags.HasFlag(KeyboardFlags.Portrait)))) {
                 // orientation change
@@ -523,7 +556,7 @@ namespace iosKeyboardTest.iOS.KeyboardExt {
                 Init(new_flags);
                 return;
             }
-            Dispatcher.UIThread.Post(()=>Init(new_flags));
+            Dispatcher.UIThread.Post(() => Init(new_flags));
         }
 
         private void Ic_OnCursorChanged(object sender, EventArgs e) {
@@ -537,17 +570,17 @@ namespace iosKeyboardTest.iOS.KeyboardExt {
                 this_cursor_change_dt - lbsudt <= TimeSpan.FromMilliseconds(MaxCursorChangeFromEventDelayForFeedbackMs)) {
                 do_vibrate = true;
             }
-            if(do_vibrate) {
+            if (do_vibrate) {
                 InputConnection.OnFeedback(KeyboardFeedbackFlags.Vibrate);
             }
             if (KeyboardFlags.HasFlag(KeyboardFlags.PlatformView)) {
-                SetShiftByLeadingText();
+                CheckAutoCap();
                 return;
             }
-            Dispatcher.UIThread.Post(SetShiftByLeadingText);
+            Dispatcher.UIThread.Post(CheckAutoCap);
         }
 
-        void SetShiftByLeadingText() {
+        void CheckAutoCap() {
             if (!IsAutoCapitalizationEnabled ||
                 InputConnection is not { } ic ||
                 ShiftState == ShiftStateType.ShiftLock) {
@@ -568,6 +601,9 @@ namespace iosKeyboardTest.iOS.KeyboardExt {
                         ((i == 0 && eos_idx == 0) || i > 0);
                     break;
                 }
+            } else {
+                // auto cap if insert is leading
+                needs_shift = true;
             }
             SetShiftState(needs_shift ? ShiftStateType.Shift : ShiftStateType.None);
         }
@@ -578,6 +614,14 @@ namespace iosKeyboardTest.iOS.KeyboardExt {
             IsFreeText = KeyboardFlags.HasFlag(KeyboardFlags.FreeText);
             IsMobile = KeyboardFlags.HasFlag(KeyboardFlags.Mobile);
             IsTablet = KeyboardFlags.HasFlag(KeyboardFlags.Tablet);
+            IsNumberRowVisible = KeyboardFlags.HasFlag(KeyboardFlags.NumberRow);
+            IsKeyBordersVisible = KeyboardFlags.HasFlag(KeyboardFlags.KeyBorders);
+            IsEmojiButtonVisible = KeyboardFlags.HasFlag(KeyboardFlags.EmojiKey);
+            IsExtendedPopupsEnabled = KeyboardFlags.HasFlag(KeyboardFlags.ShowPopups);
+
+            IsAutoCapitalizationEnabled = KeyboardFlags.HasFlag(KeyboardFlags.AutoCap);
+            IsDoubleTapSpaceEnabled = KeyboardFlags.HasFlag(KeyboardFlags.DoubleTapSpace);
+            CanCursorControlBeEnabled = KeyboardFlags.HasFlag(KeyboardFlags.CursorControl);
         }
 
         KeyViewModel GetKeyUnderPoint(Point scaledPoint) {
@@ -669,37 +713,53 @@ namespace iosKeyboardTest.iOS.KeyboardExt {
             SpecialKeyType primarySpecialType = GetPrimarySpecialKey(kbFlags);
             if (kbFlags.HasFlag(KeyboardFlags.Mobile)) {
                 if (kbFlags.HasFlag(KeyboardFlags.Numbers)) {
-                    keys = new List<List<object>>
-                {
-                    (["1,(", "2,/", "3,)", SpecialKeyType.Backspace]),
-                    (["4,N", "5,comma", "6,.", primarySpecialType]),
-                    (["7,*", "8,;", "9,#", SpecialKeyType.NumberSymbolsToggle]),
-                    (["*,-", "0,+", "#,__", "comma"])
-                };
-                } else if(kbFlags.HasFlag(KeyboardFlags.Email)) {
-                    keys = new List<List<object>>
-                {
-                    (["1", "2", "3", "4", "5", "6", "7", "8", "9", "0"]),
-                    (["q,+,`", "w,×,~", "e,÷,\\", "r,=,|", "t,/,{", "y,_,}", "u,<,€", "i,>,£", "o,[,¥", "p,],₩"]),
-                    (["a,!,○", "s,@,•", "d,#,⚪", "f,$,⚫", "g,%,□", "h,^,🔳", "j,&,♤", "k,*,♡", "l,(,♢", "none,),♧"]),
-                    ([SpecialKeyType.Shift, "z,-,☆", "x,',▪", "c,\",▫", "v,:,≪", "b,;,≫", "n,comma,¡", "m,?,¿", SpecialKeyType.Backspace]),
-                    ([SpecialKeyType.SymbolToggle, "comma","@", " ", ".",".com", primarySpecialType])
-                };
-                }
-                else {
-                    keys = new List<List<object>>
-                {
-                    (["1", "2", "3", "4", "5", "6", "7", "8", "9", "0"]),
-                    (["q,+,`", "w,×,~", "e,÷,\\", "r,=,|", "t,/,{", "y,_,}", "u,<,€", "i,>,£", "o,[,¥", "p,],₩"]),
-                    (["a,!,○", "s,@,•", "d,#,⚪", "f,$,⚫", "g,%,□", "h,^,🔳", "j,&,♤", "k,*,♡", "l,(,♢", "none,),♧"]),
-                    ([SpecialKeyType.Shift, "z,-,☆", "x,',▪", "c,\",▫", "v,:,≪", "b,;,≫", "n,comma,¡", "m,?,¿", SpecialKeyType.Backspace]),
-                    ([SpecialKeyType.SymbolToggle, "comma", " ", ".", primarySpecialType])
-                };
+                    keys = new List<List<object>> {
+                        (["1,(", "2,/", "3,)", SpecialKeyType.Backspace]),
+                        (["4,N", "5,comma", "6,.", primarySpecialType]),
+                        (["7,*", "8,;", "9,#", SpecialKeyType.NumberSymbolsToggle]),
+                        (["*,-", "0,+", "#,__", "comma"])
+                    };
+                } else {
+                    if (kbFlags.HasFlag(KeyboardFlags.Email)) {
+                        keys = [
+                            (["1", "2", "3", "4", "5", "6", "7", "8", "9", "0"]),
+                            (["q,+,`", "w,×,~", "e,÷,\\", "r,=,|", "t,/,{", "y,_,}", "u,<,€", "i,>,£", "o,[,¥", "p,],₩"]),
+                            (["a,!,○", "s,@,•", "d,#,⚪", "f,$,⚫", "g,%,□", "h,^,🔳", "j,&,♤", "k,*,♡", "l,(,♢", "none,),♧"]),
+                            ([SpecialKeyType.Shift, "z,-,☆", "x,',▪", "c,\",▫", "v,:,≪", "b,;,≫", "n,comma,¡", "m,?,¿", SpecialKeyType.Backspace]),
+                            ([SpecialKeyType.SymbolToggle, "comma","@", " ", ".",".com", primarySpecialType])
+                        ];
+                    } else {
+                        keys = [
+                            (["1", "2", "3", "4", "5", "6", "7", "8", "9", "0"]),
+                            (["q,+,`", "w,×,~", "e,÷,\\", "r,=,|", "t,/,{", "y,_,}", "u,<,€", "i,>,£", "o,[,¥", "p,],₩"]),
+                            (["a,!,○", "s,@,•", "d,#,⚪", "f,$,⚫", "g,%,□", "h,^,🔳", "j,&,♤", "k,*,♡", "l,(,♢", "none,),♧"]),
+                            ([SpecialKeyType.Shift, "z,-,☆", "x,',▪", "c,\",▫", "v,:,≪", "b,;,≫", "n,comma,¡", "m,?,¿", SpecialKeyType.Backspace]),
+                            ([SpecialKeyType.SymbolToggle, "comma", " ", ".", primarySpecialType])
+                        ];
+                    }
+                    if(!kbFlags.HasFlag(KeyboardFlags.NumberRow)) {
+                        // numbers become 2nd row secondary 
+                        var num_row = keys[0];
+                        keys.Remove(num_row);
+                        List<object> new_top_row = [];
+                        for (int i = 0; i < keys[0].Count; i++) {
+                            if (keys[0][i] is not string top_set_val) {
+                                continue;
+                            }
+                            var val_parts = top_set_val.Split(new string[] { "," }, StringSplitOptions.RemoveEmptyEntries).ToList();
+                            val_parts.Insert(1, num_row[i] as string);
+                            new_top_row.Add(string.Join(",", val_parts));
+                        }
+                        keys[0] = new_top_row;
+                    }
+                    if(kbFlags.HasFlag(KeyboardFlags.EmojiKey)) {
+                        keys.Last().Insert(1, SpecialKeyType.Emoji);
+                    }
                 }
 
             } else {
-                keys = new List<List<object>>
-                {
+                // tablet
+                keys = new List<List<object>> {
                     (["1", "2", "3", "4", "5", "6", "7", "8", "9", "0", SpecialKeyType.Backspace]),
                     ([SpecialKeyType.Tab, "q,+,`", "w,×,~", "e,÷,\\", "r,=,|", "t,/,{", "y,_,}", "u,<,€", "i,>,£", "o,[,¥", "p,],₩"]),
                     ([SpecialKeyType.CapsLock, "a,!,○", "s,@,•", "d,#,⚪", "f,$,⚫", "g,%,□", "h,^,🔳", "j,&,♤", "k,*,♡", "l,(,♢", "none,),♧", primarySpecialType]),
@@ -737,7 +797,7 @@ namespace iosKeyboardTest.iOS.KeyboardExt {
             _shiftState = sst;
             foreach (var kvm in Keys) {
                 kvm.UpdateCharacters();
-                kvm.Measure(false);
+                kvm.Renderer.Measure(false);
                 kvm.Renderer.Render(true);
             }
         }
@@ -745,7 +805,7 @@ namespace iosKeyboardTest.iOS.KeyboardExt {
             _charSet = cst;
             foreach (var kvm in Keys) {
                 kvm.UpdateCharacters();
-                kvm.Measure(false);
+                kvm.Renderer.Measure(false);
             }
             Renderer.Render(true);
         }
@@ -767,12 +827,18 @@ namespace iosKeyboardTest.iOS.KeyboardExt {
         }
 
         void ShowPressPopup(KeyViewModel kvm, Touch touch) {
+            if (!kvm.CanShowPopup) {
+                return;
+            }
             kvm.ClearPopups();
             kvm.AddPopupAnchor(0, 0, kvm.CurrentChar);
             kvm.PressPopupShowDt = DateTime.Now;
             kvm.FitPopupInFrame(touch);
         }
         void ShowHoldPopup(KeyViewModel kvm, Touch touch) {
+            if(!kvm.CanShowPopup) {
+                return;
+            }
             if (IsHoldMenuVisible && kvm != null && !kvm.HasHoldPopup) {
                 return;
             }
@@ -880,7 +946,7 @@ namespace iosKeyboardTest.iOS.KeyboardExt {
 
         void HandleBackspace() {
             LastBackspaceUpdateDt = DateTime.Now;
-            InputConnection.OnBackspace(1);            
+            InputConnection.OnBackspace(1);
         }
         async Task PressKeyAsync(Touch touch) {
             if (GetKeyUnderPoint(touch.Location) is not { } kvm) {
@@ -897,12 +963,13 @@ namespace iosKeyboardTest.iOS.KeyboardExt {
                     if (kvm.HasHoldPopup) {
                         ShowHoldPopup(kvm, touch);
                         return;
-                    } else if (kvm.IsSpaceBar) {
+                    } else if (kvm.IsSpaceBar && CanCursorControlBeEnabled) {
                         StartCursorControl(touch.Id);
                         return;
                     }
                 }
                 if (kvm.IsSpaceBar &&
+                    CanCursorControlBeEnabled &&
                     Touches.Dist(touch.Location, touch.PressLocation) >= MinCursorControlDragDist) {
                     StartCursorControl(touch.Id);
                     return;
@@ -1021,12 +1088,10 @@ namespace iosKeyboardTest.iOS.KeyboardExt {
                         anchor_kvm.PullTranslateY = 0;
                     }
                     if (!IsNumbers &&
-                                active_kvm.IsSpaceBar &&
-                                active_kvm.LastReleaseDt is { } lrdt &&
-                                DateTime.Now - lrdt <= TimeSpan.FromMilliseconds(MaxDoubleTapSpaceForPeriodMs)) {
-                        // double tap space for period
-                        // automate backspace, then period press
-                        //PerformKeyAction(backspace_kvm);
+                        IsDoubleTapSpaceEnabled &&
+                        active_kvm.IsSpaceBar &&
+                        active_kvm.LastReleaseDt is { } lrdt &&
+                        DateTime.Now - lrdt <= TimeSpan.FromMilliseconds(MaxDoubleTapSpaceForPeriodMs)) {
                         InputConnection.OnBackspace(1);
                         pv = ". ";
                     }

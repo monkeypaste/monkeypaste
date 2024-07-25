@@ -21,28 +21,31 @@ namespace iosKeyboardTest.Android {
     }
     public static class Touches {
 
-        private static List<Touch> _touches = [];
+        public static List<Touch> _touches = [];
         public static Touch Locate(Point p) {
-            if(!_touches.Any()) {
-                return null;
-            }
-            return _touches.Aggregate((a, b) => DistSquared(a.Location, p) < DistSquared(b.Location, p) ? a : b);
+            return _touches.OrderBy(x => Dist(x.Location, p)).FirstOrDefault();
         }
+        public static int Count =>
+            _touches.Count;
         public static Touch Locate(string id) {
             return _touches.FirstOrDefault(x => x.Id == id);
         }
         public static Touch Update(Point p, TouchEventType touchType) {
             // returns touch at p loc
             if(touchType == TouchEventType.Press) {
-                _touches.Add(new Touch(p));
-                return _touches.Last();
+                var nt = new Touch(p);
+                _touches.Add(nt);
+                return nt;
+            }
+            if(Count > 1 && touchType == TouchEventType.Release) {
+
             }
             if(Locate(p) is not { } t) {
                 if(touchType == TouchEventType.Move) {
                     // probably shouldn't happen but when pointer moves onto surface
                     t = new Touch(p);
                     _touches.Add(t);
-                    return _touches.Last();
+                    return t;
                 }
                 return null;
             }

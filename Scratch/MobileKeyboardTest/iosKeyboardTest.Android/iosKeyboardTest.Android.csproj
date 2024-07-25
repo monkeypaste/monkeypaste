@@ -44,4 +44,8 @@
     <ProjectReference Include="..\iosKeyboardTest\iosKeyboardTest.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="Util\" />
+  </ItemGroup>
+
 </Project>
