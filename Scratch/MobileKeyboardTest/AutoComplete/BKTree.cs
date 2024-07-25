@@ -30,7 +30,7 @@
 
         // Edit Distance
         // Dynamic-Approach O(m*n)
-        static int EditDistance(string a, string b) {
+        public static int EditDistance(string a, string b) {
             if (a == null || b == null) {
                 return -1; // or handle the case where either string is null
             }
