@@ -254,15 +254,15 @@ namespace iosKeyboardTest {
                                 key_view.Classes.Remove("special");
                             }
                             break;
-                        case nameof(kvm.IsShiftOn):
-                            if (kvm.IsShiftOn) {
+                        case nameof(kvm.IsShiftKeyAndOnTemp):
+                            if (kvm.IsShiftKeyAndOnTemp) {
                                 key_view.Classes.Add("shift");
                             } else {
                                 key_view.Classes.Remove("shift");
                             }
                             break;
-                        case nameof(kvm.IsShiftLock):
-                            if (kvm.IsShiftLock) {
+                        case nameof(kvm.IsShiftKeyAndOnLock):
+                            if (kvm.IsShiftKeyAndOnLock) {
                                 key_view.Classes.Add("shift-lock");
                             } else {
                                 key_view.Classes.Remove("shift-lock");

@@ -15,6 +15,7 @@ using Avalonia;
 using Avalonia.Android;
 using Avalonia.Controls;
 using Avalonia.Threading;
+using Microsoft.Maui.ApplicationModel;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
@@ -22,7 +23,7 @@ using System.Linq;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
-using Xamarin.Essentials;
+//using Xamarin.Essentials;
 using static Android.Views.View;
 using Color = Android.Graphics.Color;
 using Debug = System.Diagnostics.Debug;
@@ -30,8 +31,6 @@ using Exception = System.Exception;
 using Keycode = Android.Views.Keycode;
 using Orientation = Android.Content.Res.Orientation;
 using View = Android.Views.View;
-//using Resources = Android.Content.Res.Resources;
-//using Configuration = Android.Content.Res.Configuration;
 
 namespace iosKeyboardTest.Android {
     [Service(Name = "com.CompanyName.MyInputMethodService")]
@@ -256,10 +255,6 @@ namespace iosKeyboardTest.Android {
         View CreateAdKeyboard() {
             KeyboardView = new KeyboardView(this, this).SetDefaultProps("keyboardView");
             return KeyboardView;
-            //var cntr = new KeyboardLinearLayout(this, (int)(_keyboardView.DC.TotalHeight*_keyboardView.DC.ScreenScaling));
-            //cntr.SetBackgroundColor(Color.Purple);
-            //cntr.AddView(_keyboardView);
-            //return cntr;
         }
 
         View CreateAvKeyboard() {

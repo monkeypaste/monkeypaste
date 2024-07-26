@@ -27,8 +27,8 @@
                                    Classes.popup-key="{Binding IsPopupKey}"
                                    Classes.special="{Binding IsSpecial}"
                                    Classes.primary-special="{Binding IsPrimarySpecial}"
-                                   Classes.shift="{Binding IsShiftOn}"
-                                   Classes.shift-lock="{Binding IsShiftLock}" />
+                                   Classes.shift="{Binding IsShiftKeyAndOnTemp}"
+                                   Classes.shift-lock="{Binding IsShiftKeyAndOnLock}" />
                 </DataTemplate>
             </ItemsControl.ItemTemplate>
             <ItemsControl.ItemsPanel>

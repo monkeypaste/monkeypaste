@@ -13,7 +13,8 @@
         <Grid x:Name="OuterPanel"
               Width="{Binding $parent.Bounds.Width}"
               Height="{Binding $parent.Bounds.Height}"
-              RowDefinitions="Auto,Auto,Auto,0.3*">
+              RowDefinitions="Auto,Auto,Auto,Auto,0.3*">
+            <!--  ERROR BLOCK  -->
             <SelectableTextBlock Text="{Binding ErrorText}"
                                  Grid.Row="0"
                                  FontSize="24"
@@ -22,13 +23,77 @@
                                  TextWrapping="WrapWithOverflow"
                                  Margin="10"
                                  Foreground="Red" />
+            <!--  CURSOR CONTROL TEST TEXTBOX  -->
             <TextBox x:Name="TestTextBox"
                      Grid.Row="1"
                      AcceptsReturn="True"
                      HorizontalAlignment="Center"
                      VerticalAlignment="Top"
                      Text="{Binding Greeting}" />
-            <StackPanel Grid.Row="2"
+
+            <!--  INPUT TYPE TEXT BOXES  -->
+            <ScrollViewer Grid.Row="2"
+                          MaxHeight="350">
+                <StackPanel Orientation="Vertical"
+                            Spacing="5"
+                            Width="350">
+                    <!--  - Normal  -->
+                    <TextBlock Text="Normal" />
+                    <TextBox TextInputOptions.ContentType="Normal" />
+
+                    <!--  - Alpha  -->
+                    <TextBlock Text="Alpha" />
+                    <TextBox TextInputOptions.ContentType="Alpha" />
+
+
+                    <!--  - Digits  -->
+                    <TextBlock Text="Digits" />
+                    <TextBox TextInputOptions.ContentType="Digits" />
+
+
+                    <!--  - Pin  -->
+                    <TextBlock Text="Pin" />
+                    <TextBox TextInputOptions.ContentType="Pin" />
+
+
+                    <!--  - Number  -->
+                    <TextBlock Text="Number" />
+                    <TextBox TextInputOptions.ContentType="Number" />
+
+
+                    <!--  - Email  -->
+                    <TextBlock Text="Email" />
+                    <TextBox TextInputOptions.ContentType="Email" />
+
+
+                    <!--  - Url  -->
+                    <TextBlock Text="Url" />
+                    <TextBox TextInputOptions.ContentType="Url" />
+
+
+                    <!--  - Name  -->
+                    <TextBlock Text="Name" />
+                    <TextBox TextInputOptions.ContentType="Name" />
+
+
+                    <!--  - Password  -->
+                    <TextBlock Text="Password" />
+                    <TextBox TextInputOptions.ContentType="Password" />
+
+
+                    <!--  - Social  -->
+                    <TextBlock Text="Social" />
+                    <TextBox TextInputOptions.ContentType="Social" />
+
+
+                    <!--  - Search  -->
+                    <TextBlock Text="Search" />
+                    <TextBox TextInputOptions.ContentType="Search" />
+                </StackPanel>
+            </ScrollViewer>
+
+
+            <StackPanel Grid.Row="3"
                         HorizontalAlignment="Center"
                         VerticalAlignment="Top"
                         Orientation="Horizontal"

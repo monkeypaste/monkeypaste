@@ -11,6 +11,19 @@
     <AndroidEnableProfiledAot>false</AndroidEnableProfiledAot>
   </PropertyGroup>
   <ItemGroup>
+    <AndroidJavaSource Remove="Resources\drawable\**" />
+    <AndroidLibrary Remove="Resources\drawable\**" />
+    <AndroidNativeLibrary Remove="Resources\drawable\**" />
+    <AndroidResource Remove="Resources\drawable\**" />
+    <AvaloniaXaml Remove="Resources\drawable\**" />
+    <Compile Remove="Resources\drawable\**" />
+    <EmbeddedResource Remove="Resources\drawable\**" />
+    <JavaSourceJar Remove="Resources\drawable\**" />
+    <None Remove="Resources\drawable\**" />
+    <ProguardConfiguration Remove="Resources\drawable\**" />
+    <TransformFile Remove="Resources\drawable\**" />
+  </ItemGroup>
+  <ItemGroup>
     <None Remove="Resources\font\Nunito_Regular.ttf" />
     <None Remove="Resources\layout\keyboard_layout_view.xml" />
   </ItemGroup>
@@ -34,6 +47,18 @@
   </ItemGroup>
 
   <ItemGroup>
+    <AndroidResource Include="Resources\drawable\backspace.png" />
+    <AndroidResource Include="Resources\drawable\emoji.png" />
+    <AndroidResource Include="Resources\drawable\enter.png" />
+    <AndroidResource Include="Resources\drawable\globe.png" />
+    <AndroidResource Include="Resources\drawable\search.png" />
+    <AndroidResource Include="Resources\drawable\shift.png" />
+    <AndroidResource Include="Resources\drawable\shift_lock.png" />
+    <AndroidResource Include="Resources\drawable\shift_on.png" />
+    <AndroidResource Include="Resources\drawable\splash_screen.xml" />
+  </ItemGroup>
+
+  <ItemGroup>
     <PackageReference Include="Avalonia.Android" Version="$(AvaloniaVersion)" />
     <PackageReference Include="Microsoft.Maui.Essentials" Version="8.0.70" />
     <PackageReference Include="Xamarin.AndroidX.Core.SplashScreen" Version="1.0.1.1" />
@@ -42,10 +67,6 @@
 
   <ItemGroup>
     <ProjectReference Include="..\iosKeyboardTest\iosKeyboardTest.csproj" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <Folder Include="Util\" />
   </ItemGroup>
 
 </Project>

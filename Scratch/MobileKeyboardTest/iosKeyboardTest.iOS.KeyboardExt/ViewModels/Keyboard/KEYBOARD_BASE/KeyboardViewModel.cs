@@ -111,7 +111,7 @@ namespace iosKeyboardTest.iOS.KeyboardExt {
         public Rect KeyboardRect { get; private set; } = new();
         public int MaxColCount { get; private set; } = 1;
         public int RowCount { get; private set; }
-        public double NumberRowHeightRatio => IsNumbers ? 1 : 0.75;
+        public double NumberRowHeightRatio => IsNumPadLayout ? 1 : 0.75;
 
         private double _defKeyWidth = -1;
         public double DefaultKeyWidth {
@@ -168,7 +168,7 @@ namespace iosKeyboardTest.iOS.KeyboardExt {
         public int MaxPopupRowCount { get; private set; }
         double SpecialKeyWidthRatio => 1.5d;
         public double SpecialKeyWidth =>
-            DefaultKeyWidth * (IsNumbers ? 1 : SpecialKeyWidthRatio);
+            DefaultKeyWidth * (IsNumPadLayout ? 1 : SpecialKeyWidthRatio);
 
         double MenuHeightPad => 5;
         public double MenuHeight =>
@@ -198,10 +198,24 @@ namespace iosKeyboardTest.iOS.KeyboardExt {
         public double CursorControlOpacity =>
             IsCursorControlEnabled ? 1 : 0;
         public bool IsSecondaryVisible =>
-            IsNumbers || CharSet == CharSetType.Letters;
+            IsNumPadLayout || IsLettersCharSet;
         #endregion
 
         #region State
+        public bool IsLettersCharSet =>
+            CharSet == CharSetType.Letters;
+        public bool IsSymbols1CharSet =>
+            CharSet == CharSetType.Symbols1;
+        public bool IsSymbols2CharSet =>
+            CharSet == CharSetType.Symbols2;
+        public bool IsAnySymbolsCharSet =>
+            IsSymbols1CharSet || IsSymbols2CharSet;
+        public bool IsNumbers1CharSet =>
+            CharSet == CharSetType.Numbers1;
+        public bool IsNumbers2CharSet =>
+            CharSet == CharSetType.Numbers2;
+        public bool IsAnyNumbersCharSet =>
+            IsNumbers1CharSet || IsNumbers2CharSet;
         public bool IsBusy { get; set; }
 
         string[] eos_chars = ["\n", ".", "!", "?", string.Empty];
@@ -217,6 +231,12 @@ namespace iosKeyboardTest.iOS.KeyboardExt {
         public KeyboardFeedbackFlags ReturnReleaseFeedback =>
             KeyboardFeedbackFlags.Vibrate;// | KeyboardFeedbackFlags.Return;
         string LastInput { get; set; } = string.Empty;
+        public bool IsAnyShiftState =>
+            ShiftState != ShiftStateType.None;
+        public bool IsShiftOnTemp =>
+            ShiftState == ShiftStateType.Shift;
+        public bool IsShiftOnLock =>
+            ShiftState == ShiftStateType.ShiftLock;
         public bool IsPullEnabled =>
             IsTablet;
         public bool IsSlideEnabled =>
@@ -287,8 +307,9 @@ namespace iosKeyboardTest.iOS.KeyboardExt {
         #endregion
 
         #region Model
-        public bool IsFreeText { get; private set; }
-        public bool IsNumbers { get; private set; }
+        public bool IsTextLayout =>
+            !IsNumPadLayout;
+        public bool IsNumPadLayout { get; private set; }
         public bool IsThemeDark { get; private set; }
         public bool IsTablet { get; private set; }
         public bool IsMobile { get; private set; }
@@ -479,7 +500,7 @@ namespace iosKeyboardTest.iOS.KeyboardExt {
             
 
 
-            if (IsNumbers) {
+            if (IsNumPadLayout) {
                 SetCharSet(CharSetType.Numbers1);
             } else {
                 SetCharSet(CharSetType.Letters);
@@ -608,10 +629,13 @@ namespace iosKeyboardTest.iOS.KeyboardExt {
             SetShiftState(needs_shift ? ShiftStateType.Shift : ShiftStateType.None);
         }
         void SetFlags(KeyboardFlags kbFlags) {
+            if (kbFlags.HasFlag(KeyboardFlags.EmojiKey) && (kbFlags.HasFlag(KeyboardFlags.Email) || kbFlags.HasFlag(KeyboardFlags.Url)) {
+                // remove emoji key for url/email. It takes up too much space and kb overflows plus it doesn't make sense for those keyboards
+                kbFlags &= ~KeyboardFlags.EmojiKey;
+            }
             KeyboardFlags = kbFlags;
             IsThemeDark = KeyboardFlags.HasFlag(KeyboardFlags.Dark);
-            IsNumbers = KeyboardFlags.HasFlag(KeyboardFlags.Numbers);
-            IsFreeText = KeyboardFlags.HasFlag(KeyboardFlags.FreeText);
+            IsNumPadLayout = KeyboardFlags.HasFlag(KeyboardFlags.Numbers);
             IsMobile = KeyboardFlags.HasFlag(KeyboardFlags.Mobile);
             IsTablet = KeyboardFlags.HasFlag(KeyboardFlags.Tablet);
             IsNumberRowVisible = KeyboardFlags.HasFlag(KeyboardFlags.NumberRow);
@@ -622,6 +646,7 @@ namespace iosKeyboardTest.iOS.KeyboardExt {
             IsAutoCapitalizationEnabled = KeyboardFlags.HasFlag(KeyboardFlags.AutoCap);
             IsDoubleTapSpaceEnabled = KeyboardFlags.HasFlag(KeyboardFlags.DoubleTapSpace);
             CanCursorControlBeEnabled = KeyboardFlags.HasFlag(KeyboardFlags.CursorControl);
+
         }
 
         KeyViewModel GetKeyUnderPoint(Point scaledPoint) {
@@ -719,25 +744,32 @@ namespace iosKeyboardTest.iOS.KeyboardExt {
                         (["7,*", "8,;", "9,#", SpecialKeyType.NumberSymbolsToggle]),
                         (["*,-", "0,+", "#,__", "comma"])
                     };
-                } else {
-                    if (kbFlags.HasFlag(KeyboardFlags.Email)) {
-                        keys = [
-                            (["1", "2", "3", "4", "5", "6", "7", "8", "9", "0"]),
-                            (["q,+,`", "w,×,~", "e,÷,\\", "r,=,|", "t,/,{", "y,_,}", "u,<,€", "i,>,£", "o,[,¥", "p,],₩"]),
-                            (["a,!,○", "s,@,•", "d,#,⚪", "f,$,⚫", "g,%,□", "h,^,🔳", "j,&,♤", "k,*,♡", "l,(,♢", "none,),♧"]),
-                            ([SpecialKeyType.Shift, "z,-,☆", "x,',▪", "c,\",▫", "v,:,≪", "b,;,≫", "n,comma,¡", "m,?,¿", SpecialKeyType.Backspace]),
-                            ([SpecialKeyType.SymbolToggle, "comma","@", " ", ".",".com", primarySpecialType])
-                        ];
-                    } else {
-                        keys = [
+                } else {                    
+                    keys = [
                             (["1", "2", "3", "4", "5", "6", "7", "8", "9", "0"]),
                             (["q,+,`", "w,×,~", "e,÷,\\", "r,=,|", "t,/,{", "y,_,}", "u,<,€", "i,>,£", "o,[,¥", "p,],₩"]),
                             (["a,!,○", "s,@,•", "d,#,⚪", "f,$,⚫", "g,%,□", "h,^,🔳", "j,&,♤", "k,*,♡", "l,(,♢", "none,),♧"]),
                             ([SpecialKeyType.Shift, "z,-,☆", "x,',▪", "c,\",▫", "v,:,≪", "b,;,≫", "n,comma,¡", "m,?,¿", SpecialKeyType.Backspace]),
                             ([SpecialKeyType.SymbolToggle, "comma", " ", ".", primarySpecialType])
                         ];
+
+                    if (kbFlags.HasFlag(KeyboardFlags.Email) || kbFlags.HasFlag(KeyboardFlags.Url)) {
+                        // add input type char after symbol toggle
+                        string ins_char = kbFlags.HasFlag(KeyboardFlags.Email) ? "@" : "/";
+                        keys.Last().Insert(1, ins_char);
+                        if(kbFlags.HasFlag(KeyboardFlags.Url)) {
+                            // insert url parts backwards
+                            int space_idx = keys.Last().IndexOf(" ");
+                            keys.Last().Insert(space_idx + 1, ".com");
+                            keys.Last().Insert(space_idx + 1, ".");
+                        }
+                    } 
+                    if (kbFlags.HasFlag(KeyboardFlags.EmojiKey)) {
+                        // insert emoji key before space bar
+                        keys.Last().Insert(1, SpecialKeyType.Emoji);
                     }
-                    if(!kbFlags.HasFlag(KeyboardFlags.NumberRow)) {
+
+                    if (!kbFlags.HasFlag(KeyboardFlags.NumberRow)) {
                         // numbers become 2nd row secondary 
                         var num_row = keys[0];
                         keys.Remove(num_row);
@@ -751,9 +783,6 @@ namespace iosKeyboardTest.iOS.KeyboardExt {
                             new_top_row.Add(string.Join(",", val_parts));
                         }
                         keys[0] = new_top_row;
-                    }
-                    if(kbFlags.HasFlag(KeyboardFlags.EmojiKey)) {
-                        keys.Last().Insert(1, SpecialKeyType.Emoji);
                     }
                 }
 
@@ -771,20 +800,27 @@ namespace iosKeyboardTest.iOS.KeyboardExt {
         }
 
         void ToggleSymbolSet() {
-            if (CharSet == CharSetType.Numbers1) {
-                SetCharSet(CharSetType.Numbers2);
-                return;
-            }
-            if (CharSet == CharSetType.Numbers2) {
-                SetCharSet(CharSetType.Numbers1);
-                return;
-            }
+            CharSetType to_select = CharSet;
+            switch(CharSet) {
+                case CharSetType.Numbers1:
+                    to_select = CharSetType.Numbers2;
+                    break;
+                case CharSetType.Numbers2:
+                    to_select = CharSetType.Numbers1;
+                    break;
+                case CharSetType.Letters:
+                    to_select = CharSetType.Symbols1;
+                    break;
+                default:
+                    to_select = CharSetType.Letters;
+                    break;
 
-            if (CharSet == CharSetType.Letters) {
-                SetCharSet(CharSetType.Symbols1);
-                return;
             }
-            SetCharSet(CharSetType.Letters);
+            if(to_select == CharSet) {
+                // missing state?
+                Debugger.Break();
+            }
+            SetCharSet(to_select);
         }
         void ToggleCapsLock() {
             if (ShiftState == ShiftStateType.ShiftLock) {
@@ -904,6 +940,8 @@ namespace iosKeyboardTest.iOS.KeyboardExt {
 
             int dx = (int)Math.Floor((x - lx) / x_factor);
             int dy = (int)Math.Floor((y - ly) / y_factor);
+
+            dy = 0; // too volatile for now
 
             if (dx == 0 && dy == 0) {
                 return;
@@ -1087,7 +1125,7 @@ namespace iosKeyboardTest.iOS.KeyboardExt {
                         pv = anchor_kvm.SecondaryValue;
                         anchor_kvm.PullTranslateY = 0;
                     }
-                    if (!IsNumbers &&
+                    if (!IsNumPadLayout &&
                         IsDoubleTapSpaceEnabled &&
                         active_kvm.IsSpaceBar &&
                         active_kvm.LastReleaseDt is { } lrdt &&
@@ -1102,7 +1140,7 @@ namespace iosKeyboardTest.iOS.KeyboardExt {
                     if (ShiftState == ShiftStateType.Shift) {
                         SetShiftState(ShiftStateType.None);
                     }
-                    if (active_kvm.IsSpaceBar && !IsNumbers) {
+                    if (active_kvm.IsSpaceBar && !IsNumPadLayout) {
                         // after typing space reset to default keyboard                            
                         SetCharSet(CharSetType.Letters);
                     }

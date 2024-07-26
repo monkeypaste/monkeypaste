@@ -23,18 +23,39 @@ namespace iosKeyboardTest.Android {
         #endregion
 
         #region Constants
+
+        public const string BACKSPACE_IMG_FILE_NAME = "backspace.png";//"⌫";
+        public const string EMOJI_SELECT_BTN_IMG_FILE_NAME = "emoji.png";//"☺";
+        public const string ENTER_IMG_FILE_NAME = "enter.png";//"⏎";
+        public const string NEXT_KEYBOARD_IMG_FILE_NAME = "globe.png";
+        public const string SEARCH_IMG_FILE_NAME = "search.png";//"🔍";
+        public const string SHIFT_IMG_FILE_NAME = "shift.png";//"⇧";
+        public const string SHIFT_LOCK_IMG_FILE_NAME = "shift_lock.png";
+        public const string SHIFT_ON_IMG_FILE_NAME = "shift_on.png";
+
         #endregion
 
         #region Statics 
-        static IEnumerable<string> GetSpecialKeyChars(SpecialKeyType skt) {
+        public static string[] IMG_FILE_NAMES => [
+            SHIFT_IMG_FILE_NAME,
+            SHIFT_ON_IMG_FILE_NAME,
+            SHIFT_LOCK_IMG_FILE_NAME,
+            SEARCH_IMG_FILE_NAME,
+            ENTER_IMG_FILE_NAME,
+            BACKSPACE_IMG_FILE_NAME,
+            EMOJI_SELECT_BTN_IMG_FILE_NAME,
+            EMOJI_SELECT_BTN_IMG_FILE_NAME,
+        ];
+
+        static IEnumerable<string> GetSpecialKeyCharsOrResourceKeys(SpecialKeyType skt) {
             switch (skt) {
                 case SpecialKeyType.None:
                     yield break;
                 case SpecialKeyType.Emoji:
-                    yield return "☺";
+                    yield return EMOJI_SELECT_BTN_IMG_FILE_NAME;
                     break;
                 case SpecialKeyType.Shift:
-                    yield return "⇧";
+                    yield return SHIFT_IMG_FILE_NAME;
                     yield return "1/2";
                     yield return "2/2";
                     break;
@@ -54,7 +75,7 @@ namespace iosKeyboardTest.Android {
                     yield return "Done";
                     break;
                 case SpecialKeyType.Backspace:
-                    yield return "⌫";
+                    yield return BACKSPACE_IMG_FILE_NAME;
                     break;
                 case SpecialKeyType.SymbolToggle:
                     yield return "!#1";
@@ -65,10 +86,10 @@ namespace iosKeyboardTest.Android {
                     yield return "123";
                     break;
                 case SpecialKeyType.Enter:
-                    yield return "⏎";
+                    yield return ENTER_IMG_FILE_NAME;
                     break;
                 case SpecialKeyType.Search:
-                    yield return "🔍";
+                    yield return SEARCH_IMG_FILE_NAME;
                     break;
 
             }
@@ -165,7 +186,7 @@ namespace iosKeyboardTest.Android {
 
         #region IKeyboardViewRenderer Implementation
         void IKeyboardViewRenderer.Measure(bool invalidate) {
-            if(this is KeyViewModel kvm) {
+            if (this is KeyViewModel kvm) {
                 ClearRects();
 
                 kvm.RaisePropertyChanged(nameof(NeedsSymbolTranslate));
@@ -182,7 +203,7 @@ namespace iosKeyboardTest.Android {
                 kvm.RaisePropertyChanged(nameof(SecondaryTranslateOffsetY));
                 kvm.RaisePropertyChanged(nameof(PullTranslateY));
             }
-            
+
         }
 
         void IKeyboardViewRenderer.Paint(bool invalidate) {
@@ -194,8 +215,8 @@ namespace iosKeyboardTest.Android {
                 kvm.RaisePropertyChanged(nameof(SecondaryValue));
                 kvm.RaisePropertyChanged(nameof(PrimaryOpacity));
                 kvm.RaisePropertyChanged(nameof(SecondaryOpacity));
-                kvm.RaisePropertyChanged(nameof(IsShiftOn));
-                kvm.RaisePropertyChanged(nameof(IsShiftLock));
+                kvm.RaisePropertyChanged(nameof(IsShiftKeyAndOnTemp));
+                kvm.RaisePropertyChanged(nameof(IsShiftKeyAndOnLock));
             }
         }
 
@@ -319,13 +340,13 @@ namespace iosKeyboardTest.Android {
         }
         public bool IsSecondaryVisible {
             get {
-                if (Parent.IsNumbers) {
+                if (Parent.IsNumPadLayout) {
                     if (SpecialKeyType == SpecialKeyType.NumberSymbolsToggle) {
                         return false;
                     }
                     return true;
                 }
-                if (Parent.CharSet == CharSetType.Letters && IsInput) {
+                if (Parent.IsTextLayout && IsInput) {
                     if (Parent.IsNumberRowHidden && Row > 0) {
                         return false;
                     }
@@ -350,7 +371,7 @@ namespace iosKeyboardTest.Android {
         bool IsBgAlwaysVisible {
             get {
                 // TODO should probably make some keys always have bg, like space etc like gboard
-                return IsSpaceBar || IsPrimarySpecial || (IsShift && IsShiftOn);
+                return IsSpaceBar || IsPrimarySpecial || IsShiftKeyAndOnTemp;
             }
         }
         #endregion
@@ -369,18 +390,27 @@ namespace iosKeyboardTest.Android {
             IsPopupKey ?
                 0 :
                 Parent.DefaultKeyHeight * 0.15;
-        public double PrimaryFontSizeRatio =>
-            Parent.IsNumbers && IsInput ?
-                1.25 :
-                IsDotCom ?
-                    0.3 :
-                    IsShift && Parent.CharSet == CharSetType.Letters ?
-                        1 :
-                        IsBackspace ?
-                            0.65 :
-                            IsDoneTextKey ?
-                                0.33 :
-                                0.5;
+        public double PrimaryFontSizeRatio {
+            get {
+                if(Parent.IsNumPadLayout && IsInput) {
+                    return 1.25d;
+                }
+                if(IsDotCom) {
+                    return 0.3;
+                }
+                if(IsShiftKey && Parent.IsLettersCharSet) {
+                    return 1;
+                }
+                if(IsBackspace) {
+                    return 0.65;
+                }
+                if(IsDoneTextKey) {
+                    return 0.33;
+                }
+                return 0.5;
+            }
+        }
+            
         public double SecondaryFontSizeRatio => 0.33;
         string[] MisAlignedCharacters => [
             //"✖️",
@@ -482,6 +512,26 @@ namespace iosKeyboardTest.Android {
             }
         }
         
+        private Rect? _primaryImageRect;
+        public Rect PrimaryImageRect {
+            get {
+                if(_primaryImageRect is not { } ptr) {
+                    if (_keyboardRect is not { } kbRect) {
+                        kbRect = FindRect();
+                        _keyboardRect = kbRect;
+                    }
+                    
+                    double w = Math.Min(InnerWidth,InnerHeight) - 5;
+                    double h = w;
+                    double x = (InnerRect.Width / 2) - (w/2);
+                    double y = (InnerRect.Height / 2) - (h/2);
+                    _primaryImageRect = new Rect(x, y, w, h);
+                }               
+                
+                return _primaryImageRect.Value;
+            }
+        }
+        
         private Rect? _innerRect;
         public Rect InnerRect {
             get {
@@ -538,7 +588,7 @@ namespace iosKeyboardTest.Android {
                 Parent.DefaultKeyWidth :
                 Parent.SpecialKeyWidth);
         public double Height =>
-            !IsPopupKey && !Parent.IsNumbers && IsNumber ? Parent.NumberKeyHeight : Parent.DefaultKeyHeight;
+            !IsPopupKey && !Parent.IsNumPadLayout && IsNumber ? Parent.NumberKeyHeight : Parent.DefaultKeyHeight;
         public double InnerWidth =>
             Width - OuterPadX;
         public double InnerHeight =>
@@ -558,12 +608,14 @@ namespace iosKeyboardTest.Android {
         #endregion
 
         #region State
+        public bool IsPrimaryImage =>
+            CurrentChar != null && CurrentChar.EndsWith(".png");
         public bool CanShowPopup {
             get {
                 if(Parent.IsExtendedPopupsEnabled) {
                     return HasAnyPopup;
                 }
-                if(Parent.IsNumberRowHidden && Parent.CharSet == CharSetType.Letters && Row == 0) {
+                if(Parent.IsNumberRowHidden && Parent.IsTextLayout && Row == 0) {
                     return true;
                 }
                 return false;
@@ -627,7 +679,7 @@ namespace iosKeyboardTest.Android {
                     }
                     return PopupAnchorKey.NeedsOuterTranslate;
                 }
-                return Row == TranslatedRow && Parent.CharSet == CharSetType.Letters;
+                return Row == TranslatedRow && Parent.IsLettersCharSet;
             }
         }
         int TranslatedRow =>
@@ -642,7 +694,7 @@ namespace iosKeyboardTest.Android {
             CurrentChar == ".";
         public bool IsBackspace =>
             SpecialKeyType == SpecialKeyType.Backspace;
-        public bool IsShift =>
+        public bool IsShiftKey =>
             SpecialKeyType == SpecialKeyType.Shift;
         public bool IsDotCom =>
             CurrentChar == ".com";
@@ -650,23 +702,21 @@ namespace iosKeyboardTest.Android {
             "0123456789".Contains(CurrentChar);
         public bool IsInput =>
             !IsSpecial;
-        public bool IsShiftOn =>
-            SpecialKeyType == SpecialKeyType.Shift &&
-            Parent.CharSet == CharSetType.Letters &&
-            Parent.ShiftState == ShiftStateType.Shift;
-        public bool IsShiftLock =>
-            SpecialKeyType == SpecialKeyType.Shift &&
-            Parent.CharSet == CharSetType.Letters &&
-            Parent.ShiftState == ShiftStateType.ShiftLock;
-        bool IsShifted =>
-            Parent.ShiftState != ShiftStateType.None;
+        public bool IsShiftKeyAndOnTemp =>
+            IsShiftKey &&
+            Parent.IsLettersCharSet &&
+            Parent.IsShiftOnTemp;
+        public bool IsShiftKeyAndOnLock =>
+            IsShiftKey &&
+            Parent.IsLettersCharSet &&
+            Parent.IsShiftOnLock;
 
 
         public string CurrentChar { get; private set; }
 
         public string SecondaryValue { get; private set; }
         public string PrimaryValue =>
-            IsShifted && IsInput ? CurrentChar.ToUpper() : CurrentChar;
+            Parent.IsAnyShiftState && IsInput ? CurrentChar.ToUpper() : CurrentChar;
 
 
         public IEnumerable<string> SecondaryCharacters { get; private set; }
@@ -815,6 +865,9 @@ namespace iosKeyboardTest.Android {
             }
         }
         void ClearRects() {
+            _primaryTextRect = null;
+            _primaryImageRect = null;
+            _secondaryTextRect = null;
             _innerRect = null;
             _keyboardRect = null;
             _totalRect = null;
@@ -877,10 +930,15 @@ namespace iosKeyboardTest.Android {
             UpdateCharacters();
         }
         public void UpdateCharacters() {
-            if (Characters.Any()) {
-                if(Row == 1) {
-
+            if (IsShiftKey && Parent.IsLettersCharSet) {
+                if (IsShiftKeyAndOnLock) {
+                    CurrentChar = SHIFT_LOCK_IMG_FILE_NAME;
+                } else if (IsShiftKeyAndOnTemp) {
+                    CurrentChar = SHIFT_ON_IMG_FILE_NAME;
+                } else {
+                    CurrentChar = SHIFT_IMG_FILE_NAME;
                 }
+            } else if (Characters.Any()) {
                 int char_idx = Parent.CharSetIdx >= Characters.Count ? 0 : Parent.CharSetIdx;
                 CurrentChar = Characters[char_idx] ?? string.Empty;
                 int next_idx = char_idx + 1;
@@ -935,7 +993,7 @@ namespace iosKeyboardTest.Android {
                 }
             } else if (keyObj is SpecialKeyType skt) {
                 SpecialKeyType = skt;
-                chars.AddRange(GetSpecialKeyChars(skt));
+                chars.AddRange(GetSpecialKeyCharsOrResourceKeys(skt));
             } else if (keyObj is int popupIdx) {
                 PopupKeyIdx = popupIdx;
             }
@@ -947,10 +1005,10 @@ namespace iosKeyboardTest.Android {
             string fg = KeyboardPalette.FgHex;
             if (IsSpecial) {
                 bg = IsPressed ? KeyboardPalette.SpecialKeyPressedBgHex : KeyboardPalette.SpecialKeyBgHex;
-                if (SpecialKeyType == SpecialKeyType.Shift) {
-                    if (IsShiftOn) {
+                if (IsShiftKey) {
+                    if (IsShiftKeyAndOnTemp) {
                         fg = KeyboardPalette.ShiftFgHex;
-                    } else if (IsShiftLock) {
+                    } else if (IsShiftKeyAndOnLock) {
                         bg = KeyboardPalette.ShiftBgHex;
                     }
                 } else if (IsPrimarySpecial) {

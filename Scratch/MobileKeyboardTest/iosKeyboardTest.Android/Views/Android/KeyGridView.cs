@@ -86,7 +86,6 @@ namespace iosKeyboardTest.Android {
 
 
         public void ShowPopup(KeyView kv) {
-            return;
             if(GetWindowByAnchorKey(kv) is { } puw){
                 HidePopup(kv);
             }
@@ -120,7 +119,6 @@ namespace iosKeyboardTest.Android {
 
         }
         public void HidePopup(KeyView kv) {
-            return;
             if (GetWindowByAnchorKey(kv) is not { } puw) {
                 return;
             }

@@ -3,7 +3,6 @@ using Android.Content;
 using Android.Graphics;
 using Android.Views;
 using Android.Widget;
-using iosKeyboardTest.Android;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -90,14 +89,9 @@ namespace iosKeyboardTest.Android {
 
         #region Public Methods
         public void RemapRenderers() {
-            // NOTE when flags change keys are recreated and renderer
+            // NOTE when flags change keys are recreated and renderers need to be re-assigned
             KeyGridView.AddOrResetKeys();
             Render(true);
-        }
-
-        public void TestPopup() {
-            //if(DC.PressedKeys.FirstOrDefault() is { })
-
         }
         #endregion
 
@@ -111,7 +105,7 @@ namespace iosKeyboardTest.Android {
             paint.TextAlign = GPaint.Align.Left;
             //paint.ElegantTextHeight = true;
             paint.AntiAlias = true;
-            paint.SetTypeface(Resources.GetFont(Resource.Font.RobotoMono_VariableFont_wght));
+            paint.SetTypeface(Resources.GetFont(Resource.Font.Nunito_Regular));
             return paint;
         }
         void HideCursorControl() {
