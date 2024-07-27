@@ -3,8 +3,10 @@ using Android.Content;
 using Android.Graphics;
 using Android.Views;
 using Android.Widget;
+using Microsoft.Maui.ApplicationModel;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using GPaint = Android.Graphics.Paint;
 using Rect = Android.Graphics.Rect;
@@ -12,6 +14,11 @@ using Rect = Android.Graphics.Rect;
 namespace iosKeyboardTest.Android {
     public class KeyboardView : CustomViewGroup, IKeyboardViewRenderer {
         #region Private Variables
+        int measureCount = 0;
+        int layoutCount = 0;
+        int paintCount = 0;
+        int renderCount = 0;
+        int drawCount = 0;
         #endregion
 
         #region Constants
@@ -64,8 +71,11 @@ namespace iosKeyboardTest.Android {
             Scaling = (float)AndroidDisplayInfo.Scaling;
             var kbs = KeyboardViewModel.GetTotalSizeByScreenSize(AndroidDisplayInfo.UnscaledSize, AndroidDisplayInfo.IsPortrait);
             DC = new KeyboardViewModel(conn, kbs / Scaling, Scaling, AndroidDisplayInfo.Scaling);
-            DC.SetRenderer(this);
-
+            if(MyInputMethodService.IS_MULTI_THREAD_MODE) {
+                MyInputMethodService.PendingRenderers.Enqueue((DC, this));
+            } else {
+                DC.SetRenderer(this);
+            }
 
             MenuView = new CustomView(context, SharedPaint).SetDefaultProps("Menu");
             this.AddView(MenuView);
@@ -76,8 +86,8 @@ namespace iosKeyboardTest.Android {
             CursorControlView = new CustomView(context, SharedPaint).SetDefaultProps();
             this.AddView(CursorControlView);
 
-            CursorControlTextView = new CustomTextView(context, SharedPaint).SetDefaultProps();
-            CursorControlTextView.Text = "👆Cursor Control";
+            CursorControlTextView = new CustomTextView(context, SharedPaint) { TextAlignment = TextAlignment.Center }.SetDefaultProps() ;
+            CursorControlTextView.Text = DC.CursorControlText;
             this.AddView(CursorControlTextView);
 
             HideCursorControl();
@@ -93,6 +103,28 @@ namespace iosKeyboardTest.Android {
             KeyGridView.AddOrResetKeys();
             Render(true);
         }
+        public void ResetStats() {
+            measureCount = 0;
+            layoutCount = 0;
+            paintCount = 0;
+            renderCount = 0;
+            drawCount = 0;
+
+            foreach (var kv in KeyGridView.KeyViews) {
+                kv.ResetStats();
+            }
+
+        }
+        public void PrintStats() {
+            System.Diagnostics.Debug.WriteLine(this.ToString());
+            foreach(var kv in KeyGridView.KeyViews) {
+                System.Diagnostics.Debug.WriteLine(kv.ToString());
+            }
+            ResetStats();
+        }
+        public override string ToString() {
+            return $"'KEYBOARD' M:{measureCount} L:{layoutCount} P:{paintCount} R:{renderCount} D:{drawCount}";
+        }
         #endregion
 
         #region Protected Methods
@@ -103,7 +135,8 @@ namespace iosKeyboardTest.Android {
         private GPaint SetupPaint() {
             var paint = new GPaint();
             paint.TextAlign = GPaint.Align.Left;
-            //paint.ElegantTextHeight = true;
+            paint.FakeBoldText = true;
+            paint.ElegantTextHeight = true;
             paint.AntiAlias = true;
             paint.SetTypeface(Resources.GetFont(Resource.Font.Nunito_Regular));
             return paint;
@@ -127,72 +160,81 @@ namespace iosKeyboardTest.Android {
         #endregion
 
         public void Layout(bool invalidate) {
-            if(DC.IsCursorControlEnabled) {
-                ShowCursorControl();
-            } else {
-                HideCursorControl();
-            }
-            KeyGridView.Layout(invalidate);
+            MainThread.BeginInvokeOnMainThread(() => {
+                if (DC.IsCursorControlEnabled) {
+                    ShowCursorControl();
+                } else {
+                    HideCursorControl();
+                }
+                KeyGridView.Layout(invalidate);
 
-            if(invalidate) {
-                this.Redraw();
-            }
+                if (invalidate) {
+                    this.Redraw();
+                }
+            });            
         }
 
         public void Measure(bool invalidate) {
-            this.Frame = DC.TotalRect.ToRectF();
+            MainThread.BeginInvokeOnMainThread(() => {
+                this.Frame = DC.TotalRect.ToRectF();
 
-            MenuView.Frame = DC.MenuRect.ToRectF();
+                MenuView.Frame = DC.MenuRect.ToRectF();
 
-            KeyGridView.Measure(invalidate);
+                KeyGridView.Measure(invalidate);
 
-            CursorControlView.Frame = DC.InnerRect.ToRectF();
+                CursorControlView.Frame = DC.CursorControlRect.ToRectF();
 
-            CursorControlTextView.TextSize = 24;
-            var cct_size = CursorControlTextView.TextSize();
-            float cct_l = CursorControlView.Frame.CenterX() - (cct_size.Width / 2);
-            float cct_t = CursorControlView.Frame.CenterY() - (cct_size.Height / 2);
-            float cct_r = cct_l + cct_size.Width;
-            float cct_b = cct_t + cct_size.Height;
-            CursorControlTextView.Frame = new RectF(cct_l, cct_t, cct_r, cct_b);
+                CursorControlTextView.TextSize = DC.CursorControlFontSize.UnscaledF();
+                var cct_size = CursorControlTextView.TextSize();
+                float cct_l = CursorControlView.Frame.CenterX() - (cct_size.Width / 2);
+                float cct_t = CursorControlView.Frame.CenterY() - (cct_size.Height / 2);
+                float cct_r = cct_l + cct_size.Width;
+                float cct_b = cct_t + cct_size.Height;
+                CursorControlTextView.Frame = new RectF(cct_l, cct_t, cct_r, cct_b);
+                //CursorControlTextView.Frame = DC.CursorControlTextRect.ToRectF();
+
+                if (invalidate) {
+                    MenuView.Redraw();
+                    CursorControlView.Redraw();
+                    CursorControlTextView.Redraw();
+                    KeyGridView.Redraw();
+                    this.Redraw();
+                }
+            });
             
-            if(invalidate) {
-                MenuView.Redraw();
-                CursorControlView.Redraw();
-                CursorControlTextView.Redraw();
-                KeyGridView.Redraw();
-                this.Redraw();
-            }
         }
 
-        public void Paint(bool invalidate) {
-            //this.SetBackgroundColor(Color.Orange);
+        public void Paint(bool invalidate) { 
+            MainThread.BeginInvokeOnMainThread(() => {
+                MenuView.SetBackgroundColor(KeyboardPalette.MenuBgHex.ToColor());
 
-            MenuView.SetBackgroundColor(KeyboardPalette.MenuBgHex.ToColor());
+                KeyGridView.Paint(invalidate);
 
-            KeyGridView.Paint(invalidate);
+                CursorControlView.SetBackgroundColor(KeyboardPalette.CursorControlBgHex.ToColor());
 
-            CursorControlView.SetBackgroundColor(KeyboardPalette.CursorControlBgHex.ToColor());
+                CursorControlTextView.SetTextColor(KeyboardPalette.CursorControlFgHex.ToColor());
+                CursorControlTextView.ForegroundColor = KeyboardPalette.CursorControlFgHex.ToColor();
 
-            CursorControlTextView.SetTextColor(KeyboardPalette.CursorControlFgHex.ToColor());
-            CursorControlTextView.ForegroundColor = KeyboardPalette.CursorControlFgHex.ToColor();
-
-            if (invalidate) {
-                this.Redraw();
-            }
+                if (invalidate) {
+                    this.Redraw();
+                }
+            });            
         }
 
         public void Render(bool invalidate) {
-            Layout(false);
-            Measure(false);
-            Paint(false);
-            KeyGridView.Render(invalidate);
-            if (invalidate) {
-                this.Redraw();
-                for (int i = 0; i < ChildCount; i++) {
-                    this.GetChildAt(i).Redraw();
+            MainThread.BeginInvokeOnMainThread(() => {
+                Layout(false);
+                Measure(false);
+                Paint(false);
+                KeyGridView.Render(invalidate);
+                if (invalidate) {
+                    this.Redraw();
+                    for (int i = 0; i < ChildCount; i++) {
+                        this.GetChildAt(i).Redraw();
+                    }
                 }
-            }
+            });
+    
 
         }
     }

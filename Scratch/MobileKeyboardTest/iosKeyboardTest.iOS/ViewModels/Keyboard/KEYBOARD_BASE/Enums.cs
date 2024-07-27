@@ -59,38 +59,40 @@ namespace iosKeyboardTest.iOS {
         FullLayout = 1L << 6,
 
         // MODE
-        FreeText = 1L << 7,
+        Normal = 1L << 7,
         Numbers = 1L << 8,
-        Url = 1L << 9,
-        Email = 1L << 10,
-        Search = 1L << 11,
-        Next = 1L << 12,
-        Done = 1L << 13,
+        Digits = 1L << 9,
+        Pin = 1L << 10,
+        Url = 1L << 11,
+        Email = 1L << 12,
+        Search = 1L << 13,
+        Next = 1L << 14,
+        Done = 1L << 15,
 
         // THEME
-        Light = 1L << 14,
-        Dark = 1L << 15,
+        Light = 1L << 16,
+        Dark = 1L << 17,
 
         // DEVICE
-        Mobile = 1L << 16,
-        Tablet = 1L << 17,
+        Mobile = 1L << 18,
+        Tablet = 1L << 19,
         
         // LOOK & FEEL
-        PlatformView = 1L << 18,
-        NumberRow = 1L << 19,
-        KeyBorders = 1L << 20,
-        EmojiKey = 1L << 21,
+        PlatformView = 1L << 20,
+        NumberRow = 1L << 21,
+        KeyBorders = 1L << 22,
+        EmojiKey = 1L << 23,
 
         
-        Vibrate = 1L << 22,
-        Sound = 1L << 23,
-        ShowPopups = 1L << 24,
+        Vibrate = 1L << 24,
+        Sound = 1L << 25,
+        ShowPopups = 1L << 26,
 
-        OneHanded = 1L << 25,
+        OneHanded = 1L << 27,
 
-        AutoCap = 1L << 26,
-        DoubleTapSpace = 1L << 27,
-        CursorControl = 1L << 28,
+        AutoCap = 1L << 28,
+        DoubleTapSpace = 1L << 29,
+        CursorControl = 1L << 30,
 
     }
 }

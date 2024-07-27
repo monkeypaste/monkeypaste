@@ -1,10 +1,13 @@
-﻿using Android.Graphics;
+﻿using Android.App;
+using Android.Content;
+using Android.Graphics;
 using Android.Graphics.Drawables;
 using Android.Util;
 using Android.Views;
 using Android.Widget;
 using Avalonia.Media;
 using Avalonia.Media.Imaging;
+using Java.Interop;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
@@ -12,9 +15,11 @@ using System.Drawing;
 using System.Globalization;
 using System.Linq;
 using System.Reflection;
+using static Android.Icu.Text.CaseMap;
 using static System.Net.Mime.MediaTypeNames;
 using Bitmap = Android.Graphics.Bitmap;
 using Color = Android.Graphics.Color;
+using PointF = Android.Graphics.PointF;
 using Size = Android.Util.Size;
 
 namespace iosKeyboardTest.Android {
@@ -31,6 +36,9 @@ namespace iosKeyboardTest.Android {
         }
         public static Rect ToRect(this RectF rectf) {
             return new Rect((int)rectf.Left, (int)rectf.Top, (int)rectf.Right, (int)rectf.Bottom);
+        }
+        public static PointF Location(this RectF rectf) {
+            return new PointF(rectf.Left, rectf.Top);
         }
         public static RectF ToRectF(this Rect rectf) {
             return new RectF((float)rectf.Left, (float)rectf.Top, (float)rectf.Right, (float)rectf.Bottom);
@@ -150,6 +158,19 @@ namespace iosKeyboardTest.Android {
         #endregion
 
         #region Images
+
+        public static Bitmap Scale(this Bitmap bmp, int newWidth,int newHeight) {
+            //from https://stackoverflow.com/a/10703256/105028
+            int w = bmp.Width;
+            int h = bmp.Height;
+            float scaled_w = ((float)newWidth) / w;
+            float scaled_h = ((float)newHeight) / h;
+            Matrix matrix = new Matrix();
+            matrix.PostScale(scaled_w, scaled_h);
+            var scaled_bmp = Bitmap.CreateBitmap(bmp, 0, 0, w, h, matrix, false);
+            bmp.Recycle();
+            return scaled_bmp;
+        }
         public static Bitmap ToBitmap(this Drawable d) {
             // from https://stackoverflow.com/a/10600736/105028
             if(d is BitmapDrawable bd && bd.Bitmap is { } bdbmp) {
@@ -194,8 +215,23 @@ namespace iosKeyboardTest.Android {
         }
         #endregion
 
-
         #region Views
+
+        static event EventHandler<DialogClickEventArgs> alertHandler;
+        public static void Alert(this string msg, Context context,string title = "") {
+            void OnAlertClick(object sender, DialogClickEventArgs e) {
+                alertHandler -= OnAlertClick;
+                if(sender is AlertDialog ad) {
+                    ad.Dismiss();
+                }
+            }
+            alertHandler += OnAlertClick;
+            new AlertDialog.Builder(context)
+                .SetTitle(title)
+                .SetMessage(msg)
+                .SetPositiveButton("OK", alertHandler)
+                .Show();
+        }
 
         public static Size TextSize(this TextView tv) {
             // from https://stackoverflow.com/a/24359594/105028
@@ -251,4 +287,5 @@ namespace iosKeyboardTest.Android {
         }
         #endregion
     }
+
 }

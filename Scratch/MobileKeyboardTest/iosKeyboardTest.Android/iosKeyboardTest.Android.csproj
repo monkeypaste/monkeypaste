@@ -34,6 +34,10 @@
     <EnableLLVM>true</EnableLLVM>
   </PropertyGroup>
 
+  <PropertyGroup Condition="'$(IsBionic)' == 'True'">
+    <!-- target arch should be arm64 -->
+  </PropertyGroup>
+
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
     <Debugger>Xamarin</Debugger>
     <DebugSymbols>True</DebugSymbols>

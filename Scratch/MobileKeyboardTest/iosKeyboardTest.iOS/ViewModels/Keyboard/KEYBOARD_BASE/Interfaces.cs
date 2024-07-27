@@ -17,11 +17,17 @@ namespace iosKeyboardTest.iOS {
         void OnFeedback(KeyboardFeedbackFlags flags);
         KeyboardFlags Flags { get; }
     }
+    public interface IKeyboardInputConnection_android : IKeyboardInputConnection {
+        new event EventHandler<(string, (int, int))> OnCursorChanged;
+    }
     public interface IKeyboardViewRenderer {
         void Layout(bool invalidate);
         void Measure(bool invalidate);
         void Paint(bool invalidate);
         void Render(bool invalidate);
+    }
+    public interface IKeyboardRenderSource {
+        void SetRenderer(IKeyboardViewRenderer renderer);
     }
     public interface IKeyboardInputConnection_ios : IKeyboardInputConnection {
         bool NeedsInputModeSwitchKey { get; }

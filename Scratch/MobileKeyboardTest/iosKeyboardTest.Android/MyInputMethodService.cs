@@ -34,18 +34,25 @@ using View = Android.Views.View;
 
 namespace iosKeyboardTest.Android {
     [Service(Name = "com.CompanyName.MyInputMethodService")]
-    public class MyInputMethodService : InputMethodService, IKeyboardInputConnection, ITriggerTouchEvents, IOnTouchListener {
+    public class MyInputMethodService : InputMethodService, IKeyboardInputConnection_android, ITriggerTouchEvents, IOnTouchListener {
         #region Private Variables
         // from https://learn.microsoft.com/en-us/answers/questions/252318/creating-a-custom-android-keyboard
         private KeyboardFlags? _lastFlags;
         private ClipboardListener _cbListener;
         private EditorInfo _lastEditorInfo = default;
+        Thread bgThread1,bgThread2;
+        Queue<TouchEventArgs> Touch1Events { get; set; } = [];
+        Queue<TouchEventArgs> Touch2Events { get; set; } = [];
+        Queue<KeyboardFlags> NewFlags { get; set; } = [];
+        public static Queue<(IKeyboardRenderSource, IKeyboardViewRenderer)> PendingRenderers { get; set; } = [];
+        int downCount = 0;
         #endregion
 
         #region Constants
         #endregion
 
         #region Statics
+        public static bool IS_MULTI_THREAD_MODE = false;
         #endregion
 
         #region Interfaces
@@ -136,7 +143,43 @@ namespace iosKeyboardTest.Android {
             }
         }
 
-        private Dictionary<int, Point> _touches { get; set; } = [];
+
+        public event EventHandler<TouchEventArgs> OnPointerChanged;
+        public event EventHandler<(string,(int,int))> OnCursorChanged;
+        public event EventHandler OnFlagsChanged;
+        public event EventHandler OnDismissed;
+        #endregion
+
+        #endregion
+
+        #region Properties
+        Dictionary<int, Point> _touches { get; set; } = [];
+        bool IS_PLATFORM_MODE => true;
+        View KeyboardView { get; set; }
+        AvaloniaView AvView { get; set; }
+        Context CurrentContext =>
+            IS_PLATFORM_MODE ? this.Window.Context : MainActivity.Instance;
+        #endregion
+
+        #region Events
+        #endregion
+
+        #region Constructors
+        
+        public MyInputMethodService() : base()
+        {
+        }
+        #endregion
+
+        #region Public Methods
+        public override View? OnCreateInputView() {
+            Init();
+            if(IS_PLATFORM_MODE) {
+                return CreateAdKeyboard();
+            }
+            return CreateAvKeyboard();
+        }
+
         public bool OnTouch(View v, MotionEvent e) {
             var tet =
                 e.Action.IsDown() ?
@@ -152,13 +195,24 @@ namespace iosKeyboardTest.Android {
                 // what motion event is it?
                 return true;
             }
-            if(tet == TouchEventType.Release) {
-                if(KeyboardView is KeyboardView { } kv) {
-                    kv.KeyGridView.ClearPopups();
-                }
+            if (KeyboardView is KeyboardView kbv &&
+                kbv.DC.IsShiftOnLock) {
+                kbv.PrintStats();
             }
+            //int newDownCount = downCount +
+            //    tet == TouchEventType.Press ?
+            //        1 :
+            //        tet == TouchEventType.Release ?
+            //            -1 : 0;
+
+
             Avalonia.Point p = e.GetMotionPoint(_touches) / Android.KeyboardView.Scaling;
-            OnPointerChanged?.Invoke(this, new iosKeyboardTest.Android.TouchEventArgs(p, tet));
+            var touch_e = new TouchEventArgs(p, tet);
+            if(IS_MULTI_THREAD_MODE) {
+                Touch1Events.Enqueue(touch_e);
+            } else {
+                OnPointerChanged?.Invoke(this, touch_e);
+            }
 
             if (e.Action.IsUp() && e.PointerCount == 1) {
                 // ensure touch lookup empty between breakpoints
@@ -166,48 +220,16 @@ namespace iosKeyboardTest.Android {
             }
             return true;
         }
-
-        public event EventHandler<TouchEventArgs> OnPointerChanged;
-        public event EventHandler OnCursorChanged;
-        public event EventHandler OnFlagsChanged;
-        public event EventHandler OnDismissed;
-        #endregion
-
-        #endregion
-
-        #region Properties
-        bool IS_PLATFORM_MODE => true;
-        View KeyboardView { get; set; }
-        AvaloniaView AvView { get; set; }
-        Context CurrentContext =>
-            IS_PLATFORM_MODE ? this.Window.Context : MainActivity.Instance;
-        #endregion
-
-        #region Events
-        #endregion
-
-        #region Constructorsart
-        
-        public MyInputMethodService() : base()
-        {
-        }
-        #endregion
-
-        #region Public Methods
-        public override View? OnCreateInputView() {
-            Init();
-            if(IS_PLATFORM_MODE) {
-                return CreateAdKeyboard();
-            }
-            return CreateAvKeyboard();
-        }
         public override void OnUpdateSelection(int oldSelStart, int oldSelEnd, int newSelStart, int newSelEnd, int candidatesStart, int candidatesEnd) {
             base.OnUpdateSelection(oldSelStart, oldSelEnd, newSelStart, newSelEnd, candidatesStart, candidatesEnd);
-            MainThread.BeginInvokeOnMainThread(async() => {
-                //    // BUG when OnUpdateSelection is called actual insert isn't changed yet, wait a sec before signalling handler
-                await Task.Delay(150);
-                OnCursorChanged?.Invoke(this, EventArgs.Empty);
-            });
+            //MainThread.BeginInvokeOnMainThread(async() => {
+            //    //    // BUG when OnUpdateSelection is called actual insert isn't changed yet, wait a sec before signalling handler
+            //    await Task.Delay(150);
+            //    OnCursorChanged?.Invoke(this, EventArgs.Empty);
+            //});
+            var info = GetTextInfo();
+
+            OnCursorChanged?.Invoke(this, (info.text,(newSelStart,(newSelEnd-newSelStart))));
         }
         public override void OnConfigurationChanged(Configuration newConfig) {
             base.OnConfigurationChanged(newConfig);
@@ -247,8 +269,15 @@ namespace iosKeyboardTest.Android {
             // reset display if orientation changed
             Init();
             // ntf flags probably changed
-            this.OnFlagsChanged?.Invoke(this, EventArgs.Empty);
-            if(KeyboardView is KeyboardView kbv) {
+            if(IS_MULTI_THREAD_MODE) {
+                if (_lastFlags is { } lf) {
+                    NewFlags.Enqueue(lf);
+                }
+            } else {
+                this.OnFlagsChanged?.Invoke(this, EventArgs.Empty);
+            }
+
+            if (KeyboardView is KeyboardView kbv) {
                 kbv.RemapRenderers();
             }
         }
@@ -283,6 +312,30 @@ namespace iosKeyboardTest.Android {
 
             this.Window.CancelEvent += Window_CancelEvent;
             this.Window.DismissEvent += Window_DismissEvent;
+            if (bgThread1 == null) {
+                bgThread1 = new Thread(TouchBgThread);
+                bgThread1.Start();
+            }
+        }
+        void TouchBgThread() {
+            while(true) {
+                while(Touch1Events.TryPeek(out var te)) {
+                    Touch1Events.Dequeue();
+                    //MainThread.BeginInvokeOnMainThread(()=> OnPointerChanged?.Invoke(this, te));
+                    OnPointerChanged?.Invoke(this, te);
+                }
+                while(NewFlags.TryPeek(out var fe)) {
+                    NewFlags.Dequeue();
+                    //MainThread.BeginInvokeOnMainThread(()=>OnFlagsChanged?.Invoke(this, EventArgs.Empty));
+                    OnFlagsChanged?.Invoke(this, EventArgs.Empty);
+                }
+                while (PendingRenderers.TryPeek(out var pr)) {
+                    PendingRenderers.Dequeue();
+                    //MainThread.BeginInvokeOnMainThread(() => pr.Item1.SetRenderer(pr.Item2));
+                    pr.Item1.SetRenderer(pr.Item2);
+                }
+                Thread.Sleep(50);
+            }
         }
 
         private void Window_DismissEvent(object sender, EventArgs e) {
@@ -311,6 +364,7 @@ namespace iosKeyboardTest.Android {
             kbf |= KeyboardFlags.EmojiKey;
             kbf |= KeyboardFlags.ShowPopups |
                     KeyboardFlags.KeyBorders |
+                    //KeyboardFlags.NumberRow |
                     KeyboardFlags.AutoCap |
                     KeyboardFlags.DoubleTapSpace |
                     KeyboardFlags.CursorControl |
@@ -328,11 +382,19 @@ namespace iosKeyboardTest.Android {
                         [InputTypes.TextVariationUri] 
                     },
                     {
-                        KeyboardFlags.Numbers,
-                        [InputTypes.ClassDatetime,InputTypes.ClassNumber,InputTypes.ClassPhone] 
+                        KeyboardFlags.Pin,
+                        [InputTypes.NumberVariationPassword]
                     },
                     {
-                        KeyboardFlags.FreeText,
+                        KeyboardFlags.Digits,
+                        [InputTypes.ClassPhone]
+                    },
+                    {
+                        KeyboardFlags.Numbers,
+                        [InputTypes.ClassDatetime,InputTypes.ClassNumber] 
+                    },
+                    {
+                        KeyboardFlags.Normal,
                         [InputTypes.TextFlagMultiLine,InputTypes.TextFlagImeMultiLine] 
                     },
                     {
@@ -359,6 +421,7 @@ namespace iosKeyboardTest.Android {
                 CurrentContext.GetSystemService(Context.UiModeService) is UiModeManager uimm) {
                 kbf |= uimm.NightMode == UiNightMode.Yes ? KeyboardFlags.Dark : KeyboardFlags.Light;
             }
+            kbf |= KeyboardFlags.Dark;
 
             if (CurrentContext != null &&
                 CurrentContext.GetSystemService(Context.TelephonyService) is TelephonyManager tm) {
@@ -372,7 +435,15 @@ namespace iosKeyboardTest.Android {
             _lastFlags = kbf;
             return kbf;
         }
+
         #region Helpers
+
+        void StartPrefActivity() {
+            Intent prefIntent = new Intent(this, typeof(MainActivity));
+            prefIntent.AddFlags(ActivityFlags.NewTask);
+            StartActivity(prefIntent);
+        }
+
         bool IsPortrait() {
             return Resources.Configuration.Orientation == Orientation.Portrait;
         }
@@ -449,6 +520,7 @@ namespace iosKeyboardTest.Android {
 
 
         #endregion
+
         #endregion
 
     }

@@ -18,7 +18,7 @@ using Color = Avalonia.Media.Color;
 using Point = Avalonia.Point;
 
 namespace iosKeyboardTest.Android {
-    public class KeyViewModel : ViewModelBase, IKeyboardViewRenderer {
+    public class KeyViewModel : ViewModelBase, IKeyboardViewRenderer, IKeyboardRenderSource {
         #region Private Variables
         #endregion
 
@@ -32,6 +32,7 @@ namespace iosKeyboardTest.Android {
         public const string SHIFT_IMG_FILE_NAME = "shift.png";//"⇧";
         public const string SHIFT_LOCK_IMG_FILE_NAME = "shift_lock.png";
         public const string SHIFT_ON_IMG_FILE_NAME = "shift_on.png";
+
 
         #endregion
 
@@ -47,53 +48,40 @@ namespace iosKeyboardTest.Android {
             EMOJI_SELECT_BTN_IMG_FILE_NAME,
         ];
 
-        static IEnumerable<string> GetSpecialKeyCharsOrResourceKeys(SpecialKeyType skt) {
-            switch (skt) {
-                case SpecialKeyType.None:
-                    yield break;
-                case SpecialKeyType.Emoji:
-                    yield return EMOJI_SELECT_BTN_IMG_FILE_NAME;
-                    break;
-                case SpecialKeyType.Shift:
-                    yield return SHIFT_IMG_FILE_NAME;
-                    yield return "1/2";
-                    yield return "2/2";
-                    break;
-                case SpecialKeyType.Tab:
-                    yield return "Tab";
-                    break;
-                case SpecialKeyType.CapsLock:
-                    yield return "Caps Lock";
-                    break;
-                case SpecialKeyType.Go:
-                    yield return "Go";
-                    break;
-                case SpecialKeyType.Next:
-                    yield return "Next";
-                    break;
-                case SpecialKeyType.Done:
-                    yield return "Done";
-                    break;
-                case SpecialKeyType.Backspace:
-                    yield return BACKSPACE_IMG_FILE_NAME;
-                    break;
-                case SpecialKeyType.SymbolToggle:
-                    yield return "!#1";
-                    yield return "ABC";
-                    break;
-                case SpecialKeyType.NumberSymbolsToggle:
-                    yield return "*+#";
-                    yield return "123";
-                    break;
-                case SpecialKeyType.Enter:
-                    yield return ENTER_IMG_FILE_NAME;
-                    break;
-                case SpecialKeyType.Search:
-                    yield return SEARCH_IMG_FILE_NAME;
-                    break;
+        static string SHIFT_TEXT_2 = "1/2";
+        static string SHIFT_TEXT_3 = "2/2";
+        static string TAB_TEXT = "Tab";
+        static string CAPS_LOCK_TEXT = "Caps Lock";
+        static string GO_TEXT = "Go";
+        static string NEXT_TEXT = "Next";
+        static string DONE_TEXT = "Done";
+        static string SYMBOLS1_TEXT = "!#1";
+        static string SYMBOLS2_TEXT = "ABC";        
+        static string NUM_SYMBOLS1_TEXT = "*+#";
+        static string NUM_SYMBOLS2_TEXT = "123";
 
+        static string[] _SPECIAL_KEY_TEXTS;
+        static string[] SPECIAL_KEY_TEXTS {
+            get {
+                if(_SPECIAL_KEY_TEXTS == null) {
+                    _SPECIAL_KEY_TEXTS = [
+                        SHIFT_TEXT_2,
+                        SHIFT_TEXT_3,
+                        TAB_TEXT,
+                        CAPS_LOCK_TEXT,
+                        GO_TEXT,
+                        NEXT_TEXT,
+                        DONE_TEXT,
+                        SYMBOLS1_TEXT,
+                        SYMBOLS2_TEXT,
+                        NUM_SYMBOLS1_TEXT,
+                        NUM_SYMBOLS2_TEXT,
+                    ];
+                }
+                return _SPECIAL_KEY_TEXTS;
             }
         }
+
         static List<List<string>> _letterGroups;
         static List<List<string>> LetterGroups {
             get {
@@ -340,6 +328,9 @@ namespace iosKeyboardTest.Android {
         }
         public bool IsSecondaryVisible {
             get {
+                if(string.IsNullOrEmpty(SecondaryValue)) {
+                    return false;
+                }
                 if (Parent.IsNumPadLayout) {
                     if (SpecialKeyType == SpecialKeyType.NumberSymbolsToggle) {
                         return false;
@@ -347,9 +338,16 @@ namespace iosKeyboardTest.Android {
                     return true;
                 }
                 if (Parent.IsTextLayout && IsInput) {
-                    if (Parent.IsNumberRowHidden && Row > 0) {
-                        return false;
+                    if (Parent.IsNumberRowHidden) {
+                        if(Row > 0 || !Parent.IsLettersCharSet) {
+                            return false;
+                        }
+                    } else {
+                        if (!Parent.IsLettersCharSet) {
+                            return false;
+                        }
                     }
+                    
                     return true;
                 }
                 return false;
@@ -392,22 +390,28 @@ namespace iosKeyboardTest.Android {
                 Parent.DefaultKeyHeight * 0.15;
         public double PrimaryFontSizeRatio {
             get {
-                if(Parent.IsNumPadLayout && IsInput) {
-                    return 1.25d;
-                }
-                if(IsDotCom) {
+                if (IsDotCom) {
                     return 0.3;
                 }
-                if(IsShiftKey && Parent.IsLettersCharSet) {
+                if (IsShiftKey && Parent.IsLettersCharSet) {
                     return 1;
                 }
-                if(IsBackspace) {
+                if (IsBackspace) {
                     return 0.65;
                 }
-                if(IsDoneTextKey) {
+                if (IsDoneTextKey) {
                     return 0.33;
                 }
-                return 0.5;
+                if (IsSpecialDisplayText) {
+                    return 0.5;
+                }
+                if (IsShiftKey && !Parent.IsLettersCharSet) {
+                    return 0.5;
+                }
+                if(Parent.IsNumPadLayout && IsInput) {
+                    return 0.65;
+                }
+                return 0.65;
             }
         }
             
@@ -523,8 +527,8 @@ namespace iosKeyboardTest.Android {
                     
                     double w = Math.Min(InnerWidth,InnerHeight) - 5;
                     double h = w;
-                    double x = (InnerRect.Width / 2) - (w/2);
-                    double y = (InnerRect.Height / 2) - (h/2);
+                    double x = (InnerRect.Width - w) / 2;
+                    double y = (InnerRect.Height - h) / 2;
                     _primaryImageRect = new Rect(x, y, w, h);
                 }               
                 
@@ -575,20 +579,25 @@ namespace iosKeyboardTest.Android {
             }
         }
 
-
+        public Point SecondaryOffsetRatio {
+            get {
+                double x = 0.5;
+                double y = 0.5;
+                if(IsAlphaNumericNumber) {
+                    x = 0.9;
+                    y = 0.25;
+                }
+                return new Point(x, y);
+            }
+        }
         public int VisiblePopupColCount { get; set; }
         public int VisiblePopupRowCount { get; set; }
 
-        public bool IsRightSideKey =>
-            X + (Width / 2) > (Parent.KeyboardWidth / 2);
+        public bool IsRightSideKey { get; private set; }
+            
 
-        public double Width =>
-            IsPopupKey ? Parent.DefaultKeyWidth * PopupKeyWidthRatio :
-             ColumnSpan * ((SpecialKeyType == SpecialKeyType.None || SpecialKeyType == SpecialKeyType.Emoji) ?
-                Parent.DefaultKeyWidth :
-                Parent.SpecialKeyWidth);
-        public double Height =>
-            !IsPopupKey && !Parent.IsNumPadLayout && IsNumber ? Parent.NumberKeyHeight : Parent.DefaultKeyHeight;
+        public double Width { get; private set; }
+        public double Height { get; private set; }
         public double InnerWidth =>
             Width - OuterPadX;
         public double InnerHeight =>
@@ -602,12 +611,14 @@ namespace iosKeyboardTest.Android {
         }
         public int Row { get; set; }
         public int Column { get; set; }
-        public int ColumnSpan { get; set; } = 1;
+        public double ColumnSpan { get; set; } = 1;
         public double PopupOffsetX { get; private set; }
         public double PopupOffsetY { get; private set; }
         #endregion
 
         #region State
+        bool IsSpecialDisplayText =>
+            IsSpecial && SPECIAL_KEY_TEXTS.Contains(CurrentChar);
         public bool IsPrimaryImage =>
             CurrentChar != null && CurrentChar.EndsWith(".png");
         public bool CanShowPopup {
@@ -643,14 +654,10 @@ namespace iosKeyboardTest.Android {
         public double MaxPullTranslateY =>
             InnerHeight / 2;
 
-        public bool IsDoneTextKey =>
-            CurrentChar == "Done";
-        bool IsSpaceKey =>
-            PrimaryValue == " ";
         public bool HasAnyPopup =>
             HasPressPopup || HasHoldPopup;
         public bool HasPressPopup =>
-            IsInput && !IsSpaceKey;
+            IsInput && !IsSpaceBar;
         public bool HasHoldPopup =>
             IsInput && SecondaryCharacters.Any(x => x != CurrentChar);
         //public bool IsActiveKey =>
@@ -660,6 +667,7 @@ namespace iosKeyboardTest.Android {
             PopupAnchorKey != null && PopupAnchorKey.ActivePopupKey == this;
 
         public bool IsPressed { get; private set; }
+        public bool IsSoftPressed { get; private set; }
         public bool IsPopupKey =>
             PopupKeyIdx >= 0;
         public bool IsFakePopupKey { get; set; }
@@ -688,8 +696,6 @@ namespace iosKeyboardTest.Android {
             MisAlignedCharacters.Contains(PrimaryValue);
         public bool IsSpecial =>
             SpecialKeyType != SpecialKeyType.None;
-        public bool IsSpaceBar =>
-            CurrentChar == " ";
         public bool IsPeriod =>
             CurrentChar == ".";
         public bool IsBackspace =>
@@ -698,6 +704,19 @@ namespace iosKeyboardTest.Android {
             SpecialKeyType == SpecialKeyType.Shift;
         public bool IsDotCom =>
             CurrentChar == ".com";
+
+        public bool IsSymbolToggle =>
+            SpecialKeyType == SpecialKeyType.SymbolToggle;
+        public bool IsDoneTextKey =>
+            CurrentChar == "Done";
+        public bool IsSpaceBar =>
+            CurrentChar == " ";
+        public bool IsEmojiKey =>
+            CurrentChar == EMOJI_SELECT_BTN_IMG_FILE_NAME;
+        bool IsAlphaNumericNumber =>
+            Parent.IsNumPadLayout &&
+                        (Parent.IsDigits || Parent.IsPin) &&
+                        IsNumber;
         public bool IsNumber =>
             "0123456789".Contains(CurrentChar);
         public bool IsInput =>
@@ -751,9 +770,10 @@ namespace iosKeyboardTest.Android {
             OnCleanup?.Invoke(this, EventArgs.Empty);
         }
 
-        public void SetPressed(bool isPressed, Touch t) {
+        public void SetPressed(bool isPressed, Touch t, bool isSoft = false) {
             if (isPressed) {
                 IsPressed = true;
+                IsSoftPressed = isSoft;
                 TouchId = t.Id;
                 LastPressDt = DateTime.Now;
                 if (!Parent.PressedKeys.Contains(this)) {
@@ -762,6 +782,7 @@ namespace iosKeyboardTest.Android {
             } else {
                 ActivePopupKey = null;
                 IsPressed = false;
+                IsSoftPressed = false;
                 PullTranslateY = 0;
                 LastPressDt = null;
                 TouchId = null;
@@ -945,7 +966,12 @@ namespace iosKeyboardTest.Android {
                 if (next_idx >= Characters.Count) {
                     SecondaryValue = string.Empty;
                 } else {
-                    SecondaryValue = Characters[next_idx] ?? string.Empty;
+                    if (IsAlphaNumericNumber) {
+                        SecondaryValue = GetAlphasForNumeric(CurrentChar);
+                    } else {
+                        SecondaryValue = Characters[next_idx] ?? string.Empty;
+                    }
+                    
                 }
             } else {
                 CurrentChar = string.Empty;
@@ -968,6 +994,7 @@ namespace iosKeyboardTest.Android {
 
         private void Init(object keyObj) {
             List<string> chars = [];
+            
             if (keyObj is string keyStr && keyStr.Split(new string[] { "," }, StringSplitOptions.RemoveEmptyEntries) is { } keyParts) {
                 // special strings:
                 // none
@@ -984,10 +1011,7 @@ namespace iosKeyboardTest.Android {
                         text = ",";
                     }
                     if (text == " ") {
-                        int emoji_diff = Parent.IsEmojiButtonVisible ? 1 : 0;
-                        ColumnSpan = 
-                            Parent.KeyboardFlags.HasFlag(KeyboardFlags.Email) || 
-                            Parent.KeyboardFlags.HasFlag(KeyboardFlags.Url) ? 3: 5-emoji_diff;
+                        
                     }
                     chars.Add(text);
                 }
@@ -998,19 +1022,47 @@ namespace iosKeyboardTest.Android {
                 PopupKeyIdx = popupIdx;
             }
             SetCharacters(chars);
+            /*width
+            IsPopupKey ? Parent.DefaultKeyWidth * PopupKeyWidthRatio :
+             ColumnSpan * ((SpecialKeyType == SpecialKeyType.None || SpecialKeyType == SpecialKeyType.Emoji) ?
+                Parent.DefaultKeyWidth :
+                Parent.SpecialKeyWidth);
+            */
+            /*height
+            !IsPopupKey && !Parent.IsNumPadLayout && IsNumber ? Parent.NumberKeyHeight : Parent.DefaultKeyHeight;
+            */
+
+
             Renderer.Render(true);
+        }
+        public void SetSize() {
+            if (IsSpaceBar) {
+                int emoji_diff = Parent.IsEmojiButtonVisible ? 1 : 0;
+                ColumnSpan =
+                    Parent.KeyboardFlags.HasFlag(KeyboardFlags.Email) ||
+                    Parent.KeyboardFlags.HasFlag(KeyboardFlags.Url) ? 3 : 5 - emoji_diff;
+            } else if (IsSpecial && !IsEmojiKey) {
+                ColumnSpan = Parent.SpecialKeyWidth / Parent.DefaultKeyWidth;
+            } else {
+                ColumnSpan = 1;
+            }
+
+            Width = Parent.DefaultKeyWidth * ColumnSpan;
+            Height = Parent.DefaultKeyHeight;
+            if (IsPopupKey) {
+                Width *= PopupKeyWidthRatio;
+            }
+            if (!IsPopupKey && !Parent.IsNumPadLayout && IsNumber) {
+                Height = Parent.NumberKeyHeight;
+            }
         }
         public void SetBrushes() {
             string bg = KeyboardPalette.DefaultKeyBgHex;
             string fg = KeyboardPalette.FgHex;
             if (IsSpecial) {
                 bg = IsPressed ? KeyboardPalette.SpecialKeyPressedBgHex : KeyboardPalette.SpecialKeyBgHex;
-                if (IsShiftKey) {
-                    if (IsShiftKeyAndOnTemp) {
-                        fg = KeyboardPalette.ShiftFgHex;
-                    } else if (IsShiftKeyAndOnLock) {
-                        bg = KeyboardPalette.ShiftBgHex;
-                    }
+                if (IsShiftKeyAndOnTemp || IsShiftKeyAndOnLock) {
+                    fg = KeyboardPalette.ShiftFgHex;
                 } else if (IsPrimarySpecial) {
                     bg = IsPressed ? KeyboardPalette.PrimarySpecialKeyPressedBgHex : KeyboardPalette.PrimarySpecialKeyBgHex;
                 }
@@ -1034,6 +1086,77 @@ namespace iosKeyboardTest.Android {
                 !Parent.IsKeyBordersVisible && 
                 !IsBgAlwaysVisible) {
                 BgHex = KeyboardPalette.Transparent;
+            }
+        }
+        string GetAlphasForNumeric(string num) {
+            switch (num) {
+                default:
+                    return string.Empty;
+                case "2":
+                    return "ABC";
+                case "3":
+                    return "DEF";
+                case "4":
+                    return "GHI";
+                case "5":
+                    return "JKL";
+                case "6":
+                    return "MNO";
+                case "7":
+                    return "PQRS";
+                case "8":
+                    return "TUV";
+                case "9":
+                    return "WXYZ";
+                case "0":
+                    return "+";
+            }
+        }
+        IEnumerable<string> GetSpecialKeyCharsOrResourceKeys(SpecialKeyType skt) {
+            switch (skt) {
+                case SpecialKeyType.None:
+                    yield break;
+                case SpecialKeyType.Emoji:
+                    yield return EMOJI_SELECT_BTN_IMG_FILE_NAME;
+                    break;
+                case SpecialKeyType.Shift:
+                    yield return SHIFT_IMG_FILE_NAME;
+                    yield return SHIFT_TEXT_2;
+                    yield return SHIFT_TEXT_3;
+                    break;
+                case SpecialKeyType.Tab:
+                    yield return TAB_TEXT;
+                    break;
+                case SpecialKeyType.CapsLock:
+                    yield return CAPS_LOCK_TEXT;
+                    break;
+                case SpecialKeyType.Go:
+                    yield return GO_TEXT;
+                    break;
+                case SpecialKeyType.Next:
+                    yield return NEXT_TEXT;
+                    break;
+                case SpecialKeyType.Done:
+                    yield return DONE_TEXT;
+                    break;
+                case SpecialKeyType.Backspace:
+                    yield return BACKSPACE_IMG_FILE_NAME;
+                    break;
+                case SpecialKeyType.SymbolToggle:
+                    yield return SYMBOLS1_TEXT;
+                    yield return SYMBOLS2_TEXT;
+                    break;
+                case SpecialKeyType.NumberSymbolsToggle:
+                    yield return NUM_SYMBOLS1_TEXT;
+                    yield return NUM_SYMBOLS2_TEXT;
+                    break;
+                case SpecialKeyType.Enter:
+                    yield return ENTER_IMG_FILE_NAME;
+                    break;
+                case SpecialKeyType.Search:
+                    yield return SEARCH_IMG_FILE_NAME;
+                    break;
+
             }
         }
         bool CheckIsActive(Touch touch, bool debug) {
@@ -1123,6 +1246,7 @@ namespace iosKeyboardTest.Android {
             if(Row > 0) {
                 y = Parent.Keys.Where(x => !x.IsPopupKey && x.Row == Row - 1).Max(x => x.KeyboardRect.Bottom);
             }
+            IsRightSideKey = x + (Width / 2) > (Parent.KeyboardWidth / 2);
             return new Rect(x, y, Width, Height);
         }
         void DrawActiveDebug(Rect hitRect, Point p) {

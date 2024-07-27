@@ -74,9 +74,9 @@ public partial class MainView : UserControl
                 kbvm.UpdateKeyboardState();
                 if(kbvm.IsNumPadLayout) {
                     kbvm.KeyboardFlags &= ~KeyboardFlags.Numbers;
-                    kbvm.KeyboardFlags |= KeyboardFlags.FreeText;
+                    kbvm.KeyboardFlags |= KeyboardFlags.Normal;
                 } else {
-                    kbvm.KeyboardFlags &= ~KeyboardFlags.FreeText;
+                    kbvm.KeyboardFlags &= ~KeyboardFlags.Normal;
                     kbvm.KeyboardFlags |= KeyboardFlags.Numbers;
                 }
 

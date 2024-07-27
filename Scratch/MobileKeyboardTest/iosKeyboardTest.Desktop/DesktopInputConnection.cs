@@ -60,7 +60,7 @@ public class DesktopInputConnection : IKeyboardInputConnection_desktop {
     }
     public KeyboardFlags Flags =>
         KeyboardFlags.Mobile | 
-        KeyboardFlags.FreeText | 
+        KeyboardFlags.Normal | 
         KeyboardFlags.EmojiKey | 
         KeyboardFlags.Dark | 
         KeyboardFlags.ShowPopups | 
