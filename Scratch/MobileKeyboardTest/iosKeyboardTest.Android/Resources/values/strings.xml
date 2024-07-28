@@ -1,0 +1,8 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="basic_preferences">General</string>
+    <string name="title_basic_preference">Gen Title</string>
+    <string name="summary_basic_preference">Gen Summary</string>
+    <string name="title_checkbox_preference">Checkbox Title</string>
+    <string name="summary_checkbox_preference">Checkbox Summary</string>
+</resources>

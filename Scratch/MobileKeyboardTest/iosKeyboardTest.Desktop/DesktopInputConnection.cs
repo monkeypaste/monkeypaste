@@ -75,7 +75,7 @@ public class DesktopInputConnection : IKeyboardInputConnection_desktop {
 
     public void SetKeyboardInputSource(TextBox textBox) {
         InputTextBox = textBox;
-        InputTextBox.GetObservable(TextBox.CaretIndexProperty).Subscribe(value => { OnCursorChanged?.Invoke(this, EventArgs.Empty); });
+        InputTextBox.GetObservable(TextBox.CaretIndexProperty).Subscribe(value => { OnCursorChanged?.Invoke(this, (InputTextBox.Text,(InputTextBox.SelectionStart,InputTextBox.SelectionEnd-InputTextBox.SelectionStart))); });
     }
 
     public void OnNavigate(int dx, int dy) {
@@ -149,7 +149,7 @@ public class DesktopInputConnection : IKeyboardInputConnection_desktop {
     public void OnFeedback(KeyboardFeedbackFlags flags) {
     }
 
-    public event EventHandler OnCursorChanged;
+    public event EventHandler<(string,(int,int))> OnCursorChanged;
     public event EventHandler OnFlagsChanged;
     public event EventHandler OnDismissed;
 

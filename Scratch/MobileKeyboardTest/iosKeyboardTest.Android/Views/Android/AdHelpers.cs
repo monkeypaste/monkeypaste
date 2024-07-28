@@ -28,6 +28,14 @@ namespace iosKeyboardTest.Android {
             (float)AndroidDisplayInfo.Scaling;
 
         #region Geometery
+        public static float[] ToCornerArray(this Avalonia.CornerRadius cr) {
+            return new double[]{
+                        cr.TopLeft, cr.TopLeft,        // Top, left in px
+                        cr.TopRight, cr.TopRight,        // Top, right in px
+                        cr.BottomRight, cr.BottomRight,          // Bottom, right in px
+                        cr.BottomLeft, cr.BottomLeft           // Bottom,left in px
+                    }.Select(x => x.UnscaledF()).ToArray();
+        }
         public static RectF ToRectF(this Avalonia.Rect av_rect) {
             return new RectF((float)av_rect.Left * s, (float)av_rect.Top * s, (float)av_rect.Right * s, (float)av_rect.Bottom * s);
         }
@@ -73,6 +81,15 @@ namespace iosKeyboardTest.Android {
         public static RectF ToBounds(this RectF rect) {
             return rect.Move(0, 0);
         }
+        public static RectF ToBounds(this RectF rect, RectF outer_rect) {
+            float w = rect.Width();
+            float h = rect.Height();
+            float l = rect.Left - outer_rect.Left;
+            float t = rect.Top - outer_rect.Top;
+            float r = l + w;
+            float b = t + h;
+            return new RectF(l, t, r, b);
+        }
         public static Rect ToBounds(this Rect rect) {
             return rect.Move(0, 0);
         }
@@ -90,58 +107,65 @@ namespace iosKeyboardTest.Android {
         #endregion
 
         #region Motion Event
-        public static int GetTouchReleaseIdx(this MotionEventActions met) {
+        public static int GetTouchIdx(this MotionEventActions met) {
             // returns -1 if not release
             switch (met) {
+                case MotionEventActions.Down:
                 case MotionEventActions.Up:
+                case MotionEventActions.Pointer1Down:
                 case MotionEventActions.Pointer1Up:
                     return 0;
+                case MotionEventActions.Pointer2Down:
                 case MotionEventActions.Pointer2Up:
                     return 1;
+                case MotionEventActions.Pointer3Down:
                 case MotionEventActions.Pointer3Up:
                     return 2;
                 default:
                     return -1;
             }
         }
-        public static Avalonia.Point GetMotionPoint(this MotionEvent e, Dictionary<int, Avalonia.Point> touches) {
-            Avalonia.Point motion_p = default;
-            var to_remove_tidl = touches.Select(x => x.Key).ToList();
+        public static IEnumerable<(int id,Avalonia.Point loc,TouchEventType eventType)> GetMotions(this MotionEvent e, Dictionary<int, Avalonia.Point> touches) {
+            Debug.WriteLine("");
+            Debug.WriteLine($"{e.ActionMasked}");
+            List<(int, Avalonia.Point, TouchEventType)> changed_ids = [];
             for (int i = 0; i < e.PointerCount; i++) {
                 int tid = e.GetPointerId(i);
-                var idx_p = new Avalonia.Point(e.GetX(i), e.GetY(i));
-                if (touches.TryGetValue(tid, out var tp)) {
-                    if (touches[tid] != idx_p) {
-                        motion_p = idx_p;
+                var tid_p = new Avalonia.Point(e.GetX(i), e.GetY(i));
+                if(e.ActionMasked == MotionEventActions.Move) {
+                    if (touches[tid] == tid_p) {
+                        continue;
                     }
-                    touches[tid] = idx_p;
-                    to_remove_tidl.Remove(tid);
+
+                    touches[tid] = tid_p;
+                    changed_ids.Add((tid, tid_p, TouchEventType.Move));
                 } else {
-                    motion_p = idx_p;
-                    touches.Add(tid, idx_p);
+                    if(i == e.ActionIndex) {
+                        if(e.ActionMasked.IsDown()) {
+                            // new touch
+                            touches.Add(tid, tid_p);
+                            changed_ids.Add((tid, tid_p, TouchEventType.Press));
+                        } else if(e.ActionMasked.IsUp()) {
+                            // old touch
+                            changed_ids.Add((tid, tid_p, TouchEventType.Release));
+                            touches.Remove(tid);
+                        }
+                    }
                 }
             }
-            foreach (var to_remove_tid in to_remove_tidl) {
-                motion_p = touches[to_remove_tid];
-                touches.Remove(to_remove_tid);
+            foreach(var ch in changed_ids) {
+                Debug.WriteLine($"Type: {ch.Item3} Id: {ch.Item1} Loc: {ch.Item2}");
             }
-            int rel_idx = e.Action.GetTouchReleaseIdx();
-            if (rel_idx >= 0) {
-                // important to return the right location when touch is release
-                if (rel_idx >= touches.Count) {
-                    // uh oh this proves i have no idea what im doing
-                    Debugger.Break();
-                } else {
-                    return touches.ElementAt(rel_idx).Value;
-                }
-            }
-            return motion_p;
+            return changed_ids;
         }
+
         public static bool IsDown(this MotionEventActions met) {
             return
                 met == MotionEventActions.Down ||
+                met == MotionEventActions.PointerDown ||
                 met == MotionEventActions.Pointer1Down ||
                 met == MotionEventActions.Pointer2Down ||
+                met == MotionEventActions.Pointer3Down ||
                 met == MotionEventActions.ButtonPress;
         }
         public static bool IsMove(this MotionEventActions met) {
@@ -151,8 +175,10 @@ namespace iosKeyboardTest.Android {
         public static bool IsUp(this MotionEventActions met) {
             return
                 met == MotionEventActions.Up ||
+                met == MotionEventActions.PointerUp ||
                 met == MotionEventActions.Pointer1Up ||
                 met == MotionEventActions.Pointer2Up ||
+                met == MotionEventActions.Pointer3Up ||
                 met == MotionEventActions.ButtonRelease;
         }
         #endregion

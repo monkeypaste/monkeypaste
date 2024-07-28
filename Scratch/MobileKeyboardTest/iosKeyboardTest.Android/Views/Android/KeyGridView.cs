@@ -7,6 +7,7 @@ using ReactiveUI;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
+using static Android.Views.View;
 
 namespace iosKeyboardTest.Android {
     public class KeyGridView : CustomViewGroup, IKeyboardViewRenderer {
@@ -21,9 +22,10 @@ namespace iosKeyboardTest.Android {
                 }
             }
         }
+
         public KeyGridView(Context context, Paint paint, KeyboardViewModel dC) : base(context,paint) {
             DC = dC;
-            AddOrResetKeys();            
+            AddOrResetKeys();
         }
 
         public void AddOrResetKeys() {
@@ -36,59 +38,47 @@ namespace iosKeyboardTest.Android {
         }
 
         public void Layout(bool invalidate) {
-            MainThread.BeginInvokeOnMainThread(() => {
-                foreach (var kv in KeyViews) {
-                    kv.Layout(invalidate);
-                }
-                if (invalidate) {
-                    this.Redraw();
-                }
-            });
-            
+            foreach (var kv in KeyViews) {
+                kv.Layout(invalidate);
+            }
+            if (invalidate) {
+                this.Redraw();
+            }
         }
 
         public void Measure(bool invalidate) {
-            MainThread.BeginInvokeOnMainThread(() => {
-                Frame = DC.KeyboardRect.ToRectF();
+            Frame = DC.KeyboardRect.ToRectF();
 
-                foreach (var kv in KeyViews) {
-                    kv.Measure(invalidate);
-                }
-                if (invalidate) {
-                    this.Redraw();
-                }
-            });
-           
+            foreach (var kv in KeyViews) {
+                kv.Measure(invalidate);
+            }
+            if (invalidate) {
+                this.Redraw();
+            }
         }
 
         public void Paint(bool invalidate) {
-            MainThread.BeginInvokeOnMainThread(() => {
-                SetBackgroundColor(KeyboardPalette.BgHex.ToColor());
+            SetBackgroundColor(KeyboardPalette.BgHex.ToColor());
 
-                foreach (var kv in KeyViews) {
-                    kv.Paint(invalidate);
-                }
-                if (invalidate) {
-                    this.Redraw();
-                }
-            });
-            
+            foreach (var kv in KeyViews) {
+                kv.Paint(invalidate);
+            }
+            if (invalidate) {
+                this.Redraw();
+            }
         }
 
         public void Render(bool invalidate) {
-            MainThread.BeginInvokeOnMainThread(() => {
-                Layout(false);
-                Measure(false);
-                Paint(false);
+            Layout(false);
+            Measure(false);
+            Paint(false);
 
-                foreach (var kv in KeyViews) {
-                    kv.Render(invalidate);
-                }
-                if (invalidate) {
-                    this.Redraw();
-                }
-            });
-            
+            foreach (var kv in KeyViews) {
+                kv.Render(invalidate);
+            }
+            if (invalidate) {
+                this.Redraw();
+            }
         }
     }
 }

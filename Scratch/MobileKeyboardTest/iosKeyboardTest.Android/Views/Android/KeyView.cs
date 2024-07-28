@@ -9,19 +9,25 @@ using Microsoft.Maui.ApplicationModel;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using static Android.Views.View;
 using GPaint = Android.Graphics.Paint;
 using Point = Android.Graphics.Point;
 using Rect = Android.Graphics.Rect;
 
 namespace iosKeyboardTest.Android {
 
-    public class KeyView : CustomView, IKeyboardViewRenderer {
+    public class KeyView : 
+        CustomView, 
+        IKeyboardViewRenderer,
+        IOnClickListener {
         #region Private Variables
+
         int measureCount = 0;
         int layoutCount = 0;
         int paintCount = 0;
         int renderCount = 0;
         int drawCount = 0;
+
         #endregion
 
         #region Constants
@@ -34,137 +40,135 @@ namespace iosKeyboardTest.Android {
 
         #region Interfaces
 
+        #region IOnClickListener Implementation
+
+        public void OnClick(View v) {
+            DC.PerformTapActionCommand.Execute(null);
+        }
+        #endregion
+
         #region IkeyboardViewRenderer Implementation
         public void Render(bool invalidate) {
 
-            MainThread.BeginInvokeOnMainThread(() => {
+            if (!DC.IsVisible) {
+                return;
+            }
+            renderCount++;
 
-                if (!DC.IsVisible) {
-                    return;
-                }
-                renderCount++;
-
-                Layout(false);
-                Measure(false);
-                Paint(false);
-                if (invalidate) {
-                    this.Redraw();
-                }
-            });
+            Layout(false);
+            Measure(false);
+            Paint(false);
+            if (invalidate) {
+                this.Redraw();
+            }
         }
-
         public void Layout(bool invalidate) {
-
-            MainThread.BeginInvokeOnMainThread(() => {
-
-                if (!DC.IsVisible) {
-                    return;
-                }
-                layoutCount++;
-                if (invalidate) {
-                    this.Redraw();
-                }
-            });
+            if (!DC.IsVisible) {
+                return;
+            }
+            layoutCount++;
+            if (invalidate) {
+                this.Redraw();
+            }
         }
         public void Measure(bool invalidate) {
+            if (!DC.IsVisible) {
+                return;
+            }
+            measureCount++;
 
-            MainThread.BeginInvokeOnMainThread(() => {
-                if (!DC.IsVisible) {
-                    return;
+            var new_frame = DC.InnerRect.ToRectF();//DC.KeyboardRect.ToRectF();
+            Frame = new_frame;
+
+
+            var inner_rect = Frame.ToBounds();// DC.InnerRect.ToRectF().ToBounds(DC.KeyboardRect.ToRectF());
+
+            // fix precision rounding so popups are seamless
+            int pad = DC.IsPopupKey ? 1 : 0;
+            KeyPath = new Path();
+            KeyPath.AddRoundRect(inner_rect, DC.CornerRadius.ToCornerArray(), Path.Direction.Cw);
+
+            float cx = inner_rect.CenterX();
+            float cy = inner_rect.CenterY();
+            float px = 0;
+            float py = 0;
+
+            float pfs = DC.PrimaryFontSize.UnscaledF();
+
+            if (DC.PrimaryValue == null || DC.IsPrimaryImage) {
+                var img_rect = DC.PrimaryImageRect.ToRectF();
+                PrimaryLoc = img_rect.Location();
+                if (ImageLookup.TryGetValue(DC.CurrentChar, out var bmp) &&
+                    bmp.Width != img_rect.Width() || bmp.Height != img_rect.Height()) {
+                    // first use, scale bmp
+                    ImageLookup[DC.CurrentChar] = bmp.Scale((int)img_rect.Width(), (int)img_rect.Height());
                 }
-                measureCount++;
+            } else {
+                var ptb = new Rect();
+                SharedPaint.TextAlign = GPaint.Align.Center;
+                SharedPaint.TextSize = pfs;
+                SharedPaint.GetTextBounds(DC.PrimaryValue.ToCharArray(), 0, DC.PrimaryValue.Length, PrimaryTextBounds);
 
-                var new_frame = DC.InnerRect.ToRectF();
-                Frame = new_frame;
+                px = cx;
+                py = cy - ((SharedPaint.Ascent() + SharedPaint.Descent()) / 2);
+                PrimaryLoc = new PointF(px, py);
+                PrimaryTextBounds = PrimaryTextBounds.Move((int)px, (int)py);
+            }
 
-                Cr = DC.CornerRadius;
+            if (DC.SecondaryValue == null) {
+                SecondaryLoc = new();
+            } else {
+                var stb = new Rect();
+                SharedPaint.TextAlign = GPaint.Align.Center;
+                SharedPaint.TextSize = (float)DC.SecondaryFontSize;
+                SharedPaint.GetTextBounds(DC.SecondaryValue.ToCharArray(), 0, DC.SecondaryValue.Length, stb);
+                float sx = cx;
+                float sy = cy - ((SharedPaint.Ascent() + SharedPaint.Descent()) / 2);
+                sx += sx * (float)DC.SecondaryOffsetRatio.X;
+                sy -= sy * (float)DC.SecondaryOffsetRatio.Y;
+                SecondaryLoc = new PointF(sx, sy);
+            }
 
-                var inner_rect = Frame.ToBounds();
+            this.Layout((int)Frame.Left, (int)Frame.Top, (int)Frame.Right, (int)Frame.Bottom);
 
-                float cx = inner_rect.CenterX();
-                float cy = inner_rect.CenterY();
-                float px = 0;
-                float py = 0;
-
-                float pfs = DC.PrimaryFontSize.UnscaledF();
-
-                if (DC.PrimaryValue == null || DC.IsPrimaryImage) {
-                    var img_rect = DC.PrimaryImageRect.ToRectF();
-                    PrimaryLoc = img_rect.Location();
-                    if (ImageLookup.TryGetValue(DC.CurrentChar, out var bmp) &&
-                        bmp.Width != img_rect.Width() || bmp.Height != img_rect.Height()) {
-                        // first use, scale bmp
-                        ImageLookup[DC.CurrentChar] = bmp.Scale((int)img_rect.Width(), (int)img_rect.Height());
-                    }
-                } else {
-                    var ptb = new Rect();
-                    SharedPaint.TextAlign = GPaint.Align.Center;
-                    SharedPaint.TextSize = pfs;
-                    SharedPaint.GetTextBounds(DC.PrimaryValue.ToCharArray(), 0, DC.PrimaryValue.Length, PrimaryTextBounds);
-
-                    px = cx;
-                    py = cy - ((SharedPaint.Ascent() + SharedPaint.Descent()) / 2);
-                    PrimaryLoc = new PointF(px, py);
-                    PrimaryTextBounds = PrimaryTextBounds.Move((int)px, (int)py);
+            if (!DC.IsPopupKey && DC.PopupKeys.Any()) {
+                if (!IsPopupVisible && Parent is KeyGridView kgv) {
+                    //kgv.ShowPopup(this);
+                    IsPopupVisible = true;
                 }
-
-                if (DC.SecondaryValue == null) {
-                    SecondaryLoc = new();
-                } else {
-                    var stb = new Rect();
-                    SharedPaint.TextAlign = GPaint.Align.Center;
-                    SharedPaint.TextSize = (float)DC.SecondaryFontSize;
-                    SharedPaint.GetTextBounds(DC.SecondaryValue.ToCharArray(), 0, DC.SecondaryValue.Length, stb);
-                    float sx = cx;
-                    float sy = cy - ((SharedPaint.Ascent() + SharedPaint.Descent()) / 2);
-                    sx += sx * (float)DC.SecondaryOffsetRatio.X;
-                    sy -= sy * (float)DC.SecondaryOffsetRatio.Y;
-                    SecondaryLoc = new PointF(sx, sy);
-                }
-
-                this.Layout((int)Frame.Left, (int)Frame.Top, (int)Frame.Right, (int)Frame.Bottom);
-
-                if (!DC.IsPopupKey && DC.PopupKeys.Any()) {
-                    if (!IsPopupVisible && Parent is KeyGridView kgv) {
-                        //kgv.ShowPopup(this);
-                        IsPopupVisible = true;
-                    }
-                } else if (IsPopupVisible && Parent is KeyGridView kgv) {
-                    //kgv.HidePopup(this);
-                    IsPopupVisible = false;
-                }
-                if (invalidate) {
-                    this.Redraw();
-                }
-            });
-            
+            } else if (IsPopupVisible && Parent is KeyGridView kgv) {
+                //kgv.HidePopup(this);
+                IsPopupVisible = false;
+            }
+            if (invalidate) {
+                this.Redraw();
+            }
         }
-
         public void Paint(bool invalidate) {
+            this.Visibility = DC.IsVisible ? ViewStates.Visible : ViewStates.Invisible;
+            if (this.Visibility == ViewStates.Invisible) {
+                return;
+            }
+            paintCount++;
+            DC.SetBrushes();
+            BackgroundColor = DC.BgHex.ToColor();
+            PrimaryTextColor = DC.PrimaryHex.ToColor();
+            PrimaryColorFilter = DC.IsPrimaryImage ? new PorterDuffColorFilter(PrimaryTextColor, PorterDuff.Mode.SrcIn) : null;
+            SecondaryTextColor = DC.SecondaryHex.ToColor();
 
-            MainThread.BeginInvokeOnMainThread(() => {
-                this.Visibility = DC.IsVisible ? ViewStates.Visible : ViewStates.Invisible;
-                if (this.Visibility == ViewStates.Invisible) {
-                    return;
-                }
-                paintCount++;
-                DC.SetBrushes();
-                BackgroundColor = DC.BgHex.ToColor();
-                PrimaryTextColor = DC.PrimaryHex.ToColor();
-                PrimaryColorFilter = DC.IsPrimaryImage ? new PorterDuffColorFilter(PrimaryTextColor, PorterDuff.Mode.SrcIn) : null;
-                SecondaryTextColor = DC.SecondaryHex.ToColor();
-
-                if (invalidate) {
-                    this.Redraw();
-                }
-            });
-            
+            if (invalidate) {
+                this.Redraw();
+            }
         }
         #endregion
 
         #endregion
 
         #region Properties
+
+        #region Members
+
+        #endregion
 
         #region View Models
         public KeyViewModel DC { get; private set; }
@@ -176,33 +180,9 @@ namespace iosKeyboardTest.Android {
         Color SecondaryTextColor { get; set; }
         PointF PrimaryLoc { get; set; } = new();
         PointF SecondaryLoc { get; set; } = new();
-        RectF KeyRect { get; set; } = new();
         Rect PrimaryTextBounds { get; set; } = new();
 
-        float[] KeyCorners { get; set; } = [];
         Path KeyPath { get; set; } = new();
-
-        CornerRadius _cr;
-        CornerRadius Cr {
-            get => _cr;
-            set {
-                if (Cr == default || Cr.TopLeft != value.TopLeft || Cr.TopRight != value.TopRight || Cr.BottomRight != value.BottomRight || Cr.BottomLeft != value.BottomLeft) {
-                    _cr = value;
-
-                    KeyCorners = new double[]{
-                        value.TopLeft, value.TopLeft,        // Top, left in px
-                        value.TopRight, value.TopRight,        // Top, right in px
-                        value.BottomRight, value.BottomRight,          // Bottom, right in px
-                        value.BottomLeft, value.BottomLeft           // Bottom,left in px
-                    }.Select(x => x.UnscaledF()).ToArray();
-
-                    int pad = DC.IsPopupKey ? 1 : 0;
-                    KeyRect = new RectF(0, 0, Frame.Width() + pad, Frame.Height() + pad);
-                    KeyPath = new Path();
-                    KeyPath.AddRoundRect(KeyRect, KeyCorners, Path.Direction.Cw);
-                }
-            }
-        }
 
         #endregion
 
@@ -224,13 +204,10 @@ namespace iosKeyboardTest.Android {
         #region Constructors
         public KeyView(KeyViewModel kvm, Context context, Paint paint) : base(context, paint) {
             this.DC = kvm;
-            if(MyInputMethodService.IS_MULTI_THREAD_MODE) {
-                MyInputMethodService.PendingRenderers.Enqueue((kvm, this));
-            } else {
-                kvm.SetRenderer(this);
-            }
+            kvm.SetRenderer(this);
 
             InitImages();
+            Measure(false);
         }
         #endregion
 
@@ -255,16 +232,8 @@ namespace iosKeyboardTest.Android {
             }
             drawCount++;
             SharedPaint.Color = BackgroundColor;
-
-            // fix precision rounding so popups are seamless
             
-
-            if (DC.CornerRadius == default) {
-                canvas.DrawRect(KeyRect, SharedPaint);
-            } else {
-                canvas.DrawPath(KeyPath, SharedPaint);
-            }
-
+            canvas.DrawPath(KeyPath, SharedPaint);
 
             if (!string.IsNullOrEmpty(DC.PrimaryValue)) {
                 if (DC.IsPrimaryImage) {
@@ -333,6 +302,8 @@ namespace iosKeyboardTest.Android {
         Bitmap CreateBitmap(int res_id, string hex = default) {
             return Context.Resources.GetDrawable(res_id, null).ToBitmap();
         }
+
+
         #endregion
 
     }

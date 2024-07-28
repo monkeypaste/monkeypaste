@@ -2,40 +2,135 @@
 using Android.Graphics;
 using Android.Runtime;
 using Android.Util;
+using Android.Views;
 
 namespace iosKeyboardTest.Android {
-    public class CursorControlView : CustomView, IKeyboardViewRenderer {
-        #region ctors
-        public CursorControlView(Context context, Paint paint) : base(context, paint) {
-        }
+    public class CursorControlView : CustomViewGroup, IKeyboardViewRenderer {
+        #region Private Variables
+        #endregion
 
-        public CursorControlView(Context context, IAttributeSet attrs) : base(context, attrs) {
-        }
+        #region Constants
+        #endregion
 
-        public CursorControlView(Context context, IAttributeSet attrs, int defStyleAttr) : base(context, attrs, defStyleAttr) {
-        }
+        #region Statics
+        #endregion
 
-        public CursorControlView(Context context, IAttributeSet attrs, int defStyleAttr, int defStyleRes) : base(context, attrs, defStyleAttr, defStyleRes) {
-        }
+        #region Interfaces
 
-        protected CursorControlView(nint javaReference, JniHandleOwnership transfer) : base(javaReference, transfer) {
-        }
+        #region IKeyboardViewRenderer Implementation
 
         public void Layout(bool invalidate) {
-            throw new System.NotImplementedException();
+
+            if (DC.IsCursorControlEnabled) {
+                ShowCursorControl();
+            } else {
+                HideCursorControl();
+            }
         }
 
         public void Measure(bool invalidate) {
-            throw new System.NotImplementedException();
+            Frame = DC.CursorControlRect.ToRectF();
+
+            CursorControlTextView.TextSize = DC.CursorControlFontSize.UnscaledF();
+            var cct_size = CursorControlTextView.TextSize();
+            float cct_l = Frame.CenterX() - (cct_size.Width / 2);
+            float cct_t = Frame.CenterY() - (cct_size.Height / 2);
+            float cct_r = cct_l + cct_size.Width;
+            float cct_b = cct_t + cct_size.Height;
+            CursorControlTextView.Frame = new RectF(cct_l, cct_t, cct_r, cct_b);
+            //CursorControlTextView.Frame = DC.CursorControlTextRect.ToRectF();
+
+            if (invalidate) {
+                this.Redraw();
+            }
         }
 
         public void Paint(bool invalidate) {
-            throw new System.NotImplementedException();
+            SetBackgroundColor(KeyboardPalette.CursorControlBgHex.ToColor());
+
+            CursorControlTextView.SetTextColor(KeyboardPalette.CursorControlFgHex.ToColor());
+            CursorControlTextView.ForegroundColor = KeyboardPalette.CursorControlFgHex.ToColor();
+
+            if (invalidate) {
+                this.Redraw();
+            }
         }
 
         public void Render(bool invalidate) {
-            throw new System.NotImplementedException();
+            Layout(false);
+            Measure(false);
+            Paint(false);
+            if (invalidate) {
+                this.Redraw();
+            }
         }
+        #endregion
+        #endregion
+
+        #region Properties
+
+        #region View Models
+        public KeyboardViewModel DC { get; set; }
+        #endregion
+
+        #region Views
+        CustomTextView CursorControlTextView { get; set; }
+        #endregion
+
+        #region Appearance
+        #endregion
+
+        #region Layout
+        #endregion
+
+        #region State
+        #endregion
+
+        #region Models
+        #endregion
+
+        #endregion
+
+        #region Events
+        #endregion
+
+        #region Constructors
+
+        public CursorControlView(Context context, Paint paint, KeyboardViewModel dc) : base(context, paint) {
+            DC = dc;
+
+            CursorControlTextView = new CustomTextView(context, SharedPaint) { TextAlignment = TextAlignment.Center }.SetDefaultProps();
+            CursorControlTextView.Text = DC.CursorControlText;
+            this.AddView(CursorControlTextView);
+
+            HideCursorControl();
+        }
+        #endregion
+
+        #region Public Methods
+        #endregion
+
+        #region Protected Methods
+        #endregion
+
+        #region Private Methods
+
+        void HideCursorControl() {
+            this.Visibility = ViewStates.Invisible;
+            CursorControlTextView.Visibility = ViewStates.Invisible;
+            this.Redraw();
+        }
+        void ShowCursorControl() {
+            if (this == null) {
+                return;
+            }
+            this.Visibility = ViewStates.Visible;
+            CursorControlTextView.Visibility = ViewStates.Visible;
+            this.Redraw();
+        }
+        #endregion
+
+        #region Commands
         #endregion
 
     }

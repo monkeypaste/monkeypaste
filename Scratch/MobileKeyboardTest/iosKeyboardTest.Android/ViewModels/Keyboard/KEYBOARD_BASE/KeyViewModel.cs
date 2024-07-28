@@ -617,6 +617,9 @@ namespace iosKeyboardTest.Android {
         #endregion
 
         #region State
+        public bool IsHoldMenuOpen =>
+            PopupKeys.Any() && PopupKeys.Skip(1).Any();
+
         bool IsSpecialDisplayText =>
             IsSpecial && SPECIAL_KEY_TEXTS.Contains(CurrentChar);
         public bool IsPrimaryImage =>
@@ -902,9 +905,6 @@ namespace iosKeyboardTest.Android {
             if (!Parent.VisiblePopupKeys.Contains(this)) {
                 Parent.VisiblePopupKeys.Add(this);
             }
-
-            Renderer.Layout(false);
-            Renderer.Paint(true);
         }
         public void RemovePopupAnchor() {
             ClearRects();
@@ -1305,7 +1305,21 @@ namespace iosKeyboardTest.Android {
         #endregion
 
         #region Commands
-
+        public ICommand PerformTapActionCommand => ReactiveCommand.Create(
+            () => {
+                Parent.PerformKeyAction(this);
+            });
+        
+        public ICommand PerformDoubleTapActionCommand => ReactiveCommand.Create(
+            () => {
+                if(!IsSpaceBar ||
+                    Parent.IsNumPadLayout ||
+                    !Parent.IsDoubleTapSpaceEnabled) {
+                    return;
+                }
+                Parent.InputConnection.OnBackspace(1);
+                Parent.InputConnection.OnText(". ");
+            });
         #endregion
     }
 }

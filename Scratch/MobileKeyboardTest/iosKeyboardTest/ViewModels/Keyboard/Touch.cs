@@ -12,11 +12,18 @@ namespace iosKeyboardTest {
         Release
     }
     public class TouchEventArgs : EventArgs {
+        public string TouchId { get; private set; } = "UNDEFINED";
         public Point Location { get; private set; }
         public TouchEventType TouchEventType { get; private set; }
+        public TouchEventArgs(Point location, TouchEventType touchEventType, string touchId) : this(location, touchEventType) {
+            TouchId = touchId;
+        }
         public TouchEventArgs(Point location, TouchEventType touchEventType) {
             Location = location;
             TouchEventType = touchEventType;
+        }
+        public override string ToString() {
+            return $"[{TouchId}] {TouchEventType} {Location}";
         }
     }
     public static class Touches {
@@ -30,20 +37,20 @@ namespace iosKeyboardTest {
         public static Touch Locate(string id) {
             return _touches.FirstOrDefault(x => x.Id == id);
         }
-        public static Touch Update(Point p, TouchEventType touchType) {
+        public static Touch Update(string id, Point p, TouchEventType touchType) {
             // returns touch at p loc
             if(touchType == TouchEventType.Press) {
-                var nt = new Touch(p);
+                var nt = new Touch(id,p);
                 _touches.Add(nt);
                 return nt;
             }
             if(Count > 1 && touchType == TouchEventType.Release) {
 
             }
-            if(Locate(p) is not { } t) {
+            if(Locate(id) is not { } t) {
                 if(touchType == TouchEventType.Move) {
                     // probably shouldn't happen but when pointer moves onto surface
-                    t = new Touch(p);
+                    t = new Touch(id,p);
                     _touches.Add(t);
                     return t;
                 }
@@ -69,38 +76,21 @@ namespace iosKeyboardTest {
         static void RemoveTouch(Touch t) {
             var up_time = DateTime.Now;
             _touches.Remove(t);
-            Debug.WriteLine($"Touch time: {(DateTime.Now - t.CreatedDt).Milliseconds}ms");
+            //Debug.WriteLine($"Touch time: {(DateTime.Now - t.CreatedDt).Milliseconds}ms");
         }
     }
     public class Touch {
-
         public string Id { get; set; }
-        public DateTime LastEventDt { get; private set; }
-        public DateTime CreatedDt { get; private set; }
         public Point Location { get; private set; }
         public Point PressLocation { get; private set; }
 
-        private Touch() { }
-        public Touch(Point p) {
+        public Touch(string id, Point p)  {
             PressLocation = p;
             Location = p;
-            CreatedDt = DateTime.Now;
-            LastEventDt = DateTime.Now;
-            Id = System.Guid.NewGuid().ToString();
+            Id = id ?? System.Guid.NewGuid().ToString();
         }
         public void SetLocation(Point p) {
             Location = p;
-            LastEventDt = DateTime.Now;
-        }
-
-        public Touch Clone() {
-            return new Touch() {
-                Id = Id,
-                LastEventDt = LastEventDt,
-                CreatedDt = CreatedDt,
-                Location = Location,
-                PressLocation = PressLocation
-            };
         }
     }
 }

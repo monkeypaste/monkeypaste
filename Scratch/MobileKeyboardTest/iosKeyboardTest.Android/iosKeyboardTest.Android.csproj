@@ -8,8 +8,8 @@
     <ApplicationVersion>1</ApplicationVersion>
     <ApplicationDisplayVersion>1.0</ApplicationDisplayVersion>
     <AndroidPackageFormat>apk</AndroidPackageFormat>
-    <AndroidEnableProfiledAot>false</AndroidEnableProfiledAot>
   </PropertyGroup>
+  
   <ItemGroup>
     <AndroidJavaSource Remove="Resources\drawable\**" />
     <AndroidLibrary Remove="Resources\drawable\**" />
@@ -23,25 +23,26 @@
     <ProguardConfiguration Remove="Resources\drawable\**" />
     <TransformFile Remove="Resources\drawable\**" />
   </ItemGroup>
+  
   <ItemGroup>
     <None Remove="Resources\font\Nunito_Regular.ttf" />
     <None Remove="Resources\layout\keyboard_layout_view.xml" />
+    <None Remove="Resources\layout\pref_layout.xml" />
+    <None Remove="Resources\menu\menu.xml" />
+    <None Remove="Resources\xml\preferences.xml" />
   </ItemGroup>
 
-  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU' And '$(IsBionic)' == 'False'">
     <RunAOTCompilation>true</RunAOTCompilation>
     <AndroidEnableProfiledAot>false</AndroidEnableProfiledAot>
     <EnableLLVM>true</EnableLLVM>
-  </PropertyGroup>
-
-  <PropertyGroup Condition="'$(IsBionic)' == 'True'">
-    <!-- target arch should be arm64 -->
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
     <Debugger>Xamarin</Debugger>
     <DebugSymbols>True</DebugSymbols>
     <AndroidEnableMultiDex>True</AndroidEnableMultiDex>
+    <AndroidEnableProfiledAot>false</AndroidEnableProfiledAot>
   </PropertyGroup>
 
   <ItemGroup>
@@ -65,12 +66,52 @@
   <ItemGroup>
     <PackageReference Include="Avalonia.Android" Version="$(AvaloniaVersion)" />
     <PackageReference Include="Microsoft.Maui.Essentials" Version="8.0.70" />
+    <PackageReference Include="Rxmxnx.PInvoke.Extensions" Version="1.2.3" />
     <PackageReference Include="Xamarin.AndroidX.Core.SplashScreen" Version="1.0.1.1" />
-    <PackageReference Include="Xamarin.Essentials" Version="1.8.1" />
+    <PackageReference Include="Xamarin.AndroidX.Preference" Version="1.2.1.8" />
   </ItemGroup>
 
   <ItemGroup>
     <ProjectReference Include="..\iosKeyboardTest\iosKeyboardTest.csproj" />
   </ItemGroup>
+  
+  <!-- BIONIC BUILD -->
+
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU' And '$(IsBionic)' == 'True'">
+    <!--<RuntimeIdentifiers>linux-bionic-arm64</RuntimeIdentifiers>
+    <DisableUnsupportedError>true</DisableUnsupportedError>
+    <PublishAotUsingRuntimePack>true</PublishAotUsingRuntimePack>
+    <AndroidSupportedAbis>armeabi-v7a;x86_64;arm64-v8a;x86</AndroidSupportedAbis>-->
+    
+    <Optimize>true</Optimize>
+    <TrimMode>Link</TrimMode>
+    <PublishAot>true</PublishAot>
+    <TrimUnusedDependencies>true</TrimUnusedDependencies>
+    <RootAllApplicationAssemblies>false</RootAllApplicationAssemblies>
+    <IlcGenerateCompleteTypeMetadata>true</IlcGenerateCompleteTypeMetadata>
+    <IlcGenerateStackTraceData>false</IlcGenerateStackTraceData>
+    <IlcTrimMetadata>true</IlcTrimMetadata>
+    <IlcOptimizationPreference>Speed</IlcOptimizationPreference>
+    <IlcFoldIdenticalMethodBodies>true</IlcFoldIdenticalMethodBodies>
+    <CppCompilerAndLinker>./android_fake_clang.cmd</CppCompilerAndLinker>
+    <NdkHost>windows-x86_64</NdkHost>
+    <ObjCopyName Condition="'$(ObjCopyName)' == ''">$(ANDROID_NDK_ROOT)/toolchains/llvm/prebuilt/$(NdkHost)/bin/llvm-objcopy</ObjCopyName>
+    <SysRoot Condition="'$(SysRoot)' == ''">$(ANDROID_NDK_ROOT)/toolchains/llvm/prebuilt/$(NdkHost)/sysroot</SysRoot>
+    <!--Hack for removing init and fini sections into the exports file-->
+    <ExportsPatch>'s/global: _init; _fini;/global: /g;'</ExportsPatch>
+  </PropertyGroup>
+
+  <ItemGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU' And '$(IsBionic)' == 'True'">
+    <LinkerArg Include="-z noexecstack" />    
+    <LinkerArg Condition="$(RuntimeIdentifier.ToLower().EndsWith('-x64'))" Include="--target=x86_64-linux-android21" />
+    <LinkerArg Condition="$(RuntimeIdentifier.ToLower().EndsWith('-arm64'))" Include="--target=aarch64-linux-android21" />
+  </ItemGroup>
+
+  <ItemGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU' And '$(IsBionic)' == 'True' And $(UseLibCSections) == 'true'">
+    <!--Hack for passing a valid target argument on NDK linker invocation-->
+    <LinkerArg Include="-Wl,--defsym,_init=__libc_init" />
+    <LinkerArg Include="-Wl,--defsym,_fini=__libc_fini" />
+  </ItemGroup>
+  
 
 </Project>

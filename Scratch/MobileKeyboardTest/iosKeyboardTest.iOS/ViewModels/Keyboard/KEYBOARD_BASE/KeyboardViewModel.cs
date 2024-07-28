@@ -369,27 +369,21 @@ namespace iosKeyboardTest.iOS {
             if (InputConnection is IKeyboardInputConnection old_conn) {
                 old_conn.OnFlagsChanged -= Ic_OnFlagsChanged;
                 old_conn.OnDismissed -= InputConnection_OnDismissed;
+                old_conn.OnCursorChanged -= Ic_OnCursorChanged;
+
                 if (old_conn is ITriggerTouchEvents tte) {
                     tte.OnPointerChanged -= OnPointerChanged;
                 }
 
-                if (old_conn is IKeyboardInputConnection_android old_ann_conn) {
-                    old_ann_conn.OnCursorChanged -= Ic_OnCursorChanged_android;
-                } else {
-                    old_conn.OnCursorChanged -= Ic_OnCursorChanged;
-                }
             }
             if (conn is IKeyboardInputConnection new_conn) {
                 InputConnection = new_conn;
                 new_conn.OnFlagsChanged += Ic_OnFlagsChanged;
                 new_conn.OnDismissed += InputConnection_OnDismissed;
+                new_conn.OnCursorChanged += Ic_OnCursorChanged;
+
                 if (new_conn is ITriggerTouchEvents tte) {
                     tte.OnPointerChanged += OnPointerChanged;
-                }
-                if(new_conn is IKeyboardInputConnection_android new_ann_conn) {
-                    new_ann_conn.OnCursorChanged += Ic_OnCursorChanged_android;
-                } else {
-                    new_conn.OnCursorChanged += Ic_OnCursorChanged;
                 }
             } else {
                 InputConnection = null;
@@ -438,10 +432,7 @@ namespace iosKeyboardTest.iOS {
         }
 
         public void SetPointerLocation(TouchEventArgs e) {
-            var mp = e.Location;
-            var touchType = e.TouchEventType;
-
-            if (Touches.Update(mp, touchType) is not { } touch) {
+            if (Touches.Update(e.TouchId, e.Location, e.TouchEventType) is not { } touch) {
                 return;
             }
 
@@ -450,7 +441,7 @@ namespace iosKeyboardTest.iOS {
             }
             _lastDebouncedTouchEventArgs = e;
 
-            switch (touchType) {
+            switch (e.TouchEventType) {
                 case TouchEventType.Press:
                     PressKeyAsync(touch).FireAndForgetSafeAsync();
                     break;
@@ -526,7 +517,7 @@ namespace iosKeyboardTest.iOS {
             } else {
                 SetCharSet(CharSetType.Letters);
             }
-            CheckAutoCap();
+            CheckAutoCap(null);
 
             var keyRows = GetKeyRows(KeyboardFlags);
             Keys.Clear();
@@ -601,11 +592,7 @@ namespace iosKeyboardTest.iOS {
             Dispatcher.UIThread.Post(() => Init(new_flags));
         }
 
-        private void Ic_OnCursorChanged(object sender, EventArgs e) {
-            HandleCursorChange(null);
-        }
-
-        private void Ic_OnCursorChanged_android(object sender, (string text, (int sidx, int len)) e) {
+        private void Ic_OnCursorChanged(object sender, (string text, (int sidx, int len)) e) {
             HandleCursorChange(e);
         }
         void HandleCursorChange((string text, (int sidx, int len))? textInfo) {
@@ -637,14 +624,13 @@ namespace iosKeyboardTest.iOS {
             }
             bool needs_shift = false;
             string leading_text = null;
-            if(textInfo.HasValue) {
+            if(textInfo is { } ti) {
                 // BUG android OnUpdateSelection is called right BEFORE its available to the CurrentInputConnection
                 // so have to use the params from OnUpdateSelection
-                if (string.IsNullOrEmpty(textInfo.Value.text) || (textInfo.Value.Item2.sidx == 0 && textInfo.Value.Item2.len == 0)) {
-                    leading_text = null;
-                } else {
-                    leading_text = textInfo.Value.text.Substring(0, textInfo.Value.Item2.sidx + 1);
-                }                
+                string text = ti.text;
+                int sidx = ti.Item2.sidx;
+                int len = ti.Item2.len;
+                leading_text = text.Substring(0, sidx);
             } else {
                 leading_text = ic.GetLeadingText(-1, -1);
             }
@@ -693,10 +679,10 @@ namespace iosKeyboardTest.iOS {
 
         }
 
-        KeyViewModel GetKeyUnderPoint(Point scaledPoint) {
+        public KeyViewModel GetKeyUnderPoint(Point scaledPoint) {
             var p = scaledPoint;
             var result = Keys
-                .Where(x => x != null && !x.IsPopupKey)
+                .Where(x => x != null && !x.IsPopupKey && x.IsVisible)
                 .FirstOrDefault(x => x.TotalRect.Contains(p));
             return result;
         }
@@ -1109,8 +1095,8 @@ namespace iosKeyboardTest.iOS {
             if (GetPressedKeyForTouch(touch) is not { } pressed_kvm) {
                 return;
             }
-
             PerformKeyAction(pressed_kvm);
+
 
             bool is_released = Touches.Locate(touch.Id) == null;
             if (is_released) {
@@ -1121,7 +1107,7 @@ namespace iosKeyboardTest.iOS {
             }
         }
 
-        void PerformKeyAction(KeyViewModel pressed_kvm) {
+        public void PerformKeyAction(KeyViewModel pressed_kvm) {
             var active_kvm = pressed_kvm.ActivePopupKey;
             if (active_kvm == null) {
                 active_kvm = pressed_kvm;

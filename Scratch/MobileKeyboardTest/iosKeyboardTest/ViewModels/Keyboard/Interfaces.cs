@@ -6,7 +6,7 @@ using System;
 namespace iosKeyboardTest {
     public interface IKeyboardInputConnection
     {
-        event EventHandler OnCursorChanged;
+        event EventHandler<(string, (int, int))> OnCursorChanged;
         event EventHandler OnFlagsChanged;
         event EventHandler OnDismissed;
         string GetLeadingText(int offset, int len);
@@ -18,7 +18,7 @@ namespace iosKeyboardTest {
         KeyboardFlags Flags { get; }
     }
     public interface IKeyboardInputConnection_android : IKeyboardInputConnection {
-        new event EventHandler<(string, (int, int))> OnCursorChanged;
+        
     }
     public interface IKeyboardViewRenderer {
         void Layout(bool invalidate);

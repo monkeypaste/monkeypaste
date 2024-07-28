@@ -35,7 +35,7 @@ namespace iosKeyboardTest.Android {
         static string BgHex_light => $"#{BG_A}FFFFFF";
         static string FgHex_light => $"#{FG_A}000000";
         static string FgHex2_light => $"#{FG_A}696969";
-        static string DefaultKeyBgHex_light => $"#{BG_A}C0C0C0";
+        static string DefaultKeyBgHex_light => $"#{BG_A}F0F0F0";
         static string HoldBgHex_light => $"#{PU_BG_A}FAFAD2";
         static string HoldFocusBgHex_light => $"#{PU_BG_A}F0E68C";
         static string HoldFgHex_light => $"#{FG_A}000000";
