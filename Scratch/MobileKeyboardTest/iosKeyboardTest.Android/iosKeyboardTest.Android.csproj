@@ -30,6 +30,7 @@
     <None Remove="Resources\layout\pref_layout.xml" />
     <None Remove="Resources\menu\menu.xml" />
     <None Remove="Resources\xml\preferences.xml" />
+    <None Remove="ViewModels\Keyboard\KEYBOARD_BASE\AutoComplete\words_5000.txt" />
   </ItemGroup>
 
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU' And '$(IsBionic)' == 'False'">
@@ -111,6 +112,10 @@
     <!--Hack for passing a valid target argument on NDK linker invocation-->
     <LinkerArg Include="-Wl,--defsym,_init=__libc_init" />
     <LinkerArg Include="-Wl,--defsym,_fini=__libc_fini" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="Assets\" />
   </ItemGroup>
   
 

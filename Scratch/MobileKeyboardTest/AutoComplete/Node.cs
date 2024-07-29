@@ -1,9 +1,10 @@
 ﻿namespace AutoComplete {
     public class Node {
         // stores the word of the current Node
-        public WordEntry Entry { get; set; }
+        public WordEntry Entry { get; set; } = new();
         //public string Word { get; set; }
-        public string Word => Entry.Word;
+        public string Word =>
+            Entry == null ? string.Empty : Entry.Word;
 
         // links to other Node in the tree
         public int[] Next { get; set; }

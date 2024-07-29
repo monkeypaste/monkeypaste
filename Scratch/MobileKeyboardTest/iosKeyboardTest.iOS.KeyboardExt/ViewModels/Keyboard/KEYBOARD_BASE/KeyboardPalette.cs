@@ -1,4 +1,5 @@
 using Avalonia.Media;
+using System;
 using System.Diagnostics;
 using System.Globalization;
 using System.Text;
@@ -94,13 +95,15 @@ namespace iosKeyboardTest.iOS.KeyboardExt {
         #endregion
 
         public static void SetTheme(
-            bool isDark, 
+            bool? isDark = default, 
             byte? bga = default, 
             byte? fga = default, 
             byte? spa = default, 
             byte? pua = default, 
             byte? cca = default) {
-            IsDark = isDark;
+            if(isDark is bool darkVal) {
+                IsDark = darkVal;
+            }
 
             if(bga is byte bga_val) {
                 BG_ALPHA = bga_val;
@@ -122,6 +125,10 @@ namespace iosKeyboardTest.iOS.KeyboardExt {
             } else {
                 SP_BG_ALPHA = DEF_SP_BG_ALPHA;
             }
+
+            // clamp alphas if user adjusted
+            CC_BG_ALPHA = Math.Min(CC_BG_ALPHA, BG_ALPHA);
+            SP_BG_ALPHA = Math.Min(SP_BG_ALPHA, BG_ALPHA);
 
             BgHex = IsDark ? BgHex_dark : BgHex_light;
             DefaultKeyBgHex = IsDark ? DefaultKeyBgHex_dark : DefaultKeyBgHex_light;

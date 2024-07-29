@@ -42,6 +42,34 @@ namespace iosKeyboardTest.iOS.KeyboardExt {
         Numbers2,
     }
 
+
+    public enum MyPrefKeys {
+        None = 0,
+        DO_NUM_ROW,
+        DO_EMOJI_KEY,
+        DO_SOUND,
+        SOUND_LEVEL, // 0-100, 15
+        DO_VIBRATE,
+        VIBRATE_LEVEL, // 0-5, 1
+        DO_POPUP,
+        DO_LONG_POPUP,
+        LONG_POPUP_DELAY, // 0-1000, 500
+        DO_NIGHT_MODE,
+        DO_KEY_BOARDERS,
+        BG_OPACITY, // 0-255, 255
+        FG_OPACITY, // 0-255, 255
+        DO_SUGGESTION_STRIP,
+        DO_NEXT_WORD_COMPLETION,
+        MAX_COMPLETION_COUNT, //0-20, 8
+        DO_AUTO_CORRECT,
+        DO_BACKSPACE_UNDOS_LAST_AUTO_CORRECT,
+        DO_AUTO_CAPITALIZATION,
+        DO_DOUBLE_SPACE_PERIOD,
+        DO_CURSOR_CONTROL,
+        CURSOR_CONTROL_SENSITIVITY_X, //0-100, 50
+        CURSOR_CONTROL_SENSITIVITY_Y, //0-100, 50
+    }
+
     [Flags]
     public enum KeyboardFlags : long {
         None = 0,
@@ -79,20 +107,21 @@ namespace iosKeyboardTest.iOS.KeyboardExt {
         
         // LOOK & FEEL
         PlatformView = 1L << 20,
-        NumberRow = 1L << 21,
-        KeyBorders = 1L << 22,
-        EmojiKey = 1L << 23,
+        //NumberRow = 1L << 21,
+        //KeyBorders = 1L << 22,
+        //EmojiKey = 1L << 23,
 
         
-        Vibrate = 1L << 24,
-        Sound = 1L << 25,
-        ShowPopups = 1L << 26,
+        //Vibrate = 1L << 24,
+        //Sound = 1L << 25,
+        //ShowPopups = 1L << 26,
+        //ShowLongPress = 1L << 27,
 
-        OneHanded = 1L << 27,
+        OneHanded = 1L << 28,
 
-        AutoCap = 1L << 28,
-        DoubleTapSpace = 1L << 29,
-        CursorControl = 1L << 30,
-
+        //AutoCap = 1L << 29,
+        //DoubleTapSpace = 1L << 30,
+        //CursorControl = 1L << 31,
+        
     }
 }

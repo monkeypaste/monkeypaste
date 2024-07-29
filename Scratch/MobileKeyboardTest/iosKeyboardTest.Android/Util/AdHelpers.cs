@@ -103,6 +103,16 @@ namespace iosKeyboardTest.Android {
         public static int UnscaledI(this double d) {
             return (int)(d * KeyboardView.Scaling);
         }
+        
+        public static double ScaledD(this float f) {
+            return (double)((double)f / (double)KeyboardView.Scaling);
+        }
+        public static double ScaledD(this int i) {
+            return (double)((double)i / (double)KeyboardView.Scaling);
+        }
+        public static int ScaledI(this int i) {
+            return (int)(i / KeyboardView.Scaling);
+        }
 
         #endregion
 

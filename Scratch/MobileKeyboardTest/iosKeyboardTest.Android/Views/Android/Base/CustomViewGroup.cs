@@ -7,7 +7,7 @@ namespace iosKeyboardTest.Android {
     public interface IFrameView {
         RectF Frame { get; }
     }
-    public class CustomViewGroup : FrameLayout, IFrameView {
+    public class CustomViewGroup : FrameLayout, IKeyboardViewRenderer, IFrameView {
         #region Private Variables
         #endregion
 
@@ -18,6 +18,58 @@ namespace iosKeyboardTest.Android {
         #endregion
 
         #region Interfaces
+        #region IKeyboardViewRenderer Implementation
+
+        public virtual void Layout(bool invalidate) {
+            for (int i = 0; i < ChildCount; i++) {
+                if(this.GetChildAt(i) is IKeyboardViewRenderer ckbvr) {
+                    ckbvr.Layout(invalidate);
+                }
+            }
+            if(invalidate) {
+                this.Redraw();
+            }
+        }
+
+        public virtual void Measure(bool invalidate) {
+            for (int i = 0; i < ChildCount; i++) {
+                if (this.GetChildAt(i) is IKeyboardViewRenderer ckbvr) {
+                    ckbvr.Measure(invalidate);
+                }
+            }
+            if (invalidate) {
+                this.Redraw();
+            }
+        }
+
+        public virtual void Paint(bool invalidate) {
+            for (int i = 0; i < ChildCount; i++) {
+                if (this.GetChildAt(i) is IKeyboardViewRenderer ckbvr) {
+                    ckbvr.Paint(invalidate);
+                }
+            }
+            if (invalidate) {
+                this.Redraw();
+            }
+        }
+
+        public virtual void Render(bool invalidate) {
+            Layout(false);
+            Measure(false);
+            Paint(false);
+
+            for (int i = 0; i < ChildCount; i++) {
+                if (this.GetChildAt(i) is IKeyboardViewRenderer ckbvr) {
+                    ckbvr.Render(invalidate);
+                } else if(invalidate) {
+                    this.GetChildAt(i).Redraw();
+                }
+            }
+            if (invalidate) {
+                this.Redraw();
+            }
+        }
+        #endregion
         #endregion
 
         #region Properties
@@ -53,6 +105,7 @@ namespace iosKeyboardTest.Android {
 
             }
         }
+
         #endregion
 
         #region Private Methods

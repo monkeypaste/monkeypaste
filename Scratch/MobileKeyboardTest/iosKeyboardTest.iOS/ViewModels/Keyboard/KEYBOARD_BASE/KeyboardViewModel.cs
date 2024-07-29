@@ -92,6 +92,7 @@ namespace iosKeyboardTest.iOS {
         #endregion
 
         #region View Models
+        public MenuViewModel MenuViewModel { get; private set; }
         public ObservableCollection<KeyViewModel> Keys { get; set; } = [];
         public KeyViewModel[] PopupKeys { get; private set; }
         public List<KeyViewModel> VisiblePopupKeys { get; private set; } = [];
@@ -176,7 +177,7 @@ namespace iosKeyboardTest.iOS {
 
         double MenuHeightPad => 5;
         public double MenuHeight =>
-            DefaultKeyHeight + MenuHeightPad;
+           DefaultKeyHeight + MenuHeightPad;
         public double FooterHeight =>
             NeedsNextKeyboardButton ? MenuHeight * 0.5 : 0;
 
@@ -256,8 +257,8 @@ namespace iosKeyboardTest.iOS {
             (OperatingSystem.IsIOS() &&
             InputConnection != null &&
             (InputConnection as IKeyboardInputConnection_ios).NeedsInputModeSwitchKey);
-        double CursorControlFactorX => ScreenScaling * 2;
-        double CursorControlFactorY => ScreenScaling * 2;
+        //double CursorControlFactorX => ScreenScaling * 2;
+        //double CursorControlFactorY => ScreenScaling * 2;
         bool IsAnyPopupMenuVisible =>
             VisiblePopupKeys.Any();
         bool IsHoldMenuVisible =>
@@ -291,7 +292,7 @@ namespace iosKeyboardTest.iOS {
         #region Hold/Tap Stuff
         static int DefHoldDelayMs => 5; // NOTE! must be a factor of HoldDelayMs
         int HoldDelayMs { get; set; } = DefHoldDelayMs;
-        int MinHoldMs => 500; // NOTE! must be a factor of HoldDelayMs
+        int MinHoldMs { get; set; } = 500; // NOTE! must be a factor of HoldDelayMs
 
         int MaxDoubleTapSpaceForPeriodMs => 150;
         int MaxCursorChangeFromEventDelayForFeedbackMs => 50;
@@ -322,14 +323,21 @@ namespace iosKeyboardTest.iOS {
         public bool IsTablet { get; private set; }
         public bool IsMobile { get; private set; }
         public bool IsNumberRowVisible { get; private set; }
-        public bool IsNumberRowHidden =>
-            !IsNumberRowVisible;
+        
         public bool IsKeyBordersVisible { get; private set; }
         public bool IsEmojiButtonVisible { get; private set; }
-        public bool IsExtendedPopupsEnabled { get; private set; }
+        public bool IsPressPopupsEnabled { get; private set; }
+        public bool IsHoldPopupsEnabled { get; private set; }
         public bool IsAutoCapitalizationEnabled { get; private set; }
         public bool IsDoubleTapSpaceEnabled { get; private set; }
         public bool CanCursorControlBeEnabled { get; private set; }
+        public bool IsSuggestionRowVisible { get; private set; }
+        public bool IsNextWordCompletionEnabled { get; private set; }
+        public bool IsAutoCorrectEnabled { get; private set; }
+        public bool IsBackspaceUndoLastAutoCorrectEnabled { get; private set; }
+        public double CursorControlSensitivityX { get; private set; }
+        public double CursorControlSensitivityY { get; private set; }
+        public int MaxCompletionResults { get; private set; }
         #endregion
 
         #endregion
@@ -340,6 +348,7 @@ namespace iosKeyboardTest.iOS {
 
         public KeyboardViewModel(IKeyboardInputConnection inputConn, Size scaledSize, double scale, double actualScale) {
             Debug.WriteLine("kbvm ctor called");
+            MenuViewModel = new MenuViewModel(this);
             ScreenScaling = scale;
             ActualScaling = actualScale;
             Keys.CollectionChanged += Keys_CollectionChanged;
@@ -388,7 +397,7 @@ namespace iosKeyboardTest.iOS {
             } else {
                 InputConnection = null;
             }
-
+            MenuViewModel.SetInputConnection(InputConnection);
 
         }
 
@@ -508,9 +517,7 @@ namespace iosKeyboardTest.iOS {
                     IsThemeDark,
                     spa: KeyboardPalette.BG_ALPHA,
                     pua: 255);
-            }
-            
-
+            }           
 
             if (IsNumPadLayout) {
                 SetCharSet(CharSetType.Numbers1);
@@ -634,6 +641,7 @@ namespace iosKeyboardTest.iOS {
             } else {
                 leading_text = ic.GetLeadingText(-1, -1);
             }
+            //MenuViewModel.ShowCompletion(leading_text);
             if (string.IsNullOrEmpty(leading_text)) {
                 // auto cap if insert is leading
                 needs_shift = true;
@@ -656,10 +664,6 @@ namespace iosKeyboardTest.iOS {
             SetShiftState(needs_shift ? ShiftStateType.Shift : ShiftStateType.None);
         }
         void SetFlags(KeyboardFlags kbFlags) {
-            if (kbFlags.HasFlag(KeyboardFlags.EmojiKey) && (kbFlags.HasFlag(KeyboardFlags.Email) || kbFlags.HasFlag(KeyboardFlags.Url))) {
-                // remove emoji key for url/email. It takes up too much space and kb overflows plus it doesn't make sense for those keyboards
-                kbFlags &= ~KeyboardFlags.EmojiKey;
-            }
             KeyboardFlags = kbFlags;
             IsThemeDark = KeyboardFlags.HasFlag(KeyboardFlags.Dark);
             IsNumbers = KeyboardFlags.HasFlag(KeyboardFlags.Numbers);
@@ -668,14 +672,38 @@ namespace iosKeyboardTest.iOS {
             IsNumPadLayout = IsNumbers || IsDigits || IsPin;
             IsMobile = KeyboardFlags.HasFlag(KeyboardFlags.Mobile);
             IsTablet = KeyboardFlags.HasFlag(KeyboardFlags.Tablet);
-            IsNumberRowVisible = KeyboardFlags.HasFlag(KeyboardFlags.NumberRow);
-            IsKeyBordersVisible = KeyboardFlags.HasFlag(KeyboardFlags.KeyBorders);
-            IsEmojiButtonVisible = KeyboardFlags.HasFlag(KeyboardFlags.EmojiKey);
-            IsExtendedPopupsEnabled = KeyboardFlags.HasFlag(KeyboardFlags.ShowPopups);
 
-            IsAutoCapitalizationEnabled = KeyboardFlags.HasFlag(KeyboardFlags.AutoCap);
-            IsDoubleTapSpaceEnabled = KeyboardFlags.HasFlag(KeyboardFlags.DoubleTapSpace);
-            CanCursorControlBeEnabled = KeyboardFlags.HasFlag(KeyboardFlags.CursorControl);
+            if(InputConnection.SharedPrefService is not ISharedPrefService prefService) {
+                return;
+            }
+
+
+            if (kbFlags.HasFlag(KeyboardFlags.Email) || kbFlags.HasFlag(KeyboardFlags.Url)) {
+                // remove emoji key for url/email. It takes up too much space and kb overflows plus it doesn't make sense for those keyboards
+                IsEmojiButtonVisible = false;
+            } else {
+                IsEmojiButtonVisible = prefService.GetPrefValue<bool>(MyPrefKeys.DO_EMOJI_KEY);
+            }
+
+            IsNumberRowVisible = prefService.GetPrefValue<bool>(MyPrefKeys.DO_NUM_ROW);
+            IsKeyBordersVisible = prefService.GetPrefValue<bool>(MyPrefKeys.DO_KEY_BOARDERS);
+            IsPressPopupsEnabled = prefService.GetPrefValue<bool>(MyPrefKeys.DO_POPUP);
+            IsHoldPopupsEnabled = prefService.GetPrefValue<bool>(MyPrefKeys.DO_LONG_POPUP);
+
+            IsAutoCapitalizationEnabled = prefService.GetPrefValue<bool>(MyPrefKeys.DO_AUTO_CAPITALIZATION);
+            IsDoubleTapSpaceEnabled = prefService.GetPrefValue<bool>(MyPrefKeys.DO_DOUBLE_SPACE_PERIOD);
+            CanCursorControlBeEnabled = prefService.GetPrefValue<bool>(MyPrefKeys.DO_CURSOR_CONTROL);
+
+            CursorControlSensitivityX = (double)((double)prefService.GetPrefValue<int>(MyPrefKeys.CURSOR_CONTROL_SENSITIVITY_X) / 100d);
+            CursorControlSensitivityY = (double)((double)prefService.GetPrefValue<int>(MyPrefKeys.CURSOR_CONTROL_SENSITIVITY_Y) / 100d);
+
+            IsSuggestionRowVisible = prefService.GetPrefValue<bool>(MyPrefKeys.DO_SUGGESTION_STRIP);
+            IsNextWordCompletionEnabled = prefService.GetPrefValue<bool>(MyPrefKeys.DO_NEXT_WORD_COMPLETION);
+            IsAutoCorrectEnabled = prefService.GetPrefValue<bool>(MyPrefKeys.DO_AUTO_CORRECT);
+            IsBackspaceUndoLastAutoCorrectEnabled = prefService.GetPrefValue<bool>(MyPrefKeys.DO_BACKSPACE_UNDOS_LAST_AUTO_CORRECT);
+
+            HoldDelayMs = prefService.GetPrefValue<int>(MyPrefKeys.LONG_POPUP_DELAY);
+            MaxCompletionResults = prefService.GetPrefValue<int>(MyPrefKeys.MAX_COMPLETION_COUNT);
 
         }
 
@@ -777,12 +805,12 @@ namespace iosKeyboardTest.iOS {
                         int ins_idx2 = keys.Last().IndexOf(".") + 1;
                         keys.Last().Insert(ins_idx2, ins_char2);
                     } 
-                    if (kbFlags.HasFlag(KeyboardFlags.EmojiKey)) {
+                    if (IsEmojiButtonVisible) {
                         // insert emoji key before space bar
                         keys.Last().Insert(1, SpecialKeyType.Emoji);
                     }
 
-                    if (!kbFlags.HasFlag(KeyboardFlags.NumberRow)) {
+                    if (!IsNumberRowVisible) {
                         // numbers become 2nd row secondary 
                         var num_row = keys[0];
                         keys.Remove(num_row);
@@ -882,7 +910,7 @@ namespace iosKeyboardTest.iOS {
         }
 
         void ShowPressPopup(KeyViewModel kvm, Touch touch) {
-            if (!kvm.CanShowPopup) {
+            if (!IsPressPopupsEnabled || !kvm.CanShowPressPopup) {
                 return;
             }
             kvm.ClearPopups();
@@ -891,7 +919,7 @@ namespace iosKeyboardTest.iOS {
             kvm.FitPopupInFrame(touch);
         }
         void ShowHoldPopup(KeyViewModel kvm, Touch touch) {
-            if(!kvm.CanShowPopup) {
+            if(!IsHoldPopupsEnabled || !kvm.CanShowHoldPopup) {
                 return;
             }
             if (IsHoldMenuVisible && kvm != null && !kvm.HasHoldPopup) {
@@ -951,8 +979,8 @@ namespace iosKeyboardTest.iOS {
             double lx = lp.X;
             double ly = lp.Y;
 
-            double x_factor = ActualScaling * 7;
-            double y_factor = ActualScaling * 10;
+            double x_factor = ActualScaling * 7 * CursorControlSensitivityX;
+            double y_factor = ActualScaling * 10 * CursorControlSensitivityY;
 
             int max_x = 5;
             int max_y = 5;

@@ -1,5 +1,5 @@
 ﻿namespace AutoComplete {
-    public class BKTree {
+    public static class BKTree {
         // maximum number of words in dict[]
         static int MAX_WORD_COUNT = 100;
 
@@ -16,16 +16,18 @@
         // stores every Node of the tree
         static Node[] Tree { get; set; } = new Node[MAX_WORD_COUNT];
 
-        // index for the current Node of the tree
-        public static int ptr;
+        public static IEnumerable<WordEntry> Entries =>
+            Tree.Where(x=>x.Entry != null).Select(x => x.Entry);
 
-        public static void SetLimits(int maxWords, int maxWordLength) {
+        // index for the current Node of the tree
+        static int NextAddIdx { get; set; }
+
+        public static void Init(int maxWords, int maxWordLength) {
+            NextAddIdx = 0;
             MAX_WORD_COUNT = maxWords;
             MAX_WORD_LEN = maxWordLength;
             Tree = new Node[MAX_WORD_COUNT];
-        }
-        static int Min(int a, int b, int c) {
-            return Math.Min(a, Math.Min(b, c));
+            RootNode = new Node();
         }
 
         // Edit Distance
@@ -70,9 +72,9 @@
                 return;
             }
 
-            if (string.IsNullOrEmpty(root.Word)) {
+            if (root.Entry == null) {
                 // if it is the first Node then make it the root Node
-                root.Word = curr.Word;
+                root.Entry = curr.Entry;
                 return;
             }
 
@@ -94,13 +96,13 @@
                 * make it a child of root Node*/
 
                 // incrementing the pointer for curr Node
-                ptr++;
+                NextAddIdx++;
 
                 // adding curr Node to the tree
-                Tree[ptr] = curr;
+                Tree[NextAddIdx] = curr;
 
                 // curr as a child of root Node
-                root.Next[dist] = ptr;
+                root.Next[dist] = NextAddIdx;
             } else {
                 // recursively find the parent for curr Node
                 Add(Tree[root.Next[dist]], curr);

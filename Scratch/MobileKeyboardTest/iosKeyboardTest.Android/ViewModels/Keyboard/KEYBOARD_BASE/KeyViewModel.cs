@@ -177,7 +177,6 @@ namespace iosKeyboardTest.Android {
             if (this is KeyViewModel kvm) {
                 ClearRects();
 
-                kvm.RaisePropertyChanged(nameof(NeedsSymbolTranslate));
                 kvm.RaisePropertyChanged(nameof(NeedsOuterTranslate));
                 kvm.RaisePropertyChanged(nameof(IsSpecial));
                 kvm.RaisePropertyChanged(nameof(PrimaryFontSize));
@@ -302,30 +301,6 @@ namespace iosKeyboardTest.Android {
 
         public double PrimaryTranslateOffsetX { get; set; } = 0;
         public double PrimaryTranslateOffsetY { get; set; } = 0;
-        public double SecondaryTranslateOffsetX {
-            get {
-                double x = -3;
-                if (!IsPulling) {
-                    return x;
-                }
-                double max_x = (-Width / 4);// - (SecondaryFontSize/2);
-                double pull_percent = PullTranslateY / MaxPullTranslateY;
-                x = max_x * pull_percent;
-                return x;
-            }
-        }
-        public double SecondaryTranslateOffsetY {
-            get {
-                double y = 3;
-                if (!IsPulling) {
-                    return y;
-                }
-                double max_top = (Height / 4) - 5;// - (SecondaryFontSize*1);
-                double pull_percent = PullTranslateY / MaxPullTranslateY;
-                y = max_top * pull_percent;
-                return y;
-            }
-        }
         public bool IsSecondaryVisible {
             get {
                 if(string.IsNullOrEmpty(SecondaryValue)) {
@@ -338,7 +313,7 @@ namespace iosKeyboardTest.Android {
                     return true;
                 }
                 if (Parent.IsTextLayout && IsInput) {
-                    if (Parent.IsNumberRowHidden) {
+                    if (!Parent.IsNumberRowVisible) {
                         if(Row > 0 || !Parent.IsLettersCharSet) {
                             return false;
                         }
@@ -415,12 +390,6 @@ namespace iosKeyboardTest.Android {
             }
         }
             
-        public double SecondaryFontSizeRatio => 0.33;
-        string[] MisAlignedCharacters => [
-            //"✖️",
-            "♠️",
-            "♣️"
-            ];
 
         public CornerRadius CornerRadius {
             get {
@@ -581,15 +550,41 @@ namespace iosKeyboardTest.Android {
 
         public Point SecondaryOffsetRatio {
             get {
-                double x = 0.5;
-                double y = 0.5;
+                double x = 0.7;
+                double y = 0.7;
                 if(IsAlphaNumericNumber) {
-                    x = 0.9;
-                    y = 0.25;
+                    x = 0.7;
+                    y = 0.35;
                 }
                 return new Point(x, y);
             }
         }
+
+        public double SecondaryTranslateOffsetX {
+            get {
+                double x = -3;
+                if (!IsPulling) {
+                    return x;
+                }
+                double max_x = (-Width / 4);// - (SecondaryFontSize/2);
+                double pull_percent = PullTranslateY / MaxPullTranslateY;
+                x = max_x * pull_percent;
+                return x;
+            }
+        }
+        public double SecondaryTranslateOffsetY {
+            get {
+                double y = 3;
+                if (!IsPulling) {
+                    return y;
+                }
+                double max_top = (Height / 4) - 5;// - (SecondaryFontSize*1);
+                double pull_percent = PullTranslateY / MaxPullTranslateY;
+                y = max_top * pull_percent;
+                return y;
+            }
+        }
+        public double SecondaryFontSizeRatio => 0.25;
         public int VisiblePopupColCount { get; set; }
         public int VisiblePopupRowCount { get; set; }
 
@@ -624,15 +619,20 @@ namespace iosKeyboardTest.Android {
             IsSpecial && SPECIAL_KEY_TEXTS.Contains(CurrentChar);
         public bool IsPrimaryImage =>
             CurrentChar != null && CurrentChar.EndsWith(".png");
-        public bool CanShowPopup {
+        public bool CanShowPressPopup {
             get {
-                if(Parent.IsExtendedPopupsEnabled) {
-                    return HasAnyPopup;
-                }
-                if(Parent.IsNumberRowHidden && Parent.IsTextLayout && Row == 0) {
+                if(!Parent.IsNumberRowVisible && Parent.IsTextLayout && Row == 0) {
                     return true;
                 }
-                return false;
+                return HasPressPopup;
+            }
+        }
+        public bool CanShowHoldPopup {
+            get {
+                if(!Parent.IsNumberRowVisible && Parent.IsTextLayout && Row == 0) {
+                    return true;
+                }
+                return HasHoldPopup;
             }
         }
         public DateTime? PressPopupShowDt { get; set; }
@@ -690,13 +690,15 @@ namespace iosKeyboardTest.Android {
                     }
                     return PopupAnchorKey.NeedsOuterTranslate;
                 }
-                return Row == TranslatedRow && Parent.IsLettersCharSet;
+                var result = Row == TranslatedRow && Parent.IsLettersCharSet;
+                if(result) {
+
+                }
+                return result;
             }
         }
         int TranslatedRow =>
             Parent.IsNumberRowVisible ? 2 : 1;
-        public bool NeedsSymbolTranslate =>
-            MisAlignedCharacters.Contains(PrimaryValue);
         public bool IsSpecial =>
             SpecialKeyType != SpecialKeyType.None;
         public bool IsPeriod =>

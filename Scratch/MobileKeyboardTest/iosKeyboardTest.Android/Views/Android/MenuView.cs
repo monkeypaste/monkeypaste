@@ -1,10 +1,13 @@
 ﻿using Android.Content;
+using Android.Graphics;
 using Android.Views;
+using Microsoft.Maui.Graphics;
 using static Android.Views.View;
+using Color = Android.Graphics.Color;
 using GPaint = Android.Graphics.Paint;
 
 namespace iosKeyboardTest.Android {
-    public class MenuView : CustomViewGroup, IKeyboardViewRenderer, IOnClickListener {
+    public class MenuView : CustomViewGroup, IOnClickListener {
         #region Private Variables
         #endregion
 
@@ -19,41 +22,37 @@ namespace iosKeyboardTest.Android {
         #region IOnClickListener Implementation
 
         public void OnClick(View v) {
-            if(Context is MyInputMethodService mims) {
+            if(v == OptionsButtonView &&
+                Context is MyInputMethodService mims) {
                 mims.StartPrefActivity();
+                return;
             }
+            if(v == BackButtonView) {
+                DC.GoBack();
+                return;
+            }
+            // TODO find text under 
         }
         #endregion
 
         #region IKeyboardViewRenderer Implementation
 
-        public void Layout(bool invalidate) {
-            
-        }
-
-        public void Measure(bool invalidate) {
+        public override void Measure(bool invalidate) {
             Frame = DC.MenuRect.ToRectF();
+            BackButtonView.Frame = DC.BackButtonRect.ToRectF();
+            OptionsButtonView.Frame = DC.OptionsButtonRect.ToRectF();
+            InnerMenuView.Frame = DC.InnerMenuRect.ToRectF();
 
-            if (invalidate) {
-                this.Redraw();
-            }
+            base.Measure(invalidate);
         }
 
-        public void Paint(bool invalidate) {
+        public override void Paint(bool invalidate) {
             this.SetBackgroundColor(KeyboardPalette.MenuBgHex.ToColor());
+            BackButtonView.SetBackgroundColor(Color.Orange);
+            InnerMenuView.SetBackgroundColor(Color.Purple);
+            OptionsButtonView.SetBackgroundColor(Color.Red);
 
-            if (invalidate) {
-                this.Redraw();
-            }
-        }
-
-        public void Render(bool invalidate) {
-            Layout(false);
-            Measure(false);
-            Paint(false);
-            if(invalidate) {
-                this.Redraw();
-            }
+            base.Paint(invalidate);
         }
         #endregion
 
@@ -62,7 +61,13 @@ namespace iosKeyboardTest.Android {
         #region Properties
 
         #region View Models
-        public KeyboardViewModel DC { get; set; }
+        public MenuViewModel DC { get; set; }
+        #endregion
+
+        #region Views
+        CustomView BackButtonView { get; set; }
+        CustomView InnerMenuView { get; set; }
+        CustomView OptionsButtonView { get; set; }
         #endregion
 
         #region Appearance
@@ -78,13 +83,23 @@ namespace iosKeyboardTest.Android {
 
         #region Constructors
 
-        public MenuView(Context context) : base(context) {
-        }
 
-        public MenuView(Context context, GPaint paint, KeyboardViewModel dc) : base(context, paint) {
+        public MenuView(Context context, GPaint paint, MenuViewModel dc) : base(context, paint) {
             this.Clickable = true;
             DC = dc;
+            DC.SetRenderer(this);
             this.SetOnClickListener(this);
+
+            BackButtonView = new CustomView(context, paint);
+            this.AddView(BackButtonView);
+
+            InnerMenuView = new CustomView(context, paint);
+            this.AddView(InnerMenuView);
+
+            OptionsButtonView = new CustomView(context, paint);
+            this.AddView(OptionsButtonView);
+
+            this.Render(true);
         }
 
 

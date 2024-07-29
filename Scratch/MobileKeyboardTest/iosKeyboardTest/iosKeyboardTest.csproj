@@ -81,6 +81,10 @@
     </Compile>
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="ViewModels\Keyboard\AutoComplete\" />
+  </ItemGroup>
+
 
   <!-- KEYBOARD MOVER -->
   <Target Name="MoveKeyboard">

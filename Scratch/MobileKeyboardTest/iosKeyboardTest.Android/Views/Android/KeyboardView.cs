@@ -12,7 +12,7 @@ using GPaint = Android.Graphics.Paint;
 using Rect = Android.Graphics.Rect;
 
 namespace iosKeyboardTest.Android {
-    public class KeyboardView : CustomViewGroup, IKeyboardViewRenderer {
+    public class KeyboardView : CustomViewGroup, IKeyboardViewRenderer, ITextMeasurer {
         #region Private Variables
         int measureCount = 0;
         int layoutCount = 0;
@@ -28,6 +28,27 @@ namespace iosKeyboardTest.Android {
         #endregion
 
         #region Interfaces
+
+        #region ITextMeasurer Implementation
+        Avalonia.Size ITextMeasurer.MeasureText(string text, double scaledFontSize) {
+            var tb = new Rect();
+            if(!string.IsNullOrEmpty(text)) {
+                SharedPaint.TextSize = scaledFontSize.UnscaledF();
+                SharedPaint.GetTextBounds(text.ToCharArray(), 0, text.Length, tb);
+            }
+            return new Avalonia.Size(tb.Width().ScaledD(), tb.Height().ScaledD());
+
+        }
+        #endregion
+
+        #region IKeyboardRenderer Implementation
+
+        public override void Measure(bool invalidate) {
+            this.Frame = DC.TotalRect.ToRectF();
+            base.Measure(invalidate);
+        }
+        #endregion
+
         #endregion
 
         #region Properties
@@ -73,7 +94,7 @@ namespace iosKeyboardTest.Android {
             DC.SetRenderer(this);
 
 
-            MenuView = new MenuView(context, SharedPaint, DC).SetDefaultProps("Menu");
+            MenuView = new MenuView(context, SharedPaint, DC.MenuViewModel).SetDefaultProps("Menu");
             this.AddView(MenuView);
 
             KeyGridView = new KeyGridView(context, SharedPaint, DC).SetDefaultProps("KeyboardGrid");
@@ -133,47 +154,6 @@ namespace iosKeyboardTest.Android {
         }
         #endregion
 
-        public void Layout(bool invalidate) {
-            MenuView.Layout(invalidate);
-            KeyGridView.Layout(invalidate);
-
-            if (invalidate) {
-                this.Redraw();
-            }
-        }
-
-        public void Measure(bool invalidate) {
-            this.Frame = DC.TotalRect.ToRectF();
-
-            MenuView.Measure(invalidate);
-            KeyGridView.Measure(invalidate);
-            CursorControlView.Measure(invalidate);
-
-            if (invalidate) {
-                this.Redraw();
-            }
-        }
-
-        public void Paint(bool invalidate) {
-            MenuView.Paint(invalidate);
-            KeyGridView.Paint(invalidate);
-            CursorControlView.Paint(invalidate);
-            
-            if (invalidate) {
-                this.Redraw();
-            }
-        }
-
-        public void Render(bool invalidate) {
-            Layout(false);
-            Measure(false);
-            Paint(false);
-            if (invalidate) {
-                this.Redraw();
-                for (int i = 0; i < ChildCount; i++) {
-                    this.GetChildAt(i).Redraw();
-                }
-            }
-        }
+        
     }
 }

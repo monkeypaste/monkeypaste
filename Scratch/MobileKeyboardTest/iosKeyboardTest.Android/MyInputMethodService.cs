@@ -11,6 +11,7 @@ using Android.Text;
 using Android.Views;
 using Android.Views.InputMethods;
 using Android.Widget;
+using AndroidX.Preference;
 using Avalonia;
 using Avalonia.Android;
 using Avalonia.Controls;
@@ -30,6 +31,7 @@ using Debug = System.Diagnostics.Debug;
 using Exception = System.Exception;
 using Keycode = Android.Views.Keycode;
 using Orientation = Android.Content.Res.Orientation;
+using Stream = System.IO.Stream;
 using View = Android.Views.View;
 
 namespace iosKeyboardTest.Android {
@@ -38,6 +40,8 @@ namespace iosKeyboardTest.Android {
         InputMethodService, 
         IKeyboardInputConnection_android, 
         IOnTouchListener,
+        IAssetLoader,
+        IMainThread,
         ITriggerTouchEvents {
         #region Private Variables
         // from https://learn.microsoft.com/en-us/answers/questions/252318/creating-a-custom-android-keyboard
@@ -56,6 +60,19 @@ namespace iosKeyboardTest.Android {
 
         #region Interfaces
 
+        #region IAssetLoader Implementation
+        Stream IAssetLoader.LoadStream(string path) {
+            AssetManager assets = ApplicationContext.Assets;
+            return assets.Open(path);
+        }
+        #endregion
+
+        #region IMainThread Implementation
+        void IMainThread.Post(Action action) {
+            MainThread.BeginInvokeOnMainThread(action);
+        }
+        #endregion
+
 
         #region IOnTouchListener Implementation
         KeyGestureListener KeyGestureListener { get; set; }
@@ -72,6 +89,15 @@ namespace iosKeyboardTest.Android {
         #endregion
 
         #region IKeyboardInputConnection Implementation
+        IMainThread IKeyboardInputConnection.MainThread =>
+            this;
+        IAssetLoader IKeyboardInputConnection.AssetLoader =>
+            this;
+        ISharedPrefService IKeyboardInputConnection.SharedPrefService =>
+            PrefManager;
+        ITextMeasurer IKeyboardInputConnection.TextMeasurer =>
+            KeyboardView;
+
         public KeyboardFlags Flags =>
             GetFlags(_lastEditorInfo);
         string IKeyboardInputConnection.GetLeadingText(int offset, int len) =>
@@ -164,6 +190,7 @@ namespace iosKeyboardTest.Android {
         #endregion
 
         #region Properties
+        MyPrefManager PrefManager { get; set; }
         bool IS_PLATFORM_MODE => true;
         KeyboardView KeyboardView { get; set; }
         AvaloniaView AvView { get; set; }
@@ -274,6 +301,9 @@ namespace iosKeyboardTest.Android {
         }
 
         void Init() {
+            if(PrefManager == null) {
+                PrefManager = new MyPrefManager(this);
+            }
             AndroidDisplayInfo.Init(this.Window.Window,IsPortrait());
 
             this.Window.CancelEvent += Window_CancelEvent;
@@ -299,19 +329,6 @@ namespace iosKeyboardTest.Android {
             } 
             
             kbf |= IsPortrait() ? KeyboardFlags.Portrait : KeyboardFlags.Landscape;
-
-            // does android have floating keyboard? 
-            kbf |= KeyboardFlags.FullLayout;
-
-            kbf |= KeyboardFlags.EmojiKey;
-            kbf |= KeyboardFlags.ShowPopups |
-                    KeyboardFlags.KeyBorders |
-                    //KeyboardFlags.NumberRow |
-                    KeyboardFlags.AutoCap |
-                    KeyboardFlags.DoubleTapSpace |
-                    KeyboardFlags.CursorControl |
-                    KeyboardFlags.Vibrate |
-                    KeyboardFlags.Sound;
 
             if (_lastEditorInfo != null) {
                 var ime_type_lookup = new Dictionary<KeyboardFlags, InputTypes[]>() {
@@ -374,6 +391,25 @@ namespace iosKeyboardTest.Android {
                 }
             }
 
+
+            // does android have floating keyboard? 
+            kbf |= KeyboardFlags.FullLayout;
+
+            //kbf |= KeyboardFlags.EmojiKey;
+            //kbf |= KeyboardFlags.ShowPopups |
+            //        KeyboardFlags.KeyBorders |
+            //        //KeyboardFlags.NumberRow |
+            //        KeyboardFlags.AutoCap |
+            //        KeyboardFlags.DoubleTapSpace |
+            //        KeyboardFlags.CursorControl |
+            //        KeyboardFlags.Vibrate |
+            //        KeyboardFlags.Sound;
+
+            if(PrefManager == null) {
+                Init();
+            }
+
+            kbf = PrefManager.UpdateFlags(kbf);
             _lastFlags = kbf;
             return kbf;
         }
@@ -390,18 +426,21 @@ namespace iosKeyboardTest.Android {
             return Resources.Configuration.Orientation == Orientation.Portrait;
         }
         void Vibrate() {
-            if(!_lastFlags.HasValue || !_lastFlags.Value.HasFlag(KeyboardFlags.Vibrate)) {
+            if(PrefManager.VibrateDurMs == 0) {
                 return;
             }
-            Microsoft.Maui.Devices.Vibration.Vibrate(2);
+            Microsoft.Maui.Devices.Vibration.Vibrate(PrefManager.VibrateDurMs);
         }
         void PlaySound(SoundEffect sound) {
+            if(PrefManager.SoundVol == 0) {
+                return;
+            }
             if (_audioManager == null && 
                 CurrentContext != null &&
                 CurrentContext.GetSystemService(Context.AudioService) is AudioManager am) {
                 _audioManager = am;
             }
-            _audioManager.PlaySoundEffect(sound);
+            _audioManager.PlaySoundEffect(sound,PrefManager.SoundVol);
         }
 
         (string text, (int start, int len)) GetTextInfo() {

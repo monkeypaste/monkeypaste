@@ -2,8 +2,23 @@ using Avalonia;
 using Avalonia.Controls;
 using Avalonia.Media.Imaging;
 using System;
+using System.IO;
+using System.Threading.Tasks;
 
 namespace iosKeyboardTest.iOS {
+    public interface IMainThread {
+        void Post(Action action);
+    }
+    public interface IAssetLoader {
+        Stream LoadStream(string path); 
+    }
+    public interface ISharedPrefService {
+        T GetPrefValue<T>(MyPrefKeys prefKey) where T : struct;
+    }
+
+    public interface ITextMeasurer {
+        Avalonia.Size MeasureText(string text, double scaledFontSize);
+    }
     public interface IKeyboardInputConnection
     {
         event EventHandler<(string, (int, int))> OnCursorChanged;
@@ -16,6 +31,10 @@ namespace iosKeyboardTest.iOS {
         void OnNavigate(int dx, int dy);
         void OnFeedback(KeyboardFeedbackFlags flags);
         KeyboardFlags Flags { get; }
+        ITextMeasurer TextMeasurer { get; }
+        ISharedPrefService SharedPrefService { get; }
+        IAssetLoader AssetLoader { get; }
+        IMainThread MainThread { get; }
     }
     public interface IKeyboardInputConnection_android : IKeyboardInputConnection {
         

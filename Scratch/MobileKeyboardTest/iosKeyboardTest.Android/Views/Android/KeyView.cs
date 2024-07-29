@@ -49,7 +49,6 @@ namespace iosKeyboardTest.Android {
 
         #region IkeyboardViewRenderer Implementation
         public void Render(bool invalidate) {
-
             if (!DC.IsVisible) {
                 return;
             }
@@ -81,12 +80,13 @@ namespace iosKeyboardTest.Android {
             Frame = new_frame;
 
 
-            var inner_rect = Frame.ToBounds();// DC.InnerRect.ToRectF().ToBounds(DC.KeyboardRect.ToRectF());
+            var inner_rect = Frame.ToBounds();
 
             // fix precision rounding so popups are seamless
-            int pad = DC.IsPopupKey ? 1 : 0;
+            int pad = DC.IsPopupKey ? 1 : 0; 
+            var key_rect = new RectF(0, 0, Frame.Width() + pad, Frame.Height() + pad);
             KeyPath = new Path();
-            KeyPath.AddRoundRect(inner_rect, DC.CornerRadius.ToCornerArray(), Path.Direction.Cw);
+            KeyPath.AddRoundRect(key_rect, DC.CornerRadius.ToCornerArray(), Path.Direction.Cw);
 
             float cx = inner_rect.CenterX();
             float cy = inner_rect.CenterY();

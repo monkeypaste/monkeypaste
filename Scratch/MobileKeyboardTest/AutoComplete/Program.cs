@@ -1,39 +1,13 @@
-﻿
-using MonkeyPaste.Common;
-using MonkeyPaste.Common.Plugin;
+﻿using MonkeyPaste.Common.Plugin;
 using System;
 using System.Collections.Generic;
 
 namespace AutoComplete {
+
     internal class Program {
-        static string[] dictionary { get; set; }
-        static WordEntry[] entries { get; set; }
-        static int max_len = 0;
+
         static void Main(string[] args) {
-            // words_4000 from: https://raw.githubusercontent.com/pkLazer/password_rank/master/4000-most-common-english-words-csv.csv
-            // 
-            //var text = MpFileIo.ReadTextFromFile(@"C:\Users\tkefauver\Source\Repos\MonkeyPaste\Scratch\MobileKeyboardTest\AutoComplete\words_4000.txt");
-            //var text = MpFileIo.ReadTextFromFile(@"C:\Users\tkefauver\Source\Repos\MonkeyPaste\Scratch\MobileKeyboardTest\AutoComplete\words_alpha.txt");
-            //dictionary = text.SplitNoEmpty(Environment.NewLine);
-            var text = MpFileIo.ReadTextFromFile(@"C:\Users\tkefauver\Source\Repos\MonkeyPaste\Scratch\MobileKeyboardTest\AutoComplete\words_5000.txt");
-            var rows = text.SplitNoEmpty(Environment.NewLine).Skip(1);
-            entries = new WordEntry[rows.Count()];
-            max_len = dictionary.Max(x => x.Length);
-            BKTree.SetLimits(dictionary.Length, max_len);
-            BKTree.ptr = 0;
-            BKTree.RootNode = new Node(); // Initialize RT before using it
-
-            // adding dict[] words onto the tree
-            for (int i = 0; i < dictionary.Length; i++) {
-                Node tmp = new Node(dictionary[i]);
-                entries[i] = tmp.Entry;
-                BKTree.Add(BKTree.RootNode, tmp);
-
-                int percent = (int)(((double)i / (double)dictionary.Length)*100);
-                Console.Clear();
-                Console.WriteLine($"Loading...{percent}%");
-            }
-
+            TextCorrector.Init();
             while(true) {
                 Console.Clear();
                 //DoDistance();
@@ -50,24 +24,17 @@ namespace AutoComplete {
             Console.WriteLine($"Distance: {BKTree.EditDistance(word1, word2)}");
         }
         static void DoSimilarWords() {
-            Console.WriteLine($"Enter text to complete (or Empty to quit): ");
+            Console.WriteLine($"Enter text to complete (or q! to quit): ");
             string input = Console.ReadLine();
-            if (string.IsNullOrWhiteSpace(input)) {
+            if (input == "q!") {
                 return;
             }
             Console.WriteLine("-----------------------------------------------------------------------");
 
-            var similar_matches = BKTree.GetSimilarWords(BKTree.RootNode, input);
-            var starts_with_strs = entries.Where(x => x.Word.StartsWith(input) && x.Word != input).OrderByDescending(x => x.Frequency);
-            int max_starts_with_len = 0;
-            if(starts_with_strs.OrderByDescending(x=>x.Word.Length).FirstOrDefault() is { } max) {
-                max_starts_with_len = max.Word.Length + 1;
+            var merged_matches = TextCorrector.GetResults(input, true, 8, out string autoCorrectResult);
+           if(!string.IsNullOrEmpty(autoCorrectResult)) {
+                Console.WriteLine($"Auto-corrected to: {autoCorrectResult}");
             }
-            var starts_with_matches = starts_with_strs.Select(x => (x, -max_starts_with_len + x.Word.Length)).OrderBy(x=>x.Item2);
-            var merged_matches =
-                starts_with_matches
-                .Select(x=>(x.x.Word,x.Item2))
-                .Union(similar_matches.Where(x => !starts_with_matches.Any(y=>y.Item1.Word == x.Item1)).OrderBy(x => x.Item2));
             foreach (var x in merged_matches) {
                 Console.WriteLine(x);
             }
