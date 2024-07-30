@@ -153,7 +153,6 @@ namespace iosKeyboardTest.Android {
             DC.SetBrushes();
             BackgroundColor = DC.BgHex.ToColor();
             PrimaryTextColor = DC.PrimaryHex.ToColor();
-            PrimaryColorFilter = DC.IsPrimaryImage ? new PorterDuffColorFilter(PrimaryTextColor, PorterDuff.Mode.SrcIn) : null;
             SecondaryTextColor = DC.SecondaryHex.ToColor();
 
             if (invalidate) {
@@ -176,7 +175,6 @@ namespace iosKeyboardTest.Android {
 
         #region Appearance
         Color PrimaryTextColor { get; set; }
-        ColorFilter? PrimaryColorFilter { get; set; }
         Color SecondaryTextColor { get; set; }
         PointF PrimaryLoc { get; set; } = new();
         PointF SecondaryLoc { get; set; } = new();
@@ -238,8 +236,7 @@ namespace iosKeyboardTest.Android {
             if (!string.IsNullOrEmpty(DC.PrimaryValue)) {
                 if (DC.IsPrimaryImage) {
                     var r = DC.PrimaryImageRect.ToRect();
-                    SharedPaint.SetColorFilter(PrimaryColorFilter);
-                    SharedPaint.Color = PrimaryTextColor;
+                    SharedPaint.SetTint(PrimaryTextColor);
 
                     if(ImageLookup.TryGetValue(DC.CurrentChar, out var bmp)) {
                         canvas.DrawBitmap(bmp, PrimaryLoc.X, PrimaryLoc.Y, SharedPaint);

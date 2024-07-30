@@ -195,16 +195,18 @@ namespace iosKeyboardTest.Android {
 
         #region Images
 
-        public static Bitmap Scale(this Bitmap bmp, int newWidth,int newHeight) {
+        public static Bitmap Scale(this Bitmap bmp, int newWidth,int newHeight, bool recycle = true) {
             //from https://stackoverflow.com/a/10703256/105028
-            int w = bmp.Width;
-            int h = bmp.Height;
-            float scaled_w = ((float)newWidth) / w;
-            float scaled_h = ((float)newHeight) / h;
+            int w = Math.Max(1, bmp.Width);
+            int h = Math.Max(1, bmp.Height);
+            float scaled_w = ((float)Math.Max(1,newWidth)) / w;
+            float scaled_h = ((float)Math.Max(1,newHeight)) / h;
             Matrix matrix = new Matrix();
             matrix.PostScale(scaled_w, scaled_h);
             var scaled_bmp = Bitmap.CreateBitmap(bmp, 0, 0, w, h, matrix, false);
-            bmp.Recycle();
+            if(recycle) {
+                bmp.Recycle();
+            }
             return scaled_bmp;
         }
         public static Bitmap ToBitmap(this Drawable d) {
@@ -306,6 +308,14 @@ namespace iosKeyboardTest.Android {
         #endregion
 
         #region Color
+        public static void SetTint(this Paint paint, Color? color) {
+            if(color is { } c) {
+                paint.Color = c;
+                paint.SetColorFilter(new PorterDuffColorFilter(c, PorterDuff.Mode.SrcIn));
+            } else {
+                paint.SetColorFilter(null);
+            }
+        }
         public static int ToInt(this Color c) {
             return (int)c;
         }

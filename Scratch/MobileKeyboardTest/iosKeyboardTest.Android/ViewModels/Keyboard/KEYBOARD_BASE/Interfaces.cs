@@ -21,7 +21,7 @@ namespace iosKeyboardTest.Android {
     }
     public interface IKeyboardInputConnection
     {
-        event EventHandler<(string, (int, int))> OnCursorChanged;
+        event EventHandler<TextRange> OnCursorChanged;
         event EventHandler OnFlagsChanged;
         event EventHandler OnDismissed;
         string GetLeadingText(int offset, int len);
@@ -30,6 +30,7 @@ namespace iosKeyboardTest.Android {
         void OnDone();
         void OnNavigate(int dx, int dy);
         void OnFeedback(KeyboardFeedbackFlags flags);
+        void OnShowPreferences(object args);
         KeyboardFlags Flags { get; }
         ITextMeasurer TextMeasurer { get; }
         ISharedPrefService SharedPrefService { get; }

@@ -93,7 +93,6 @@ namespace iosKeyboardTest.Android {
             DC = new KeyboardViewModel(conn, kbs / Scaling, Scaling, AndroidDisplayInfo.Scaling);
             DC.SetRenderer(this);
 
-
             MenuView = new MenuView(context, SharedPaint, DC.MenuViewModel).SetDefaultProps("Menu");
             this.AddView(MenuView);
 
@@ -112,6 +111,7 @@ namespace iosKeyboardTest.Android {
         public void RemapRenderers() {
             // NOTE when flags change keys are recreated and renderers need to be re-assigned
             KeyGridView.AddOrResetKeys();
+            MenuView.ResetRenderer();
             Render(true);
         }
         public void ResetStats() {

@@ -175,9 +175,9 @@ namespace iosKeyboardTest.iOS {
         public double SpecialKeyWidth =>
             DefaultKeyWidth * (IsNumPadLayout ? 1 : SpecialKeyWidthRatio);
 
-        double MenuHeightPad => 5;
+        double MenuHeightRatio => 0.5;
         public double MenuHeight =>
-           DefaultKeyHeight + MenuHeightPad;
+           DefaultKeyHeight * MenuHeightRatio;
         public double FooterHeight =>
             NeedsNextKeyboardButton ? MenuHeight * 0.5 : 0;
 
@@ -224,18 +224,14 @@ namespace iosKeyboardTest.iOS {
             IsNumbers1CharSet || IsNumbers2CharSet;
         public bool IsBusy { get; set; }
 
-        string[] eos_chars = ["\n", ".", "!", "?", string.Empty];
+        public string[] EndOfSentenceChars => ["\n", ".", "!", "?", string.Empty];
+        public string[] EndOfWordChars => ["\n", ".", "!", "?", " ", string.Empty];
         bool IsInitialized =>
             InputConnection != null && InputConnection.Flags == LastInitializedFlags;
-
-        public KeyboardFeedbackFlags ActiveChangeFeedback =>
-            KeyboardFeedbackFlags.Vibrate;
-        public KeyboardFeedbackFlags CursorChangeFeedback =>
-            KeyboardFeedbackFlags.Vibrate;
-        public KeyboardFeedbackFlags KeyReleaseFeedback =>
-            KeyboardFeedbackFlags.Vibrate;// | KeyboardFeedbackFlags.Click;
-        public KeyboardFeedbackFlags ReturnReleaseFeedback =>
-            KeyboardFeedbackFlags.Vibrate;// | KeyboardFeedbackFlags.Return;
+        public KeyboardFeedbackFlags ActiveChangeFeedback { get; private set; }
+        public KeyboardFeedbackFlags CursorChangeFeedback { get; private set; }
+        public KeyboardFeedbackFlags KeyReleaseFeedback { get; private set; }
+        public KeyboardFeedbackFlags ReturnReleaseFeedback { get; private set; }
         string LastInput { get; set; } = string.Empty;
         public bool IsAnyShiftState =>
             ShiftState != ShiftStateType.None;
@@ -319,6 +315,8 @@ namespace iosKeyboardTest.iOS {
         public bool IsDigits { get; private set; }
         public bool IsNumbers { get; private set; }
         public bool IsNumPadLayout { get; private set; }
+        public bool IsEmailLayout { get; private set; }
+        public bool IsUrlLayout { get; private set; }
         public bool IsThemeDark { get; private set; }
         public bool IsTablet { get; private set; }
         public bool IsMobile { get; private set; }
@@ -338,6 +336,7 @@ namespace iosKeyboardTest.iOS {
         public double CursorControlSensitivityX { get; private set; }
         public double CursorControlSensitivityY { get; private set; }
         public int MaxCompletionResults { get; private set; }
+        public bool IsCompoundWordBreakEnabled { get; private set; }
         #endregion
 
         #endregion
@@ -441,7 +440,13 @@ namespace iosKeyboardTest.iOS {
         }
 
         public void SetPointerLocation(TouchEventArgs e) {
-            if (Touches.Update(e.TouchId, e.Location, e.TouchEventType) is not { } touch) {
+            if (Touches.Update(
+                e.TouchId, 
+                e.Location, 
+                e.TouchEventType) is not { } touch) {
+                return;
+            }
+            if (MenuViewModel.HandleMenuTouch(e.TouchEventType, touch)) {
                 return;
             }
 
@@ -524,7 +529,7 @@ namespace iosKeyboardTest.iOS {
             } else {
                 SetCharSet(CharSetType.Letters);
             }
-            CheckAutoCap(null);
+            HandleCursorChange(null);
 
             var keyRows = GetKeyRows(KeyboardFlags);
             Keys.Clear();
@@ -599,11 +604,10 @@ namespace iosKeyboardTest.iOS {
             Dispatcher.UIThread.Post(() => Init(new_flags));
         }
 
-        private void Ic_OnCursorChanged(object sender, (string text, (int sidx, int len)) e) {
+        private void Ic_OnCursorChanged(object sender, TextRange e) {
             HandleCursorChange(e);
         }
-        void HandleCursorChange((string text, (int sidx, int len))? textInfo) {
-
+        void HandleCursorChange(TextRange? textInfo) {
             DateTime this_cursor_change_dt = DateTime.Now;
 
             bool do_vibrate = false;
@@ -619,11 +623,13 @@ namespace iosKeyboardTest.iOS {
             }
             if (KeyboardFlags.HasFlag(KeyboardFlags.PlatformView)) {
                 CheckAutoCap(textInfo);
-                return;
-            }
-            Dispatcher.UIThread.Post(()=>CheckAutoCap(textInfo));
+            } else {
+                Dispatcher.UIThread.Post(() => CheckAutoCap(textInfo));
+            }       
+            // NOTE do completion AFTER shift state has been changed
+            MenuViewModel.ShowCompletion(textInfo);
         }
-        void CheckAutoCap((string text, (int sidx, int len))? textInfo) {
+        void CheckAutoCap(TextRange? textInfo) {
             if (!IsAutoCapitalizationEnabled ||
                 InputConnection is not { } ic ||
                 ShiftState == ShiftStateType.ShiftLock) {
@@ -634,14 +640,12 @@ namespace iosKeyboardTest.iOS {
             if(textInfo is { } ti) {
                 // BUG android OnUpdateSelection is called right BEFORE its available to the CurrentInputConnection
                 // so have to use the params from OnUpdateSelection
-                string text = ti.text;
-                int sidx = ti.Item2.sidx;
-                int len = ti.Item2.len;
-                leading_text = text.Substring(0, sidx);
+                leading_text = ti.LeadingText;
             } else {
                 leading_text = ic.GetLeadingText(-1, -1);
             }
-            //MenuViewModel.ShowCompletion(leading_text);
+            
+            
             if (string.IsNullOrEmpty(leading_text)) {
                 // auto cap if insert is leading
                 needs_shift = true;
@@ -652,7 +656,7 @@ namespace iosKeyboardTest.iOS {
                     if (cur_char == " ") {
                         continue;
                     }
-                    int eos_idx = eos_chars.IndexOf(cur_char);
+                    int eos_idx = EndOfSentenceChars.IndexOf(cur_char);
                     // only allow shift if prev char is newline or
                     // space(s) after any end-of-sentence char 
                     needs_shift =
@@ -670,6 +674,8 @@ namespace iosKeyboardTest.iOS {
             IsDigits = KeyboardFlags.HasFlag(KeyboardFlags.Digits);
             IsPin = KeyboardFlags.HasFlag(KeyboardFlags.Pin);
             IsNumPadLayout = IsNumbers || IsDigits || IsPin;
+            IsEmailLayout = KeyboardFlags.HasFlag(KeyboardFlags.Email);
+            IsUrlLayout = KeyboardFlags.HasFlag(KeyboardFlags.Url);
             IsMobile = KeyboardFlags.HasFlag(KeyboardFlags.Mobile);
             IsTablet = KeyboardFlags.HasFlag(KeyboardFlags.Tablet);
 
@@ -701,10 +707,27 @@ namespace iosKeyboardTest.iOS {
             IsNextWordCompletionEnabled = prefService.GetPrefValue<bool>(MyPrefKeys.DO_NEXT_WORD_COMPLETION);
             IsAutoCorrectEnabled = prefService.GetPrefValue<bool>(MyPrefKeys.DO_AUTO_CORRECT);
             IsBackspaceUndoLastAutoCorrectEnabled = prefService.GetPrefValue<bool>(MyPrefKeys.DO_BACKSPACE_UNDOS_LAST_AUTO_CORRECT);
+            IsCompoundWordBreakEnabled = prefService.GetPrefValue<bool>(MyPrefKeys.DO_CASE_COMPLETION);
 
             HoldDelayMs = prefService.GetPrefValue<int>(MyPrefKeys.LONG_POPUP_DELAY);
             MaxCompletionResults = prefService.GetPrefValue<int>(MyPrefKeys.MAX_COMPLETION_COUNT);
 
+            var def_feeback = KeyboardFeedbackFlags.None;
+            if(prefService.GetPrefValue<bool>(MyPrefKeys.DO_SOUND)) {
+                def_feeback |= KeyboardFeedbackFlags.Click;
+            }
+            if(prefService.GetPrefValue<bool>(MyPrefKeys.DO_VIBRATE)) {
+                def_feeback |= KeyboardFeedbackFlags.Vibrate;
+            }
+            var ret_feedback = def_feeback;
+            if(ret_feedback.HasFlag(KeyboardFeedbackFlags.Click)) {
+                ret_feedback &= ~KeyboardFeedbackFlags.Click;
+                ret_feedback |= KeyboardFeedbackFlags.Return;
+            }
+            ActiveChangeFeedback = def_feeback;
+            CursorChangeFeedback = def_feeback;
+            KeyReleaseFeedback = def_feeback;
+            ReturnReleaseFeedback = ret_feedback;
         }
 
         public KeyViewModel GetKeyUnderPoint(Point scaledPoint) {
@@ -880,6 +903,8 @@ namespace iosKeyboardTest.iOS {
                 kvm.Renderer.Measure(false);
                 kvm.Renderer.Render(true);
             }
+            MenuViewModel.Layout(false);
+            MenuViewModel.Measure(true);
         }
         void SetCharSet(CharSetType cst) {
             if(_charSet == cst) {

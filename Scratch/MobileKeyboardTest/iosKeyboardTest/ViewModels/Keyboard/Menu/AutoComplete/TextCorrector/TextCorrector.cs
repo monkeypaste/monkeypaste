@@ -1,12 +1,14 @@
-
+﻿
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Text;
 
-namespace iosKeyboardTest.Android {
+namespace iosKeyboardTest {
     public static class TextCorrector {
+        const int MAX_COMPLETION_RESULTS = 20;
         public static bool IsLoaded { get; private set; }
+        static IEnumerable<string> Defaults { get; set; }
         public static void Init(IAssetLoader loader) {
             if(loader.LoadStream("words_5000.txt") is not { } stream) {
                 return;
@@ -30,17 +32,24 @@ namespace iosKeyboardTest.Android {
             foreach (var node in nodes) {
                 BKTree.Add(BKTree.RootNode, node);
             }
+            Defaults = BKTree.Entries.Skip(1).Take(MAX_COMPLETION_RESULTS).Select(x => x.Word).ToArray();
+
             IsLoaded = true;
         }
 
         public static IEnumerable<string> GetResults(string input, bool autoCorrect, int maxResults, out string autoCorrectResult) {
             autoCorrectResult = null;
-
+            if(string.IsNullOrEmpty(input)) {
+                return FillWithDefaults([], maxResults);
+            }
             // get completion results ordered by frequency
             var starts_with_strs = 
                 BKTree.Entries
                 .Where(x => x.Word.StartsWith(input) && x.Word != input)
-                .OrderByDescending(x => x.Frequency);
+                .OrderBy(x=>x.Rank)
+                //.OrderBy(x=>x.Word.Length)
+                //.ThenByDescending(x => x.Frequency)
+                ;
             if(starts_with_strs.Any()) {
                 // word can be completed
                 return FillWithDefaults(starts_with_strs.Select(x => x.Word).Take(maxResults),maxResults);
@@ -58,19 +67,22 @@ namespace iosKeyboardTest.Android {
             // TODO called when keyboard is done. regex for words, scan data file and add/update new use count field then re-initialize (in background) 
         }
         static IEnumerable<string> FillWithDefaults(IEnumerable<string> results, int desiredCount) {
-            var enumerator = results.GetEnumerator();
-            var def_enumerator = BKTree.Entries.GetEnumerator();
-            for (int i = 0; i < desiredCount; i++) {
-                string result = null;
-                if(enumerator.MoveNext()) {
-                    result = enumerator.Current;
-                } else if(def_enumerator.MoveNext()) {
-                    result = def_enumerator.Current.Word;
-                }
-                if(string.IsNullOrEmpty(result)) {
-                    continue;
+            int count = 0;
+            foreach(var result in results) {
+                if(count >= desiredCount) {
+                    yield break;
                 }
                 yield return result;
+                count++;
+            }
+
+            Defaults = Defaults.Randomize();
+            foreach (var result in Defaults) {
+                if (count >= desiredCount) {
+                    yield break;
+                }
+                yield return result;
+                count++;
             }
         }
     }

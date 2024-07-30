@@ -2,6 +2,15 @@
 
 namespace iosKeyboardTest {
     [Flags]
+    public enum WordBreakTypes : long {
+        None = 0,
+        Grammatical = 1L << 1,
+        UpperToLowerCase = 1L << 2, // camel or pascal case
+        UnderScore = 1L << 3, // snake case
+        Hyphen = 1L << 4, // kebob case
+    }
+    
+    [Flags]
     public enum KeyboardFeedbackFlags : long {
         None = 0,
         Vibrate = 1L << 1,
@@ -68,6 +77,7 @@ namespace iosKeyboardTest {
         DO_CURSOR_CONTROL,
         CURSOR_CONTROL_SENSITIVITY_X, //0-100, 50
         CURSOR_CONTROL_SENSITIVITY_Y, //0-100, 50
+        DO_CASE_COMPLETION
     }
 
     [Flags]

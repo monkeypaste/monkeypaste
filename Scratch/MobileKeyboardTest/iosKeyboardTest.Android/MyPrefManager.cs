@@ -40,6 +40,7 @@ namespace iosKeyboardTest.Android {
                         { MyPrefKeys.DO_CURSOR_CONTROL, true },
                         { MyPrefKeys.CURSOR_CONTROL_SENSITIVITY_X, 50 },
                         { MyPrefKeys.CURSOR_CONTROL_SENSITIVITY_Y, 50 },
+                        { MyPrefKeys.DO_CASE_COMPLETION, true },
                     };
                 }
                 return _defValLookup;

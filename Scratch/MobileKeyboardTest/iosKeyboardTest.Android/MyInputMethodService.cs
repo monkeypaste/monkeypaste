@@ -89,6 +89,9 @@ namespace iosKeyboardTest.Android {
         #endregion
 
         #region IKeyboardInputConnection Implementation
+        void IKeyboardInputConnection.OnShowPreferences(object args) {
+            StartPrefActivity();
+        }
         IMainThread IKeyboardInputConnection.MainThread =>
             this;
         IAssetLoader IKeyboardInputConnection.AssetLoader =>
@@ -182,7 +185,7 @@ namespace iosKeyboardTest.Android {
 
 
         public event EventHandler<TouchEventArgs> OnPointerChanged;
-        public event EventHandler<(string,(int,int))> OnCursorChanged;
+        public event EventHandler<TextRange> OnCursorChanged;
         public event EventHandler OnFlagsChanged;
         public event EventHandler OnDismissed;
         #endregion
@@ -226,8 +229,8 @@ namespace iosKeyboardTest.Android {
             //    OnCursorChanged?.Invoke(this, EventArgs.Empty);
             //});
             var info = GetTextInfo();
-
-            OnCursorChanged?.Invoke(this, (info.text,(newSelStart,(newSelEnd-newSelStart))));
+            info.Select(newSelStart, newSelEnd - newSelStart);
+            OnCursorChanged?.Invoke(this, info);
         }
         public override void OnConfigurationChanged(Configuration newConfig) {
             base.OnConfigurationChanged(newConfig);
@@ -443,7 +446,7 @@ namespace iosKeyboardTest.Android {
             _audioManager.PlaySoundEffect(sound,PrefManager.SoundVol);
         }
 
-        (string text, (int start, int len)) GetTextInfo() {
+        TextRange GetTextInfo() {
             if (this.CurrentInputConnection == null) {
                 return default;
             }
@@ -452,7 +455,8 @@ namespace iosKeyboardTest.Android {
             string post_text = GetTrailingText(-1, -1);
             string total_text = pre_text + sel_text + post_text;
             int sel_len = sel_text.Length == total_text.Length ? 0 : sel_text.Length;
-            return (total_text, (pre_text.Length, sel_len));
+            //return (total_text, (pre_text.Length, sel_len));
+            return new TextRange(total_text, pre_text.Length, sel_len);
         }
         string GetTextAroundCursor(int offset, int len, bool isBefore) {
             if (this.CurrentInputConnection == null) {

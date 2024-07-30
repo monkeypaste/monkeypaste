@@ -9,7 +9,7 @@ using System.Collections.Generic;
 using System.Linq;
 
 namespace iosKeyboardTest.Android {
-    public class CustomView : View, IFrameView {
+    public class CustomView : View, IFrameView, IKeyboardViewRenderer {
         public Color BackgroundColor { get; set; }
         public Paint SharedPaint { get; set; }
         public RectF Frame { get; set; } = new();
@@ -34,9 +34,41 @@ namespace iosKeyboardTest.Android {
         protected CustomView(nint javaReference, JniHandleOwnership transfer) : base(javaReference, transfer) {
         }
         #endregion
+
+        protected override void OnMeasure(int widthMeasureSpec, int heightMeasureSpec) {
+            SetMeasuredDimension((int)Frame.Width(), (int)Frame.Height());
+        }
+
         public override string ToString() {
             return $"{Name} {Frame}";
         }
-        
+
+        public virtual void Layout(bool invalidate) {
+            if (invalidate) {
+                this.Redraw();
+            }
+        }
+
+        public virtual void Measure(bool invalidate) {
+            if (invalidate) {
+                this.Redraw();
+            }
+        }
+
+        public virtual void Paint(bool invalidate) {
+            if (invalidate) {
+                this.Redraw();
+            }
+        }
+
+        public virtual void Render(bool invalidate) {
+            Layout(false);
+            Measure(false);
+            Paint(false);
+
+            if (invalidate) {
+                this.Redraw();
+            }
+        }
     }
 }

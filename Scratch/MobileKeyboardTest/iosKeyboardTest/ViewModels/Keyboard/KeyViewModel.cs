@@ -551,7 +551,7 @@ namespace iosKeyboardTest {
         public Point SecondaryOffsetRatio {
             get {
                 double x = 0.7;
-                double y = 0.7;
+                double y = 0.65;
                 if(IsAlphaNumericNumber) {
                     x = 0.7;
                     y = 0.35;

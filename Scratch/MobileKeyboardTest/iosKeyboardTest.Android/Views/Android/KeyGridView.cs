@@ -37,48 +37,15 @@ namespace iosKeyboardTest.Android {
             }
         }
 
-        public void Layout(bool invalidate) {
-            foreach (var kv in KeyViews) {
-                kv.Layout(invalidate);
-            }
-            if (invalidate) {
-                this.Redraw();
-            }
-        }
 
-        public void Measure(bool invalidate) {
+        public override void Measure(bool invalidate) {
             Frame = DC.KeyboardRect.ToRectF();
-
-            foreach (var kv in KeyViews) {
-                kv.Measure(invalidate);
-            }
-            if (invalidate) {
-                this.Redraw();
-            }
+            base.Measure(invalidate);
         }
 
-        public void Paint(bool invalidate) {
+        public override void Paint(bool invalidate) {
             SetBackgroundColor(KeyboardPalette.BgHex.ToColor());
-
-            foreach (var kv in KeyViews) {
-                kv.Paint(invalidate);
-            }
-            if (invalidate) {
-                this.Redraw();
-            }
-        }
-
-        public void Render(bool invalidate) {
-            Layout(false);
-            Measure(false);
-            Paint(false);
-
-            foreach (var kv in KeyViews) {
-                kv.Render(invalidate);
-            }
-            if (invalidate) {
-                this.Redraw();
-            }
+            base.Paint(invalidate);
         }
     }
 }

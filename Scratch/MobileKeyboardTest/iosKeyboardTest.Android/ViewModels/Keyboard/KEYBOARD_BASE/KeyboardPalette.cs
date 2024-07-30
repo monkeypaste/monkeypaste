@@ -47,9 +47,11 @@ namespace iosKeyboardTest.Android {
         static string PrimarySpecialKeyPressedBgHex_light => $"#{SP_BG_A}93CAEC";
         static string ShiftBgHex_light => $"#{SP_BG_A}6495ED";
         static string ShiftFgHex_light => $"#{FG_A}6495ED";
-        static string MenuBgHex_light => $"#{BG_A}CCCCCC";
         static string CursorControlBgHex_light => $"#{CC_BG_A}141414";
         static string CursorControlFgHex_light => $"#{FG_A}FFFFFF";
+        static string MenuBgHex_light => BgHex_light;
+        static string MenuFgHex_light => FgHex_light;
+        static string MenuItemPressedBgHex_light => PressedBgHex_light;
         #endregion
 
         #region Dark
@@ -67,9 +69,11 @@ namespace iosKeyboardTest.Android {
         static string PrimarySpecialKeyPressedBgHex_dark => $"#{SP_BG_A}5C5CFF";
         static string ShiftBgHex_dark => $"#{SP_BG_A}00FFFF";
         static string ShiftFgHex_dark => $"#{FG_A}00FFFF";
-        static string MenuBgHex_dark => $"#{BG_A}C0C0C0";
         static string CursorControlBgHex_dark => $"#{CC_BG_A}141414";
         static string CursorControlFgHex_dark => $"#{FG_A}FFFFFF";
+        static string MenuBgHex_dark => BgHex_dark;
+        static string MenuFgHex_dark => FgHex_dark;
+        static string MenuItemPressedBgHex_dark => PressedBgHex_dark;
         #endregion
 
         #region Working Set
@@ -87,9 +91,11 @@ namespace iosKeyboardTest.Android {
         public static string PrimarySpecialKeyPressedBgHex { get; private set; }        
         public static string ShiftBgHex { get; private set; }       
         public static string ShiftFgHex { get; private set; }       
-        public static string MenuBgHex { get; private set; }        
         public static string CursorControlBgHex { get; private set; }        
         public static string CursorControlFgHex { get; private set; }  
+        public static string MenuBgHex { get; private set; }        
+        public static string MenuFgHex { get; private set; }
+        public static string MenuItemPressedBgHex { get;private set; }
         #endregion
 
         #endregion
@@ -144,9 +150,11 @@ namespace iosKeyboardTest.Android {
             PrimarySpecialKeyPressedBgHex = IsDark ? PrimarySpecialKeyPressedBgHex_dark : PrimarySpecialKeyPressedBgHex_light;
             ShiftBgHex = IsDark ? ShiftBgHex_dark : ShiftBgHex_light;
             ShiftFgHex = IsDark ? ShiftFgHex_dark : ShiftFgHex_light;
-            MenuBgHex = IsDark ? MenuBgHex_dark : MenuBgHex_light;
             CursorControlBgHex = IsDark ? CursorControlBgHex_dark : CursorControlBgHex_light;
             CursorControlFgHex = IsDark ? CursorControlFgHex_dark : CursorControlFgHex_light;
+            MenuBgHex = IsDark ? MenuBgHex_dark : MenuBgHex_light;
+            MenuFgHex = IsDark ? MenuFgHex_dark : MenuFgHex_light;
+            MenuItemPressedBgHex = IsDark ? MenuItemPressedBgHex_dark : MenuItemPressedBgHex_light;
         }
 
 

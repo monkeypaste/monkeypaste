@@ -65,6 +65,11 @@
   </ItemGroup>
 
   <ItemGroup>
+    <AndroidResource Include="Resources\drawable\dots_1x3.png" />
+    <AndroidResource Include="Resources\drawable\edgearrowleft.png" />
+  </ItemGroup>
+
+  <ItemGroup>
     <PackageReference Include="Avalonia.Android" Version="$(AvaloniaVersion)" />
     <PackageReference Include="Microsoft.Maui.Essentials" Version="8.0.70" />
     <PackageReference Include="Rxmxnx.PInvoke.Extensions" Version="1.2.3" />
