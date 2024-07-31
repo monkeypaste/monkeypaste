@@ -10,8 +10,8 @@
         public int[] Next { get; set; }
 
         // constructor
-        public Node(string x) {
-            Entry = new WordEntry(x);
+        public Node(int rank, string word) {
+            Entry = new WordEntry(rank, word);
             //Word = x;
             // initializing next[i] = 0
             Next = new int[2 * BKTree.MAX_WORD_LEN];
@@ -19,6 +19,9 @@
                 Next[i] = 0;
         }
 
+        public Node(int rank) {
+            Entry = new WordEntry(rank);
+        }
         public Node() { }
     }
 }

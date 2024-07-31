@@ -175,7 +175,7 @@ namespace iosKeyboardTest.iOS {
         public double SpecialKeyWidth =>
             DefaultKeyWidth * (IsNumPadLayout ? 1 : SpecialKeyWidthRatio);
 
-        double MenuHeightRatio => 0.5;
+        double MenuHeightRatio => 0.77;
         public double MenuHeight =>
            DefaultKeyHeight * MenuHeightRatio;
         public double FooterHeight =>
@@ -900,11 +900,9 @@ namespace iosKeyboardTest.iOS {
             _shiftState = sst;
             foreach (var kvm in Keys) {
                 kvm.UpdateCharacters();
-                kvm.Renderer.Measure(false);
                 kvm.Renderer.Render(true);
             }
-            MenuViewModel.Layout(false);
-            MenuViewModel.Measure(true);
+            MenuViewModel.Renderer.Layout(true);
         }
         void SetCharSet(CharSetType cst) {
             if(_charSet == cst) {

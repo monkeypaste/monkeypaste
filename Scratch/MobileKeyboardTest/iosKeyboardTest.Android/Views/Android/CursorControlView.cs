@@ -19,16 +19,17 @@ namespace iosKeyboardTest.Android {
 
         #region IKeyboardViewRenderer Implementation
 
-        public void Layout(bool invalidate) {
-
+        public override void Layout(bool invalidate) {
             if (DC.IsCursorControlEnabled) {
                 ShowCursorControl();
             } else {
                 HideCursorControl();
             }
+
+            base.Layout(invalidate);
         }
 
-        public void Measure(bool invalidate) {
+        public override void Measure(bool invalidate) {
             Frame = DC.CursorControlRect.ToRectF();
 
             CursorControlTextView.TextSize = DC.CursorControlFontSize.UnscaledF();
@@ -38,31 +39,25 @@ namespace iosKeyboardTest.Android {
             float cct_r = cct_l + cct_size.Width;
             float cct_b = cct_t + cct_size.Height;
             CursorControlTextView.Frame = new RectF(cct_l, cct_t, cct_r, cct_b);
-            //CursorControlTextView.Frame = DC.CursorControlTextRect.ToRectF();
 
-            if (invalidate) {
-                this.Redraw();
-            }
+            base.Measure(invalidate);
         }
 
-        public void Paint(bool invalidate) {
+        public override void Paint(bool invalidate) {
             SetBackgroundColor(KeyboardPalette.CursorControlBgHex.ToColor());
 
             CursorControlTextView.SetTextColor(KeyboardPalette.CursorControlFgHex.ToColor());
             CursorControlTextView.ForegroundColor = KeyboardPalette.CursorControlFgHex.ToColor();
 
-            if (invalidate) {
-                this.Redraw();
-            }
+            base.Paint(invalidate);
         }
 
-        public void Render(bool invalidate) {
+        public override void Render(bool invalidate) {
             Layout(false);
             Measure(false);
             Paint(false);
-            if (invalidate) {
-                this.Redraw();
-            }
+
+            base.Render(invalidate);
         }
         #endregion
         #endregion
@@ -118,7 +113,6 @@ namespace iosKeyboardTest.Android {
         void HideCursorControl() {
             this.Visibility = ViewStates.Invisible;
             CursorControlTextView.Visibility = ViewStates.Invisible;
-            this.Redraw();
         }
         void ShowCursorControl() {
             if (this == null) {
@@ -126,7 +120,6 @@ namespace iosKeyboardTest.Android {
             }
             this.Visibility = ViewStates.Visible;
             CursorControlTextView.Visibility = ViewStates.Visible;
-            this.Redraw();
         }
         #endregion
 

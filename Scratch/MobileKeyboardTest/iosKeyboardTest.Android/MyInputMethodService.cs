@@ -223,13 +223,9 @@ namespace iosKeyboardTest.Android {
         
         public override void OnUpdateSelection(int oldSelStart, int oldSelEnd, int newSelStart, int newSelEnd, int candidatesStart, int candidatesEnd) {
             base.OnUpdateSelection(oldSelStart, oldSelEnd, newSelStart, newSelEnd, candidatesStart, candidatesEnd);
-            //MainThread.BeginInvokeOnMainThread(async() => {
-            //    //    // BUG when OnUpdateSelection is called actual insert isn't changed yet, wait a sec before signalling handler
-            //    await Task.Delay(150);
-            //    OnCursorChanged?.Invoke(this, EventArgs.Empty);
-            //});
             var info = GetTextInfo();
             info.Select(newSelStart, newSelEnd - newSelStart);
+            Debug.WriteLine($"[{DateTime.Now}] [{oldSelStart},{oldSelEnd}] [{newSelStart},{newSelEnd}] [{candidatesStart},{candidatesEnd}] {info}");
             OnCursorChanged?.Invoke(this, info);
         }
         public override void OnConfigurationChanged(Configuration newConfig) {

@@ -226,31 +226,7 @@ namespace iosKeyboardTest.Android {
             d.Draw(canvas);
             return bmp;
         }
-        public static Bitmap TintBitmap(this Bitmap bmp, int color) {
-            // from https://stackoverflow.com/a/4856229/105028
 
-            var result = Bitmap.CreateBitmap(bmp.Width, bmp.Height, bmp.GetConfig());
-            var canvas = new Canvas(result);
-            var paint = new Paint();
-            paint.SetColorFilter(new LightingColorFilter(color, 0));
-            canvas.DrawBitmap(bmp, 0, 0, paint);
-            return result;
-        }
-        public static byte[] ImageDataFromResource(string r) {
-            // Ensure "this" is an object that is part of your implementation within your Xamarin forms project
-            var assembly = typeof(AdHelpers).GetTypeInfo().Assembly;
-            byte[] buffer = null;
-
-            using (System.IO.Stream s = assembly.GetManifestResourceStream(r)) {
-                if (s != null) {
-                    long length = s.Length;
-                    buffer = new byte[length];
-                    s.Read(buffer, 0, (int)length);
-                }
-            }
-
-            return buffer;
-        }
         #endregion
 
         #region Views

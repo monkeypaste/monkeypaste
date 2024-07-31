@@ -48,7 +48,7 @@ namespace iosKeyboardTest.Android {
         #endregion
 
         #region IkeyboardViewRenderer Implementation
-        public void Render(bool invalidate) {
+        public override void Render(bool invalidate) {
             if (!DC.IsVisible) {
                 return;
             }
@@ -57,20 +57,17 @@ namespace iosKeyboardTest.Android {
             Layout(false);
             Measure(false);
             Paint(false);
-            if (invalidate) {
-                this.Redraw();
-            }
+
+            base.Render(invalidate);
         }
-        public void Layout(bool invalidate) {
+        public override void Layout(bool invalidate) {
             if (!DC.IsVisible) {
                 return;
             }
             layoutCount++;
-            if (invalidate) {
-                this.Redraw();
-            }
+            base.Layout(invalidate);
         }
-        public void Measure(bool invalidate) {
+        public override void Measure(bool invalidate) {
             if (!DC.IsVisible) {
                 return;
             }
@@ -140,11 +137,9 @@ namespace iosKeyboardTest.Android {
                 //kgv.HidePopup(this);
                 IsPopupVisible = false;
             }
-            if (invalidate) {
-                this.Redraw();
-            }
+            base.Layout(invalidate);
         }
-        public void Paint(bool invalidate) {
+        public override void Paint(bool invalidate) {
             this.Visibility = DC.IsVisible ? ViewStates.Visible : ViewStates.Invisible;
             if (this.Visibility == ViewStates.Invisible) {
                 return;
@@ -155,9 +150,7 @@ namespace iosKeyboardTest.Android {
             PrimaryTextColor = DC.PrimaryHex.ToColor();
             SecondaryTextColor = DC.SecondaryHex.ToColor();
 
-            if (invalidate) {
-                this.Redraw();
-            }
+            base.Paint(invalidate);
         }
         #endregion
 

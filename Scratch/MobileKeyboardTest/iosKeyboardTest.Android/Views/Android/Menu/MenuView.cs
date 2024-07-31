@@ -157,6 +157,9 @@ namespace iosKeyboardTest.Android {
             if (DC.MenuPageType == MenuPageType.Completions) {
                 // draw completions
 
+                // clip completions to inner frame
+                canvas.Save();
+                canvas.ClipRect(InnerMenuRect.Left, InnerMenuRect.Top, InnerMenuRect.Right, InnerMenuRect.Bottom);
 
                 for (int i = 0; i < CompletionTexts.Length; i++) {
                     var comp_item_rect = CompletionRects[i];
@@ -165,6 +168,7 @@ namespace iosKeyboardTest.Android {
                         // clipped
                         continue;
                     }
+
                     var comp_item_text = CompletionTexts[i];
                     var comp_item_bg = CompletionBgColors[i];
                     var comp_item_loc = CompletionTextLocs[i];
@@ -185,16 +189,11 @@ namespace iosKeyboardTest.Android {
                     SharedPaint.Color = DC.MenuFgHexColor.ToColor();                    
                     canvas.DrawText(comp_item_text, comp_item_loc.X, comp_item_loc.Y, SharedPaint);
                 }
+                canvas.Restore();
             }
-            // draw button bgs
-            //SharedPaint.Color = DC.BackButtonBgHexColor.ToColor();
-            //canvas.DrawRect(BackButtonRect, SharedPaint);
-
-            //SharedPaint.Color = DC.OptionsButtonBgHexColor.ToColor();
-            //canvas.DrawRect(OptionsButtonRect, SharedPaint);
 
             SharedPaint.SetTint(DC.MenuFgHexColor.ToColor());
-            if(BackButtonBmp != null) {
+            if(BackButtonBmp != null && DC.IsBackButtonVisible) {
                 canvas.DrawBitmap(BackButtonBmp, BackButtonImageRect.Left, BackButtonImageRect.Top, SharedPaint);
             }
             if(OptionsButtonBmp != null) {

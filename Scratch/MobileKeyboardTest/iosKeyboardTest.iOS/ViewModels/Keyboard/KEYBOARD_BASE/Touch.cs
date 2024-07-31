@@ -76,21 +76,32 @@ namespace iosKeyboardTest.iOS {
         static void RemoveTouch(Touch t) {
             var up_time = DateTime.Now;
             _touches.Remove(t);
-            //Debug.WriteLine($"Touch time: {(DateTime.Now - t.CreatedDt).Milliseconds}ms");
         }
     }
     public class Touch {
         public string Id { get; set; }
         public Point Location { get; private set; }
         public Point PressLocation { get; private set; }
+        public Point LastLocation { get; private set; }
+        public Point Velocity { get; private set; }
+        DateTime LastUpdateDt { get; set; }
 
         public Touch(string id, Point p)  {
             PressLocation = p;
+            LastLocation = p;
             Location = p;
+            LastUpdateDt = DateTime.Now;
             Id = id ?? System.Guid.NewGuid().ToString();
         }
         public void SetLocation(Point p) {
+            var cur_time = DateTime.Now;
+
+            LastLocation = Location;
             Location = p;
+
+            Velocity = (Location - LastLocation) / (cur_time - LastUpdateDt).TotalSeconds;
+            LastUpdateDt = cur_time;
+            Debug.WriteLine($"[{Id}] Velocity: {Velocity}");
         }
     }
 }

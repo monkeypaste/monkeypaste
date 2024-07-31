@@ -1,6 +1,20 @@
 using System;
 
 namespace iosKeyboardTest.iOS {
+
+    public enum MenuPageType {
+        None = 0,
+        TabSelector,
+        Completions,
+        OtherTab
+    }
+    public enum MenuItemType {
+        None = 0,
+        BackButton,
+        OptionsButton,
+        CompletionItem,
+        OtherTabItem
+    }
     [Flags]
     public enum WordBreakTypes : long {
         None = 0,

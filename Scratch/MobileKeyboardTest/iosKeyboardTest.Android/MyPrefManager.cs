@@ -49,8 +49,9 @@ namespace iosKeyboardTest.Android {
 
         public MyPrefManager(Context context) {
             SharedPrefs = PreferenceManager.GetDefaultSharedPreferences(context);
+            bool first_run = SharedPrefs.GetBoolean("firstRun", true);
 
-            if (!SharedPrefs.All.Any()) {
+            if (first_run) {
                 // initial startup
                 RestoreDefaults();
             }
@@ -140,6 +141,7 @@ namespace iosKeyboardTest.Android {
                     editor.PutFloat(key, floatVal);
                 }
             }
+            editor.Commit();
         }
     }
 }

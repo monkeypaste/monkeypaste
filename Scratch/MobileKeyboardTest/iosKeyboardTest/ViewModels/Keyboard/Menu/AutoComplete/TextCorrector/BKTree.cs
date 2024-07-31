@@ -21,7 +21,7 @@ namespace iosKeyboardTest {
         static Node[] Tree { get; set; } = new Node[MAX_WORD_COUNT];
 
         public static IEnumerable<WordEntry> Entries =>
-            Tree.Where(x=>x.Entry != null).Select(x => x.Entry);
+            Tree.Where(x=>x.Entry != null && !string.IsNullOrWhiteSpace(x.Word)).Select(x => x.Entry);
 
         // index for the current Node of the tree
         static int NextAddIdx { get; set; }
@@ -76,7 +76,7 @@ namespace iosKeyboardTest {
                 return;
             }
 
-            if (root.Entry == null) {
+            if (root.Word == null) {
                 // if it is the first Node then make it the root Node
                 root.Entry = curr.Entry;
                 return;
@@ -115,7 +115,7 @@ namespace iosKeyboardTest {
 
         public static List<(string,int)> GetSimilarWords(Node root, string s) {
             var ret = new List<(string,int)>();
-            if (root == null || root.Word == null || root.Word == "") {
+            if (root != RootNode && (root == null || string.IsNullOrEmpty(root.Word))) {
                 return ret;
             }
                 

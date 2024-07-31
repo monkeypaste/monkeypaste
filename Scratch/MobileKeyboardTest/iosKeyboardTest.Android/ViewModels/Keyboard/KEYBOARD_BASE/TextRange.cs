@@ -43,7 +43,7 @@ namespace iosKeyboardTest.Android {
                 Text == otherRange.Text;
         }
         public override string ToString() {
-            return $"[{SelectionStartIdx},{SelectionEndIdx}]'{Text}'";
+            return $"[{SelectionStartIdx},{SelectionLength}]'{Text}'";
         }
 
         public TextRange Clone() {
