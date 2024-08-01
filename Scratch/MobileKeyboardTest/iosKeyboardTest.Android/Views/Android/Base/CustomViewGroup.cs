@@ -15,6 +15,7 @@ namespace iosKeyboardTest.Android {
         #endregion
 
         #region Statics
+        public Paint SharedPaint { get; set; } = new();
         #endregion
 
         #region Interfaces
@@ -74,7 +75,6 @@ namespace iosKeyboardTest.Android {
 
         #region Properties
 
-        public Paint SharedPaint { get; set; }
         public Color BackgroundColor { get; set; }
         public virtual RectF Frame { get; set; }
         #endregion

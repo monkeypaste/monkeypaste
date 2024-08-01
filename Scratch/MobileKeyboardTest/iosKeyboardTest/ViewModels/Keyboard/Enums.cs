@@ -1,6 +1,9 @@
 ﻿using System;
 
 namespace iosKeyboardTest {
+    public enum MeasuredTextAlignment {
+
+    }
 
     public enum MenuPageType {
         None = 0,

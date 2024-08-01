@@ -32,7 +32,7 @@ namespace iosKeyboardTest {
             int count = rows.Length;
             var nodes = rows.Select((x,idx) => new Node(idx + 1, x));
             int max_len = nodes.Max(x => x.Word.Length);
-            BKTree.Init(count, max_len);
+            BKTree.Init(count+1, max_len);
             foreach (var node in nodes) {
                 BKTree.Add(BKTree.RootNode, node);
             }

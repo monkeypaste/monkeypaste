@@ -1,7 +1,7 @@
 using System;
 
-namespace iosKeyboardTest.Android {
-    public class TextRange {
+namespace iosKeyboardTest.iOS.KeyboardExt {
+    public class TextRangeInfo {
         public int SelectionStartIdx { get; private set; }
         public int SelectionLength { get; private set; }
         public int SelectionEndIdx =>
@@ -23,7 +23,7 @@ namespace iosKeyboardTest.Android {
                 Text.Substring(SelectionEndIdx, Math.Max(0,Text.Length - SelectionEndIdx)) : 
                 string.Empty;
 
-        public TextRange(string text, int sidx,int len) {
+        public TextRangeInfo(string text, int sidx,int len) {
             Text = text;
             SelectionStartIdx = sidx;
             SelectionLength = len;
@@ -33,7 +33,7 @@ namespace iosKeyboardTest.Android {
             SelectionLength = Math.Clamp(len, 0, Math.Max(0,Text.Length - SelectionStartIdx));
         }
 
-        public bool IsEqual(TextRange otherRange) {
+        public bool IsEqual(TextRangeInfo otherRange) {
             if(otherRange == null) {
                 return false;
             }
@@ -46,8 +46,8 @@ namespace iosKeyboardTest.Android {
             return $"[{SelectionStartIdx},{SelectionLength}]'{Text}'";
         }
 
-        public TextRange Clone() {
-            return new TextRange(Text, SelectionStartIdx, SelectionLength);
+        public TextRangeInfo Clone() {
+            return new TextRangeInfo(Text, SelectionStartIdx, SelectionLength);
         }
     }
 }

@@ -2,6 +2,7 @@
 using Android.Graphics;
 using Android.Views;
 using Microsoft.Maui.Graphics;
+using System;
 using System.Linq;
 using static Android.Views.View;
 using Color = Android.Graphics.Color;
@@ -40,8 +41,10 @@ namespace iosKeyboardTest.Android {
             InnerMenuRect = DC.InnerMenuRect.ToRectF();
 
             CompletionRects = DC.CompletionItemRects.Select(x => x.ToRectF()).ToArray();
+            //CompletionTextLocs = DC.CompletionItemTextLocs.Select(x => x.ToPointF()).ToArray();
             CompletionTextLocs = new PointF[CompletionTexts.Length];
-            for (int i = 0; i < CompletionTexts.Length; i++) {
+            int avail_count = Math.Min(CompletionRects.Length, CompletionTexts.Length);
+            for (int i = 0; i < avail_count; i++) {
                 var comp_item_text = CompletionTexts[i];
                 var comp_item_rect = CompletionRects[i];
                 var citb = new Rect();
@@ -161,7 +164,8 @@ namespace iosKeyboardTest.Android {
                 canvas.Save();
                 canvas.ClipRect(InnerMenuRect.Left, InnerMenuRect.Top, InnerMenuRect.Right, InnerMenuRect.Bottom);
 
-                for (int i = 0; i < CompletionTexts.Length; i++) {
+                int avail_count = GetAvailableComplCount();
+                for (int i = 0; i < avail_count; i++) {
                     var comp_item_rect = CompletionRects[i];
                     if(comp_item_rect.Right < InnerMenuRect.Left ||
                         comp_item_rect.Left > InnerMenuRect.Right) {
@@ -184,7 +188,7 @@ namespace iosKeyboardTest.Android {
 
                     // draw item text
                     SharedPaint.SetStyle(GPaint.Style.Fill);
-                    SharedPaint.TextAlign = GPaint.Align.Center;
+                    SharedPaint.TextAlign = DC.CompletionTextAlignment.ToAdAlign();
                     SharedPaint.TextSize = DC.CompletionItemFontSize.UnscaledF();
                     SharedPaint.Color = DC.MenuFgHexColor.ToColor();                    
                     canvas.DrawText(comp_item_text, comp_item_loc.X, comp_item_loc.Y, SharedPaint);
@@ -207,6 +211,14 @@ namespace iosKeyboardTest.Android {
         #endregion
 
         #region Private Methods
+        int GetAvailableComplCount() {
+            int avail_count = Math.Min(CompletionTexts.Length, Math.Min(CompletionRects.Length, Math.Min(CompletionBgColors.Length, CompletionTextLocs.Length)));
+            int max_count = Math.Max(CompletionTexts.Length, Math.Max(CompletionRects.Length, Math.Max(CompletionBgColors.Length, CompletionTextLocs.Length)));
+            if (avail_count != max_count) {
+                // mismatch!
+            }
+            return avail_count;
+        }
         #endregion
 
         #region Commands

@@ -28,21 +28,15 @@ namespace iosKeyboardTest.iOS.KeyboardExt {
                 f.Close();
             }
 
-            var raw_rows = text.Split(new string[] { "\r\n" }, System.StringSplitOptions.RemoveEmptyEntries);
-            int count = raw_rows.Length;
-            var rows = raw_rows.Skip(1);
+            var rows = text.Split(new string[] { "\r\n" }, System.StringSplitOptions.RemoveEmptyEntries);
+            int count = rows.Length;
             var nodes = rows.Select((x,idx) => new Node(idx + 1, x));
-
             int max_len = nodes.Max(x => x.Word.Length);
-            BKTree.Init(count, max_len);
+            BKTree.Init(count+1, max_len);
             foreach (var node in nodes) {
                 BKTree.Add(BKTree.RootNode, node);
             }
             Defaults = BKTree.Entries.Skip(1).Take(MAX_COMPLETION_RESULTS).Select(x => x.Word).ToArray();
-
-            var sb = new StringBuilder();
-            BKTree.Entries.Where(x => !string.IsNullOrWhiteSpace(x.Word)).OrderBy(x => x.Rank).ForEach(x => sb.AppendLine(x.Word.ToLower()));
-            string output = sb.ToString();
 
             IsLoaded = true;
         }

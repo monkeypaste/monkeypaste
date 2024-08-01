@@ -1,19 +1,23 @@
 using Avalonia;
+using Avalonia.Media;
 using DynamicData;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Diagnostics;
+using System.Drawing;
 using System.Globalization;
 using System.Linq;
 using System.Reflection;
 using System.Threading.Tasks;
 using System.Xml.Linq;
+using Point = Avalonia.Point;
 
 namespace iosKeyboardTest.Android {
     public class MenuViewModel : ViewModelBase, IKeyboardViewRenderer, IKeyboardRenderSource {
 
         #region Private Variables
+        object _completionLock = new();
         #endregion
 
         #region Constants
@@ -61,17 +65,18 @@ namespace iosKeyboardTest.Android {
         public ObservableCollection<string> CompletionItems { get; set; } = [];
         public IEnumerable<string> CompletionDisplayValues {
             get {
-                string leading_word = GetLeadingWord(LastInfo,false);
+                string leading_word = GetLeadingWord(LastTextInfo,sentenceWordsOnly: true);
                 foreach(string comp_val in CompletionItems) {
                     yield return GetCompletionDisplayValue(leading_word, comp_val);
                 }
             }
         }
 
-            
+
         #endregion
 
         #region Appearance
+        string ConfirmIgnoreAutoCorrectCompletionText => "✓";
         public string MenuBgHexColor => KeyboardPalette.MenuBgHex;
         public string MenuFgHexColor => KeyboardPalette.MenuFgHex;
         public string BackButtonBgHexColor { get; private set; } = KeyboardPalette.MenuBgHex;
@@ -175,22 +180,48 @@ namespace iosKeyboardTest.Android {
 
         int MaxVisibleCompletionItems => 3;
 
-        Rect[] _completionItemBaseRects;
+        Rect[] _maxCompletionItemRects;
         public Rect[] CompletionItemRects {
             get {
-                if(_completionItemBaseRects == null) {
+                if(_maxCompletionItemRects == null) {
                     double w = InnerMenuRect.Width / MaxVisibleCompletionItems;
                     double h = InnerMenuRect.Height;
-                    _completionItemBaseRects = new Rect[Parent.MaxCompletionResults];
-                    for (int i = 0; i < _completionItemBaseRects.Length; i++) {
+                    _maxCompletionItemRects = new Rect[Parent.MaxCompletionResults];
+                    for (int i = 0; i < _maxCompletionItemRects.Length; i++) {
                         double x = InnerMenuRect.Left + i * w;
                         double y = InnerMenuRect.Top;
-                        _completionItemBaseRects[i] = new Rect(x, y, w, h);
+                        _maxCompletionItemRects[i] = new Rect(x, y, w, h);
                     }
                 }
-                return _completionItemBaseRects.Select(x=>new Rect(x.X - CompletionScrollOffset,x.Y,x.Width,x.Height)).ToArray();
+                // NOTE only provide rects for available completions
+                return 
+                    _maxCompletionItemRects
+                    .Take(CompletionItems.Count)
+                    .Select(x=>new Rect(x.X - CompletionScrollOffset,x.Y,x.Width,x.Height))
+                    .ToArray();
             }
         }
+
+        IEnumerable<Point> _completionItemTextLocs;
+        public IEnumerable<Point> CompletionItemTextLocs {
+            get {
+                foreach(string comp_disp_val in CompletionDisplayValues) {
+                    if(InputConnection == null || InputConnection.TextMeasurer == null) {
+                        yield return new();
+                        continue;
+                    }
+                    var comp_item_rect =
+                        InputConnection.TextMeasurer
+                        .MeasureText(comp_disp_val, CompletionItemFontSize, CompletionTextAlignment, out double ascent, out double descent);
+                    double cix = comp_item_rect.Center.X;
+                    double ciy = comp_item_rect.Center.Y - ((ascent + descent) / 2);
+                    yield return new Point(cix, ciy);
+                }
+            }
+        }
+        public TextAlignment CompletionTextAlignment =>
+            TextAlignment.Center;
+
         double MinCompletionScrollDisplacement => 3;
         double LastCompletionScrollOffset { get; set; }
         double CompletionScrollDisplacement { get; set; } 
@@ -218,11 +249,11 @@ namespace iosKeyboardTest.Android {
         #endregion
 
         #region State
-        TextRange LastInfo { get; set; }
+        TextRangeInfo LastTextInfo { get; set; }
         bool IsScrolling =>
             CompletionScrollDisplacement > MinCompletionScrollDisplacement;
         int PressedCompletionItemIdx { get; set; } = -1;
-        TextRange LastAutoCorrectRange { get; set; }
+        TextRangeInfo LastAutoCorrectRange { get; set; }
         string LastAutoCorrectedIncorrectText { get; set; }
         (MenuItemType ownerType, int ownerIdx) TouchOwner { get; set; }
         string TouchId { get; set; }
@@ -243,6 +274,11 @@ namespace iosKeyboardTest.Android {
         #region Constructors
         public MenuViewModel(KeyboardViewModel parent) {
             Parent = parent;
+            CompletionItems.CollectionChanged += (s, e) => {
+                if(CompletionItems.Count > 8) {
+
+                }
+            };
         }
 
         public void SetInputConnection(IKeyboardInputConnection conn) {
@@ -289,37 +325,48 @@ namespace iosKeyboardTest.Android {
             Renderer.Render(true);
             return true;
         }
+        public void ShowCompletion(TextRangeInfo textInfo) {
+           lock (_completionLock) {
+                // NOTE lock ensures completion count changes between insert changes
+                // don't throw off the renderers references
+                if (GetLeadingWord(textInfo) is not { } raw_input ||
+                    !TextCorrector.IsLoaded) {
+                    return;
+                }
+                string input = raw_input.Trim();
+                CompletionItems.Clear();
+                if (string.IsNullOrEmpty(input) && !Parent.IsNextWordCompletionEnabled) {
+                    // don't do beginning of word
+                    MenuPageType = MenuPageType.TabSelector;
+                    return;
+                }
+                MenuPageType = MenuPageType.Completions;
+                ResetCompletionScroll();
 
-        public void ShowCompletion(TextRange textInfo) {
-            //Task.Run(() => {
-            if (GetLeadingWord(textInfo) is not { } input ||
-                !TextCorrector.IsLoaded) {
-                return;
-            }
-            input = input.Trim();
-            CompletionItems.Clear();
-            if(string.IsNullOrEmpty(input) && !Parent.IsNextWordCompletionEnabled) {
-                // don't do beginning of word
-                MenuPageType = MenuPageType.TabSelector;
-                return;
-            }
+                if (CheckForAutoCorrectUndo(textInfo)) {
+                    return;
+                }
 
-            MenuPageType = MenuPageType.Completions;
-            LastInfo = textInfo;
-            ResetCompletionScroll();
+                var results = TextCorrector.GetResults(input.ToLower(), Parent.IsAutoCorrectEnabled, Parent.MaxCompletionResults, out string autoCorrectResult);
+                if (Parent.IsAutoCorrectEnabled && 
+                    !string.IsNullOrEmpty(autoCorrectResult) &&
+                    results.ToList() is { } result_list) {
+                    // pre-pend results with check-mark to signify autocorrect pending in menu strip
+                    result_list.Insert(0, ConfirmIgnoreAutoCorrectCompletionText);
+                    // ensure results within max count
+                    results = result_list.Take(Parent.MaxCompletionResults);
+                    StartAutoCorrect(textInfo, autoCorrectResult);
+                } else if (LastAutoCorrectRange != null && WasSpace(textInfo, LastTextInfo)) {
+                    DoAutoCorrect(textInfo);
+                }
+                CompletionItems.Clear();
+                CompletionItems.AddRange(results);
 
-            if(CheckForAutoCorrectUndo(textInfo)) {
-                return;
+                LastTextInfo = textInfo;
+
+                this.Renderer.Render(true);
             }
-            
-            var results = TextCorrector.GetResults(input.ToLower(), Parent.IsAutoCorrectEnabled, Parent.MaxCompletionResults, out string autoCorrectResult);
-            if (Parent.IsAutoCorrectEnabled && !string.IsNullOrEmpty(autoCorrectResult)) {
-                DoAutoCorrect(textInfo, autoCorrectResult);
-            }
-            CompletionItems.AddRange(results);
-            this.Renderer.Render(true);
         }
-
         public void GoBack() {
             MenuPageType back_to_page = MenuPageType;
             switch (MenuPageType) {
@@ -339,10 +386,9 @@ namespace iosKeyboardTest.Android {
 
         #endregion
 
-        #region Protected Methods
-        #endregion
-
         #region Private Methods
+
+        #region Touch Actions
         bool CanPerformAction(Touch touch) {
             var release_owner = FindTouchOwner(touch);
             if (TouchOwner.ownerType != release_owner.ownerType ||
@@ -353,67 +399,6 @@ namespace iosKeyboardTest.Android {
             }
             return true;
         }
-        bool WasBackspace(TextRange curRange,TextRange lastRange) {
-            if(lastRange.LeadingText.Length > 0 &&
-                curRange.LeadingText == lastRange.LeadingText.Substring(0,lastRange.LeadingText.Length - 1)) {
-                return true;
-            }
-            return false;
-        }
-        string GetLeadingWord(TextRange textRange, bool ignoreCompound = false) {
-            if(textRange == null ||
-                textRange.LeadingText is not { } leading_text) {
-                return string.Empty;
-            }
-            int leading_word_idx = 0;
-            string last_char = string.Empty;
-            for (int i = 0; i < leading_text.Length; i++) {
-                int text_idx = leading_text.Length - i - 1;
-                string cur_char = leading_text[text_idx].ToString();
-                if(!ignoreCompound &&
-                    Parent.IsCompoundWordBreakEnabled && 
-                    !string.IsNullOrEmpty(last_char) &&
-                    i + 1 <leading_text.Length) {
-                    /*
-                    snake_case
-                    camelCase
-                    PascalCase
-                    kebab-case
-                    */
-                    if(cur_char == "_" || 
-                        cur_char == "-" ||
-                        cur_char.StartsWithCapitalCaseChar() != last_char.StartsWithCapitalCaseChar()) {
-                        leading_word_idx = leading_word_idx + 1;
-                        break;
-                    }
-                }
-                if(Parent.EndOfWordChars.IndexOf(cur_char) >= 0) {
-                    leading_word_idx = text_idx;
-                    break;
-                }
-                last_char = cur_char;
-            }
-            if(leading_word_idx < 0) {
-                return string.Empty;
-            }
-            return leading_text.Substring(leading_word_idx, leading_text.Length - leading_word_idx);
-        }
-
-        string GetCompletionDisplayValue(string leading_word, string comp_val) {
-            string out_val = comp_val;
-            //if(comp_val.ToLower().StartsWith(leading_word.ToLower()) {
-            //    // a completion (NOT an auto-correct result)
-            //    // preprend actual leading to result
-            //    out_val = actual_leading_text.Replace(leading_word, comp_val);
-            //}
-            if (Parent.IsShiftOnLock || (leading_word.Length > 1 && leading_word.IsAllCaps())) {
-                return out_val.ToUpper();
-            } else if (Parent.IsShiftOnTemp || leading_word.StartsWithCapitalCaseChar()) {
-                return out_val.ToTitleCase();
-            }
-
-            return out_val;
-        }
         void PerformMenuAction((MenuItemType,int) owner) {
             switch (owner.Item1) {
                 case MenuItemType.BackButton:
@@ -423,55 +408,11 @@ namespace iosKeyboardTest.Android {
                     InputConnection.OnShowPreferences(null);
                     break;
                 case MenuItemType.CompletionItem:
-                    DoCompletion(CompletionDisplayValues.ElementAt(owner.Item2));                    
+                    DoCompletion(LastTextInfo, CompletionDisplayValues.ElementAt(owner.Item2));                    
                     break;
             }
             
-        }
-        bool CheckForAutoCorrectUndo(TextRange curRange) {
-            if (LastAutoCorrectRange != null) {
-                // TODO? may need to check if input is space here, if so don't clear LastAutoCorrect
-                if (Parent.IsBackspaceUndoLastAutoCorrectEnabled &&
-                    WasBackspace(curRange, LastAutoCorrectRange) &&
-                    GetLeadingWord(curRange) is { } auto_corrected_word) {
-                    // delete auto corrected word
-                    InputConnection.OnBackspace(auto_corrected_word.Length);
-                    LastAutoCorrectRange = null;
-                    return true;
-                }
-
-                LastAutoCorrectRange = null;
-            }
-            return false;
-        }
-        void DoAutoCorrect(TextRange curRange, string autoCorrectedText) {
-            // get incorrect text
-            string text_to_delete = GetLeadingWord(curRange);
-            int del_len = text_to_delete.Length;
-            // backspace incorrect text length
-            InputConnection.OnBackspace(del_len);
-            // format correct text based on incorrect/shift state
-            string out_val = GetCompletionDisplayValue(text_to_delete, autoCorrectedText);
-            // insert formatted/corrected text
-            InputConnection.OnText(out_val);
-
-            // store incorrect text
-            LastAutoCorrectedIncorrectText = text_to_delete.Trim();
-            // store newly corrected info with corrected text as sel range
-            LastAutoCorrectRange = curRange.Clone();
-            LastAutoCorrectRange.Select(LastAutoCorrectRange.SelectionStartIdx - del_len, del_len);
-            LastAutoCorrectRange.SelectedText = out_val;
-        }
-        void DoCompletion(string completionText) {
-            if(GetLeadingWord(LastInfo) is { } orig_leading_text) {
-                // remove whats being completed
-                InputConnection.OnBackspace(orig_leading_text.Length);
-            }
-            // only insert space if not url/email
-            string completion_suffix = Parent.IsEmailLayout || Parent.IsUrlLayout ? string.Empty : " ";
-            string output_text = completionText + completion_suffix;
-            InputConnection.OnText(output_text);
-        }
+        }        
         (MenuItemType ownerType, int ownerIdx) FindTouchOwner(Touch touch) {
             if(BackButtonRect.Contains(touch.Location)) {
                 return (MenuItemType.BackButton, 0);
@@ -506,13 +447,164 @@ namespace iosKeyboardTest.Android {
             TouchOwner = isPressed ? TouchOwner : default;
         }
 
+        #endregion
+
+        #region Insert Helpers
+
+        bool WasSpace(TextRangeInfo curRange, TextRangeInfo lastRange) {
+            if (curRange.LeadingText.Length > 0 &&
+                curRange.LeadingText.Substring(0, curRange.LeadingText.Length - 1) == lastRange.LeadingText &&
+                curRange.LeadingText.Last() == ' ') {
+                return true;
+            }
+            return false;
+        }
+        bool WasBackspace(TextRangeInfo curRange, TextRangeInfo lastRange) {
+            if (lastRange.LeadingText.Length > 0 &&
+                curRange.LeadingText == lastRange.LeadingText.Substring(0, lastRange.LeadingText.Length - 1)) {
+                return true;
+            }
+            return false;
+        }
+        string GetLeadingWord(TextRangeInfo textRange, bool sentenceWordsOnly = false, bool acceptWhitespace = false) {
+            if (textRange == null ||
+                textRange.LeadingText is not { } leading_text) {
+                return string.Empty;
+            }
+            int leading_word_idx = 0;
+            string last_char = string.Empty;
+            for (int i = 0; i < leading_text.Length; i++) {
+                int text_idx = leading_text.Length - i - 1;
+                string cur_char = leading_text[text_idx].ToString();
+                if (!sentenceWordsOnly &&
+                    Parent.IsCompoundWordBreakEnabled &&
+                    !string.IsNullOrEmpty(last_char) &&
+                    i + 1 < leading_text.Length) {
+                    /*
+                    snake_case
+                    camelCase
+                    PascalCase
+                    kebab-case
+                    */
+                    if (cur_char == "_" ||
+                        cur_char == "-" ||
+                        cur_char.StartsWithCapitalCaseChar() != last_char.StartsWithCapitalCaseChar()) {
+                        leading_word_idx = leading_word_idx + 1;
+                        break;
+                    }
+                }
+                int eow_idx = Parent.EndOfWordChars.IndexOf(cur_char);
+                if (eow_idx >= 0) {
+                    if(acceptWhitespace && Parent.EndOfWordChars[eow_idx] == " ") {
+                        // allow whitespace...
+                        // needed when replacing autocorrected text since its replaced
+                        // AFTER hitting space
+                    } else {
+                        leading_word_idx = text_idx;
+                        break;
+                    }
+                    
+                }
+                last_char = cur_char;
+            }
+            if (leading_word_idx < 0) {
+                return string.Empty;
+            }
+            return leading_text.Substring(leading_word_idx, leading_text.Length - leading_word_idx);
+        }
+        #endregion
+
+        #region Completion
+
+        string GetCompletionDisplayValue(string leading_word, string comp_val, bool isForMenuStrip = true) {
+            //if(isForMenuStrip &&
+            //    comp_val == ConfirmIgnoreAutoCorrectCompletionText) {
+            //    // don't mess w/ the check mark
+            //    return ConfirmIgnoreAutoCorrectCompletionText;
+            //}
+            string out_val = comp_val;
+            //if(comp_val.ToLower().StartsWith(leading_word.ToLower()) {
+            //    // a completion (NOT an auto-correct result)
+            //    // preprend actual leading to result
+            //    out_val = actual_leading_text.Replace(leading_word, comp_val);
+            //}
+            if (Parent.IsShiftOnLock || (leading_word.Length > 1 && leading_word.IsAllCaps())) {
+                return out_val.ToUpper();
+            } else if (Parent.IsShiftOnTemp || leading_word.StartsWithCapitalCaseChar()) {
+                return out_val.ToTitleCase();
+            }
+
+            return out_val;
+        }
+        void DoCompletion(TextRangeInfo textInfo, string completionText, bool isAutoCorrect = false) {
+            if (completionText == ConfirmIgnoreAutoCorrectCompletionText) {
+                // cancel auto correct by inserting a space
+                InputConnection.OnText(" ");
+                return;
+            }
+            if (GetLeadingWord(textInfo, acceptWhitespace: isAutoCorrect) is { } orig_leading_text) {
+                // remove whats being completed
+                InputConnection.OnBackspace(orig_leading_text.Length);
+            }
+            // only insert space if not url/email
+            string completion_suffix = Parent.IsEmailLayout || Parent.IsUrlLayout ? string.Empty : " ";
+            string output_text = completionText + completion_suffix;
+            InputConnection.OnText(output_text);
+        }
+
+        #endregion
+
+        #region Auto-Correct
+        bool CheckForAutoCorrectUndo(TextRangeInfo curRange) {
+            if (LastAutoCorrectRange == null) {
+                return false;
+            }
+
+            bool is_undo = false;
+            if (Parent.IsBackspaceUndoLastAutoCorrectEnabled &&
+                WasBackspace(curRange, LastAutoCorrectRange)) {
+                is_undo = true;
+            } else if (WasSpace(curRange, LastTextInfo)) {
+                // auto-correct will occur
+                return false;
+            }
+            FinishAutoCorrect(curRange, is_undo);
+            return is_undo;
+        }
+        void StartAutoCorrect(TextRangeInfo curRange, string autoCorrectedText) {
+            // get incorrect text
+            string incorrect_text = GetLeadingWord(curRange);
+            int inc_len = incorrect_text.Length;
+            // format correct text based on incorrect/shift state
+            string out_val = GetCompletionDisplayValue(incorrect_text, autoCorrectedText, false);
+
+            // store incorrect text
+            LastAutoCorrectedIncorrectText = incorrect_text.Trim();
+            // store newly corrected info with corrected text as sel range
+            LastAutoCorrectRange = curRange.Clone();
+            LastAutoCorrectRange.Select(LastAutoCorrectRange.SelectionStartIdx - inc_len, inc_len);
+            LastAutoCorrectRange.SelectedText = out_val;
+        }
+        void FinishAutoCorrect(TextRangeInfo curRange, bool is_undo) {
+            if (is_undo) {
+                DoCompletion(curRange, LastAutoCorrectedIncorrectText);
+            }
+            LastAutoCorrectRange = null;
+            LastAutoCorrectedIncorrectText = null;
+        }
+        void DoAutoCorrect(TextRangeInfo textInfo) {
+            DoCompletion(textInfo, LastAutoCorrectRange.SelectedText.Trim(), isAutoCorrect: true);
+        }
+        #endregion
+
+        #region Scroll
         void SetCompletionScrollOffset(double new_offset) {
             CompletionScrollOffset = Math.Clamp(new_offset, MinCompletionScrollOffset, MaxCompletionScrollOffset);
             CompletionScrollDisplacement += Math.Abs(CompletionScrollOffset - LastCompletionScrollOffset);
             LastCompletionScrollOffset = CompletionScrollOffset;
         }
         async Task StartScrollAnimationAsync(Touch touch) {
-            if(!CompletionItemRects.Any()) {
+            if (!CompletionItemRects.Any()) {
                 return;
             }
             CompletionScrollVelocity = touch.Velocity.X;
@@ -523,9 +615,9 @@ namespace iosKeyboardTest.Android {
             double max_v = 10;
             double min_v = 0.1;
 
-            while(true) {
-                CompletionScrollVelocity = Math.Clamp(CompletionScrollVelocity * dampening,-max_v, max_v);
-                if(Math.Abs(CompletionScrollVelocity) < min_v) {
+            while (true) {
+                CompletionScrollVelocity = Math.Clamp(CompletionScrollVelocity * dampening, -max_v, max_v);
+                if (Math.Abs(CompletionScrollVelocity) < min_v) {
                     // snap
                     double dist = FindSnapCompletionRectDisp();
                     double snap_v = dist / snap_t;
@@ -553,7 +645,7 @@ namespace iosKeyboardTest.Android {
             }
         }
         double FindSnapCompletionRectDisp() {
-            var closest_item_rect = 
+            var closest_item_rect =
                 CompletionItemRects
                 .Aggregate((a, b) => Math.Abs(InnerMenuRect.Left - a.Left) < Math.Abs(InnerMenuRect.Left - b.Left) ? a : b);
             return closest_item_rect.Left - InnerMenuRect.Left;
@@ -567,6 +659,8 @@ namespace iosKeyboardTest.Android {
             LastCompletionScrollOffset = 0;
             CompletionScrollOffset = 0;
         }
+        #endregion
+
         #endregion
 
         #region Commands

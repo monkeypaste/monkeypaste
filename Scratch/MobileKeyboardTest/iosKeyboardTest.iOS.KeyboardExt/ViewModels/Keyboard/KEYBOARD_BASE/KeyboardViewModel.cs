@@ -529,7 +529,8 @@ namespace iosKeyboardTest.iOS.KeyboardExt {
             } else {
                 SetCharSet(CharSetType.Letters);
             }
-            HandleCursorChange(null);
+
+            HandleCursorChange(InputConnection.OnTextRangeInfoRequest());
 
             var keyRows = GetKeyRows(KeyboardFlags);
             Keys.Clear();
@@ -553,7 +554,9 @@ namespace iosKeyboardTest.iOS.KeyboardExt {
                     }
                 }
             }
+            // find max popups for current keyboard
             int max_popup_keys = Keys.Max(x => x.GetSecondaryCharacters().Count());
+            // calculate max possible rows using a fixed max col count
             MaxPopupRowCount = (int)Math.Floor((double)max_popup_keys / (double)(MaxPopupColCount));
             //TotalTopPad = MaxPopupRowCount * DefaultKeyHeight;
 
@@ -571,6 +574,16 @@ namespace iosKeyboardTest.iOS.KeyboardExt {
             }
             PopupKeys = Keys.Where(x => x.IsPopupKey).ToArray();
 
+            double max_key_height = DefaultKeyHeight;
+            double menu_height = MenuHeight;
+            double safe_pad = 5;
+            double inner_top_margin = max_key_height - menu_height + safe_pad;
+            if(inner_top_margin > 0) {
+                // needs this much inner margin to show popups without overflowing
+                // top of keyboard
+                KeyboardMargin = new Thickness(KeyboardMargin.Left, inner_top_margin, KeyboardMargin.Right, KeyboardMargin.Bottom);
+            }
+            
             SetDesiredSize(DesiredSize);
             ResetLayout();
             UpdateKeyboardState();
@@ -604,10 +617,10 @@ namespace iosKeyboardTest.iOS.KeyboardExt {
             Dispatcher.UIThread.Post(() => Init(new_flags));
         }
 
-        private void Ic_OnCursorChanged(object sender, TextRange e) {
+        private void Ic_OnCursorChanged(object sender, TextRangeInfo e) {
             HandleCursorChange(e);
         }
-        void HandleCursorChange(TextRange? textInfo) {
+        void HandleCursorChange(TextRangeInfo textInfo) {
             DateTime this_cursor_change_dt = DateTime.Now;
 
             bool do_vibrate = false;
@@ -629,22 +642,14 @@ namespace iosKeyboardTest.iOS.KeyboardExt {
             // NOTE do completion AFTER shift state has been changed
             MenuViewModel.ShowCompletion(textInfo);
         }
-        void CheckAutoCap(TextRange? textInfo) {
+        void CheckAutoCap(TextRangeInfo textInfo) {
             if (!IsAutoCapitalizationEnabled ||
                 InputConnection is not { } ic ||
                 ShiftState == ShiftStateType.ShiftLock) {
                 return;
             }
             bool needs_shift = false;
-            string leading_text = null;
-            if(textInfo is { } ti) {
-                // BUG android OnUpdateSelection is called right BEFORE its available to the CurrentInputConnection
-                // so have to use the params from OnUpdateSelection
-                leading_text = ti.LeadingText;
-            } else {
-                leading_text = ic.GetLeadingText(-1, -1);
-            }
-            
+            string leading_text = textInfo.LeadingText;            
             
             if (string.IsNullOrEmpty(leading_text)) {
                 // auto cap if insert is leading
@@ -667,6 +672,7 @@ namespace iosKeyboardTest.iOS.KeyboardExt {
             }
             SetShiftState(needs_shift ? ShiftStateType.Shift : ShiftStateType.None);
         }
+        
         void SetFlags(KeyboardFlags kbFlags) {
             KeyboardFlags = kbFlags;
             IsThemeDark = KeyboardFlags.HasFlag(KeyboardFlags.Dark);

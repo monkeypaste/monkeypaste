@@ -388,8 +388,7 @@ namespace iosKeyboardTest {
                 }
                 return 0.65;
             }
-        }
-            
+        }           
 
         public CornerRadius CornerRadius {
             get {

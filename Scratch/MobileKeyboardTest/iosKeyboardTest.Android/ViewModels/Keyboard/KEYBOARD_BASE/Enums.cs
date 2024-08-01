@@ -1,6 +1,9 @@
 using System;
 
 namespace iosKeyboardTest.Android {
+    public enum MeasuredTextAlignment {
+
+    }
 
     public enum MenuPageType {
         None = 0,

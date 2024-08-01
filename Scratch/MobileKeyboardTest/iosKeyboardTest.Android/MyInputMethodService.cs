@@ -15,6 +15,8 @@ using AndroidX.Preference;
 using Avalonia;
 using Avalonia.Android;
 using Avalonia.Controls;
+using Avalonia.Media;
+using Avalonia.Skia;
 using Avalonia.Threading;
 using Microsoft.Maui.ApplicationModel;
 using System;
@@ -24,6 +26,7 @@ using System.Linq;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
+using Xamarin.Google.Crypto.Tink.Prf;
 //using Xamarin.Essentials;
 using static Android.Views.View;
 using Color = Android.Graphics.Color;
@@ -31,14 +34,16 @@ using Debug = System.Diagnostics.Debug;
 using Exception = System.Exception;
 using Keycode = Android.Views.Keycode;
 using Orientation = Android.Content.Res.Orientation;
+using Rect = Android.Graphics.Rect;
 using Stream = System.IO.Stream;
+using TextAlignment = Avalonia.Media.TextAlignment;
 using View = Android.Views.View;
 
 namespace iosKeyboardTest.Android {
     [Service(Name = "com.CompanyName.MyInputMethodService")]
     public class MyInputMethodService : 
         InputMethodService, 
-        IKeyboardInputConnection_android, 
+        IKeyboardInputConnection,
         IOnTouchListener,
         IAssetLoader,
         IMainThread,
@@ -59,6 +64,7 @@ namespace iosKeyboardTest.Android {
         #endregion
 
         #region Interfaces
+
 
         #region IAssetLoader Implementation
         Stream IAssetLoader.LoadStream(string path) {
@@ -103,8 +109,8 @@ namespace iosKeyboardTest.Android {
 
         public KeyboardFlags Flags =>
             GetFlags(_lastEditorInfo);
-        string IKeyboardInputConnection.GetLeadingText(int offset, int len) =>
-            GetTextAroundCursor(offset, len, true);
+        TextRangeInfo IKeyboardInputConnection.OnTextRangeInfoRequest() =>
+            GetTextInfo();
         void IKeyboardInputConnection.OnText(string text) {
             if (this.CurrentInputConnection == null ||
                 string.IsNullOrEmpty(text)) {
@@ -122,6 +128,12 @@ namespace iosKeyboardTest.Android {
             //if (this.CurrentInputConnection == null) {
             //    return;
             //}
+            if(GetLeadingText(-1,-1) is { } leading_text &&
+                leading_text.Length < count) {
+                // android throws error if can't delete anymore
+                count = leading_text.Length;
+            }
+            int success_count = 0;
             for (int i = 0; i < count; i++) {
                 try {
                     string selectedText = this.CurrentInputConnection.GetSelectedText(0);
@@ -132,18 +144,24 @@ namespace iosKeyboardTest.Android {
                     } else {
                         success = this.CurrentInputConnection.CommitText(string.Empty, 1);
                     }
-                    if(success) {
+                    if (success) {
+                        success_count++;
                         continue;
                     }
-                    // send actual backspace key event when nothing to delete from conn,
-                    // conn method doesn't auto remove Google Keep checkboxes like default keyboard does
-                    // NOTE not sure if below does fix it...
-                    this.SendDownUpKeyEvents(Keycode.Del);
                 }
                 catch (Exception ex) {
                     Debug.WriteLine(ex.ToString());
                 }
             }
+            //int i = 0;
+            //while(count - i > 0) {
+
+            //    // send actual backspace key event when nothing to delete from conn,
+            //    // conn method doesn't auto remove Google Keep checkboxes like default keyboard does
+            //    // NOTE not sure if below does fix it...
+            //    this.SendDownUpKeyEvents(Keycode.Del);
+            //    i++;
+            //}
         }
 
         void IKeyboardInputConnection.OnDone() {
@@ -185,7 +203,7 @@ namespace iosKeyboardTest.Android {
 
 
         public event EventHandler<TouchEventArgs> OnPointerChanged;
-        public event EventHandler<TextRange> OnCursorChanged;
+        public event EventHandler<TextRangeInfo> OnCursorChanged;
         public event EventHandler OnFlagsChanged;
         public event EventHandler OnDismissed;
         #endregion
@@ -274,7 +292,8 @@ namespace iosKeyboardTest.Android {
         }
         View CreateAdKeyboard() {
             KeyGestureListener = new KeyGestureListener(this);
-            KeyboardView = new KeyboardView(this, this).SetDefaultProps("keyboardView");
+            KeyboardView = new KeyboardView(this).SetDefaultProps("keyboardView");
+            KeyboardView.Init(this);
             return KeyboardView;
         }
 
@@ -442,17 +461,17 @@ namespace iosKeyboardTest.Android {
             _audioManager.PlaySoundEffect(sound,PrefManager.SoundVol);
         }
 
-        TextRange GetTextInfo() {
+        TextRangeInfo GetTextInfo() {
             if (this.CurrentInputConnection == null) {
                 return default;
             }
-            string pre_text = (this as IKeyboardInputConnection).GetLeadingText(-1, -1);
+            string pre_text = GetLeadingText(-1, -1);
             string sel_text = this.CurrentInputConnection.GetSelectedText(0) ?? string.Empty;
             string post_text = GetTrailingText(-1, -1);
             string total_text = pre_text + sel_text + post_text;
             int sel_len = sel_text.Length == total_text.Length ? 0 : sel_text.Length;
-            //return (total_text, (pre_text.Length, sel_len));
-            return new TextRange(total_text, pre_text.Length, sel_len);
+
+            return new TextRangeInfo(total_text, pre_text.Length, sel_len);
         }
         string GetTextAroundCursor(int offset, int len, bool isBefore) {
             if (this.CurrentInputConnection == null) {
@@ -478,6 +497,8 @@ namespace iosKeyboardTest.Android {
             }
             return last_text;
         }
+        string GetLeadingText(int offset, int len) =>
+            GetTextAroundCursor(offset, len, true);
         string GetTrailingText(int offset, int len) =>
             GetTextAroundCursor(offset, len, false);
 

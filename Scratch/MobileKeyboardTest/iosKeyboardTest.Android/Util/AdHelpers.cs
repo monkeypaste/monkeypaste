@@ -21,10 +21,11 @@ using Bitmap = Android.Graphics.Bitmap;
 using Color = Android.Graphics.Color;
 using PointF = Android.Graphics.PointF;
 using Size = Android.Util.Size;
+using TextAlignment = Avalonia.Media.TextAlignment;
 
 namespace iosKeyboardTest.Android {
     public static class AdHelpers {
-        static float s =>
+        static float Scaling =>
             (float)AndroidDisplayInfo.Scaling;
 
         #region Geometery
@@ -37,10 +38,25 @@ namespace iosKeyboardTest.Android {
                     }.Select(x => x.UnscaledF()).ToArray();
         }
         public static RectF ToRectF(this Avalonia.Rect av_rect) {
-            return new RectF((float)av_rect.Left * s, (float)av_rect.Top * s, (float)av_rect.Right * s, (float)av_rect.Bottom * s);
+            return new RectF(
+                (float)av_rect.Left * Scaling, 
+                (float)av_rect.Top * Scaling, 
+                (float)av_rect.Right * Scaling, 
+                (float)av_rect.Bottom * Scaling);
         }
         public static Rect ToRect(this Avalonia.Rect av_rect) {
-            return new Rect((int)av_rect.Left * (int)s, (int)av_rect.Top * (int)s, (int)av_rect.Right * (int)s, (int)av_rect.Bottom * (int)s);
+            return new Rect(
+                (int)av_rect.Left * (int)Scaling, 
+                (int)av_rect.Top * (int)Scaling, 
+                (int)av_rect.Right * (int)Scaling, 
+                (int)av_rect.Bottom * (int)Scaling);
+        }
+        public static Avalonia.Rect ToAvRect(this Rect rect) {
+            return new Avalonia.Rect(
+                (double)rect.Left / (double)Scaling,
+                (double)rect.Top / (double)Scaling,
+                (double)rect.Width() / (double)Scaling,
+                (double)rect.Height() / (double)Scaling);
         }
         public static Rect ToRect(this RectF rectf) {
             return new Rect((int)rectf.Left, (int)rectf.Top, (int)rectf.Right, (int)rectf.Bottom);
@@ -98,22 +114,25 @@ namespace iosKeyboardTest.Android {
         }
 
         public static float UnscaledF(this double d) {
-            return (float)(d * KeyboardView.Scaling);
+            return (float)(d * Scaling);
         }
         public static int UnscaledI(this double d) {
-            return (int)(d * KeyboardView.Scaling);
+            return (int)(d * Scaling);
         }
         
         public static double ScaledD(this float f) {
-            return (double)((double)f / (double)KeyboardView.Scaling);
+            return (double)((double)f / (double)Scaling);
         }
         public static double ScaledD(this int i) {
-            return (double)((double)i / (double)KeyboardView.Scaling);
+            return (double)((double)i / (double)Scaling);
         }
         public static int ScaledI(this int i) {
-            return (int)(i / KeyboardView.Scaling);
+            return (int)(i / Scaling);
         }
 
+        public static PointF ToPointF(this Avalonia.Point p) {
+            return new PointF((float)p.X * Scaling, (float)p.Y * Scaling);
+        }
         #endregion
 
         #region Motion Event
@@ -306,6 +325,22 @@ namespace iosKeyboardTest.Android {
         }
         public static Color ToAdColor(this SolidColorBrush scb) {
             return new(scb.Color.R, scb.Color.G, scb.Color.B, scb.Color.A);
+        }
+        #endregion
+
+        #region Text
+
+        public static Paint.Align ToAdAlign(this TextAlignment ta) {
+            switch(ta) {
+                case TextAlignment.Left:
+                    return Paint.Align.Left;
+                case TextAlignment.Right:
+                    return Paint.Align.Right;
+                case TextAlignment.Center:
+                    return Paint.Align.Center;
+                default:
+                    throw new NotSupportedException();
+            }
         }
         #endregion
     }

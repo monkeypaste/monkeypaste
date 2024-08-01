@@ -1,5 +1,6 @@
 using Avalonia;
 using Avalonia.Controls;
+using Avalonia.Media;
 using Avalonia.Media.Imaging;
 using System;
 using System.IO;
@@ -17,14 +18,14 @@ namespace iosKeyboardTest.iOS {
     }
 
     public interface ITextMeasurer {
-        Avalonia.Size MeasureText(string text, double scaledFontSize);
+        Rect MeasureText(string text, double scaledFontSize, TextAlignment alignment, out double ascent, out double descent);
     }
     public interface IKeyboardInputConnection
     {
-        event EventHandler<TextRange> OnCursorChanged;
+        event EventHandler<TextRangeInfo> OnCursorChanged;
         event EventHandler OnFlagsChanged;
         event EventHandler OnDismissed;
-        string GetLeadingText(int offset, int len);
+        TextRangeInfo OnTextRangeInfoRequest();
         void OnText(string text);
         void OnBackspace(int count);
         void OnDone();
@@ -36,9 +37,6 @@ namespace iosKeyboardTest.iOS {
         ISharedPrefService SharedPrefService { get; }
         IAssetLoader AssetLoader { get; }
         IMainThread MainThread { get; }
-    }
-    public interface IKeyboardInputConnection_android : IKeyboardInputConnection {
-        
     }
     public interface IKeyboardViewRenderer {
         void Layout(bool invalidate);

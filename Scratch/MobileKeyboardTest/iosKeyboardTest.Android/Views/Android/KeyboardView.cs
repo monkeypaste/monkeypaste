@@ -9,10 +9,11 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
 using GPaint = Android.Graphics.Paint;
-using Rect = Android.Graphics.Rect;
 
 namespace iosKeyboardTest.Android {
-    public class KeyboardView : CustomViewGroup, IKeyboardViewRenderer, ITextMeasurer {
+    public class KeyboardView : CustomViewGroup, 
+        IKeyboardViewRenderer,
+        ITextMeasurer {
         #region Private Variables
         int measureCount = 0;
         int layoutCount = 0;
@@ -29,14 +30,17 @@ namespace iosKeyboardTest.Android {
 
         #region Interfaces
 
+
         #region ITextMeasurer Implementation
-        Avalonia.Size ITextMeasurer.MeasureText(string text, double scaledFontSize) {
+        Avalonia.Rect ITextMeasurer.MeasureText(string text, double scaledFontSize, Avalonia.Media.TextAlignment alignment, out double ascent, out double descent) {
             var tb = new Rect();
-            if(!string.IsNullOrEmpty(text)) {
-                SharedPaint.TextSize = scaledFontSize.UnscaledF();
-                SharedPaint.GetTextBounds(text.ToCharArray(), 0, text.Length, tb);
-            }
-            return new Avalonia.Size(tb.Width().ScaledD(), tb.Height().ScaledD());
+            text = text ?? string.Empty;
+            SharedPaint.TextAlign = alignment.ToAdAlign();
+            SharedPaint.TextSize = scaledFontSize.UnscaledF();
+            SharedPaint.GetTextBounds(text, 0, text.Length, tb);
+            ascent = SharedPaint.Ascent().ScaledD();
+            descent = SharedPaint.Descent().ScaledD();
+            return tb.ToAvRect();
 
         }
         #endregion
@@ -62,7 +66,6 @@ namespace iosKeyboardTest.Android {
         #endregion
 
         #region State
-        bool HasFullAccess { get; set; }
         #endregion
 
         #region Views
@@ -79,28 +82,27 @@ namespace iosKeyboardTest.Android {
         #endregion
 
         #region Constructors
-        public KeyboardView(Context context, IKeyboardInputConnection conn) : base(context) {
+        public KeyboardView(Context context) : base(context) {            
+            SharedPaint = SetupPaint();
+            Scaling = (float)AndroidDisplayInfo.Scaling;
+        }
+        public void Init(IKeyboardInputConnection conn) {
             if (conn is IOnTouchListener otl) {
                 this.SetOnTouchListener(otl);
                 //KeyGridView.KeyViews.ForEach(x => x.SetOnTouchListener(otl));
             }
-            SharedPaint = SetupPaint();
-            Focusable = false;
-            HasFullAccess = false;
-
-            Scaling = (float)AndroidDisplayInfo.Scaling;
             var kbs = KeyboardViewModel.GetTotalSizeByScreenSize(AndroidDisplayInfo.UnscaledSize, AndroidDisplayInfo.IsPortrait);
             DC = new KeyboardViewModel(conn, kbs / Scaling, Scaling, AndroidDisplayInfo.Scaling);
             DC.SetRenderer(this);
 
-            MenuView = new MenuView(context, SharedPaint, DC.MenuViewModel).SetDefaultProps("Menu");
+            MenuView = new MenuView(Context, SharedPaint, DC.MenuViewModel).SetDefaultProps("Menu");
             this.AddView(MenuView);
 
-            KeyGridView = new KeyGridView(context, SharedPaint, DC).SetDefaultProps("KeyboardGrid");
+            KeyGridView = new KeyGridView(Context, SharedPaint, DC).SetDefaultProps("KeyboardGrid");
             this.AddView(KeyGridView);
 
-            CursorControlView = new CursorControlView(context, SharedPaint, DC).SetDefaultProps();
-            this.AddView(CursorControlView);            
+            CursorControlView = new CursorControlView(Context, SharedPaint, DC).SetDefaultProps();
+            this.AddView(CursorControlView);
 
             Measure(true);
             DC.Renderer.Render(true);
@@ -154,6 +156,6 @@ namespace iosKeyboardTest.Android {
         }
         #endregion
 
-        
+
     }
 }
