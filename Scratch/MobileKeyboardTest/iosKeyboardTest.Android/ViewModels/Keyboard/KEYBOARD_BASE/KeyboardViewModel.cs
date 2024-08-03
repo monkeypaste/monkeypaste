@@ -27,8 +27,6 @@ namespace iosKeyboardTest.Android {
         #region Constants
         const double TOTAL_KEYBOARD_SCREEN_HEIGHT_RATIO_PORTRAIT = 0.3;
         const double TOTAL_KEYBOARD_SCREEN_HEIGHT_RATIO_LANDSCAPE = 0.5;
-
-        public const double KEYBOARD_CNTR_SCREEN_HEIGHT_RATIO = 0.75;
         #endregion
 
         #region Statics
@@ -208,6 +206,8 @@ namespace iosKeyboardTest.Android {
         #endregion
 
         #region State
+        public bool CanShowPopupWindows =>
+            OperatingSystem.IsAndroid();
         public bool IsLettersCharSet =>
             CharSet == CharSetType.Letters;
         public bool IsSymbols1CharSet =>
@@ -341,6 +341,11 @@ namespace iosKeyboardTest.Android {
 
         #endregion
 
+        #region Events
+        public event EventHandler<IEnumerable<KeyViewModel>> OnShowPopupKeys;
+        public event EventHandler OnInputConnectionChanged;
+        #endregion
+
         #region Constructors
         public KeyboardViewModel() : this(null, new Size(360, 740), 2.75) { }
         public KeyboardViewModel(IKeyboardInputConnection inputConn, Size scaledSize, double scale) : this(inputConn, scaledSize, scale, scale) { }
@@ -382,7 +387,6 @@ namespace iosKeyboardTest.Android {
                 if (old_conn is ITriggerTouchEvents tte) {
                     tte.OnPointerChanged -= OnPointerChanged;
                 }
-
             }
             if (conn is IKeyboardInputConnection new_conn) {
                 InputConnection = new_conn;
@@ -396,7 +400,7 @@ namespace iosKeyboardTest.Android {
             } else {
                 InputConnection = null;
             }
-            MenuViewModel.SetInputConnection(InputConnection);
+            OnInputConnectionChanged?.Invoke(this, EventArgs.Empty);
 
         }
 
@@ -574,14 +578,16 @@ namespace iosKeyboardTest.Android {
             }
             PopupKeys = Keys.Where(x => x.IsPopupKey).ToArray();
 
-            double max_key_height = DefaultKeyHeight;
-            double menu_height = MenuHeight;
-            double safe_pad = 5;
-            double inner_top_margin = max_key_height - menu_height + safe_pad;
-            if(inner_top_margin > 0) {
-                // needs this much inner margin to show popups without overflowing
-                // top of keyboard
-                KeyboardMargin = new Thickness(KeyboardMargin.Left, inner_top_margin, KeyboardMargin.Right, KeyboardMargin.Bottom);
+            if(!CanShowPopupWindows) {
+                double max_key_height = DefaultKeyHeight;
+                double menu_height = MenuHeight;
+                double safe_pad = 5;
+                double inner_top_margin = max_key_height - menu_height + safe_pad;
+                if (inner_top_margin > 0) {
+                    // needs this much inner margin to show popups without overflowing
+                    // top of keyboard
+                    KeyboardMargin = new Thickness(KeyboardMargin.Left, inner_top_margin, KeyboardMargin.Right, KeyboardMargin.Bottom);
+                }
             }
             
             SetDesiredSize(DesiredSize);
@@ -640,7 +646,7 @@ namespace iosKeyboardTest.Android {
                 Dispatcher.UIThread.Post(() => CheckAutoCap(textInfo));
             }       
             // NOTE do completion AFTER shift state has been changed
-            MenuViewModel.ShowCompletion(textInfo);
+            MenuViewModel.AutoCompleteViewModel.ShowCompletion(textInfo);
         }
         void CheckAutoCap(TextRangeInfo textInfo) {
             if (!IsAutoCapitalizationEnabled ||
@@ -712,6 +718,7 @@ namespace iosKeyboardTest.Android {
             IsSuggestionRowVisible = prefService.GetPrefValue<bool>(MyPrefKeys.DO_SUGGESTION_STRIP);
             IsNextWordCompletionEnabled = prefService.GetPrefValue<bool>(MyPrefKeys.DO_NEXT_WORD_COMPLETION);
             IsAutoCorrectEnabled = prefService.GetPrefValue<bool>(MyPrefKeys.DO_AUTO_CORRECT);
+            IsAutoCorrectEnabled = false;
             IsBackspaceUndoLastAutoCorrectEnabled = prefService.GetPrefValue<bool>(MyPrefKeys.DO_BACKSPACE_UNDOS_LAST_AUTO_CORRECT);
             IsCompoundWordBreakEnabled = prefService.GetPrefValue<bool>(MyPrefKeys.DO_CASE_COMPLETION);
 
@@ -946,6 +953,7 @@ namespace iosKeyboardTest.Android {
             kvm.AddPopupAnchor(0, 0, kvm.CurrentChar);
             kvm.PressPopupShowDt = DateTime.Now;
             kvm.FitPopupInFrame(touch);
+            OnShowPopupKeys?.Invoke(kvm, kvm.PopupKeys);
         }
         void ShowHoldPopup(KeyViewModel kvm, Touch touch) {
             if(!IsHoldPopupsEnabled || !kvm.CanShowHoldPopup) {
@@ -982,6 +990,7 @@ namespace iosKeyboardTest.Android {
                 }
             }
             kvm.FitPopupInFrame(touch);
+            OnShowPopupKeys?.Invoke(kvm, kvm.PopupKeys);
         }
 
         #region Cursor Control

@@ -288,9 +288,12 @@ namespace iosKeyboardTest.Android {
             }
             if (uiv is ViewGroup vg) {
                 vg.SetClipChildren(false);
+                vg.SetPadding(0, 0, 0, 0);
+                vg.SetPaddingRelative(0, 0, 0, 0);
             }
             return uiv;
         }
+
         public static T SetDefaultTextProps<T>(this T uitv) where T : TextView {
             uitv = uitv.SetDefaultProps();
             uitv.SetMaxLines(1);

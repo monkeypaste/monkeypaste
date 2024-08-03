@@ -73,7 +73,7 @@ namespace iosKeyboardTest.Android {
             }
             measureCount++;
 
-            var new_frame = DC.InnerRect.ToRectF();//DC.KeyboardRect.ToRectF();
+            var new_frame = DC.InnerRect.ToRectF();
             Frame = new_frame;
 
 

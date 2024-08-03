@@ -41,15 +41,30 @@
                     <TextBlock Text="Normal" />
                     <TextBox TextInputOptions.ContentType="Normal" />
 
-                    <!--  - Alpha  -->
-                    <TextBlock Text="Alpha" />
-                    <TextBox TextInputOptions.ContentType="Alpha" />
 
+
+                    <!--  - Url  -->
+                    <TextBlock Text="Url" />
+                    <TextBox TextInputOptions.ContentType="Url" />
+
+
+
+                    <!--  - Social  -->
+                    <TextBlock Text="Social" />
+                    <TextBox TextInputOptions.ContentType="Social" />
+
+
+                    <!--  - Search  -->
+                    <TextBlock Text="Search" />
+                    <TextBox TextInputOptions.ContentType="Search" />
 
                     <!--  - Digits  -->
                     <TextBlock Text="Digits" />
                     <TextBox TextInputOptions.ContentType="Digits" />
 
+                    <!--  - Alpha  -->
+                    <TextBlock Text="Alpha" />
+                    <TextBox TextInputOptions.ContentType="Alpha" />
 
                     <!--  - Pin  -->
                     <TextBlock Text="Pin" />
@@ -65,12 +80,6 @@
                     <TextBlock Text="Email" />
                     <TextBox TextInputOptions.ContentType="Email" />
 
-
-                    <!--  - Url  -->
-                    <TextBlock Text="Url" />
-                    <TextBox TextInputOptions.ContentType="Url" />
-
-
                     <!--  - Name  -->
                     <TextBlock Text="Name" />
                     <TextBox TextInputOptions.ContentType="Name" />
@@ -81,14 +90,6 @@
                     <TextBox TextInputOptions.ContentType="Password" />
 
 
-                    <!--  - Social  -->
-                    <TextBlock Text="Social" />
-                    <TextBox TextInputOptions.ContentType="Social" />
-
-
-                    <!--  - Search  -->
-                    <TextBlock Text="Search" />
-                    <TextBox TextInputOptions.ContentType="Search" />
                 </StackPanel>
             </ScrollViewer>
 

@@ -15,6 +15,8 @@ namespace iosKeyboardTest {
     }
     public interface ISharedPrefService {
         T GetPrefValue<T>(MyPrefKeys prefKey) where T : struct;
+        void SetPrefValue<T>(MyPrefKeys prefKey, T newValue) where T : struct;
+
     }
 
     public interface ITextMeasurer {

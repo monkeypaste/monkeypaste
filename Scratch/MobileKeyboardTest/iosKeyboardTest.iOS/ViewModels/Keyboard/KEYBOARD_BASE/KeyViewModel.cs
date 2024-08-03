@@ -553,7 +553,7 @@ namespace iosKeyboardTest.iOS {
                 double y = 0.65;
                 if(IsAlphaNumericNumber) {
                     x = 0.7;
-                    y = 0.35;
+                    y = 0.2;
                 }
                 return new Point(x, y);
             }
@@ -583,7 +583,8 @@ namespace iosKeyboardTest.iOS {
                 return y;
             }
         }
-        public double SecondaryFontSizeRatio => 0.25;
+        public double SecondaryFontSizeRatio => 
+            IsAlphaNumericNumber ? 0.2 : 0.25;
         public int VisiblePopupColCount { get; set; }
         public int VisiblePopupRowCount { get; set; }
 
@@ -755,6 +756,7 @@ namespace iosKeyboardTest.iOS {
 
         #region Events
         public event EventHandler OnCleanup;
+        public event EventHandler OnHidePopup;
         #endregion
 
         #region Constructors
@@ -830,51 +832,76 @@ namespace iosKeyboardTest.iOS {
             if (!PopupKeys.Any()) {
                 return;
             }
-            //if(PopupKeys.Count() > 1) {
 
-            //}
             double l = PopupKeys.Min(x => x.TotalRect.Left);
             double t = PopupKeys.Min(x => x.TotalRect.Top);
             double r = PopupKeys.Max(x => x.TotalRect.Right);
             double b = PopupKeys.Max(x => x.TotalRect.Bottom);
 
-            double x_diff = 0;
-            double y_diff = t - Parent.TotalRect.Top;
+            if (Parent.CanShowPopupWindows) {
+                if(PopupKeys.Skip(1).Any()) {
 
-            bool contain_frame = true;
+                }
+                // don't need to fit
+                double w = r - l;
+                double h = b - t;
 
-            if(contain_frame) {
-                if (y_diff < 0) {
-                    t -= y_diff;
-                    b -= y_diff;
-                } else {
-                    y_diff = 0;
+                l = TotalRect.Center.X - (w / 2);
+                t = Parent.KeyboardRect.Top + KeyboardRect.Top - h;
+                r = l + w;
+                b = t + h;
+
+                double edge_pad = 5;
+                double r_diff = r - Parent.KeyboardRect.Right;
+                if (r_diff > 0) {
+                    l = l - r_diff - edge_pad;
+                    r = r - r_diff - edge_pad;
                 }
-                var this_key_rect = this.TotalRect;
-                var y_adj_rect = new Rect(l, t, r - l, b - t);
-                if (y_adj_rect.Intersects(this_key_rect)) {
-                    if (IsRightSideKey) {
-                        x_diff = this_key_rect.Left - r - Width;
-                    } else {
-                        x_diff = l - this_key_rect.Right + (Width * 2);
-                    }
+                double l_diff = Parent.KeyboardRect.Left - l;
+                if (l_diff > 0) {
+                    l = l + l_diff + edge_pad;
+                    r = r + l_diff + edge_pad;
                 }
+                PopupRect = new Rect(l, t, w, h);
             } else {
-                //if (y_diff < 0) {
-                //    t += y_diff;
-                //    b += y_diff;
-                //} else {
-                //    y_diff = 0;
-                //}
+                double x_diff = 0;
+                double y_diff = t - Parent.TotalRect.Top;
+
+                bool contain_frame = true;
+
+                if (contain_frame) {
+                    if (y_diff < 0) {
+                        t -= y_diff;
+                        b -= y_diff;
+                    } else {
+                        y_diff = 0;
+                    }
+                    var this_key_rect = this.TotalRect;
+                    var y_adj_rect = new Rect(l, t, r - l, b - t);
+                    if (y_adj_rect.Intersects(this_key_rect)) {
+                        if (IsRightSideKey) {
+                            x_diff = this_key_rect.Left - r - Width;
+                        } else {
+                            x_diff = l - this_key_rect.Right + (Width * 2);
+                        }
+                    }
+                } else {
+                    //if (y_diff < 0) {
+                    //    t += y_diff;
+                    //    b += y_diff;
+                    //} else {
+                    //    y_diff = 0;
+                    //}
+                }
+                foreach (var pukvm in PopupKeys) {
+                    pukvm.TranslatePopupLocation(x_diff, -y_diff);
+                }
+                double tl = PopupKeys.Min(x => x.TotalRect.Left);
+                double tt = PopupKeys.Min(x => x.TotalRect.Top);
+                double tr = PopupKeys.Max(x => x.TotalRect.Right);
+                double tb = PopupKeys.Max(x => x.TotalRect.Bottom);
+                PopupRect = new Rect(tl, tt, tr, tb);
             }
-            foreach (var pukvm in PopupKeys) {
-                pukvm.TranslatePopupLocation(x_diff, -y_diff);
-            }
-            double tl = PopupKeys.Min(x => x.TotalRect.Left);
-            double tt = PopupKeys.Min(x => x.TotalRect.Top);
-            double tr = PopupKeys.Max(x => x.TotalRect.Right);
-            double tb = PopupKeys.Max(x => x.TotalRect.Bottom);
-            PopupRect = new Rect(tl, tt, tr, tb);
             UpdateActivePopup(touch);
             this.Renderer.Render(true);
         }
@@ -920,12 +947,16 @@ namespace iosKeyboardTest.iOS {
         }
 
         public void ClearPopups() {
+            bool had_popups = VisiblePopupColCount > 0 || VisiblePopupRowCount > 0;
             VisiblePopupColCount = 0;
             VisiblePopupRowCount = 0;
             ActivePopupKey = null;
             var to_rmv = PopupKeys.ToArray();
             foreach (var rmv in to_rmv) {
                 rmv.RemovePopupAnchor();
+            }
+            if(had_popups) {
+                OnHidePopup?.Invoke(this, EventArgs.Empty);
             }
         }
         #endregion
@@ -1225,16 +1256,18 @@ namespace iosKeyboardTest.iOS {
                 if (PopupAnchorKey is not { } anchor_kvm) {
                     return new();
                 }
-                double origin_offset = 0;
-                if (anchor_kvm.IsRightSideKey) {
-                    origin_offset = PopupAnchorKey.PopupKeys.Max(x => x.Column) * -Width;
-                }
-                x = anchor_kvm.X + (Column * Width) + origin_offset;
+                if(Parent.CanShowPopupWindows) {
+                    x = Column * Width;
+                    y = Row * Height;
+                } else {
+                    double origin_offset_x = 0;
+                    if (anchor_kvm.IsRightSideKey && !Parent.CanShowPopupWindows) {
+                        origin_offset_x = PopupAnchorKey.PopupKeys.Max(x => x.Column) * -Width;
+                    }
+                    x = anchor_kvm.X + (Column * Width) + origin_offset_x;
 
-                double offset = PopupAnchorKey.PopupKeys.Max(x => x.Row) * Height;
-                y = anchor_kvm.Y - anchor_kvm.Height - offset + (Row * Height);
-                if (y < 0) {
-
+                    double origin_offset_y = PopupAnchorKey.PopupKeys.Max(x => x.Row) * Height;
+                    y = anchor_kvm.Y - anchor_kvm.Height - origin_offset_y + (Row * Height);
                 }
                 return new Rect(x + PopupOffsetX, y + PopupOffsetY, Width, Height);
             }

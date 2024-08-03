@@ -211,7 +211,7 @@ namespace iosKeyboardTest.Android {
         #endregion
 
         #region Properties
-        MyPrefManager PrefManager { get; set; }
+        public static MyPrefManager PrefManager { get; private set; }
         bool IS_PLATFORM_MODE => true;
         KeyboardView KeyboardView { get; set; }
         AvaloniaView AvView { get; set; }
@@ -251,7 +251,7 @@ namespace iosKeyboardTest.Android {
             RefreshState();
         }
         public override void OnStartInput(EditorInfo attribute, bool restarting) {
-            base.OnStartInput(attribute, restarting);
+            //base.OnStartInput(attribute, restarting);
 
             _lastEditorInfo = attribute;
             var new_flags = Flags;
@@ -341,6 +341,14 @@ namespace iosKeyboardTest.Android {
         }
 
         KeyboardFlags GetFlags(EditorInfo info) {
+            var test = KeyboardFlags.None;
+            test |= KeyboardFlags.Url;
+            if(test.HasFlag(KeyboardFlags.Pin)) {
+
+            }
+            if(test.HasFlag(KeyboardFlags.Url)) {
+
+            }
             var kbf = KeyboardFlags.Android;
             if(IS_PLATFORM_MODE) {
                 kbf |= KeyboardFlags.PlatformView;
@@ -349,45 +357,74 @@ namespace iosKeyboardTest.Android {
             kbf |= IsPortrait() ? KeyboardFlags.Portrait : KeyboardFlags.Landscape;
 
             if (_lastEditorInfo != null) {
-                var ime_type_lookup = new Dictionary<KeyboardFlags, InputTypes[]>() {
-                    {
-                        KeyboardFlags.Email,
-                        [InputTypes.TextVariationEmailAddress,InputTypes.TextVariationWebEmailAddress] 
-                    },
-                    {
-                        KeyboardFlags.Url,
-                        [InputTypes.TextVariationUri] 
-                    },
-                    {
-                        KeyboardFlags.Pin,
-                        [InputTypes.NumberVariationPassword]
-                    },
-                    {
-                        KeyboardFlags.Digits,
-                        [InputTypes.ClassPhone]
-                    },
-                    {
-                        KeyboardFlags.Numbers,
-                        [InputTypes.ClassDatetime,InputTypes.ClassNumber] 
-                    },
-                    {
-                        KeyboardFlags.Normal,
-                        [InputTypes.TextFlagMultiLine,InputTypes.TextFlagImeMultiLine] 
-                    },
-                    {
-                        KeyboardFlags.Done,
-                        [(InputTypes)0] 
-                    },
-
-                };
-                foreach(var kvp in ime_type_lookup) {
-                    foreach(var type in kvp.Value) {
-                        if(_lastEditorInfo.InputType.HasFlag(type)) {
-                            kbf |= kvp.Key;
-                            break;
-                        }
+                int test34 = (int)_lastEditorInfo.InputType;
+                var class_type = _lastEditorInfo.InputType & InputTypes.MaskClass;
+                var var_type = _lastEditorInfo.InputType & InputTypes.MaskVariation;
+                var mask_type = _lastEditorInfo.InputType & InputTypes.MaskFlags;
+                if (!class_type.HasFlag(InputTypes.ClassNumber) && 
+                    (class_type.HasFlag(InputTypes.ClassText) || class_type.HasFlag(InputTypes.DatetimeVariationNormal))) {
+                    if(var_type.HasFlag(InputTypes.TextVariationUri)) {
+                        kbf |= KeyboardFlags.Url;
+                    } else if(var_type.HasFlag(InputTypes.TextVariationEmailAddress) || var_type.HasFlag(InputTypes.TextVariationWebEmailAddress)) {
+                        kbf |= KeyboardFlags.Email;
+                    } else {
+                        kbf |= KeyboardFlags.Normal;
                     }
+                } else if(class_type.HasFlag(InputTypes.ClassNumber)) {
+                    if(var_type.HasFlag(InputTypes.NumberVariationPassword)) {
+                        kbf |= KeyboardFlags.Pin;
+                    } else {
+                        kbf |= KeyboardFlags.Numbers;
+                    }
+                } else if(class_type.HasFlag(InputTypes.ClassDatetime)) {
+                    kbf |= KeyboardFlags.Numbers;
+                } else {
+                    // should only be phone
+                    kbf |= KeyboardFlags.Pin;
                 }
+
+                //var input_type4 = _lastEditorInfo.InputType & (InputTypes)ActualInputType.TYPE_MASK_CLASS;
+                //var input_type5 = _lastEditorInfo.InputType & (InputTypes)ActualInputType.TYPE_MASK_VARIATION;
+                //var input_type6 = _lastEditorInfo.InputType & (InputTypes)ActualInputType.TYPE_MASK_FLAGS;
+                //var ime_type_lookup = new Dictionary<KeyboardFlags, InputTypes[]>() {
+                //    {
+                //        KeyboardFlags.Email,
+                //        [InputTypes.TextVariationEmailAddress,InputTypes.TextVariationWebEmailAddress] 
+                //    },
+                //    {
+                //        KeyboardFlags.Url,
+                //        [InputTypes.TextVariationUri] 
+                //    },
+                //    {
+                //        KeyboardFlags.Pin,
+                //        [InputTypes.NumberVariationPassword]
+                //    },
+                //    {
+                //        KeyboardFlags.Digits,
+                //        [InputTypes.ClassPhone]
+                //    },
+                //    {
+                //        KeyboardFlags.Numbers,
+                //        [InputTypes.ClassDatetime,InputTypes.ClassNumber] 
+                //    },
+                //    {
+                //        KeyboardFlags.Normal,
+                //        [InputTypes.TextFlagMultiLine,InputTypes.TextFlagImeMultiLine] 
+                //    },
+                //    {
+                //        KeyboardFlags.Done,
+                //        [(InputTypes)0] 
+                //    },
+
+                //};
+                //foreach(var kvp in ime_type_lookup) {
+                //    foreach(var type in kvp.Value) {
+                //        if(input_type.HasFlag(type)) {
+                //            kbf |= kvp.Key;
+                //            break;
+                //        }
+                //    }
+                //}
 
                 if(_lastEditorInfo.ImeOptions.HasFlag(ImeFlags.NavigateNext)) {
                     kbf |= KeyboardFlags.Next;

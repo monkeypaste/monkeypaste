@@ -33,6 +33,10 @@ namespace iosKeyboardTest.Android {
                 SupportActionBar.SetDisplayHomeAsUpEnabled(true);
             }
         }
+        protected override void OnDestroy() {
+            base.OnDestroy();
+
+        }
 
         public override bool OnOptionsItemSelected(IMenuItem item) {
             //if (item.ItemId == Android.Resource.Id.Home) {
@@ -53,6 +57,22 @@ namespace iosKeyboardTest.Android {
 
         public void OnSharedPreferenceChanged(ISharedPreferences sharedPreferences, string key) {
             UpdateSummaries();
+
+            if(MyInputMethodService.PrefManager is not { } prefm ||
+                prefm.DefValLookup is not { } def_vals ||
+                !Enum.TryParse(key,out MyPrefKeys prefKey) ||
+                !def_vals.TryGetValue(prefKey,out object def_val)) {
+                return;
+            }
+
+            if(key.ToLower().StartsWith("do") &&
+                def_val is bool def_bool_val &&
+                sharedPreferences.GetBoolean(key,def_bool_val) is bool new_bool_val) {
+                prefm.SetPrefValue(prefKey, new_bool_val);
+            } else if(def_val is int def_int_val &&
+                        sharedPreferences.GetInt(key, def_int_val) is int new_int_val) {
+                prefm.SetPrefValue(prefKey, new_int_val);
+            }
         }
         void UpdateSummaries() {
             foreach(var widget_key in Enum.GetNames(typeof(MyPrefKeys))) {

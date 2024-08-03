@@ -1,6 +1,7 @@
 ﻿using Android.Content;
 using AndroidX.Core.Content;
 using AndroidX.Preference;
+using Java.Interop;
 using Java.Util;
 using System.Collections.Generic;
 using System.Linq;
@@ -13,10 +14,11 @@ namespace iosKeyboardTest.Android {
         public float SoundVol { get; private set; }
 
         Dictionary<MyPrefKeys, object> _defValLookup;
-        Dictionary<MyPrefKeys, object> DefValLookup {
+        public Dictionary<MyPrefKeys, object> DefValLookup {
             get {
                 if (_defValLookup == null) {
                     _defValLookup = new Dictionary<MyPrefKeys, object>() {
+                        { MyPrefKeys.DO_FIRST_RUN, true },
                         { MyPrefKeys.DO_NUM_ROW, false },
                         { MyPrefKeys.DO_EMOJI_KEY, false },
                         { MyPrefKeys.DO_SOUND, true },
@@ -49,22 +51,23 @@ namespace iosKeyboardTest.Android {
 
         public MyPrefManager(Context context) {
             SharedPrefs = PreferenceManager.GetDefaultSharedPreferences(context);
-            bool first_run = SharedPrefs.GetBoolean("firstRun", true);
+            bool first_run = GetPrefValue<bool>(MyPrefKeys.DO_FIRST_RUN);
 
             if (first_run) {
                 // initial startup
                 RestoreDefaults();
+                SetPrefValue(MyPrefKeys.DO_FIRST_RUN, false);
             }
         }
         public KeyboardFlags UpdateFlags(KeyboardFlags flags) {
-            if(SharedPrefs == null) {
+            if (SharedPrefs == null) {
                 return flags;
             }
             UpdateVibration();
             UpdateVolume();
             UpdateOpacity();
 
-            if(GetPrefValue<bool>(MyPrefKeys.DO_NIGHT_MODE)) {
+            if (GetPrefValue<bool>(MyPrefKeys.DO_NIGHT_MODE)) {
                 flags &= ~KeyboardFlags.Light;
                 flags |= KeyboardFlags.Dark;
             }
@@ -72,20 +75,33 @@ namespace iosKeyboardTest.Android {
             return flags;
         }
 
-        public T GetPrefValue<T>(MyPrefKeys prefKey) where T:struct {
-            if(SharedPrefs == null) {
+        public T GetPrefValue<T>(MyPrefKeys prefKey) where T : struct {
+            if (SharedPrefs == null) {
                 return (T)(object)DefValLookup[prefKey];
             }
             string key = prefKey.ToString();
             object val = default;
-            if(typeof(T) == typeof(bool)) {
+            if (typeof(T) == typeof(bool)) {
                 val = SharedPrefs.GetBoolean(key, (bool)DefValLookup[prefKey]);
-            } else if(typeof(T) == typeof(int)) {
+            } else if (typeof(T) == typeof(int)) {
                 val = SharedPrefs.GetInt(key, (int)DefValLookup[prefKey]);
-            } else if(typeof(T) == typeof(float)) {
+            } else if (typeof(T) == typeof(float)) {
                 val = SharedPrefs.GetFloat(key, (float)DefValLookup[prefKey]);
             }
             return (T)(object)val;
+        }
+        public void SetPrefValue<T>(MyPrefKeys prefKey, T newValue) where T : struct {
+            if(SharedPrefs == null) {
+                return;
+            }
+            string key = prefKey.ToString();
+            var editor = SharedPrefs.Edit();
+            if (typeof(T) == typeof(bool)) {
+                editor.PutBoolean(key, (bool)(object)newValue);
+            } else if (typeof(T) == typeof(int)) {
+                editor.PutInt(key, (int)(object)newValue);
+            } 
+            editor.Apply();
         }
 
         void UpdateOpacity() {
@@ -142,6 +158,8 @@ namespace iosKeyboardTest.Android {
                 }
             }
             editor.Commit();
+            editor.Apply();
         }
+
     }
 }

@@ -74,9 +74,8 @@ namespace iosKeyboardTest.Android {
         #endregion
 
         #region Properties
-
         public Color BackgroundColor { get; set; }
-        public virtual RectF Frame { get; set; }
+        public virtual RectF Frame { get; set; } = new();
         #endregion
         #region Constructors
 

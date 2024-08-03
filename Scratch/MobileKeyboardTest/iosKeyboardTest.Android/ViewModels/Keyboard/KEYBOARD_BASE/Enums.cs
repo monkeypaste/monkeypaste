@@ -71,6 +71,7 @@ namespace iosKeyboardTest.Android {
 
     public enum MyPrefKeys {
         None = 0,
+        DO_FIRST_RUN,
         DO_NUM_ROW,
         DO_EMOJI_KEY,
         DO_SOUND,
