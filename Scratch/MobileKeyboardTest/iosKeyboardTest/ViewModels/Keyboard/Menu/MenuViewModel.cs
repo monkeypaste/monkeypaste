@@ -56,7 +56,8 @@ namespace iosKeyboardTest {
         IKeyboardViewRenderer _renderer;
         public IKeyboardViewRenderer Renderer =>
             _renderer ?? this;
-        IKeyboardInputConnection InputConnection { get; set; }
+        IKeyboardInputConnection InputConnection =>
+            Parent.InputConnection;
         #endregion
 
         #region View Models
@@ -200,18 +201,17 @@ namespace iosKeyboardTest {
 
             if(touchType == TouchEventType.Move) {
                 if(TouchOwner.ownerType == MenuItemType.CompletionItem) {
-                    AutoCompleteViewModel.SetCompletionScrollOffset(
+                    if(AutoCompleteViewModel.CanScroll(touch)) {
+                        AutoCompleteViewModel.SetCompletionScrollOffset(
                         AutoCompleteViewModel.CompletionScrollOffset + (touch.LastLocation.X - touch.Location.X));
-                    Debug.WriteLine($"Offset: {AutoCompleteViewModel.CompletionScrollOffset}");
+                        //Debug.WriteLine($"Offset: {AutoCompleteViewModel.CompletionScrollOffset}");
+                    }                    
                 }
             } else if(touchType == TouchEventType.Release) {
                 if(CanPerformAction(touch)) {
                     PerformMenuAction(TouchOwner);
                 }
-                if(TouchOwner.ownerType == MenuItemType.CompletionItem) {
-                    AutoCompleteViewModel.StartScrollAnimationAsync(touch).FireAndForgetSafeAsync();
-                }
-                SetPressed(touch, false);                
+                SetPressed(touch, false);                           
             }
             Renderer.Render(true);
             return true;
@@ -258,10 +258,9 @@ namespace iosKeyboardTest {
                     InputConnection.OnShowPreferences(null);
                     break;
                 case MenuItemType.CompletionItem:
-                    AutoCompleteViewModel.DoCompletion(AutoCompleteViewModel.LastTextInfo, AutoCompleteViewModel.CompletionDisplayValues.ElementAt(owner.Item2));                    
+                    AutoCompleteViewModel.DoCompletion(/*AutoCompleteViewModel.LastTextInfo*/InputConnection.OnTextRangeInfoRequest(), AutoCompleteViewModel.CompletionDisplayValues.ElementAt(owner.Item2));                    
                     break;
-            }
-            
+            }            
         }        
         (MenuItemType ownerType, int ownerIdx) FindTouchOwner(Touch touch) {
             if(BackButtonRect.Contains(touch.Location)) {
@@ -270,8 +269,11 @@ namespace iosKeyboardTest {
             if(OptionsButtonRect.Contains(touch.Location)) {
                 return (MenuItemType.OptionsButton, 0);
             }
+            var comp_loc = new Point(
+                touch.Location.X - AutoCompleteViewModel.AutoCompleteRect.Left, 
+                touch.Location.Y - AutoCompleteViewModel.AutoCompleteRect.Top);
             for (int i = 0; i < AutoCompleteViewModel.CompletionItemRects.Length; i++) {
-                if (AutoCompleteViewModel.CompletionItemRects[i].Contains(touch.Location)) {
+                if (AutoCompleteViewModel.CompletionItemRects[i].Contains(comp_loc)) {
                     return (MenuItemType.CompletionItem, i);
                 }
             }

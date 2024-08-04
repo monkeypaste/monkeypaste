@@ -26,7 +26,7 @@ namespace iosKeyboardTest.iOS.KeyboardExt {
 
         public const string BACKSPACE_IMG_FILE_NAME = "backspace.png";//"⌫";
         public const string EMOJI_SELECT_BTN_IMG_FILE_NAME = "emoji.png";//"☺";
-        public const string ENTER_IMG_FILE_NAME = "enter.png";//"⏎";
+        //public const string ENTER_IMG_FILE_NAME = "enter.png";//"⏎";
         public const string NEXT_KEYBOARD_IMG_FILE_NAME = "globe.png";
         public const string SEARCH_IMG_FILE_NAME = "search.png";//"🔍";
         public const string SHIFT_IMG_FILE_NAME = "shift.png";//"⇧";
@@ -42,7 +42,7 @@ namespace iosKeyboardTest.iOS.KeyboardExt {
             SHIFT_ON_IMG_FILE_NAME,
             SHIFT_LOCK_IMG_FILE_NAME,
             SEARCH_IMG_FILE_NAME,
-            ENTER_IMG_FILE_NAME,
+            //ENTER_IMG_FILE_NAME,
             BACKSPACE_IMG_FILE_NAME,
             EMOJI_SELECT_BTN_IMG_FILE_NAME,
             EMOJI_SELECT_BTN_IMG_FILE_NAME,
@@ -53,6 +53,7 @@ namespace iosKeyboardTest.iOS.KeyboardExt {
         static string TAB_TEXT = "Tab";
         static string CAPS_LOCK_TEXT = "Caps Lock";
         static string GO_TEXT = "Go";
+        static string ENTER_TEXT = "Enter";
         static string NEXT_TEXT = "Next";
         static string DONE_TEXT = "Done";
         static string SYMBOLS1_TEXT = "!#1";
@@ -372,9 +373,9 @@ namespace iosKeyboardTest.iOS.KeyboardExt {
                     return 1;
                 }
                 if (IsBackspace) {
-                    return 0.65;
+                    return 0.5;
                 }
-                if (IsDoneTextKey) {
+                if (IsPrimarySpecialKey) {
                     return 0.33;
                 }
                 if (IsSpecialDisplayText) {
@@ -712,8 +713,12 @@ namespace iosKeyboardTest.iOS.KeyboardExt {
 
         public bool IsSymbolToggle =>
             SpecialKeyType == SpecialKeyType.SymbolToggle;
-        public bool IsDoneTextKey =>
-            CurrentChar == "Done";
+        public bool IsPrimarySpecialKey =>
+            SpecialKeyType == SpecialKeyType.Done ||
+            SpecialKeyType == SpecialKeyType.Search ||
+            SpecialKeyType == SpecialKeyType.Go ||
+            SpecialKeyType == SpecialKeyType.Enter ||
+            SpecialKeyType == SpecialKeyType.Next;
         public bool IsSpaceBar =>
             CurrentChar == " ";
         public bool IsEmojiKey =>
@@ -1183,7 +1188,7 @@ namespace iosKeyboardTest.iOS.KeyboardExt {
                     yield return NUM_SYMBOLS2_TEXT;
                     break;
                 case SpecialKeyType.Enter:
-                    yield return ENTER_IMG_FILE_NAME;
+                    yield return ENTER_TEXT;
                     break;
                 case SpecialKeyType.Search:
                     yield return SEARCH_IMG_FILE_NAME;

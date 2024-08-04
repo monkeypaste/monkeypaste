@@ -77,7 +77,7 @@ namespace iosKeyboardTest.Android {
             Frame = new_frame;
 
 
-            var inner_rect = Frame.ToBounds();
+            var inner_rect = Bounds;
 
             // fix precision rounding so popups are seamless
             int pad = DC.IsPopupKey ? 1 : 0; 
@@ -271,7 +271,7 @@ namespace iosKeyboardTest.Android {
                 { KeyViewModel.SHIFT_LOCK_IMG_FILE_NAME, CreateBitmap(Resource.Drawable.shift_lock) },
 
                 { KeyViewModel.SEARCH_IMG_FILE_NAME, CreateBitmap(Resource.Drawable.search) },
-                { KeyViewModel.ENTER_IMG_FILE_NAME, CreateBitmap(Resource.Drawable.enter) },
+                //{ KeyViewModel.ENTER_IMG_FILE_NAME, CreateBitmap(Resource.Drawable.enter) },
                 { KeyViewModel.BACKSPACE_IMG_FILE_NAME, CreateBitmap(Resource.Drawable.backspace) },
                 { KeyViewModel.EMOJI_SELECT_BTN_IMG_FILE_NAME, CreateBitmap(Resource.Drawable.emoji) },
                 { KeyViewModel.NEXT_KEYBOARD_IMG_FILE_NAME, CreateBitmap(Resource.Drawable.globe) }

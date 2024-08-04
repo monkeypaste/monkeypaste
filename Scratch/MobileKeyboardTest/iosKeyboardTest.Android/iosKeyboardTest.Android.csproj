@@ -25,6 +25,12 @@
   </ItemGroup>
   
   <ItemGroup>
+    <AndroidAsset Remove="Assets\words_10000.txt" />
+  </ItemGroup>
+  
+  <ItemGroup>
+    <None Remove="Assets\words_10000.txt" />
+    <None Remove="Assets\words_5000_normalized.txt" />
     <None Remove="Resources\font\Nunito_Regular.ttf" />
     <None Remove="Resources\layout\keyboard_layout_view.xml" />
     <None Remove="Resources\layout\pref_layout.xml" />
@@ -72,7 +78,7 @@
   <ItemGroup>
     <PackageReference Include="Avalonia.Android" Version="$(AvaloniaVersion)" />
     <PackageReference Include="Microsoft.Maui.Essentials" Version="8.0.70" />
-    <PackageReference Include="Rxmxnx.PInvoke.Extensions" Version="1.2.3" />
+    <PackageReference Include="Rxmxnx.PInvoke.Extensions" Version="1.2.3" Condition="'$(IsBionic)' == 'True'" />
     <PackageReference Include="Xamarin.AndroidX.Core.SplashScreen" Version="1.0.1.1" />
     <PackageReference Include="Xamarin.AndroidX.Preference" Version="1.2.1.8" />
   </ItemGroup>
@@ -117,10 +123,6 @@
     <!--Hack for passing a valid target argument on NDK linker invocation-->
     <LinkerArg Include="-Wl,--defsym,_init=__libc_init" />
     <LinkerArg Include="-Wl,--defsym,_fini=__libc_fini" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <Folder Include="Assets\" />
   </ItemGroup>
   
 

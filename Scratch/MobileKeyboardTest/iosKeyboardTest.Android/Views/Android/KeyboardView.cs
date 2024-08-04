@@ -148,9 +148,9 @@ namespace iosKeyboardTest.Android {
         private GPaint SetupPaint() {
             var paint = new GPaint();
             paint.TextAlign = GPaint.Align.Left;
-            paint.FakeBoldText = true;
-            paint.ElegantTextHeight = true;
-            paint.AntiAlias = true;
+            //paint.FakeBoldText = true;
+            //paint.ElegantTextHeight = true;
+            //paint.AntiAlias = true;
             paint.SetTypeface(Resources.GetFont(Resource.Font.Nunito_Regular));
             return paint;
         }

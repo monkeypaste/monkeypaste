@@ -12,7 +12,15 @@ namespace iosKeyboardTest.Android {
     public class CustomView : View, IFrameView, IKeyboardViewRenderer {
         public Color BackgroundColor { get; set; }
         public Paint SharedPaint { get; set; }
-        public RectF Frame { get; set; } = new();
+        private RectF _frame = new();
+        public RectF Frame {
+            get => _frame;
+            set {
+                _frame = value;
+                Bounds = _frame.ToBounds();
+            }
+        }
+        public RectF Bounds { get; private set; } = new();
         public string Name { get; set; } = "Unnamed";
 
         #region ctors

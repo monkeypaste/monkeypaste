@@ -1,4 +1,5 @@
 
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
@@ -8,6 +9,7 @@ namespace iosKeyboardTest.Android {
     public static class TextCorrector {
         const int MAX_COMPLETION_RESULTS = 20;
         const int INITIAL_DICT_LEN = 5_000;
+        public static bool IS_CASE_SENSITIVE = true;
 
         public static bool IsLoaded { get; private set; }
         static IEnumerable<string> Defaults { get; set; }
@@ -17,6 +19,8 @@ namespace iosKeyboardTest.Android {
             if(IsLoaded) {
                 return;
             }
+                
+
             if (loader.LoadStream("words_5000_bare.txt") is not { } stream) {
                 return;
             }
@@ -32,42 +36,48 @@ namespace iosKeyboardTest.Android {
             int count = rows.Length;
             var nodes = rows.Select((x,idx) => new Node(idx + 1, x));
             int max_len = nodes.Max(x => x.Word.Length);
-            BKTree.Init(count+1, max_len);
+            BKTree.Init(count+1, max_len, IS_CASE_SENSITIVE);
             foreach (var node in nodes) {
                 BKTree.Add(BKTree.RootNode, node);
             }
-            Defaults = BKTree.Entries.Skip(1).Take(MAX_COMPLETION_RESULTS).Select(x => x.Word).ToArray();
+
+            Defaults = BKTree.Entries
+                .Skip(1)
+                .Take(MAX_COMPLETION_RESULTS)
+                .Select(x => x.Word)
+                .ToArray();
 
             IsLoaded = true;
         }
 
         public static IEnumerable<string> GetResults(string input, bool autoCorrect, int maxResults, out string autoCorrectResult) {
             autoCorrectResult = null;
+            input = input.ToLower();
 
             if(string.IsNullOrWhiteSpace(input)) {
                 Defaults = Defaults.Randomize();
                 return Defaults.Take(maxResults);
             }
             // get completion results ordered by frequency
-            var starts_with_strs = 
-                BKTree.Entries
-                .Where(x => x.Word.StartsWith(input) && x.Word != input)
-                .OrderBy(x=>x.Rank)
-                //.OrderBy(x=>x.Word.Length)
-                //.ThenBy(x => x.Rank)
-                ;
-            if(starts_with_strs.Any()) {
-                // word can be completed
-                return starts_with_strs.Select(x => x.Word).Take(maxResults);
+            IEnumerable<string> matches = BKTree.Entries
+                    .Select((x, idx) => (x.Word.ToLower(), idx))
+                    .Where(x => x.Item1.StartsWith(input))
+                    .OrderBy(x => x.Item1)
+                    .Select(x => x.Item1);
+
+            if(!matches.Where(x=>x.ToLower() != input).Any()) {
+                matches = BKTree.GetSimilarWords(BKTree.RootNode, input)
+                    .Where(x => !string.IsNullOrEmpty(x.Item1))
+                    .OrderBy(x => x.Item2)
+                    .Select(x => x.Item1);
+                if (autoCorrect && matches.Where(x => x.ToLower() != input).FirstOrDefault() is { } best_match) {
+                    // use best match as auto-correct
+                    autoCorrectResult = best_match;
+                }
             }
-            // might be misspelled
-            var similar_matches = BKTree.GetSimilarWords(BKTree.RootNode, input).Where(x=>!string.IsNullOrEmpty(x.Item1)).OrderBy(x => x.Item2).ToList();
-            if(autoCorrect && similar_matches.FirstOrDefault() is { } best_match) {
-                // use best match as auto-correct
-                autoCorrectResult = best_match.Item1;
-            }
+            
             // return closest auto-corrected words
-            return similar_matches.Select(x=>x.Item1).Take(maxResults);
+            return matches.Where(x => x.ToLower() != input).Distinct().Take(maxResults);
         }
 
         public static void UpdateMatcher(string confirmedText) {

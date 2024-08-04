@@ -99,16 +99,18 @@
                         VerticalAlignment="Top"
                         Orientation="Horizontal"
                         Spacing="5">
-                <Button HorizontalAlignment="Center"
+                <Button x:Name="TestButton"
+                        HorizontalAlignment="Center"
                         VerticalAlignment="Center"
-                        x:Name="TestButton">
-                    Test
-                </Button>
-                <Button HorizontalAlignment="Center"
+                        Content="Test" />
+              <Button x:Name="ActivateButton"
+                        HorizontalAlignment="Center"
                         VerticalAlignment="Center"
-                        x:Name="OrientationButton">
-                    Orientation
-                </Button>
+                        Content="Activate" />
+                <Button x:Name="OrientationButton"
+                        HorizontalAlignment="Center"
+                        VerticalAlignment="Center"
+                        Content="Orientation" />
             </StackPanel>
         </Grid>
     </Canvas>

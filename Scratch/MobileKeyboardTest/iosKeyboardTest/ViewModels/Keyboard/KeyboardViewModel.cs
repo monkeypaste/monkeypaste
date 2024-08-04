@@ -225,7 +225,7 @@ namespace iosKeyboardTest {
         public bool IsBusy { get; set; }
 
         public string[] EndOfSentenceChars => ["\n", ".", "!", "?", string.Empty];
-        public string[] EndOfWordChars => ["\n", ".", "!", "?", " ", string.Empty];
+        public char[] EndOfWordChars => ['\n', '.', '!', '?', ' ', default];
         bool IsInitialized =>
             InputConnection != null && InputConnection.Flags == LastInitializedFlags;
         public KeyboardFeedbackFlags ActiveChangeFeedback { get; private set; }
@@ -259,6 +259,9 @@ namespace iosKeyboardTest {
             VisiblePopupKeys.Any();
         bool IsHoldMenuVisible =>
             VisiblePopupKeys.Skip(1).Any();
+
+        bool IsCursorChangeManuallySuppressed { get; set; }
+        bool WasCursorChangedWhileSuppressed { get; set; }
 
         private CharSetType _charSet;
         public CharSetType CharSet => _charSet;
@@ -304,8 +307,11 @@ namespace iosKeyboardTest {
         Point? LastCursorControlUpdateLocation { get; set; }
         DateTime? LastCursorControlUpdateDt { get; set; }
         public bool IsCursorControlEnabled { get; private set; }
+
         #endregion
+
         #endregion
+
         #endregion
 
         #region Model
@@ -462,6 +468,7 @@ namespace iosKeyboardTest {
             switch (e.TouchEventType) {
                 case TouchEventType.Press:
                     PressKeyAsync(touch).FireAndForgetSafeAsync();
+
                     break;
                 case TouchEventType.Move:
                     MoveKey(touch);
@@ -626,7 +633,30 @@ namespace iosKeyboardTest {
         private void Ic_OnCursorChanged(object sender, TextRangeInfo e) {
             HandleCursorChange(e);
         }
+        public void SuppressCursorChange() {
+            IsCursorChangeManuallySuppressed = true;
+        }
+        public void UnsupressCursorChange() {
+            IsCursorChangeManuallySuppressed = false;
+        }
         void HandleCursorChange(TextRangeInfo textInfo) {
+            DoCursorFeedback();
+
+            if (!CanHandleCursorChange()) {
+                WasCursorChangedWhileSuppressed = true;
+                return;
+            }
+            WasCursorChangedWhileSuppressed = false;
+
+            if (KeyboardFlags.HasFlag(KeyboardFlags.PlatformView)) {
+                CheckAutoCap(textInfo);
+            } else {
+                Dispatcher.UIThread.Post(() => CheckAutoCap(textInfo));
+            }       
+            // NOTE do completion AFTER shift state has been changed
+            MenuViewModel.AutoCompleteViewModel.ShowCompletion(textInfo);
+        }
+        void DoCursorFeedback() {
             DateTime this_cursor_change_dt = DateTime.Now;
 
             bool do_vibrate = false;
@@ -640,13 +670,18 @@ namespace iosKeyboardTest {
             if (do_vibrate) {
                 InputConnection.OnFeedback(KeyboardFeedbackFlags.Vibrate);
             }
-            if (KeyboardFlags.HasFlag(KeyboardFlags.PlatformView)) {
-                CheckAutoCap(textInfo);
-            } else {
-                Dispatcher.UIThread.Post(() => CheckAutoCap(textInfo));
-            }       
-            // NOTE do completion AFTER shift state has been changed
-            MenuViewModel.AutoCompleteViewModel.ShowCompletion(textInfo);
+        }
+        bool CanHandleCursorChange() {
+            if(IsCursorChangeManuallySuppressed) {
+                return false;
+            }
+            if(IsCursorControlEnabled) {
+                return false;
+            }
+            if(PressedKeys.Any(x=>x.IsBackspace)) {
+                return false;
+            }
+            return true;
         }
         void CheckAutoCap(TextRangeInfo textInfo) {
             if (!IsAutoCapitalizationEnabled ||
@@ -721,6 +756,7 @@ namespace iosKeyboardTest {
             IsAutoCorrectEnabled = false;
             IsBackspaceUndoLastAutoCorrectEnabled = prefService.GetPrefValue<bool>(MyPrefKeys.DO_BACKSPACE_UNDOS_LAST_AUTO_CORRECT);
             IsCompoundWordBreakEnabled = prefService.GetPrefValue<bool>(MyPrefKeys.DO_CASE_COMPLETION);
+            IsCompoundWordBreakEnabled = false;
 
             HoldDelayMs = prefService.GetPrefValue<int>(MyPrefKeys.LONG_POPUP_DELAY);
             MaxCompletionResults = prefService.GetPrefValue<int>(MyPrefKeys.MAX_COMPLETION_COUNT);
@@ -1034,7 +1070,7 @@ namespace iosKeyboardTest {
             dx = Math.Clamp(dx, -max_x, max_x);
             dy = Math.Clamp(dy, -max_y, max_y);
 
-            Debug.WriteLine($"DX: {dx} DY: {dy}");
+            //Debug.WriteLine($"DX: {dx} DY: {dy}");
 
             LastCursorControlUpdateDt = DateTime.Now;
             InputConnection.OnNavigate(dx, dy);
@@ -1106,8 +1142,7 @@ namespace iosKeyboardTest {
                     StartCursorControl(touch.Id);
                     return;
                 }
-                if (kvm.IsBackspace &&
-                    (t == 0 || (t >= BackspaceHoldToRepeatMs && t % MinBackspaceRepeatMs == 0))) {
+                if (kvm.IsBackspace && (t == 0 || t >= BackspaceHoldToRepeatMs)) { 
                     HandleBackspace();
                     //Debug.WriteLine($"Backspace: MinRepeat: {BackspaceHoldToRepeatMs} T: {t}");
                 }
@@ -1163,12 +1198,14 @@ namespace iosKeyboardTest {
             }
             PerformKeyAction(pressed_kvm);
 
-
             bool is_released = Touches.Locate(touch.Id) == null;
             if (is_released) {
                 pressed_kvm.SetPressed(false, null);
                 if (pressed_kvm.IsBackspace) {
                     ResetBackspace();
+                }
+                if(WasCursorChangedWhileSuppressed) {
+                    HandleCursorChange(InputConnection.OnTextRangeInfoRequest());
                 }
             }
         }

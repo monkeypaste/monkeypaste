@@ -23,9 +23,11 @@ namespace iosKeyboardTest.Android {
         protected override AppBuilder CustomizeAppBuilder(AppBuilder builder) {
             Instance = this;
             var result = base.CustomizeAppBuilder(builder)
-                     //.With(new AndroidPlatformOptions())
                      .WithInterFont()
-                     .UseReactiveUI();
+                     .UseReactiveUI()
+                     .AfterSetup(_=> {
+                         PlatformKeyboardServices.KeyboardPermissionHelper = new AndroidPermissionHelper();
+                     });
 
             return result;
         }

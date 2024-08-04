@@ -55,9 +55,11 @@ namespace iosKeyboardTest.Android {
         private EditorInfo _lastEditorInfo = default;
         AudioManager _audioManager;
 
+
         #endregion
 
         #region Constants
+        const int OP_DELAY_MS = 30;
         #endregion
 
         #region Statics
@@ -95,23 +97,24 @@ namespace iosKeyboardTest.Android {
         #endregion
 
         #region IKeyboardInputConnection Implementation
-        void IKeyboardInputConnection.OnShowPreferences(object args) {
+
+        public void OnShowPreferences(object args) {
             StartPrefActivity();
         }
         IMainThread IKeyboardInputConnection.MainThread =>
             this;
-        IAssetLoader IKeyboardInputConnection.AssetLoader =>
+        public IAssetLoader AssetLoader =>
             this;
-        ISharedPrefService IKeyboardInputConnection.SharedPrefService =>
+        public ISharedPrefService SharedPrefService =>
             PrefManager;
-        ITextMeasurer IKeyboardInputConnection.TextMeasurer =>
+        public ITextMeasurer TextMeasurer =>
             KeyboardView;
 
         public KeyboardFlags Flags =>
             GetFlags(_lastEditorInfo);
-        TextRangeInfo IKeyboardInputConnection.OnTextRangeInfoRequest() =>
+        public TextRangeInfo OnTextRangeInfoRequest() =>
             GetTextInfo();
-        void IKeyboardInputConnection.OnText(string text) {
+        public void OnText(string text) {
             if (this.CurrentInputConnection == null ||
                 string.IsNullOrEmpty(text)) {
                 return;
@@ -124,51 +127,58 @@ namespace iosKeyboardTest.Android {
             }
         }
 
-        void IKeyboardInputConnection.OnBackspace(int count) {
+        public void OnBackspace(int count) {
             //if (this.CurrentInputConnection == null) {
             //    return;
             //}
-            if(GetLeadingText(-1,-1) is { } leading_text &&
-                leading_text.Length < count) {
-                // android throws error if can't delete anymore
-                count = leading_text.Length;
-            }
-            int success_count = 0;
-            for (int i = 0; i < count; i++) {
-                try {
-                    string selectedText = this.CurrentInputConnection.GetSelectedText(0);
-
-                    bool success = false;
-                    if (string.IsNullOrEmpty(selectedText)) {
-                        success = this.CurrentInputConnection.DeleteSurroundingText(1, 0);
-                    } else {
-                        success = this.CurrentInputConnection.CommitText(string.Empty, 1);
-                    }
-                    if (success) {
-                        success_count++;
-                        continue;
-                    }
-                }
-                catch (Exception ex) {
-                    Debug.WriteLine(ex.ToString());
-                }
-            }
-            //int i = 0;
-            //while(count - i > 0) {
-
-            //    // send actual backspace key event when nothing to delete from conn,
-            //    // conn method doesn't auto remove Google Keep checkboxes like default keyboard does
-            //    // NOTE not sure if below does fix it...
-            //    this.SendDownUpKeyEvents(Keycode.Del);
-            //    i++;
+            //if(GetLeadingText() is { } leading_text &&
+            //    leading_text.Length < count) {
+            //    // android throws error if can't delete anymore
+            //    count = leading_text.Length;
             //}
+            //int success_count = 0;
+            //for (int i = 0; i < count; i++) {
+            //    try {
+            //        string selectedText = this.CurrentInputConnection.GetSelectedText(0);
+
+            //        bool success = false;
+            //        if (string.IsNullOrEmpty(selectedText)) {
+            //            success = this.CurrentInputConnection.DeleteSurroundingText(1, 0);
+            //        } else {
+            //            success = this.CurrentInputConnection.CommitText(string.Empty, 1);
+            //        }
+            //        if (success) {
+            //            success_count++;
+            //            continue;
+            //        }
+            //    }
+            //    catch (Exception ex) {
+            //        Debug.WriteLine(ex.ToString());
+            //    }
+            //}
+            int j = 0;
+            while (count - j > 0) {
+
+                // send actual backspace key event when nothing to delete from conn,
+                // conn method doesn't auto remove Google Keep checkboxes like default keyboard does
+                // NOTE not sure if below does fix it...
+                //this.CurrentInputConnection.SendKeyEvent(new KeyEvent(KeyEventActions.Down, Keycode.Del));
+                //this.CurrentInputConnection.SendKeyEvent(new KeyEvent(KeyEventActions.Up, Keycode.Del));
+                this.SendDownUpKeyEvents(Keycode.Del);
+                Thread.Sleep(OP_DELAY_MS);
+                j++;
+            }
         }
 
-        void IKeyboardInputConnection.OnDone() {
+        public void OnDone() {
+            if(Flags.HasFlag(KeyboardFlags.Next)) {
+                this.CurrentInputConnection.PerformEditorAction(ImeAction.Next);
+                return;
+            }
             this.SendDownUpKeyEvents(Keycode.Enter);
         }
 
-        void IKeyboardInputConnection.OnNavigate(int dx, int dy) {
+        public void OnNavigate(int dx, int dy) {
             if (this.CurrentInputConnection == null) {
                 return;
             }
@@ -180,16 +190,18 @@ namespace iosKeyboardTest.Android {
                 Keycode kc = x_dir > 0 ? Keycode.DpadRight : Keycode.DpadLeft;
                 for (int i = 0; i < (int)Math.Abs(dx); i++) {
                     this.SendDownUpKeyEvents(kc);
+                    Thread.Sleep(OP_DELAY_MS);
                 }
             }
             if (y_dir.HasValue) {
                 Keycode kc = y_dir > 0 ? Keycode.DpadDown : Keycode.DpadUp;
                 for (int i = 0; i < (int)Math.Abs(dy); i++) {
                     this.SendDownUpKeyEvents(kc);
+                    Thread.Sleep(OP_DELAY_MS);
                 }
             }
         }
-        void IKeyboardInputConnection.OnFeedback(KeyboardFeedbackFlags flags) {
+        public void OnFeedback(KeyboardFeedbackFlags flags) {
             if (flags.HasFlag(KeyboardFeedbackFlags.Vibrate)) {
                 Vibrate();
             }
@@ -502,42 +514,44 @@ namespace iosKeyboardTest.Android {
             if (this.CurrentInputConnection == null) {
                 return default;
             }
-            string pre_text = GetLeadingText(-1, -1);
+            string pre_text = GetLeadingText();
             string sel_text = this.CurrentInputConnection.GetSelectedText(0) ?? string.Empty;
-            string post_text = GetTrailingText(-1, -1);
+            string post_text = GetTrailingText();
             string total_text = pre_text + sel_text + post_text;
             int sel_len = sel_text.Length == total_text.Length ? 0 : sel_text.Length;
 
             return new TextRangeInfo(total_text, pre_text.Length, sel_len);
         }
-        string GetTextAroundCursor(int offset, int len, bool isBefore) {
+        string GetTextAroundCursor(bool isBefore) {
             if (this.CurrentInputConnection == null) {
                 return string.Empty;
             }
-            string last_text = string.Empty;
-            var sb = new StringBuilder();
+            // NOTE max is arbitrary, should only ever need to beginning or end of sentence (if it a sentence)
+            int max = 1_0000;
+
+            string last_text = null;
             int cur_count = 1;
             while (true) {
                 string cur_text = isBefore ?
                     CurrentInputConnection.GetTextBeforeCursor(cur_count, 0) :
                     CurrentInputConnection.GetTextAfterCursor(cur_count, 0);
-                if (string.IsNullOrEmpty(cur_text) ||
+                if (cur_text == null ||
                     cur_text == last_text) {
                     // NOTE when n is before beginning of text it'll just return as far as it can go
                     break;
                 }
                 last_text = cur_text;
-                if (cur_count == offset) {
+                if (cur_count >= max) {
                     break;
                 }
                 cur_count++;
             }
-            return last_text;
+            return last_text ?? string.Empty;
         }
-        string GetLeadingText(int offset, int len) =>
-            GetTextAroundCursor(offset, len, true);
-        string GetTrailingText(int offset, int len) =>
-            GetTextAroundCursor(offset, len, false);
+        string GetLeadingText() =>
+            GetTextAroundCursor(true);
+        string GetTrailingText() =>
+            GetTextAroundCursor(false);
 
         #endregion
 
@@ -560,7 +574,7 @@ namespace iosKeyboardTest.Android {
                 var test4 = _cbListener.ClipboardManager.TextFormatted.ToString();
 
             }
-
+            
             _cbListener.OnClipboardChanged += OnCbChanged;
         }
 

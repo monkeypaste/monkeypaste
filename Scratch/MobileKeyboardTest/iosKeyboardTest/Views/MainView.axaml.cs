@@ -65,6 +65,12 @@ public partial class MainView : UserControl
             OnBoundsChanged();
             kbvm.Init(kbvm.KeyboardFlags);
         };
+        ActivateButton.Click += (s, e) => {
+            if (PlatformKeyboardServices.KeyboardPermissionHelper is not { } kph) {
+                return;
+            }
+            kph.ShowKeyboardActivator();
+        };
 
         TestButton.Click += (s, e) => {
             TestTextBox.Text = "Welcome to Avalonia!" + Environment.NewLine + "Welcome to Avalonia!" + Environment.NewLine + "Welcome to Avalonia!" + Environment.NewLine + "Welcome to Avalonia!" + Environment.NewLine + "Welcome to Avalonia!" + Environment.NewLine + "Welcome to Avalonia!";

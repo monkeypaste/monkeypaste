@@ -20,6 +20,19 @@ namespace iosKeyboardTest.iOS {
                 Debug.WriteLine(ex.ToString());
             }
         }
+        public static bool AddOrReplace<TKey, TValue>(this Dictionary<TKey, TValue> d, TKey key, TValue value) {
+            //returns true if kvp was added
+            //returns false if kvp was replaced
+            if (d.ContainsKey(key)) {
+                d[key] = value;
+                return false;
+            }
+            d.Add(key, value);
+            return true;
+        }
+        public static IEnumerable<TSource> If<TSource>(this IEnumerable<TSource> source, bool condition, Func<IEnumerable<TSource>, IEnumerable<TSource>> branch) {
+            return condition ? branch(source) : source;
+        }
         public static void ForEach<T>(this IEnumerable source, Action<T> action) {
             if (source == null) {
                 return;
@@ -104,7 +117,7 @@ namespace iosKeyboardTest.iOS {
             return false;
         }
         
-        public static bool IsCapitalCaseChar(char let) {
+        public static bool IsCapitalCaseChar(this char let) {
             if (let == default) {
                 return false;
             }
@@ -114,7 +127,7 @@ namespace iosKeyboardTest.iOS {
             return false;
         }
 
-        public static bool IsLowerCaseChar(char let) {
+        public static bool IsLowerCaseChar(this char let) {
             if (let == default) {
                 return false;
             }

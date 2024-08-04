@@ -101,7 +101,7 @@ namespace iosKeyboardTest.iOS {
 
             Velocity = (Location - LastLocation) / (cur_time - LastUpdateDt).TotalSeconds;
             LastUpdateDt = cur_time;
-            Debug.WriteLine($"[{Id}] Velocity: {Velocity}");
+            //Debug.WriteLine($"[{Id}] Velocity: {Velocity}");
         }
     }
 }

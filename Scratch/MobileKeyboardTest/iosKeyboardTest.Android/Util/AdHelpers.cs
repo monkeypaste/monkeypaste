@@ -155,8 +155,8 @@ namespace iosKeyboardTest.Android {
             }
         }
         public static IEnumerable<(int id,Avalonia.Point loc,TouchEventType eventType)> GetMotions(this MotionEvent e, Dictionary<int, Avalonia.Point> touches) {
-            Debug.WriteLine("");
-            Debug.WriteLine($"{e.ActionMasked}");
+            //Debug.WriteLine("");
+           // Debug.WriteLine($"{e.ActionMasked}");
             List<(int, Avalonia.Point, TouchEventType)> changed_ids = [];
             for (int i = 0; i < e.PointerCount; i++) {
                 int tid = e.GetPointerId(i);
@@ -172,7 +172,7 @@ namespace iosKeyboardTest.Android {
                     if(i == e.ActionIndex) {
                         if(e.ActionMasked.IsDown()) {
                             // new touch
-                            touches.Add(tid, tid_p);
+                            touches.AddOrReplace(tid, tid_p);
                             changed_ids.Add((tid, tid_p, TouchEventType.Press));
                         } else if(e.ActionMasked.IsUp()) {
                             // old touch
@@ -182,9 +182,9 @@ namespace iosKeyboardTest.Android {
                     }
                 }
             }
-            foreach(var ch in changed_ids) {
-                Debug.WriteLine($"Type: {ch.Item3} Id: {ch.Item1} Loc: {ch.Item2}");
-            }
+            //foreach(var ch in changed_ids) {
+            //    Debug.WriteLine($"Type: {ch.Item3} Id: {ch.Item1} Loc: {ch.Item2}");
+            //}
             return changed_ids;
         }
 

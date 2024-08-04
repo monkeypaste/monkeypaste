@@ -25,13 +25,15 @@ namespace iosKeyboardTest.iOS.KeyboardExt {
 
         // index for the current Node of the tree
         static int NextAddIdx { get; set; }
+        static bool IsCaseSensitive { get; set; }
 
-        public static void Init(int maxWords, int maxWordLength) {
+        public static void Init(int maxWords, int maxWordLength, bool isCaseSensitive) {
             NextAddIdx = 0;
             MAX_WORD_COUNT = maxWords;
             MAX_WORD_LEN = maxWordLength;
             Tree = new Node[MAX_WORD_COUNT];
             RootNode = new Node();
+            IsCaseSensitive = isCaseSensitive;
         }
 
         // Edit Distance
@@ -39,6 +41,10 @@ namespace iosKeyboardTest.iOS.KeyboardExt {
         public static int EditDistance(string a, string b) {
             if (a == null || b == null) {
                 return -1; // or handle the case where either string is null
+            }
+            if(!IsCaseSensitive) {
+                a = a.ToLower();
+                b = b.ToLower();
             }
 
             int m = a.Length;
@@ -137,7 +143,7 @@ namespace iosKeyboardTest.iOS.KeyboardExt {
             }
                 
 
-            while (start <= dist + MATCH_TOLERANCE) {
+            while (start <= dist + MATCH_TOLERANCE && start < MAX_WORD_LEN) {
                 var tmp = GetSimilarWords(Tree[root.Next[start]], s);
                 ret.AddRange(tmp);
                 start++;
