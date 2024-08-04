@@ -1,0 +1,244 @@
+<?xml version="1.0" encoding="utf-8"?>
+<PreferenceScreen
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:app="http://schemas.android.com/apk/res-auto">
+
+  <PreferenceCategory
+          android:title="@string/header_preferences">
+
+    <!-- KEYS -->
+
+    <Preference
+            android:key="keys_header"
+            android:title="@string/title_keys_preference"/>
+
+    <SwitchPreferenceCompat
+            android:key="DO_NUM_ROW"
+            android:title="@string/title_keys_num_row_preference"
+            android:summary="@string/summary_keys_num_row_preference"/>
+
+    <SwitchPreferenceCompat
+            android:key="DO_EMOJI_KEY"
+            android:title="@string/title_keys_emoji_preference"
+            android:summary="@string/summary_keys_emoji_preference"/>
+
+    <!-- KEY PRESS -->
+
+    <Preference
+            android:key="key_press_header"
+            android:title="@string/title_key_press_preference"/>
+
+    <!-- SOUND -->
+    <SwitchPreferenceCompat
+            android:key="DO_SOUND"
+            android:title="@string/title_key_press_do_sound_preference"/>
+
+    <SeekBarPreference
+                android:key="SOUND_LEVEL"
+                android:dependency="DO_SOUND"
+                android:title="@string/title_key_press_volume_preference"
+                android:max="100"
+                android:defaultValue="15"/>
+
+    <!-- VIBRATE -->
+    <SwitchPreferenceCompat
+            android:key="DO_VIBRATE"
+            android:title="@string/title_key_press_do_vibrate_preference"/>
+
+    <SeekBarPreference
+            android:key="VIBRATE_LEVEL"
+            android:dependency="DO_VIBRATE"
+            android:title="@string/title_key_press_vibrate_level_preference"
+            android:max="5"
+            android:defaultValue="1"/>
+
+    <!-- POPUP -->
+    <SwitchPreferenceCompat
+            android:key="DO_POPUP"
+            android:title="@string/title_key_press_do_popup_preference"/>
+
+    <!-- LONG PRESS POPUP -->
+    <SwitchPreferenceCompat
+            android:key="DO_LONG_POPUP"
+            android:title="@string/title_key_press_do_long_press_popup_preference"/>
+
+    <SeekBarPreference
+            android:key="LONG_POPUP_DELAY"
+            android:dependency="DO_LONG_POPUP"
+            android:title="@string/title_key_press_long_press_delay_preference"
+            android:max="5"
+            android:min="0"
+            android:defaultValue="1"/>
+
+    <!-- LOOK & FEEL -->
+
+    <Preference
+            android:key="preference"
+            android:title="@string/title_look_and_feel_preference"/>
+
+    <!-- NIGHT MODES -->
+    <SwitchPreferenceCompat
+            android:key="DO_NIGHT_MODE"
+            android:title="@string/title_look_and_feel_force_night_mode_preference"/>
+    <!-- SHOW BORDERS -->
+    <SwitchPreferenceCompat
+            android:key="DO_KEY_BOARDERS"
+            android:title="@string/title_look_and_feel_show_key_borders_preference"
+            android:defaultValue="true"/>
+
+    <!-- BG OPACITY -->
+    <SeekBarPreference
+            android:key="BG_OPACITY"
+            android:title="@string/title_look_and_feel_bg_opacity_level_preference"
+            android:max="255"
+            android:defaultValue="255"/>
+    <!-- FG OPACITY -->
+    <SeekBarPreference
+            android:key="FG_OPACITY"
+            android:title="@string/title_look_and_feel_fg_opacity_level_preference"
+            android:max="255"
+            android:defaultValue="255"/>
+
+
+
+    <!-- BEHAVIOR -->
+
+    <Preference
+            android:key="preference"
+            android:title="@string/title_behavior_preference"/>
+    <SwitchPreferenceCompat 
+            android:key="DO_SUGGESTION_STRIP" 
+            android:title="@string/title_behavior_show_suggestions_preference"/>
+    <SwitchPreferenceCompat 
+            android:key="DO_NEXT_WORD_COMPLETION" 
+            android:title="@string/title_behavior_do_next_word_completion_preference"/>
+    <SeekBarPreference 
+            android:key="MAX_COMPLETION_COUNT" 
+            android:max="20"
+            android:defaultValue="8"
+            android:title="@string/title_behavior_max_completion_count_preference"/>
+    <SwitchPreferenceCompat 
+            android:key="DO_AUTO_CORRECT" 
+            android:title="@string/title_behavior_do_auto_correct_preference"/>
+    <SwitchPreferenceCompat 
+            android:key="DO_BACKSPACE_UNDOS_LAST_AUTO_CORRECT" 
+            android:title="@string/title_behavior_do_backspace_undo_auto_correct_preference"/>
+    <SwitchPreferenceCompat 
+            android:key="DO_AUTO_CAPITALIZATION" 
+            android:title="@string/title_behavior_do_auto_capitalization_preference"/>
+    <SwitchPreferenceCompat 
+            android:key="DO_DOUBLE_SPACE_PERIOD" 
+            android:title="@string/title_behavior_do_double_space_period_preference"/>
+    <SwitchPreferenceCompat 
+            android:key="DO_CURSOR_CONTROL" 
+            android:title="@string/title_behavior_do_cursor_control_preference"/>
+    <SeekBarPreference 
+            android:key="CURSOR_CONTROL_SENSITIVITY_X" 
+            android:max="100" 
+            android:defaultValue="50"  
+            android:title="@string/title_behavior_cursor_control_factor_x_preference"/>
+    <SeekBarPreference 
+            android:key="CURSOR_CONTROL_SENSITIVITY_Y" 
+            android:max="100" 
+            android:defaultValue="50" 
+            android:title="@string/title_behavior_cursor_control_factor_y_preference"/>
+  </PreferenceCategory>
+
+  <!--<PreferenceCategory
+          android:title="@string/widgets">
+
+    <CheckBoxPreference
+            android:key="checkbox"
+            android:title="@string/title_checkbox_preference"
+            android:summary="@string/summary_checkbox_preference"/>
+
+    <SwitchPreferenceCompat
+            android:key="switch"
+            android:title="@string/title_switch_preference"
+            android:summary="@string/summary_switch_preference"/>
+
+    <DropDownPreference
+            android:key="dropdown"
+            android:title="@string/title_dropdown_preference"
+            android:entries="@array/entries"
+            app:useSimpleSummaryProvider="true"
+            android:entryValues="@array/entry_values"/>
+
+    <SeekBarPreference
+            android:key="seekbar"
+            android:title="@string/title_seekbar_preference"
+            android:max="10"
+            android:defaultValue="5"/>
+  </PreferenceCategory>
+
+  <PreferenceCategory
+          android:title="@string/dialogs">
+
+    <EditTextPreference
+            android:key="edittext"
+            android:title="@string/title_edittext_preference"
+            app:useSimpleSummaryProvider="true"
+            android:dialogTitle="@string/dialog_title_edittext_preference"/>
+
+    <ListPreference
+            android:key="list"
+            android:title="@string/title_list_preference"
+            app:useSimpleSummaryProvider="true"
+            android:entries="@array/entries"
+            android:entryValues="@array/entry_values"
+            android:dialogTitle="@string/dialog_title_list_preference"/>
+
+    <MultiSelectListPreference
+            android:key="multi_select_list"
+            android:title="@string/title_multi_list_preference"
+            android:summary="@string/summary_multi_list_preference"
+            android:entries="@array/entries"
+            android:entryValues="@array/entry_values"
+            android:dialogTitle="@string/dialog_title_multi_list_preference"/>
+  </PreferenceCategory>
+
+  <PreferenceCategory
+          android:key="advanced"
+          android:title="@string/advanced_attributes"
+          app:initialExpandedChildrenCount="1">
+
+    <Preference
+            android:key="expandable"
+            android:title="@string/title_expandable_preference"
+            android:summary="@string/summary_expandable_preference"/>
+
+    <Preference
+            android:title="@string/title_intent_preference"
+            android:summary="@string/summary_intent_preference">
+
+      <intent android:action="android.intent.action.VIEW"
+              android:data="http://www.android.com"/>
+
+    </Preference>
+
+    <SwitchPreferenceCompat
+            android:key="parent"
+            android:title="@string/title_parent_preference"
+            android:summary="@string/summary_parent_preference"/>
+
+    <SwitchPreferenceCompat
+            android:key="child"
+            android:dependency="parent"
+            android:title="@string/title_child_preference"
+            android:summary="@string/summary_child_preference"/>
+
+    <SwitchPreferenceCompat
+            android:key="toggle_summary"
+            android:title="@string/title_toggle_summary_preference"
+            android:summaryOn="@string/summary_on_toggle_summary_preference"
+            android:summaryOff="@string/summary_off_toggle_summary_preference"/>
+
+    <Preference
+            android:key="copyable"
+            android:title="@string/title_copyable_preference"
+            android:summary="@string/summary_copyable_preference"
+            android:selectable="false"
+            app:enableCopying="true"/>
+  </PreferenceCategory>-->
+
+</PreferenceScreen>

@@ -33,6 +33,7 @@ namespace MonkeyBuild {
         GEN_EDITOR_UISTRS,
         DO_JS_UISTRINGS,
         MOVE_NUGET_CACHE,
+        MOVE_KEYBOARD,
         DEBUG,
         RELEASE,
     }
@@ -215,20 +216,70 @@ namespace MonkeyBuild {
 
         #endregion
 
+        #region Keyboard Mover
+        static string KeyboardTargetDirName => "KEYBOARD_BASE";
+        static string KeyboardSourceNamespace => "iosKeyboardTest";
+        static string KeyboardSourceDir =>
+            Path.Combine(
+                    MpPlatformHelpers.GetSolutionDir(),
+                    "Scratch",
+                    "MobileKeyboardTest",
+                    "iosKeyboardTest",
+                    "ViewModels",
+                    "Keyboard"
+                    );
+        static List<string> KeyboardTargetDirs =>
+            [
+                Path.Combine(
+                    MpPlatformHelpers.GetSolutionDir(),
+                    "Scratch",
+                    "MobileKeyboardTest",
+                    "iosKeyboardTest.Android",
+                    "ViewModels",
+                    "Keyboard",
+                    KeyboardTargetDirName
+                    ),
+            Path.Combine(
+                    MpPlatformHelpers.GetSolutionDir(),
+                    "Scratch",
+                    "MobileKeyboardTest",
+                    "iosKeyboardTest.iOS",
+                    "ViewModels",
+                    "Keyboard",
+                    KeyboardTargetDirName
+                    ),
+            Path.Combine(
+                    MpPlatformHelpers.GetSolutionDir(),
+                    "Scratch",
+                    "MobileKeyboardTest",
+                    "iosKeyboardTest.iOS.KeyboardExt",
+                    "ViewModels",
+                    "Keyboard",
+                    KeyboardTargetDirName
+                    ),
+            ];
+
+        static Dictionary<string, string[]> OmittedFilesForTargetNamespaceLookup => new Dictionary<string, string[]>() {
+            {"iosKeyboardTest.Android",["KeyboardFactory.cs"] },
+            {"iosKeyboardTest.iOS",["KeyboardFactory.cs"] },
+            {"iosKeyboardTest.iOS.KeyboardExt",["KeyboardFactory.cs"] },
+        };
+        #endregion
+
         #region Env
         private static IConfiguration _config;
-        static IConfigurationSection ServerSecrets { 
+        static IConfigurationSection ServerSecrets {
             get {
-                if(_config == null) {
+                if (_config == null) {
                     var cb = new ConfigurationBuilder();
                     _config = cb.AddUserSecrets<MonkeyBuild>().Build();
                 }
                 return _config.GetSection("server");
             }
         }
-        static IConfigurationSection UbuntuSecrets { 
+        static IConfigurationSection UbuntuSecrets {
             get {
-                if(_config == null) {
+                if (_config == null) {
                     var cb = new ConfigurationBuilder();
                     _config = cb.AddUserSecrets<MonkeyBuild>().Build();
                 }
@@ -243,7 +294,11 @@ namespace MonkeyBuild {
             Trace.AutoFlush = true;
             MpConsole.IsConsoleApp = true;
             MpConsole.HideAllStamps = true;
-            while(SelectTasks()) {
+            if(ProcessArgs(args)) {
+                return;
+            }
+
+            while (SelectTasks()) {
                 Console.Clear();
                 MpConsole.WriteLine($"Tasks: {string.Join(", ", BuildTasks.Select(x => x.ToString()))}");
                 MpConsole.WriteLine("Starting...");
@@ -251,9 +306,22 @@ namespace MonkeyBuild {
                 ProcessAll();
                 MpConsole.WriteLine("Done.. press key to continue");
                 Console.ReadLine();
-            }                        
+            }
+        }
+        static bool ProcessArgs(string[] args) {
+            if(args is not { } argParts ||
+                !argParts.Any() ||
+                argParts.Select(x=>x.ToEnum<MpBuildFlags>()) is not { } argFlagParts) {
+                return false;
+            }
+            BuildTasks = argFlagParts.ToList();
+            ProcessAll();
+            return true;
         }
         static void ProcessAll() {
+            if (BuildTasks.Contains(MpBuildFlags.MOVE_KEYBOARD)) {
+                MoveKeyboard();
+            }
             if (BuildTasks.Contains(MpBuildFlags.GEN_EDITOR_UISTRS)) {
                 GenEditorUiStrings();
             }
@@ -308,9 +376,11 @@ namespace MonkeyBuild {
             if (BuildTasks.Contains(MpBuildFlags.DO_JS_UISTRINGS)) {
                 MoveJsUiStrings();
             }
-            if(BuildTasks.Contains(MpBuildFlags.MOVE_NUGET_CACHE)) {
+            if (BuildTasks.Contains(MpBuildFlags.MOVE_NUGET_CACHE)) {
                 MoveNugetCache();
             }
+
+            BuildTasks.Clear();
         }
 
         #region Menu
@@ -319,8 +389,8 @@ namespace MonkeyBuild {
 
             Console.Clear();
             var task_names = Enum.GetNames(typeof(MpBuildFlags));
-            foreach(var (task_name,idx) in task_names.WithIndex()) {
-                if(idx == 0) {
+            foreach (var (task_name, idx) in task_names.WithIndex()) {
+                if (idx == 0) {
                     MpConsole.WriteLine($"0. Select working plugin list...");
                     continue;
                 }
@@ -328,21 +398,21 @@ namespace MonkeyBuild {
             }
             MpConsole.WriteLine($"{task_names.Count()}.QUIT");
             MpConsole.WriteLine($"Select tasks/flags (# seperated by comma):");
-            var tasks_str = Console.ReadLine().SplitNoEmpty(",").Select(x=>x.Trim());
-            if(tasks_str.IsNullOrEmpty()) {
+            var tasks_str = Console.ReadLine().SplitNoEmpty(",").Select(x => x.Trim());
+            if (tasks_str.IsNullOrEmpty()) {
                 // default quit
                 return false;
             }
 
-            foreach(var task_str in tasks_str) {
-                if(!int.TryParse(task_str,out int task_idx) || task_idx < 0 || task_idx >= task_names.Length) {
-                    if(task_idx == task_names.Count()) {
+            foreach (var task_str in tasks_str) {
+                if (!int.TryParse(task_str, out int task_idx) || task_idx < 0 || task_idx >= task_names.Length) {
+                    if (task_idx == task_names.Count()) {
                         // quit selected
                         return false;
                     }
                     continue;
                 }
-                if(task_idx == 0) {
+                if (task_idx == 0) {
                     BuildTasks.Clear();
                     SelectPlugins();
                     SelectTasks();
@@ -350,12 +420,11 @@ namespace MonkeyBuild {
                 }
                 BuildTasks.AddOrReplace(task_names[task_idx].ToEnum<MpBuildFlags>());
             }
-            if(!BuildTasks.Contains(MpBuildFlags.DEBUG) && !BuildTasks.Contains(MpBuildFlags.RELEASE)) {
+            if (!BuildTasks.Contains(MpBuildFlags.DEBUG) && !BuildTasks.Contains(MpBuildFlags.RELEASE)) {
                 BuildTasks.Add(MpBuildFlags.DEBUG);
             }
             return true;
         }
-
         static void SelectPlugins() {
             Console.Clear();
             WorkingPluginNames.Clear();
@@ -368,8 +437,8 @@ namespace MonkeyBuild {
             MpConsole.WriteLine($"Select plugin (# seperated by comma):");
             var plugins_str = Console.ReadLine().SplitNoEmpty(",").Select(x => x.Trim());
             foreach (var plugin_idx_str in plugins_str) {
-                if (!int.TryParse(plugin_idx_str, out int plugin_idx) || 
-                    plugin_idx < 0 || 
+                if (!int.TryParse(plugin_idx_str, out int plugin_idx) ||
+                    plugin_idx < 0 ||
                     plugin_idx >= AllPluginNames.Length ||
                     WorkingPluginNames.Contains(AllPluginNames[plugin_idx])) {
                     continue;
@@ -967,7 +1036,7 @@ TrailerThumbnail15,1054,Relative path (or URL to file in Partner Center),
 
                         if (cc == "en" || cc.StartsWith("en-")) {
                             // do nothing 
-                        } else { 
+                        } else {
                             // add translation warning prefix
                             if (long_trans_warning_keys.Any(x => x == row_key)) {
                                 new_cell_val = listing_lookup["TranslationWarning"] + Environment.NewLine + new_cell_val;
@@ -1205,7 +1274,7 @@ TrailerThumbnail15,1054,Relative path (or URL to file in Partner Center),
                     Path.Combine(
                         MpPlatformHelpers.GetStorageDir(is_debug),
                         "Resources");
-                if(resources_install_dir.IsDirectory()) {
+                if (resources_install_dir.IsDirectory()) {
                     MpFileIo.DeleteDirectory(resources_install_dir);
                     MpFileIo.CreateDirectory(resources_install_dir);
                     install_update_suffix = $" install UPDATED";
@@ -1214,7 +1283,7 @@ TrailerThumbnail15,1054,Relative path (or URL to file in Partner Center),
                     // zip resource dir into dat dir
                     string dest_dat_zip =
                         Path.Combine(proj_dat_dir, $"{Path.GetFileName(res_dir)}.zip");
-                    if(dest_dat_zip.IsFileOrDirectory()) {
+                    if (dest_dat_zip.IsFileOrDirectory()) {
                         // dest dir exists, remove or zip throws exception
                         MpFileIo.DeleteFileOrDirectory(dest_dat_zip);
                     }
@@ -1224,7 +1293,7 @@ TrailerThumbnail15,1054,Relative path (or URL to file in Partner Center),
                     if (!install_update_suffix.IsNullOrEmpty()) {
                         ZipFile.ExtractToDirectory(dest_dat_zip, resources_install_dir);
                     }
-                    MpConsole.WriteLine($"Resource '{Path.GetFileName(res_dir)}' Moved to dat{install_update_suffix}");                    
+                    MpConsole.WriteLine($"Resource '{Path.GetFileName(res_dir)}' Moved to dat{install_update_suffix}");
                 }
             }
 
@@ -1731,7 +1800,7 @@ TrailerThumbnail15,1054,Relative path (or URL to file in Partner Center),
             //string args = CorePlugins.Contains(plugin_name) ?
             //    $"msbuild /p:OutDir={publish_dir} -target:Publish /property:Configuration={config} /property:DefineConstants=AUX%3B{BUILD_OS} -restore" :
             //    $"publish --configuration {config} --output {publish_dir}";
-            
+
             string args = $"publish --configuration {config} --output {publish_dir}";
             MpConsole.WriteLine($"dotnet {args}");
 
@@ -1925,7 +1994,7 @@ TrailerThumbnail15,1054,Relative path (or URL to file in Partner Center),
                     bool success = MpHttpRequester.ProcessServerResponse(resp, out var resp_args);
 
                     var msg_mf = mf;
-                    if(GetLocalizedManifest(mf.title,"en-US") is { } neu_mf) {
+                    if (GetLocalizedManifest(mf.title, "en-US") is { } neu_mf) {
                         msg_mf = neu_mf;
                     }
                     MpConsole.WriteLine($"{msg_mf} {success.ToTestResultLabel()} info check resp: {resp}");
@@ -1958,6 +2027,65 @@ TrailerThumbnail15,1054,Relative path (or URL to file in Partner Center),
             MpConsole.WriteLine($"Output:");
             MpConsole.WriteLine(sb.ToString());
             MpConsole.WriteLine($"DONE");
+        }
+        #endregion
+
+        #region Keyboard Mover
+        
+        static void MoveKeyboard() {
+            // NOTE need to stagger delete/create/update so WinSCP can pickup the changes
+            MpConsole.WriteLine($"Moving Keyboard BEGIN...");
+
+            foreach (string target_dir in KeyboardTargetDirs) {
+                // delete current target dir if exist
+                if (target_dir.IsDirectory()) {
+                    // unmark all files as read-only
+                    var all_old_target_paths = new DirectoryInfo(target_dir).EnumerateFiles("*.cs", SearchOption.AllDirectories).Select(x => x.FullName);
+                    all_old_target_paths.Select(x => new FileInfo(x)).ForEach(x => x.IsReadOnly = false);
+                    //all_old_target_paths.ForEach(x =>File.SetAttributes(x, File.GetAttributes(x) & ~FileAttributes.ReadOnly));
+
+                    MpFileIo.DeleteDirectory(target_dir);
+                    MpConsole.WriteLine($"Target Dir Deleted: '{target_dir}'");
+                } else {
+                    MpConsole.WriteLine($"Target Dir NOT FOUND: '{target_dir}'");
+                }
+
+                // create empty target dir
+                MpFileIo.CreateDirectory(target_dir);
+
+                // duplicate current source dir
+                MpFileIo.CopyDirectory(KeyboardSourceDir, target_dir);
+
+                // parse target dir path for namespace name
+                string target_namespace_name = Path.GetFileName(Directory.GetParent(target_dir).Parent.Parent.FullName);
+
+                // create match strs
+                string source_match_str = $"namespace {KeyboardSourceNamespace}";
+                string target_match_str = $"namespace {target_namespace_name}";
+
+                // get all keyboard code files in target dir
+                var all_target_paths = new DirectoryInfo(target_dir).EnumerateFiles("*.cs", SearchOption.AllDirectories).Select(x => x.FullName);
+
+                foreach (string target_path in all_target_paths) {
+                    if (OmittedFilesForTargetNamespaceLookup.TryGetValue(target_namespace_name, out var omitted_file_names) &&
+                        omitted_file_names.Any(x => x == Path.GetFileName(target_path))) {
+                        MpFileIo.DeleteFile(target_path);
+                        MpConsole.WriteLine($"Deleted '{Path.GetFileName(target_path)}'");
+                        continue;
+                    }
+                    string msg_prefix = "Skipping ";
+                    // replace all namespace references with project dir
+                    string target_text = MpFileIo.ReadTextFromFile(target_path);
+                    if (target_text.Contains(source_match_str)) {
+                        msg_prefix = "Fixed ";
+                        target_text = target_text.Replace(source_match_str, target_match_str);
+                        MpFileIo.WriteTextToFile(target_path, target_text);
+                    }
+                    new FileInfo(target_path).IsReadOnly = true;
+                    MpConsole.WriteLine($"{msg_prefix}'{Path.GetFileName(target_path)}'");
+                }
+            }
+            MpConsole.WriteLine($"Keyboard Mover DONE (mark as readonly after sync complete!)...");
         }
         #endregion
 

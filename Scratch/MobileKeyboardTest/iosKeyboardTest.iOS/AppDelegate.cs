@@ -1,7 +1,7 @@
 using Avalonia;
 using Avalonia.iOS;
-using Avalonia.ReactiveUI;
 using Foundation;
+using UIKit;
 
 namespace iosKeyboardTest.iOS;
 
@@ -13,45 +13,24 @@ namespace iosKeyboardTest.iOS;
 public partial class AppDelegate : AvaloniaAppDelegate<App>
 #pragma warning restore CA1711 // Identifiers should not have incorrect suffix
 {
-    protected override AppBuilder CustomizeAppBuilder(AppBuilder builder)
-    { 
-        return base.CustomizeAppBuilder(builder)
-            .WithInterFont()
-            .UseReactiveUI()
-            //.With(new iOSPlatformOptions { RenderingMode = [iOSRenderingMode.Metal] })
-            //.UseMaui<MauiApplication>(this)
-            .AfterSetup(_ => {
-                //KeyboardExtHelper.
-                //KeyboardViewController.InitAv();
-                //if (MainView.IsMainViewLoaded) {
-                //    Debug.WriteLine("Already loaded");
-                //    //KeyboardViewController.CreateKeyboardView();
-                //} else {
-                //    MainView.OnMainViewLoaded += (s, e) => {
-                //        //KeyboardViewController.CreateKeyboardView();
-                //        //iosExtAvaloniaViewLoader.AvViewObj = new AvaloniaView() {
-                //        //    Content = new Avalonia.Controls.Border() {
-                //        //        Width = 600,
-                //        //        Height = 600,
-                //        //        Background = Brushes.Brown
-                //        //    }
-                //        //};
-                //        //iosExtAvaloniaViewLoader.AvViewObj = MauiApplication.Instance.Handler.MauiContext;
+    //protected override AppBuilder CustomizeAppBuilder(AppBuilder builder) {
+    //    return base.CustomizeAppBuilder(builder)
+    //        .WithInterFont()
+    //        .UseReactiveUI()
+    //        //.With(new iOSPlatformOptions { RenderingMode = [iOSRenderingMode.Metal] })
+    //        .AfterSetup(_ => {
 
-                //        //DispatchQueue.MainQueue.DispatchAsync(() => {
-                //        //    var alert = UIAlertController.Create("Test title", "Test msg", UIAlertControllerStyle.Alert);
-                //        //    var ok = UIAlertAction.Create("OK", UIAlertActionStyle.Default, (x) => {
-                //        //        Debug.WriteLine("whatever");
-                //        //    });
-                //        //    alert.AddAction(ok);
-                //        //    this.Window.RootViewController.PresentViewController(alert, true, null);
-                //        //});
-                //    };
-                //}
+    //        });
+    //        ;
+    //}
 
-            })
-            ;
+    [Export("application:didFinishLaunchingWithOptions:")]
+    public new bool FinishedLaunching(UIApplication application, NSDictionary launchOptions) {
+        this.Window = new UIWindow(UIScreen.MainScreen.Bounds);
+        var mkbvc = new MockKeyboardViewController();
+        Window.RootViewController = mkbvc;
+        Window.MakeKeyAndVisible();
+        return true;
     }
-
 
 }

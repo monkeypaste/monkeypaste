@@ -21,6 +21,8 @@ public partial class MainView : UserControl
     public static void ForceInputConn(IKeyboardInputConnection conn) {
         _conn = conn;
     }
+    public Canvas OuterCanvas =>
+        ContainerCanvas;
 
     public MainView()
     {
@@ -34,41 +36,64 @@ public partial class MainView : UserControl
             return;
         }
 
-        kbmvm.SetDesiredSize(KeyboardViewModel.GetTotalSizeByScreenSize(this.Bounds.Size));
+        kbmvm.SetDesiredSize(KeyboardViewModel.GetTotalSizeByScreenSize(this.Bounds.Size, kbmvm.KeyboardFlags.HasFlag(KeyboardFlags.Portrait)));
         kbv.Width = kbmvm.TotalWidth;
         kbv.Height = kbmvm.TotalHeight;
     }
 
     protected override void OnLoaded(RoutedEventArgs e) {
         base.OnLoaded(e);
+        KeyboardViewModel kbvm = null;
+
+        OrientationButton.Click += (s, e) => {
+            if(TopLevel.GetTopLevel(this) is not Window w) {
+                return;
+            }
+            if (w.Width > w.Height) {
+                kbvm.KeyboardFlags &= ~KeyboardFlags.Landscape;
+                kbvm.KeyboardFlags |= KeyboardFlags.Portrait;
+            } else {
+                kbvm.KeyboardFlags &= ~KeyboardFlags.Portrait;
+                kbvm.KeyboardFlags |= KeyboardFlags.Landscape;
+            }
+            double temp = w.Width;
+            w.Width = w.Height;
+            w.Height = temp;
+            w.InvalidateArrange();
+            w.InvalidateMeasure();
+            w.InvalidateVisual();
+            OnBoundsChanged();
+            kbvm.Init(kbvm.KeyboardFlags);
+        };
+        ActivateButton.Click += (s, e) => {
+            if (PlatformKeyboardServices.KeyboardPermissionHelper is not { } kph) {
+                return;
+            }
+            kph.ShowKeyboardActivator();
+        };
 
         TestButton.Click += (s, e) => {
-            //var test = new Border() {
-            //    Background = Brushes.Purple,
-            //    Width = 1000,
-            //    Height = 1000,
-            //    //Child = new Ellipse() {
-            //    //    Width = 100,
-            //    //    Height = 100,
-            //    //    Fill = Brushes.Orange
-            //    //}
-            //    Child = new TestView() {
-            //        Width = 100,
-            //        Height = 100
-            //    }
-            //};
+            TestTextBox.Text = "Welcome to Avalonia!" + Environment.NewLine + "Welcome to Avalonia!" + Environment.NewLine + "Welcome to Avalonia!" + Environment.NewLine + "Welcome to Avalonia!" + Environment.NewLine + "Welcome to Avalonia!" + Environment.NewLine + "Welcome to Avalonia!";
+            //KeyboardPalette.PrintPalette();
+
+            if (kbvm != null) {
+                kbvm.UpdateKeyboardState();
+                if(kbvm.IsNumPadLayout) {
+                    kbvm.KeyboardFlags &= ~KeyboardFlags.Numbers;
+                    kbvm.KeyboardFlags |= KeyboardFlags.Normal;
+                } else {
+                    kbvm.KeyboardFlags &= ~KeyboardFlags.Normal;
+                    kbvm.KeyboardFlags |= KeyboardFlags.Numbers;
+                }
+
+                kbvm.Init(kbvm.KeyboardFlags);
+            }
             Touches.Clear();
             if(!show_windowless_kb) {
                 return;
             }
 
-            var rect = new Rect(0, 0, 1000, 300);
-            //var test = new TestView() {
-            //    Width = rect.Width,
-            //    Height = rect.Height
-            //};
-            
-
+            var rect = new Rect(0, 0, 1000, 300);         
             var test = KeyboardBuilder.Build(null, new Size(1000, 300), 2.25, out _);
             test.Measure(rect.Size);
             test.Arrange(rect);
@@ -85,10 +110,9 @@ public partial class MainView : UserControl
             }
             Control ctrl_to_add = null;
             Control kbv = null;
-            KeyboardViewModel kbvm = null;
             //show_windowless_kb = false;
             if(show_windowless_kb) {
-                kbv = KeyboardBuilder.Build(_conn, KeyboardViewModel.GetTotalSizeByScreenSize(this.Bounds.Size), scale, out _);
+                kbv = KeyboardBuilder.Build(_conn, KeyboardViewModel.GetTotalSizeByScreenSize(this.Bounds.Size, kbvm.KeyboardFlags.HasFlag(KeyboardFlags.Portrait)), scale, out _);
                 kbvm = kbv.DataContext as KeyboardViewModel;
                 //if(_conn is IKeyboardInputConnection_desktop) {
                 //    var hidden_window = new Window() {
@@ -116,12 +140,12 @@ public partial class MainView : UserControl
                 };
                 ctrl_to_add = bg_border;
             } else {
-                kbv = KeyboardViewModel.CreateKeyboardView(_conn, KeyboardViewModel.GetTotalSizeByScreenSize(this.Bounds.Size), scale, out _);
+                kbv = KeyboardFactory.CreateKeyboardView(_conn, KeyboardViewModel.GetTotalSizeByScreenSize(this.Bounds.Size, true), scale, out _);
                 kbvm = kbv.DataContext as KeyboardViewModel;
                 ctrl_to_add = kbv;
             }
 
-            
+            ctrl_to_add.VerticalAlignment = Avalonia.Layout.VerticalAlignment.Bottom;
 
             OuterPanel.Children.Add(ctrl_to_add);
             Grid.SetRow(ctrl_to_add, 3);
@@ -170,7 +194,10 @@ public partial class MainView : UserControl
                 
             }
         }
-        TestTextBox.Focus();
+        if(!OperatingSystem.IsAndroid()) {
+            TestTextBox.Focus();
+        }
+        
     }
     
 }

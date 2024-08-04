@@ -1,4 +1,4 @@
-<Project Sdk="Microsoft.NET.Sdk">
+﻿<Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
     <OutputType>Exe</OutputType>
     <TargetFramework>net8.0-android</TargetFramework>
@@ -8,13 +8,38 @@
     <ApplicationVersion>1</ApplicationVersion>
     <ApplicationDisplayVersion>1.0</ApplicationDisplayVersion>
     <AndroidPackageFormat>apk</AndroidPackageFormat>
-    <AndroidEnableProfiledAot>false</AndroidEnableProfiledAot>
   </PropertyGroup>
+  
   <ItemGroup>
+    <AndroidJavaSource Remove="Resources\drawable\**" />
+    <AndroidLibrary Remove="Resources\drawable\**" />
+    <AndroidNativeLibrary Remove="Resources\drawable\**" />
+    <AndroidResource Remove="Resources\drawable\**" />
+    <AvaloniaXaml Remove="Resources\drawable\**" />
+    <Compile Remove="Resources\drawable\**" />
+    <EmbeddedResource Remove="Resources\drawable\**" />
+    <JavaSourceJar Remove="Resources\drawable\**" />
+    <None Remove="Resources\drawable\**" />
+    <ProguardConfiguration Remove="Resources\drawable\**" />
+    <TransformFile Remove="Resources\drawable\**" />
+  </ItemGroup>
+  
+  <ItemGroup>
+    <AndroidAsset Remove="Assets\words_10000.txt" />
+  </ItemGroup>
+  
+  <ItemGroup>
+    <None Remove="Assets\words_10000.txt" />
+    <None Remove="Assets\words_5000_normalized.txt" />
+    <None Remove="Resources\font\Nunito_Regular.ttf" />
     <None Remove="Resources\layout\keyboard_layout_view.xml" />
+    <None Remove="Resources\layout\pref_layout.xml" />
+    <None Remove="Resources\menu\menu.xml" />
+    <None Remove="Resources\xml\preferences.xml" />
+    <None Remove="ViewModels\Keyboard\KEYBOARD_BASE\AutoComplete\words_5000.txt" />
   </ItemGroup>
 
-  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU' And '$(IsBionic)' == 'False'">
     <RunAOTCompilation>true</RunAOTCompilation>
     <AndroidEnableProfiledAot>false</AndroidEnableProfiledAot>
     <EnableLLVM>true</EnableLLVM>
@@ -24,6 +49,7 @@
     <Debugger>Xamarin</Debugger>
     <DebugSymbols>True</DebugSymbols>
     <AndroidEnableMultiDex>True</AndroidEnableMultiDex>
+    <AndroidEnableProfiledAot>false</AndroidEnableProfiledAot>
   </PropertyGroup>
 
   <ItemGroup>
@@ -33,12 +59,71 @@
   </ItemGroup>
 
   <ItemGroup>
+    <AndroidResource Include="Resources\drawable\backspace.png" />
+    <AndroidResource Include="Resources\drawable\emoji.png" />
+    <AndroidResource Include="Resources\drawable\enter.png" />
+    <AndroidResource Include="Resources\drawable\globe.png" />
+    <AndroidResource Include="Resources\drawable\search.png" />
+    <AndroidResource Include="Resources\drawable\shift.png" />
+    <AndroidResource Include="Resources\drawable\shift_lock.png" />
+    <AndroidResource Include="Resources\drawable\shift_on.png" />
+    <AndroidResource Include="Resources\drawable\splash_screen.xml" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <AndroidResource Include="Resources\drawable\dots_1x3.png" />
+    <AndroidResource Include="Resources\drawable\edgearrowleft.png" />
+  </ItemGroup>
+
+  <ItemGroup>
     <PackageReference Include="Avalonia.Android" Version="$(AvaloniaVersion)" />
     <PackageReference Include="Microsoft.Maui.Essentials" Version="8.0.70" />
+    <PackageReference Include="Rxmxnx.PInvoke.Extensions" Version="1.2.3" Condition="'$(IsBionic)' == 'True'" />
     <PackageReference Include="Xamarin.AndroidX.Core.SplashScreen" Version="1.0.1.1" />
+    <PackageReference Include="Xamarin.AndroidX.Preference" Version="1.2.1.8" />
   </ItemGroup>
 
   <ItemGroup>
     <ProjectReference Include="..\iosKeyboardTest\iosKeyboardTest.csproj" />
   </ItemGroup>
+  
+  <!-- BIONIC BUILD -->
+
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU' And '$(IsBionic)' == 'True'">
+    <!--<RuntimeIdentifiers>linux-bionic-arm64</RuntimeIdentifiers>
+    <DisableUnsupportedError>true</DisableUnsupportedError>
+    <PublishAotUsingRuntimePack>true</PublishAotUsingRuntimePack>
+    <AndroidSupportedAbis>armeabi-v7a;x86_64;arm64-v8a;x86</AndroidSupportedAbis>-->
+    
+    <Optimize>true</Optimize>
+    <TrimMode>Link</TrimMode>
+    <PublishAot>true</PublishAot>
+    <TrimUnusedDependencies>true</TrimUnusedDependencies>
+    <RootAllApplicationAssemblies>false</RootAllApplicationAssemblies>
+    <IlcGenerateCompleteTypeMetadata>true</IlcGenerateCompleteTypeMetadata>
+    <IlcGenerateStackTraceData>false</IlcGenerateStackTraceData>
+    <IlcTrimMetadata>true</IlcTrimMetadata>
+    <IlcOptimizationPreference>Speed</IlcOptimizationPreference>
+    <IlcFoldIdenticalMethodBodies>true</IlcFoldIdenticalMethodBodies>
+    <CppCompilerAndLinker>./android_fake_clang.cmd</CppCompilerAndLinker>
+    <NdkHost>windows-x86_64</NdkHost>
+    <ObjCopyName Condition="'$(ObjCopyName)' == ''">$(ANDROID_NDK_ROOT)/toolchains/llvm/prebuilt/$(NdkHost)/bin/llvm-objcopy</ObjCopyName>
+    <SysRoot Condition="'$(SysRoot)' == ''">$(ANDROID_NDK_ROOT)/toolchains/llvm/prebuilt/$(NdkHost)/sysroot</SysRoot>
+    <!--Hack for removing init and fini sections into the exports file-->
+    <ExportsPatch>'s/global: _init; _fini;/global: /g;'</ExportsPatch>
+  </PropertyGroup>
+
+  <ItemGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU' And '$(IsBionic)' == 'True'">
+    <LinkerArg Include="-z noexecstack" />    
+    <LinkerArg Condition="$(RuntimeIdentifier.ToLower().EndsWith('-x64'))" Include="--target=x86_64-linux-android21" />
+    <LinkerArg Condition="$(RuntimeIdentifier.ToLower().EndsWith('-arm64'))" Include="--target=aarch64-linux-android21" />
+  </ItemGroup>
+
+  <ItemGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU' And '$(IsBionic)' == 'True' And $(UseLibCSections) == 'true'">
+    <!--Hack for passing a valid target argument on NDK linker invocation-->
+    <LinkerArg Include="-Wl,--defsym,_init=__libc_init" />
+    <LinkerArg Include="-Wl,--defsym,_fini=__libc_fini" />
+  </ItemGroup>
+  
+
 </Project>

@@ -2,8 +2,6 @@
   <PropertyGroup>
     <OutputType>Exe</OutputType>
     <TargetFrameworks>net8.0-ios</TargetFrameworks>
-    <!--<RuntimeIdentifiers>ios-arm64</RuntimeIdentifiers>-->
-    <!--<RuntimeIdentifiers>iossimulator-x64</RuntimeIdentifiers>-->
     <SupportedOSPlatformVersion>13.0</SupportedOSPlatformVersion>
     <Nullable>disable</Nullable>
     <CodesignKey>Apple Development: Created via API (79M7T3S5XK)</CodesignKey>
@@ -19,13 +17,18 @@
     <PackageReference Include="Avalonia.iOS" Version="$(AvaloniaVersion)" />
   </ItemGroup>
 
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
+    <PublishAot>true</PublishAot>
+    <IsAotCompatible>true</IsAotCompatible>
+  </PropertyGroup>
+
   <ItemGroup>
-    <!--<ProjectReference Include="..\iosKeyboardTest.iOS.KeyboardExt\iosKeyboardTest.iOS.KeyboardExt.csproj" />-->
-    <ProjectReference Include="..\iosKeyboardTest\iosKeyboardTest.csproj" />
     
     <ProjectReference Include="..\iosKeyboardTest.iOS.KeyboardExt\iosKeyboardTest.iOS.KeyboardExt.csproj">
       <IsAppExtension>true</IsAppExtension>
       <IsWatchExtension>false</IsWatchExtension>
     </ProjectReference>
+    
+    <ProjectReference Include="..\iosKeyboardTest\iosKeyboardTest.csproj" />
   </ItemGroup>
 </Project>

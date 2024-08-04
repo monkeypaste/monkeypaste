@@ -16,7 +16,7 @@ namespace iosKeyboardTest.iOS.KeyboardExt
             //DeviceDisplay.MainDisplayInfo.Density;
             UIScreen.MainScreen.Scale;
 
-        static bool IsPortrait =>
+        public static bool IsPortrait =>
             //DeviceDisplay.MainDisplayInfo.Orientation == DisplayOrientation.Portrait
             UIScreen.MainScreen.Bounds.Width < UIScreen.MainScreen.Bounds.Height;
         static iosDisplayInfo()

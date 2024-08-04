@@ -1,5 +1,5 @@
 #!/bin/bash
-CONFIG=Debug
+CONFIG=Release
 FRAMEWORK="net8.0-ios"
 RUNTIME="ios-arm64"
 PLATFORM="AnyCPU"
@@ -39,7 +39,7 @@ if [ "$1" = "manual" ] || [ "$2" = "manual" ]; then
 	
 	cd bin/${CONFIG}/${FRAMEWORK}/${RUNTIME}/publish
 
-	# unzip the IPA file to tmp folder
+	# unzip the IPA file to tmp foldercd D
 	mkdir ./tmp
 	unzip ${EXE_NAME}.ipa -d ./tmp
 	#cd -

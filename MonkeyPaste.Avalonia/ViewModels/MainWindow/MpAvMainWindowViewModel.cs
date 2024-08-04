@@ -15,6 +15,7 @@ using System.Diagnostics;
 using System.Linq;
 using System.Threading.Tasks;
 using System.Windows.Input;
+using System.Windows.Media;
 
 namespace MonkeyPaste.Avalonia {
     public class MpAvMainWindowViewModel :
@@ -1531,12 +1532,6 @@ namespace MonkeyPaste.Avalonia {
                     MainWindowScreen.Rotate(MainWindowTransformAngle);
                     if (MpAvThemeViewModel.Instance.IsMobileOrWindowed &&
                         TopLevel.GetTopLevel(MpAvMainView.Instance) is Window w) {
-                        //w.CanResize = true;
-                        //var new_bounds = new MpRect(0, 0, w.Bounds.Height, w.Bounds.Width);
-                        //w.Width = new_bounds.Width;
-                        //w.Height = new_bounds.Height;
-                        //w.CanResize = false;
-                        //w.CanResize = true;
                         if (IsHorizontalOrientation) {
                             w.Width = 740;
                             w.Height = 360;
@@ -1547,7 +1542,7 @@ namespace MonkeyPaste.Avalonia {
                         if (w.Content is MpAvWindow cw) {
                             cw.Width = w.Width;
                             cw.Height = w.Height;
-                        }
+                        }new SolidColorBrush().ToHex
                         _mainWindowScreen = null;
                         Mp.Services.ScreenInfoCollection = new MpAvDesktopScreenInfoCollection(w);
                         MpMessenger.SendGlobal(MpMessageType.ScreenInfoChanged);

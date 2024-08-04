@@ -61,7 +61,7 @@ namespace iosKeyboardTest {
             //} else {
             KeyboardView = MainView.show_windowless_kb ?
                 KeyboardBuilder.Build(conn, scaledDesiredSize, scale, out unscaledActualSize) :
-                KeyboardViewModel.CreateKeyboardView(conn, scaledDesiredSize, scale, out unscaledActualSize);
+                KeyboardFactory.CreateKeyboardView(conn, scaledDesiredSize, scale, out unscaledActualSize);
                 
             if(!MainView.show_windowless_kb) {
                 if (OperatingSystem.IsWindows()) {
@@ -75,7 +75,7 @@ namespace iosKeyboardTest {
                     hidden_window.Show();
                 } else if (Application.Current.ApplicationLifetime is ISingleViewApplicationLifetime lt &&
                         lt.MainView is MainView mv &&
-                        mv.ContainerCanvas is { } canvas) {
+                        mv.OuterCanvas is { } canvas) {
                     if (canvas.Children.OfType<KeyboardView>() is { } kvl) {
                         // remove any existing keyboards
                         foreach (var kv in kvl) {
@@ -89,7 +89,7 @@ namespace iosKeyboardTest {
                 }
             }
 
-            if (conn is IHeadlessRender hrd) {
+            if (conn is ITriggerTouchEvents hrd) {
                 hrd.OnPointerChanged += (s, e) => {
                     if (KeyboardView.DataContext is not KeyboardViewModel kbvm) {
                         return;

@@ -33,6 +33,6 @@ public partial class MainWindow : Window
             kbv.DataContext is not KeyboardViewModel kbvm) {
             return;
         }
-        kbvm.SetDesiredSize(KeyboardViewModel.GetTotalSizeByScreenSize(this.Bounds.Size));
+        kbvm.SetDesiredSize(KeyboardViewModel.GetTotalSizeByScreenSize(this.Bounds.Size, kbvm.KeyboardFlags.HasFlag(KeyboardFlags.Portrait)));
     }
 }
